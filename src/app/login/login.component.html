@@ -1,6 +1,14 @@
-<div class="start_background">
-    <div class="logo">
-        <img src="/assets/img/Logo.png" alt="">
+<div class="start_background" [class.opacity]="animationLogo"></div>
+<div class="logo" [class.slide_img]="animationStart" [class.slide_logo]="animationLogo" [class.d_none]="d_none">
+    <img src="/assets/img/Logo.png" alt="">
+    <div class="logo_text">
+        <span [class.slide_text]="animationStart">DABubble</span>
+    </div>
+</div>
+
+<div class="main_div">
+    <div class="logo2" [class.slide_logo2]="animationLogo">
+        <img src="/assets/img/Logo.png">
         <div>
             <span>DABubble</span>
         </div>
