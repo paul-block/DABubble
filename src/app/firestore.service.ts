@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { getFirestore, collection, addDoc } from '@angular/fire/firestore';
 
-
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -19,8 +15,6 @@ export class FirestoreService {
   constructor(private auth: Auth) { }
 
   updateData() {
-    console.log('test');
-    
     addDoc(this.dbRef, this.test)
   }
 }

@@ -15,7 +15,6 @@ export class LoginComponent implements OnInit {
   constructor( private firestoreService: FirestoreService) {}
 
   ngOnInit(): void {
-    this.firestoreService.updateData();
     setTimeout(() =>  this.animationStart = true, 1000);
     setTimeout(() =>  this.animationLogo = true, 2000);
     setTimeout(() =>  this.d_none = true, 2900);
