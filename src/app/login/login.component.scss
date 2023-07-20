@@ -1,0 +1,21 @@
+.start_background {
+    background:  linear-gradient(1.46deg, #313AE6 1.22%, #797EF3 98.76%);
+    width: 100wh;
+    height: 100vh;
+    ;
+}
+
+.logo {
+    position: absolute;
+    top: calc(50% - 92px);
+    left: calc(50% - 95px);
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 100px;
+    font-weight: 600;
+    img {
+        width: 187px;
+        height: 184px;
+    }
+}
