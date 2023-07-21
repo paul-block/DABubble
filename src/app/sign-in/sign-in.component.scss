@@ -1,4 +1,6 @@
 .signin_div {
+    z-index: 1;
+    box-sizing: border-box;
     position: absolute;
     left: calc(50% - 303px);
     top: calc(50% - 385px);
@@ -7,4 +9,141 @@
     border-radius: 30px;
     gap: 43px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+
+    span {
+        text-align: center;
+    }
+}
+
+.headline {
+    font-size: 46px;
+    font-weight: 700;
+    color: #444DF2;
+}
+
+.forgot_pw {
+    color: #797EF3;
+    font-size: 18px;
+    font-family: 'Figtree', sans-serif;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+}
+
+.or {
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    img {
+        height: 1px;
+        width: 200px;
+    }
+}
+
+input {
+    border: 1px solid transparent;
+    transition: 200ms;
+    box-sizing: border-box;
+    outline: none;
+    width: 100%;
+    height: 60px;
+    background: #ECEEFE;
+    border-radius: 100px;
+    &:hover {
+        cursor: pointer;
+        border: 1px solid #686868;
+    }
+
+}
+
+.input_img {
+    position: absolute;
+    left: 24px;
+    top: 23px;
+}
+
+.input_img_2 {
+    position: absolute;
+    left: 24px;
+    top: 19px;
+}
+
+.input_div {
+    width: 100%;
+    position: relative;
+}
+
+.google_button {
+    border: 1px solid transparent;
+    transition: 200ms;
+    box-sizing: border-box;
+    transition: 200ms;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: #ECEEFE;
+    width: 100%;
+    border-radius: 100px;
+    height: 60px;
+    justify-content: center;
+    gap: 16px;
+    &:hover {
+        border: 1px solid #686868;
+    }
+    span {
+        font-size: 18px;
+        color: #444DF2;
+    }
+}
+
+.button_div {
+    display: flex;
+    gap: 30px;
+}
+
+.signin_button {
+    transition: 200ms;
+    font-weight: 700;
+    font-size: 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #444DF2;
+    border-radius: 25px;
+    width: 137px;
+    height: 49px;
+    &:hover {
+        background-color: #797EF3;
+        cursor: pointer;
+    }
+}
+
+.guest_login_button {
+    transition: 200ms;
+    box-sizing: border-box;
+    color: #444DF2;
+    font-weight: 700;
+    font-size: 18px;
+    border: 1px solid #797EF3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    width: 137px;
+    height: 49px;
+    &:hover {
+        background-color: #444DF2;
+        cursor: pointer;
+        color: white;
+    }
 }

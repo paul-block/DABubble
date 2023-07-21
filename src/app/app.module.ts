@@ -16,6 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
     MainComponent,
     ChannelDirectChatComponent,
     SignInComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
