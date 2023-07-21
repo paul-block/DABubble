@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { StartScreenComponent } from './start-screen/start-screen.component';
 import { MainComponent } from './main/main.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 const routes: Routes = [
-  {path: '', component: LoginComponent, children: [
-    {path: 'signin', component: SignInComponent}
+  {path: '', component: StartScreenComponent, children: [
+    {path: 'sign-in', component: SignInComponent},
+    {path: 'sign-up', component: SignUpComponent}
   ]},
   {path: 'main', component: MainComponent},
 ];

@@ -7,8 +7,9 @@ import { environment } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { RouterModule } from '@angular/router';
 // Components
-import { LoginComponent } from './login/login.component';
+import { StartScreenComponent } from './start-screen/start-screen.component';
 import { MainComponent } from './main/main.component';
 import { ChannelDirectChatComponent } from './channel-direct-chat/channel-direct-chat.component';
 // Material API imports
@@ -21,13 +22,14 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
+    StartScreenComponent,
     MainComponent,
     ChannelDirectChatComponent,
     SignInComponent,
     SignUpComponent,
   ],
   imports: [
+    RouterModule,
     BrowserModule,
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
