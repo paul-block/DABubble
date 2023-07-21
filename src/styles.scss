@@ -1,7 +1,14 @@
 body {
     margin: 0;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Nunito', sans-serif !important;
+    background-color: #ECEEFE;
 }
+
 .d_none {
     display: none !important;
+}
+
+html,
+body {
+    height: 100%;
 }
