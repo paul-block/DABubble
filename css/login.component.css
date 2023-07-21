@@ -1,4 +1,5 @@
 .start_background {
+  z-index: 2;
   position: absolute;
   top: 0;
   left: 0;
@@ -9,6 +10,7 @@
 }
 
 .logo {
+  z-index: 2;
   display: flex;
   position: absolute;
   top: calc(50% - 92px);
@@ -47,8 +49,40 @@
 .logo_text span {
   transition: 700ms;
   position: absolute;
-  top: 20px;
+  top: 80px;
   transform: translateX(-100%);
+}
+
+.sign_in {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  position: absolute;
+  right: 75px;
+  top: 75px;
+}
+
+.create_text {
+  margin-top: 3px;
+  z-index: 2;
+  color: #797EF3;
+  font-size: 18px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.create_text:hover {
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.5019607843);
+  border-radius: 15px;
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .slide_img {

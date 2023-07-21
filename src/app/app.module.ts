@@ -15,6 +15,7 @@ import { ChannelDirectChatComponent } from './channel-direct-chat/channel-direct
 import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
     LoginComponent,
     MainComponent,
     ChannelDirectChatComponent,
+    SignInComponent,
   ],
   imports: [
     BrowserModule,
