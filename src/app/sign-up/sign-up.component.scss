@@ -5,7 +5,7 @@
     left: calc(50% - 303px);
     top: calc(50% - 385px);
     width: 606px;
-    height: 605px;
+    height: 625px;
     border-radius: 30px;
     gap: 43px;
     background-color: white;
@@ -26,6 +26,9 @@
 }
 
 input {
+    font-size: 18px;
+    font-weight: 500;
+    padding-left: 50px;
     border: 1px solid transparent;
     transition: 200ms;
     box-sizing: border-box;
@@ -89,5 +92,18 @@ input {
     &:hover {
         border-radius: 100%;
         background-color: #ECEEFE;
+    }
+}
+
+.error {
+    color: red;
+    margin-left: 15px;
+}
+
+.invalid {
+    background-color: #686868 ;
+    &:hover {
+        background-color: #686868 ;
+        cursor: not-allowed;
     }
 }
