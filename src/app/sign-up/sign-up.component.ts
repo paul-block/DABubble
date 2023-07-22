@@ -18,6 +18,9 @@ export class SignUpComponent {
   nameFocus: boolean = false
   passwordFocus: boolean = false
   validPassword: boolean = false
+  match:boolean = false
+  matchPassword: string
+  passwordConfirmed:boolean = false
 
 
 
@@ -25,11 +28,8 @@ export class SignUpComponent {
 
 
   dataChanged(value: any, inputfield: string) {
-    if (inputfield == 'name') this.name = value
-    if (inputfield == 'password') this.password = value
     if (inputfield == 'email') {
       this.emailError = this.regexEmail.test(value)
-      this.email = value
     }
     this.validateForm()
   }
@@ -54,7 +54,8 @@ export class SignUpComponent {
   }
 
   validateForm() {
-    if (this.hasNumber() && this.hasSpecialChr() && this.hasValidLength() && this.hasUppercase() && this.name.length > 2 && this.emailError) this.formValid = true
+    if (this.password === this.matchPassword) this.passwordConfirmed = true
+    if (this.hasNumber() && this.hasSpecialChr() && this.hasValidLength() && this.hasUppercase() && this.name.length > 2 && this.emailError && this.passwordConfirmed) this.formValid = true
   }
 
 

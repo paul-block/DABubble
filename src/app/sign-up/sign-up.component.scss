@@ -5,7 +5,7 @@
     left: calc(50% - 303px);
     top: calc(50% - 385px);
     width: 606px;
-    height: 625px;
+    height: 707px;
     border-radius: 30px;
     gap: 43px;
     background-color: white;
@@ -28,7 +28,7 @@
 input {
     font-size: 18px;
     font-weight: 500;
-    padding-left: 50px;
+    padding-left: 60px;
     border: 1px solid transparent;
     transition: 200ms;
     box-sizing: border-box;
@@ -40,6 +40,11 @@ input {
     &:hover {
         cursor: pointer;
         border: 1px solid #686868;
+    &:focus {
+        border: 1px solid #535AF1;
+    }
+
+
     }
 }
 

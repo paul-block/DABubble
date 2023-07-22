@@ -50,6 +50,9 @@
 }
 
 input {
+    font-size: 18px;
+    font-weight: 500;
+    padding-left: 60px;
     border: 1px solid transparent;
     transition: 200ms;
     box-sizing: border-box;
@@ -61,6 +64,9 @@ input {
     &:hover {
         cursor: pointer;
         border: 1px solid #686868;
+    }
+    &:focus {
+        border: 1px solid #535AF1;
     }
 
 }

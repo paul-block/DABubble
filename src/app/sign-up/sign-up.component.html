@@ -6,21 +6,26 @@
     <span>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</span>
     <div class="input_div">
         <img class="input_img_2" src="/assets/img/person_filled.png" alt="">
-        <input type="text" #myInput (focus)="nameFocus = true" [(ngModel)]="name"  (ngModelChange)="dataChanged($event, 'name')" >
+        <input placeholder="Name" type="text" #myInput (focus)="nameFocus = true" [(ngModel)]="name"  (ngModelChange)="dataChanged($event, 'name')" >
         <span class="error" *ngIf="name.length < 1 && nameFocus">Bitte schreiben Sie einen Namen.</span>
     </div>
     <div class="input_div">
         <img class="input_img" src="/assets/img/mail.png" alt="" #email_input>
-        <input type="email" #myInput (focus)="emailFocus = true" [(ngModel)]="email" (ngModelChange)="dataChanged($event, 'email')">
+        <input placeholder="beispielname@email.com" type="email" #myInput (focus)="emailFocus = true" [(ngModel)]="email" (ngModelChange)="dataChanged($event, 'email')">
         <span class="error" *ngIf="!emailError && emailFocus">Diese E-Mail-Adresse ist leider ungültig.</span>
     </div>
     <div class="input_div">
         <img class="input_img_2" src="/assets/img/lock.png" alt="" #userPassword>
-        <input type="text" #myInput (focus)="passwordFocus = true" [(ngModel)]="password" (ngModelChange)="dataChanged($event, 'password')">
+        <input placeholder="Passwort" type="password" #myInput (focus)="passwordFocus = true" [(ngModel)]="password" (ngModelChange)="dataChanged($event, 'password')">
         <span class="error" *ngIf="!hasValidLength() && passwordFocus">8-32 Zeichen</span>
         <span class="error" *ngIf="!hasSpecialChr() && passwordFocus">Sonderzeichen</span>
         <span class="error" *ngIf="!hasNumber() && passwordFocus">Zahl</span>
         <span class="error" *ngIf="!hasUppercase() && passwordFocus">Großbuchstabe</span>
+    </div>
+    <div class="input_div">
+        <img class="input_img_2" src="/assets/img/lock.png" alt="" #userPassword>
+        <input placeholder="Passwort wiederholen" type="password" #myInput (focus)="match = true" [(ngModel)]="matchPassword" (ngModelChange)="dataChanged($event, 'passwordMatch')">
+        <span class="error" *ngIf="!passwordConfirmed && match">Passwort stimmt nicht überein</span>
     </div>
     <div [class.invalid]="!formValid" class="go_on" (click)="signUp()">Weiter</div>
 </div>
