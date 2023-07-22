@@ -28,6 +28,11 @@ header {
     }
 }
 
+.gap-10 {
+    display: flex;
+    gap: 10px;
+}
+
 h1 {
     margin-block-start: unset;
     margin-block-end: unset;
@@ -81,6 +86,102 @@ h1 {
     &:hover {
         color: $hover-text-color;
         cursor: pointer;
+        transition: $hover-transition;
+    }
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: calc(100% - 98px - 100px - 170px);
+
+}
+
+.chat-messages-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: calc(100% - 100px);
+    padding: 25px 0px;
+}
+
+.parting-line {
+    width: 100%;
+    height: 1px;
+    background-color: #ADB0D9;
+    position: absolute;
+    z-index: 1;
+}
+
+.messages-date {
+    z-index: 2;
+    padding: 5px 15px;
+    background-color: white;
+    border-radius: 20px;
+    border: 1px solid #ADB0D9;
+}
+
+.chat-message-container {
+    display: flex;
+    gap: 25px;
+    padding: 10px 60px;
+    width: calc(100% - 110px);
+    cursor: pointer;
+    transition: $hover-transition;
+
+    img {
+        height: 50px;
+    }
+
+    &:hover {
+        background-color: #ECEEFE;
+        transition: $hover-transition;
+    }
+
+    &:hover .chat-message-text {
+        transition: $hover-transition;
+        background-color: white;
+    }
+}
+
+.chat-message-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-message-name {
+    font-size: 18px;
+    font-weight: 700;
+    &:hover{
+        color: $hover-text-color;
+    }
+}
+
+.last-message-time {
+    font-size: 14px;
+    font-weight: 400;
+    color: #686868;
+}
+
+.chat-message-text {
+    border-radius: 0px 30px 30px 30px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 400;
+    background-color: $hover-background-color;
+}
+
+.chat-message-answers-amount {
+    font-size: 18px;
+    font-weight: 400;
+    color: $hover-text-color;
+    transition: $hover-transition;
+    &:hover{
+        font-weight: 700;
         transition: $hover-transition;
     }
 }
