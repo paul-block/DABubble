@@ -13,6 +13,7 @@ export class AuthenticationService {
   db = getFirestore();
   dbRef = collection(this.db, "users");
   userData: any
+  signIn_successful:boolean
  
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth) { 
@@ -63,7 +64,8 @@ export class AuthenticationService {
     try {
       const result = await this.afAuth
         .signInWithPopup(provider);
-      console.log('You have been successfully logged in!');
+      this.signIn_successful = true
+      setTimeout(() => this.signIn_successful = false, 2000);
     } catch (error) {
       console.log(error);
     }

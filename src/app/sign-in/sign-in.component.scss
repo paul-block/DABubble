@@ -70,10 +70,12 @@ input {
     height: 60px;
     background: #ECEEFE;
     border-radius: 100px;
+
     &:hover {
         cursor: pointer;
         border: 1px solid #686868;
     }
+
     &:focus {
         border: 1px solid #535AF1;
     }
@@ -111,9 +113,11 @@ input {
     height: 60px;
     justify-content: center;
     gap: 16px;
+
     &:hover {
         border: 1px solid #686868;
     }
+
     span {
         font-size: 18px;
         color: #444DF2;
@@ -137,6 +141,7 @@ input {
     border-radius: 25px;
     width: 137px;
     height: 49px;
+
     &:hover {
         background-color: #797EF3;
         cursor: pointer;
@@ -156,9 +161,48 @@ input {
     border-radius: 25px;
     width: 137px;
     height: 49px;
+
     &:hover {
         background-color: #444DF2;
         cursor: pointer;
         color: white;
     }
+}
+
+.confirmation {
+    z-index: 5;
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    transform: translateX(+110%);
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+    box-sizing: border-box;
+    width: 530px;
+    height: 150px;
+    background-color: #444DF2;
+    border-radius: 30px;
+    padding: 65px;
+
+}
+
+.show_confirmation {
+    transition: 800ms;
+    transform: translateX(0);
+}
+
+.white_shadow {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.468);
+}
+
+.show_shadow {
+    display: block;
 }

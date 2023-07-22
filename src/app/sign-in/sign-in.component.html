@@ -15,7 +15,7 @@
         <span>ODER</span>
         <img src="/assets/img/line.png" alt="">
     </div>
-    <div class="google_button" (click)="authenticationService.GoogleAuth()">
+    <div class="google_button" (click)="signIn()">
         <img src="/assets/img/Google.png" alt="">
         <span>Anmelden mit Google</span>
     </div>
@@ -24,3 +24,5 @@
         <div class="guest_login_button">Gäste-Login</div>
     </div>
 </div>
+<div [class.show_confirmation]="authenticationService.signIn_successful" class="confirmation">Erfolgreich angemeldet</div>
+<div [class.show_shadow]="authenticationService.signIn_successful" class="white_shadow"></div>
