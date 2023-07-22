@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FirestoreService } from '../firestore.service';
+import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ export class StartScreenComponent implements OnInit {
   d_none:boolean = false
   active:boolean = false
 
-  constructor( private firestoreService: FirestoreService, private router: Router) {
+  constructor( private firestoreService: AuthenticationService, private router: Router) {
    
   }
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -7,4 +8,16 @@ import { Component } from '@angular/core';
 })
 export class SignUpComponent {
 
+name =''
+password = ''
+email = ''
+ 
+
+  constructor( public authenticationService: AuthenticationService) { }
+
+
+  dataChanged(change: any) {
+    console.log(change);
+    
+  }
 }

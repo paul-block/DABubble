@@ -8,6 +8,8 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms'; 
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 // Components
 import { StartScreenComponent } from './start-screen/start-screen.component';
 import { MainComponent } from './main/main.component';
@@ -29,6 +31,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     SignUpComponent,
   ],
   imports: [
+    FormsModule,
     RouterModule,
     BrowserModule,
     AppRoutingModule,
@@ -40,7 +43,9 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     BrowserAnimationsModule,
     MatIconModule
   ],
-  providers: [],
+  providers: [
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

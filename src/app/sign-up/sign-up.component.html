@@ -6,15 +6,15 @@
     <span>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</span>
     <div class="input_div">
         <img class="input_img_2" src="/assets/img/person_filled.png" alt="">
-        <input type="text">
+        <input type="text" [(ngModel)]="name"  (ngModelChange)="dataChanged($event)" >
     </div>
     <div class="input_div">
-        <img class="input_img" src="/assets/img/mail.png" alt="">
-        <input type="text">
+        <img class="input_img" src="/assets/img/mail.png" alt="" #userEmail>
+        <input type="text" [(ngModel)]="email">
     </div>
     <div class="input_div">
-        <img class="input_img_2" src="/assets/img/lock.png" alt="">
-        <input type="text">
+        <img class="input_img_2" src="/assets/img/lock.png" alt="" #userPassword>
+        <input type="text" [(ngModel)]="password">
     </div>
-    <div class="go_on">Weiter</div>
+    <div class="go_on" (click)="authenticationService.SignUp(email, password)">Weiter</div>
 </div>
