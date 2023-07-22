@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     ChannelDirectChatComponent,
     SignInComponent,
     SignUpComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     FormsModule,

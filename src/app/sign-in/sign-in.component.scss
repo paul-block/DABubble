@@ -26,12 +26,21 @@
 }
 
 .forgot_pw {
+    transition: 200ms;
+    background-color: transparent;
+    border-radius: 30px;
+    width: 201px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #797EF3;
     font-size: 18px;
     font-family: 'Figtree', sans-serif;
 
     &:hover {
         cursor: pointer;
+        background-color: #ECEEFE;
     }
 
 }

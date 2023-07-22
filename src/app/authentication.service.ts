@@ -9,14 +9,25 @@ import firebase from 'firebase/compat';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  [x: string]: any;
+
   db = getFirestore();
   dbRef = collection(this.db, "users");
-  user = {
-    name: ''
-  }
+  userData: any
+ 
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth) { }
+  constructor(private auth: Auth, public afAuth: AngularFireAuth) { 
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        console.log(user);
+        this.userData = user;
+        localStorage.setItem('user', JSON.stringify(this.userData));
+        JSON.parse(localStorage.getItem('user')!);
+      } else {
+        localStorage.setItem('user', 'null');
+        JSON.parse(localStorage.getItem('user')!);
+      }
+    });
+  }
 
   // Sign up with email/password
   async SignUp(email: string, password: string) {
@@ -56,5 +67,17 @@ export class AuthenticationService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+
+  async ForgotPassword(passwordResetEmail: string) {
+    return this.afAuth
+      .sendPasswordResetEmail(passwordResetEmail)
+      .then(() => {
+        window.alert('Password reset email sent, check your inbox.');
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
   }
 }
