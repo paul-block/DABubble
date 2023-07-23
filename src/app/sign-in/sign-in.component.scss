@@ -193,16 +193,17 @@ input {
 }
 
 .white_shadow {
-    display: none;
+    transition: 200ms;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 4;
+    z-index: -1;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, 0.468);
+    background-color: transparent;
 }
 
 .show_shadow {
-    display: block;
+    z-index: 4;
+    background-color: rgba(255, 255, 255, 0.468);
 }

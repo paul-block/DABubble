@@ -25,12 +25,21 @@
 }
 
 .forgot_pw {
+  transition: 200ms;
+  background-color: transparent;
+  border-radius: 30px;
+  width: 201px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #797EF3;
   font-size: 18px;
   font-family: "Figtree", sans-serif;
 }
 .forgot_pw:hover {
   cursor: pointer;
+  background-color: #ECEEFE;
 }
 
 .or {
@@ -46,6 +55,9 @@
 }
 
 input {
+  font-size: 18px;
+  font-weight: 500;
+  padding-left: 60px;
   border: 1px solid transparent;
   transition: 200ms;
   box-sizing: border-box;
@@ -58,6 +70,9 @@ input {
 input:hover {
   cursor: pointer;
   border: 1px solid #686868;
+}
+input:focus {
+  border: 1px solid #535AF1;
 }
 
 .input_img {
@@ -141,4 +156,42 @@ input:hover {
   background-color: #444DF2;
   cursor: pointer;
   color: white;
+}
+
+.confirmation {
+  z-index: 5;
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  transform: translateX(110%);
+  color: white;
+  font-size: 36px;
+  font-weight: 700;
+  box-sizing: border-box;
+  width: 530px;
+  height: 150px;
+  background-color: #444DF2;
+  border-radius: 30px;
+  padding: 65px;
+}
+
+.show_confirmation {
+  transition: 800ms;
+  transform: translateX(0);
+}
+
+.white_shadow {
+  transition: 200ms;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+}
+
+.show_shadow {
+  z-index: 4;
+  background-color: rgba(255, 255, 255, 0.468);
 }/*# sourceMappingURL=sign-in.component.css.map */
