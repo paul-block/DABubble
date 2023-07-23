@@ -100,9 +100,8 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    height: calc(100% - 98px - 100px - 170px);
+    height: calc(100% - 98px - 170px);
     gap: 10px;
-
 }
 
 .chat-messages-date {
@@ -153,6 +152,10 @@ h1 {
         background-color: white;
     }
 
+    &:hover .message-creator {
+        background-color: $hover-text-color;
+    }
+
     &:hover .reaction-bar {
         display: flex;
         animation: 225ms shortSlideInRight ease-in-out;
@@ -198,6 +201,80 @@ h1 {
     font-size: 18px;
     font-weight: 400;
     background-color: $hover-background-color;
+}
+
+.chat-message-details-reactions {
+    display: flex;
+    gap: 10px;
+
+    svg {
+        background-color: white;
+        border-radius: 100%;
+        cursor: pointer;
+        transition: $hover-transition;
+
+        &:hover {
+            background-color: $hover-background-color;
+            transition: $hover-transition;
+
+            path {
+                fill: $hover-text-color;
+                transition: $hover-transition;
+            }
+        }
+    }
+}
+
+.reaction-emojis {
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: white;
+    border: 1px solid #ADB0D9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    transition: $hover-transition;
+
+    span {
+        font-weight: 400;
+        font-size: 16px;
+    }
+
+
+
+    &:hover {
+        border: 1px solid #797EF3;
+
+        .reaction-emojis-bubble {
+            opacity: 1;
+        }
+    }
+
+    img {
+        width: 24px;
+        height: 24px;
+    }
+
+}
+
+.reaction-emojis-bubble {
+    opacity: 0;
+    display: none;
+    transition: $hover-transition;
+    display: flex;
+    transition: $hover-transition;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #444DF2;
+    border-radius: 30px 30px 30px 0px;
+    position: absolute;
+    left: 22px;
+    bottom: 38px;
+    height: 115px;
+    width: 160px;
+    color: white;
 }
 
 .chat-message-answers-amount {
@@ -248,8 +325,10 @@ h1 {
     }
 }
 
-.border-receiver {
+.message-creator {
     border-radius: 30px 0px 30px 30px;
+    background-color: $hover-text-color;
+    color: white;
 }
 
 .reaction-bar-sender {
