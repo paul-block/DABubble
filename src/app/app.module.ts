@@ -21,6 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { DesktopHeaderComponent } from './desktop-header/desktop-header.component';
+import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     SignInComponent,
     SignUpComponent,
     ForgotPasswordComponent,
+    DesktopHeaderComponent,
+    ChannelSidebarComponent
   ],
   imports: [
     FormsModule,

@@ -7,7 +7,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    padding: 20px;
+    padding: 10px 30px;
 
     #logo {
         width: 200px;
@@ -15,9 +15,11 @@ header {
 
     #searchbar {
         height: 35px;
-        width: 25vw;
-        border-radius: 20px;
-        padding: 0 10px;
+        width: 1300px;
+        border-radius: 42px;
+        border: none;
+        font-size: 24px;
+        font-weight: 400;
     }
 
     #profile {
@@ -25,9 +27,8 @@ header {
         align-items: center;
         gap: 20px;
 
-        .profileImg {
+        .profile-img {
             width: 70px;
-            border-radius: 50%;
         }
 
         #name {
@@ -36,5 +37,19 @@ header {
         }
     }
 
+    .input-container {
+        position: relative;
 
+        input {
+            padding: 10px 45px;
+        }
+
+        img {
+            position: absolute;
+            height: 25px;
+            right: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
 }
