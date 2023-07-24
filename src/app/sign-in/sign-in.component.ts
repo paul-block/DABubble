@@ -9,6 +9,13 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent {
 
+  regexEmail = new RegExp('^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$');
+  email: string
+  emailFocus: boolean = false
+  emailError: boolean = false
+  password: string = ''
+  form_valid: boolean = false
+
   constructor(public authenticationService: AuthenticationService, private router: Router) { }
 
 
@@ -17,5 +24,22 @@ export class SignInComponent {
     if (this.authenticationService.signIn_successful) {
       setTimeout(() => this.router.navigateByUrl('/main'), 1900);
     }
+  }
+
+
+  async signInWithPassword() {
+    if (this.password.length > 7 && this.emailError) {
+      console.log('test');
+      
+      await this.authenticationService.SignIn(this.email, this.password)
+      if (this.authenticationService.signIn_successful) {
+        setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+      }
+    }
+  }
+
+
+  dataChanged(value: string) {
+    this.emailError = this.regexEmail.test(value)
   }
 }

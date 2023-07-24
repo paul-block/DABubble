@@ -12,7 +12,7 @@ export class SignUpComponent {
   name = ''
   password = ''
   email = ''
-  emailError: boolean = true
+  emailError: boolean = false
   regexEmail = new RegExp('^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$');
   formValid: boolean = false
   nameFocus: boolean = false

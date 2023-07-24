@@ -5,7 +5,7 @@
     left: calc(50% - 303px);
     top: calc(50% - 385px);
     width: 606px;
-    height: 707px;
+    height: 748px;
     border-radius: 30px;
     gap: 43px;
     background-color: white;
@@ -42,6 +42,10 @@ input {
         border: 1px solid #686868;
     &:focus {
         border: 1px solid #535AF1;
+    &:focus::placeholder {
+        color: transparent;
+    }
+        
     }
 
 
@@ -89,7 +93,7 @@ input {
     align-items: center;
     transition: 200ms;
     position: absolute;
-    top: 40px;
+    top: 61px;
     left: 55px;
     width: 40px;
     height: 40px;
@@ -101,8 +105,14 @@ input {
 }
 
 .error {
+    position: absolute;
     color: red;
     margin-left: 15px;
+    top: 63px;
+    left: 0px;
+    span {
+        margin-right: 5px;
+    }
 }
 
 .invalid {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, User } from '@angular/fire/auth';
 import { getFirestore, collection, addDoc } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
@@ -14,12 +14,13 @@ export class AuthenticationService {
   dbRef = collection(this.db, "users");
   userData: any
   signIn_successful:boolean
+  signIn_error:boolean
+  
  
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth) { 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        console.log(user);
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user')!);
@@ -48,9 +49,10 @@ export class AuthenticationService {
     try {
       const result = await this.afAuth
         .signInWithEmailAndPassword(email, password);
-      console.log(result);
+        this.signIn_successful = true
+        setTimeout(() => this.signIn_successful = false, 2000);
     } catch (error) {
-      window.alert(error.message);
+      
     }
   }
 
@@ -67,7 +69,8 @@ export class AuthenticationService {
       this.signIn_successful = true
       setTimeout(() => this.signIn_successful = false, 2000);
     } catch (error) {
-      console.log(error);
+      this.signIn_error = true
+      setTimeout(() => this.signIn_error = false, 2000);
     }
   }
 
