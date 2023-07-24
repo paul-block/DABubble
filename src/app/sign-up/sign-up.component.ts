@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -24,7 +25,7 @@ export class SignUpComponent {
 
 
 
-  constructor(public authenticationService: AuthenticationService) { }
+  constructor(public authenticationService: AuthenticationService, private router:Router) { }
 
 
   dataChanged(value: any, inputfield: string) {
@@ -59,7 +60,10 @@ export class SignUpComponent {
   }
 
 
-  signUp() {
-    if (this.formValid) this.authenticationService.SignUp(this.email, this.password)
+  async signUp() {
+    if (this.formValid) await this.authenticationService.SignUp(this.email, this.password)
+    if (this.authenticationService.signUp_successful) {
+      setTimeout(() => this.router.navigateByUrl('/sign-in'), 1900);
+    }
   }
 }

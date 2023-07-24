@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
+import { SelectMultipleControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-in',
@@ -28,14 +29,17 @@ export class SignInComponent {
 
 
   async signInWithPassword() {
-    if (this.password.length > 7 && this.emailError) {
-      console.log('test');
-      
+    if (this.password.length > 7 && this.emailError && !this.authenticationService.signIn_error) {
       await this.authenticationService.SignIn(this.email, this.password)
       if (this.authenticationService.signIn_successful) {
         setTimeout(() => this.router.navigateByUrl('/main'), 1900);
       }
     }
+  }
+
+
+  guestLogin() {
+    this.router.navigateByUrl('/main');
   }
 
 

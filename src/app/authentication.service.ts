@@ -13,12 +13,14 @@ export class AuthenticationService {
   db = getFirestore();
   dbRef = collection(this.db, "users");
   userData: any
-  signIn_successful:boolean
-  signIn_error:boolean
-  
- 
+  signIn_successful: boolean
+  signIn_error: boolean
+  email_error: boolean
+  signUp_successful:boolean
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth) { 
+
+
+  constructor(private auth: Auth, public afAuth: AngularFireAuth) {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.userData = user;
@@ -31,30 +33,37 @@ export class AuthenticationService {
     });
   }
 
+
   // Sign up with email/password
   async SignUp(email: string, password: string) {
-    console.log(email, password);
-
     try {
       const result = await this.afAuth
         .createUserWithEmailAndPassword(email, password);
-      window.alert('You have been successfully registered!');
-      console.log(result.user);
+        this.signUp_successful = true
+        setTimeout(() => this.signUp_successful = false, 3000);
     } catch (error) {
-      window.alert(error.message);
+      if (error.message == 'Firebase: Error (auth/email-already-in-use).') {
+        this.email_error = true
+        setTimeout(() => this.email_error = false, 3000);
+      } else
+        window.alert(error.message)
     }
   }
+
+
   // Sign in with email/password
   async SignIn(email: string, password: string) {
     try {
       const result = await this.afAuth
         .signInWithEmailAndPassword(email, password);
-        this.signIn_successful = true
-        setTimeout(() => this.signIn_successful = false, 2000);
+      this.signIn_successful = true
+      setTimeout(() => this.signIn_successful = false, 3000);
     } catch (error) {
-      
+      this.signIn_error = true
+      setTimeout(() => this.signIn_error = false, 3000);
     }
   }
+
 
   // Sign in with Google
   GoogleAuth() {
@@ -69,8 +78,7 @@ export class AuthenticationService {
       this.signIn_successful = true
       setTimeout(() => this.signIn_successful = false, 2000);
     } catch (error) {
-      this.signIn_error = true
-      setTimeout(() => this.signIn_error = false, 2000);
+      window.alert(error.message);
     }
   }
 

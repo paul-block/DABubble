@@ -179,15 +179,36 @@ input {
     right: 50px;
     transform: translateX(+110%);
     color: white;
-    font-size: 36px;
+    font-size: 30px;
     font-weight: 700;
     box-sizing: border-box;
     width: 530px;
     height: 150px;
     background-color: #444DF2;
     border-radius: 30px;
-    padding: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
 
+.login_error {
+    z-index: 5;
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    transform: translateX(+110%);
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    box-sizing: border-box;
+    width: 530px;
+    height: 150px;
+    background-color: red;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .show_confirmation {
@@ -196,7 +217,7 @@ input {
 }
 
 .show_error {
-    animation: slide_in 2s ease-in-out;
+    animation: slide_in 3s ease-in-out;
 }
 
 .white_shadow {
@@ -235,7 +256,10 @@ input {
     0% {
         transform: translateX(+110%);
     }
-    50% {
+    30% {
+        transform: translateX(0);
+    }
+    70% {
         transform: translateX(0);
     }
     100% {

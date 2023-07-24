@@ -104,6 +104,31 @@ input {
     }
 }
 
+.signup_success {
+    z-index: 5;
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    transform: translateX(+110%);
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    box-sizing: border-box;
+    width: 530px;
+    height: 150px;
+    background-color: #444DF2;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.show_signup_success {
+    transition: 800ms;
+    transform: translateX(0);
+}
+
 .error {
     position: absolute;
     color: red;
@@ -120,5 +145,60 @@ input {
     &:hover {
         background-color: #686868 ;
         cursor: not-allowed;
+    }
+}
+
+.email_error {
+    z-index: 5;
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    transform: translateX(+110%);
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+    box-sizing: border-box;
+    width: 530px;
+    height: 150px;
+    background-color: red;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.show_error {
+    animation: slide_in 3s ease-in-out;
+}
+
+.white_shadow {
+    transition: 200ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+}
+
+.show_shadow {
+    z-index: 4;
+    background-color: rgba(255, 255, 255, 0.468);
+}
+
+@keyframes slide_in {
+    0% {
+        transform: translateX(+110%);
+    }
+    30% {
+        transform: translateX(0);
+    }
+    70% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(+110%);
     }
 }

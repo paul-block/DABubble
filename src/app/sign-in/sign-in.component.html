@@ -21,10 +21,10 @@
         <span>Anmelden mit Google</span>
     </div>
     <div class="button_div">
-        <div  [class.invalid]="password.length < 8 && !emailError" (click)="signInWithPassword()" class="signin_button">Anmelden</div>
-        <div class="guest_login_button">Gäste-Login</div>
+        <div [class.invalid]="password.length > 8 || emailError == false" (click)="signInWithPassword()" class="signin_button">Anmelden</div>
+        <div (click)="guestLogin()" class="guest_login_button">Gäste-Login</div>
     </div>
 </div>
 <div [class.show_confirmation]="authenticationService.signIn_successful" class="confirmation">Erfolgreich angemeldet</div>
-<div [class.show_error]="authenticationService.signIn_error" class="confirmation">Passwort oder Email falsch</div>
+<div [class.show_error]="authenticationService.signIn_error" class="login_error">Passwort oder Email falsch</div>
 <div [class.show_shadow]="authenticationService.signIn_successful" class="white_shadow"></div>
