@@ -18,9 +18,7 @@ export class StartScreenComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    console.log(this.firestoreService.userData);
-    
+  ngOnInit(): void {    
     setTimeout(() => this.animationStart = true, 1000);
     setTimeout(() => this.animationLogo = true, 2000);
     setTimeout(() => this.d_none = true, 2900);
