@@ -45,6 +45,10 @@
                 position: relative;
                 gap: 15px;
                 width: 100%;
+
+                &:hover {
+                    color: #535AF1;
+                }
             }
 
             .workspace {
@@ -105,10 +109,19 @@
                     gap: 10px;
                     padding: 4px 20px;
                     margin-top: 10px;
+
+                    &:hover {
+                        color: #535AF1;
+                        
+                         img {
+                               scale: 1.05;        
+                         }
+                    }  
                 }
             }
-            }
+        }
     }
+
     .dm-section {
         display: flex;
         flex-direction: column;
@@ -117,6 +130,10 @@
         .dm-first-row {
             display: flex;
             position: relative;
+
+            &:hover {
+                color: #535AF1;
+            }
         
             .icon-headline {
                 display: flex;
@@ -144,7 +161,7 @@
                 justify-content: flex-start;
                 height: 50px;
                 gap: 15px;
-                width: 300px;
+                width: 250px;
                 padding: 0 45px;
 
 
