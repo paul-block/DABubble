@@ -34,7 +34,7 @@ import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.compo
     SignUpComponent,
     ForgotPasswordComponent,
     DesktopHeaderComponent,
-    ChannelSidebarComponent
+    ChannelSidebarComponent,
   ],
   imports: [
     FormsModule,
