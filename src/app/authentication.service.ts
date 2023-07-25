@@ -4,6 +4,7 @@ import { getFirestore, collection, addDoc } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
 import firebase from 'firebase/compat';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,17 @@ export class AuthenticationService {
   signIn_error: boolean
   email_error: boolean
   signUp_successful:boolean
+  userName:string 
+  
 
 
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth) {
+  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore) {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.userData = user;
+        console.log(this.userData);
+        
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user')!);
       } else {
@@ -38,7 +43,7 @@ export class AuthenticationService {
   async SignUp(email: string, password: string) {
     try {
       const result = await this.afAuth
-        .createUserWithEmailAndPassword(email, password);
+        .createUserWithEmailAndPassword(email, password)   
         this.signUp_successful = true
         setTimeout(() => this.signUp_successful = false, 3000);
     } catch (error) {
@@ -92,5 +97,15 @@ export class AuthenticationService {
       .catch((error) => {
         window.alert(error);
       });
+  }
+
+
+  SetUserData(user: any) {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
+    return userRef.set(this.userName, {
+      merge: true,
+    });
   }
 }

@@ -21,7 +21,7 @@
         <span>Anmelden mit Google</span>
     </div>
     <div class="button_div">
-        <div [class.invalid]="password.length > 8 || emailError == false" (click)="signInWithPassword()" class="signin_button">Anmelden</div>
+        <div [class.invalid]="password.length < 8 || !emailError" (click)="signInWithPassword()" class="signin_button">Anmelden</div>
         <div (click)="guestLogin()" class="guest_login_button">Gäste-Login</div>
     </div>
 </div>
