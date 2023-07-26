@@ -15,7 +15,8 @@
                     <img src="assets/img/icons/workspaces.png" alt="">
                     <span>Channels</span>
                 </div>
-                <img class="pointer sidebar-icon-hover" src="assets/img/icons/add.png" alt="">
+                <img class="pointer sidebar-icon-hover" (click)="openAddChannel()" src="assets/img/icons/add.png"
+                    alt="">
             </div>
 
             <div class="channel-second-row" *ngIf="channelsVisible">
@@ -27,7 +28,7 @@
                     <span class="tag">#</span>
                     <span>Office-team</span>
                 </div>
-                <div class="add-channel-container pointer">
+                <div class="add-channel-container pointer" (click)="openAddChannel()">
                     <img src="assets/img/icons/add_circle.png" alt="">
                     <span>Channel hinzufügen</span>
                 </div>

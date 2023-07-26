@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddChannelComponent } from '../add-channel/add-channel.component';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -9,6 +11,10 @@ export class ChannelSidebarComponent {
   channelsVisible: boolean = true;
   dmsVisible: boolean = true;
   workspaceVisible: boolean = true;
+
+  constructor(public dialog: MatDialog) {
+
+  }
 
   toggleChannels() {
     this.channelsVisible = !this.channelsVisible;
@@ -21,4 +27,8 @@ export class ChannelSidebarComponent {
   toggleWorkspace() {
     this.workspaceVisible = !this.workspaceVisible;
   }
+
+  openAddChannel() {
+    this.dialog.open(AddChannelComponent);
+  } 
 }
