@@ -1,12 +1,37 @@
-<div mat-dialog-title>
-  <mat-icon>tag</mat-icon>
-  <h1>Entwicklerteam</h1>
-</div>
-<div mat-dialog-content>
-  <h2>Channel-Name</h2>
-</div>
-<div mat-dialog-content>
-  This dialog showcases the title, close, content and actions elements.</div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Close</button>
-</div>
+<section class="p-20">
+
+  <div class="title">
+    <div>
+      <mat-icon>tag</mat-icon>
+      <h1>Entwicklerteam</h1>
+    </div>
+    <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
+  </div>
+
+  <div class="container-channel-name-description">
+    <div class="space-between">
+      <h2>Channel-Name</h2>
+      <span class="edit-text">Bearbeiten</span>
+    </div>
+    <div>
+      <mat-icon>tag</mat-icon>
+      <span class="channel-name">Entwicklerteam</span>
+    </div>
+
+  </div>
+  <div class="container-channel-name-description">
+    <div class="space-between">
+      <h2>Beschreibung</h2>
+      <span class="edit-text">Bearbeiten</span>
+    </div>
+    <span class="channel-description">Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen
+      mit deinem Team Meetings
+      abhalten, Dokumente teilen und Entscheidungen treffen.</span>
+    <div class="parting-line"></div>
+    <h2>Erstellt von</h2>
+    <span class="channel-creator">Noah Braun</span>
+  </div>
+  <div class="leave-channel">
+    <button (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
+  </div>
+</section>

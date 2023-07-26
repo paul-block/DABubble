@@ -21,6 +21,10 @@ header {
     transition: $hover-transition;
     position: relative;
 
+    .tag {
+        font-style: italic;
+    }
+
     &:hover {
         background-color: $hover-background-color;
         color: $hover-text-color;
