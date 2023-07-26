@@ -31,3 +31,31 @@ h6 {
 .pointer {
     cursor: pointer;
 }
+
+.br-20 {
+    border-radius: 20px;
+}
+
+.default {
+    cursor: default;
+}
+
+.sidebar-hover:hover {
+            background-color: #ECEEFE;
+            border-radius: 20px;
+}
+
+.sidebar-icon-hover:hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ECEEFE;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
