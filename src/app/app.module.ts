@@ -8,21 +8,22 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 // Components
 import { StartScreenComponent } from './start-screen/start-screen.component';
 import { MainComponent } from './main/main.component';
 import { ChannelDirectChatComponent } from './channel-direct-chat/channel-direct-chat.component';
-// Material API imports
-import { MatCardModule } from '@angular/material/card';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DesktopHeaderComponent } from './desktop-header/desktop-header.component';
 import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.component';
+// Material API imports
+import { MatCardModule } from '@angular/material/card';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.compo
     SignUpComponent,
     ForgotPasswordComponent,
     DesktopHeaderComponent,
-    ChannelSidebarComponent
+    ChannelSidebarComponent,
   ],
   imports: [
     FormsModule,
@@ -47,7 +48,7 @@ import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.compo
     provideFirestore(() => getFirestore()),
     MatCardModule,
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
