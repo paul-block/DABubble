@@ -14,14 +14,20 @@ header {
         display: flex;
         align-items: center;
         gap: 20px;
+        cursor: pointer;
 
         .profile-img {
             width: 70px;
+            margin-right: 20px;
         }
 
         #name {
             font-size: 26px;
             font-weight: bold;
+
+            &:hover {
+                color: #535AF1;
+            }
         }
     }
 
@@ -47,3 +53,4 @@ header {
         }
     }
 }
+

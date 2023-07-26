@@ -26,6 +26,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AddChannelComponent } from './add-channel/add-channel.component';
+import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
 
 
 
@@ -42,6 +43,7 @@ import { AddChannelComponent } from './add-channel/add-channel.component';
     DesktopHeaderComponent,
     ChannelSidebarComponent,
     AddChannelComponent,
+    ProfileMenuComponent,
   ],
   imports: [
     FormsModule,

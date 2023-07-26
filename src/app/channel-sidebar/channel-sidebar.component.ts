@@ -13,7 +13,7 @@ export class ChannelSidebarComponent {
   workspaceVisible: boolean = true;
 
   constructor(public dialog: MatDialog) {
-
+    
   }
 
   toggleChannels() {

@@ -1,0 +1,63 @@
+<div id="menu-container">
+    <span (click)="toggleDetails()">Profile</span>
+    <span>Log out</span>
+</div>
+
+<div id="profileDetails" *ngIf="detailsVisible">
+    <div class="header-container">
+        <span>Profil</span>
+        <img class="sidebar-icon-hover" (click)="toggleDetails()" src="assets/img/icons/close.png" alt="">
+    </div>
+
+    <img class="profileImg" src="assets/img/big_avatar/avatar_1.svg" alt="">
+
+    <div class="middle-part">
+        <div class="edit-container">
+            <span id="name">Frederick Beck</span>
+            <span id="edit" class="pointer" (click)="toggleEditDetails()">Bearbeiten</span>
+        </div>
+        <img id="status" src="assets/img/status/active.png" alt="">
+    </div>
+
+
+    <div class="email-container">
+        <img src="assets/img/mail.png" alt="">
+        <span id="email-headline">E-Mail-Adresse</span>
+        <span id="email-address">fred.beck@email.com</span>
+    </div>
+</div>
+
+<div id="editProfile" *ngIf="editDetailsVisible">
+    <div class="header-container">
+        <span>Dein Profil bearbeiten</span>
+        <img (click)="toggleEditDetails()" class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="">
+    </div>
+
+    <img class="profileImg" src="assets/img/big_avatar/avatar_1.svg" alt="">
+
+    <div class="middle-part">
+
+        <div id="edit-name">
+            <div id="edit-name-headline">
+                <img src="assets/img/icons/account_circle.png" alt="">
+                <span>Vollständiger Name</span>
+            </div>
+            <input type="text" placeholder="Frederick Beck">
+        </div>
+
+        <div id="edit-email">
+            <div id="edit-email-headline">
+                <img src="assets/img/mail.png" alt="">
+                <span>E-Mail-Adresse</span>
+            </div>
+            <input type="text" placeholder="fred.beck@email.com">
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <button id="cancel-btn" mat-fab extended (click)="toggleEditDetails()">Abbrechen</button>
+        <button id="save-btn" mat-fab extended>Speichern</button>
+
+    </div>
+
+</div>
