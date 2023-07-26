@@ -23,6 +23,8 @@ import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.compo
 import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -36,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
     ForgotPasswordComponent,
     DesktopHeaderComponent,
     ChannelSidebarComponent,
+    DialogEditChannelComponent,
   ],
   imports: [
     FormsModule,
@@ -49,6 +52,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     BrowserAnimationsModule,
     MatIconModule,
+    MatDialogModule
   ],
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase }

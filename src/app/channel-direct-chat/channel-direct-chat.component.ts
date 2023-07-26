@@ -1,18 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 
 @Component({
   selector: 'app-channel-direct-chat',
   templateUrl: './channel-direct-chat.component.html',
   styleUrls: ['./channel-direct-chat.component.scss']
 })
+
 export class ChannelDirectChatComponent {
   messageCreator = true;
   toggleEditMessage: boolean = false;
   toggleReactionEmojis: boolean = false;
   toggleEditChannel: boolean = false;
+  @ViewChild('editChannelREF') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
+  constructor(private dialog: MatDialog) { }
 
-  editMessage() {
+  editChannel() {
+    const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.position = {
+      top: `${rect.bottom}px`,
+      left: `${rect.left}px`,
+    };
+    dialogConfig.panelClass = 'custom-edit-channel-dialog';
+
+    this.dialog.open(DialogEditChannelComponent, dialogConfig);
+  }
+
+  public editMessage() {
+    // this.dialog.open(DialogEditChannelComponent);
   }
 
   resetToggledAreas() {
@@ -30,10 +48,6 @@ export class ChannelDirectChatComponent {
         this.toggleEditMessage = false;
         this.toggleReactionEmojis = !this.toggleReactionEmojis;
         break;
-      case 'edit-channel':
-        this.toggleEditChannel = !this.toggleEditChannel;
-        break;
-
       default:
         break;
     }

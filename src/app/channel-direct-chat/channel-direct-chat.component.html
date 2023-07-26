@@ -1,10 +1,9 @@
 <section [ngClass]="{'bgFilter': toggleEditChannel}"></section>
 <header>
-    <div (click)="toggleArea('edit-channel')" class="chat-receiver">
+    <div class="chat-receiver" (click)="editChannel()" #editChannelREF>
         <mat-icon>tag</mat-icon>
         <h1>Entwicklerteam</h1>
         <mat-icon>keyboard_arrow_down</mat-icon>
-        <div class="edit-channel" [ngClass]="{'d_none': !toggleEditChannel}">test</div>
     </div>
     <div class="members">
         <div class="already-members">
