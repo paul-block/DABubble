@@ -8,7 +8,7 @@
         <img class="input_img_2" src="/assets/img/person_filled.png" alt="">
         <input placeholder="Name" type="text" #myInput (focus)="nameFocus = true" [(ngModel)]="name"
             (ngModelChange)="dataChanged($event, 'name')">
-        <span class="error" *ngIf="name.length < 1 && nameFocus">Bitte schreiben Sie einen Namen.</span>
+        <span class="error" *ngIf="name.length < 3 && nameFocus">Bitte schreiben Sie einen Namen.</span>
     </div>
     <div class="input_div">
         <img class="input_img" src="/assets/img/mail.png" alt="" #email_input>
