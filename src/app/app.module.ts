@@ -20,13 +20,14 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { DesktopHeaderComponent } from './desktop-header/desktop-header.component';
 import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.component';
 import { AddChannelComponent } from './add-channel/add-channel.component';
+import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
+import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
 // Material API imports
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 
 
 
@@ -44,7 +45,8 @@ import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-ch
     DesktopHeaderComponent,
     ChannelSidebarComponent,
     AddChannelComponent,
-    DialogEditChannelComponent
+    DialogEditChannelComponent,
+    ProfileMenuComponent,
   ],
   imports: [
     FormsModule,
