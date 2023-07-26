@@ -4,6 +4,12 @@
     padding: 32px 30px;
     gap: 50px;
     position: relative;
+    width: 300px;
+    border-radius: 30px;
+    height: calc(100vh - 210px);
+    background-color: white;
+    margin-left: 25px;
+    border-radius: 30px;
 
     header {
         display: flex;
@@ -25,7 +31,7 @@
         span {
             font-size: 24px;
             font-weight: 700;
-            width: 212px;
+            width: 173px;
             height: 33px;
         }
     }
@@ -44,6 +50,7 @@
                 justify-content: space-between;
                 position: relative;
                 gap: 15px;
+                height: 50px;
                 width: 100%;
 
                 &:hover {
@@ -129,6 +136,8 @@
 
         .dm-first-row {
             display: flex;
+            height: 50px;
+            align-items: center;
             position: relative;
 
             &:hover {
@@ -197,8 +206,10 @@
     left: -155px;
     top: 70%;
     width: 350px;
-
+    z-index: 999;
+    
         span {
             font-size: 18px;
+            user-select: none;
         } 
   }
