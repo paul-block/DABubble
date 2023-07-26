@@ -21,10 +21,13 @@ import { DesktopHeaderComponent } from './desktop-header/desktop-header.componen
 import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.component';
 // Material API imports
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
-import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { AddChannelComponent } from './add-channel/add-channel.component';
+
+
 
 
 @NgModule({
@@ -38,7 +41,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     ForgotPasswordComponent,
     DesktopHeaderComponent,
     ChannelSidebarComponent,
-    DialogEditChannelComponent,
+    AddChannelComponent,
   ],
   imports: [
     FormsModule,
@@ -52,7 +55,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCardModule,
     BrowserAnimationsModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
