@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="first-row">
+        <span class="headline">Leute hinzufügen</span>
+        <img src="assets/img/icons/close.png" (click)="closeDialog()" class="pointer" alt="">
+    </div>
+    <label class="checkbox-container">
+        <div class="flex">
+            <input type="checkbox" class="round-checkbox">
+            <span class="checkmark">Alle Mitglieder von <span id="highlight">OfficeTeam</span> hinzufügen</span>
+        </div>
+    </label>
+    <label class="checkbox-container">
+        <div class="flex">
+            <input type="checkbox" class="round-checkbox" [(ngModel)]="checkboxValue">
+            <span class="checkmark">Bestimmte Leute hinzufügen</span>
+        </div>
+        <input id="certain-input" *ngIf="checkboxValue" type="text" placeholder="Name eingeben">
+    </label>
+    <button mat-fab extended>Erstellen</button>
+</div>

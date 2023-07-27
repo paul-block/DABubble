@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { AddPplToChannelComponent } from '../add-ppl-to-channel/add-ppl-to-channel.component';
 
 @Component({
   selector: 'app-add-channel',
@@ -14,5 +15,10 @@ export class AddChannelComponent {
 
   closeDialog() {
     this.dialog.closeAll();
+  } 
+
+  openAddChannel() {
+    this.dialog.closeAll();
+    this.dialog.open(AddPplToChannelComponent);
   } 
 }
