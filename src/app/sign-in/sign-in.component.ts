@@ -27,7 +27,6 @@ export class SignInComponent {
     }
   }
 
-
   async signInWithPassword() {
     if (this.password.length > 7 && this.emailError && !this.authenticationService.signIn_error) {
       await this.authenticationService.SignIn(this.email, this.password)
@@ -36,7 +35,6 @@ export class SignInComponent {
       }
     }
   }
-
 
   guestLogin() {
     this.router.navigateByUrl('/main');

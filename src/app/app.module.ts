@@ -28,6 +28,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { NewMsgComponent } from './new-msg/new-msg.component';
 
 
 
@@ -47,6 +48,7 @@ import { MatButtonModule } from '@angular/material/button';
     AddChannelComponent,
     DialogEditChannelComponent,
     ProfileMenuComponent,
+    NewMsgComponent,
   ],
   imports: [
     FormsModule,
