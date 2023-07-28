@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
+import { NewMsgComponent } from '../new-msg/new-msg.component';
 
 @Component({
   selector: 'app-channel-sidebar',

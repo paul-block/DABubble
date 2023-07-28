@@ -22,15 +22,18 @@ import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.compo
 import { AddChannelComponent } from './add-channel/add-channel.component';
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
+import { DialogEditMembersComponent } from './dialog-edit-members/dialog-edit-members.component';
+import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-members.component';
+import { AddPplToChannelComponent } from './add-ppl-to-channel/add-ppl-to-channel.component';
+import { NewMsgComponent } from './new-msg/new-msg.component';
 // Material API imports
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { NewMsgComponent } from './new-msg/new-msg.component';
-import { DialogEditMembersComponent } from './dialog-edit-members/dialog-edit-members.component';
-import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-members.component';
+
+
 
 
 
@@ -53,6 +56,7 @@ import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-membe
     NewMsgComponent,
     DialogEditMembersComponent,
     DialogAddMembersComponent,
+    AddPplToChannelComponent,
   ],
   imports: [
     FormsModule,
