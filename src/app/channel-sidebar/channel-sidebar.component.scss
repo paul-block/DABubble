@@ -34,6 +34,13 @@
             width: 173px;
             height: 33px;
         }
+
+        #edit:hover {
+            scale: 1.1;
+                path {
+                    fill: #535AF1;
+                }
+            }
     }
 
     .channel-container {
@@ -53,8 +60,28 @@
                 height: 50px;
                 width: 100%;
 
+                #add-channel-icon:hover {
+                    scale: 1.1;
+                        path {
+                            fill: #535AF1 !important;
+                        }
+                }
+
                 &:hover {
                     color: #535AF1;
+
+                    svg {
+                        path {
+                            fill: #535AF1;
+                        }
+                    }
+
+                    #add-channel-icon {
+            
+                        path {
+                            fill: black;
+                        }
+                    }
                 }
             }
 
@@ -120,8 +147,12 @@
                     &:hover {
                         color: #535AF1;
                         
-                         img {
-                               scale: 1.05;        
+                         svg {
+                               scale: 1.05;  
+                               
+                               path {
+                                fill: #535AF1;
+                               }
                          }
                     }  
                 }
@@ -142,6 +173,12 @@
 
             &:hover {
                 color: #535AF1;
+
+                svg {
+                    path {
+                        fill: #535AF1;
+                    }
+                }
             }
         
             .icon-headline {
