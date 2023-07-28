@@ -1,12 +1,13 @@
-<section [ngClass]="{'bgFilter': toggleEditChannel}"></section>
 <header>
-    <div class="chat-receiver" (click)="editChannel()" #editChannelREF>
+    <div class="chat-receiver" [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()"
+        #editChannelREF>
         <mat-icon class="tag">tag</mat-icon>
         <h1>Entwicklerteam</h1>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
     <div class="members">
-        <div class="already-members">
+        <div class="already-members" [ngClass]="{'edit-dialog-open':isEditMembersDialogOpen === true}"
+            (click)="editMembers()" #editMembersREF>
             <div class="already-members-avatars">
                 <img src="/assets/img/small_avatar/avatar_1.svg">
                 <img src="/assets/img/small_avatar/avatar_2.svg">
@@ -14,7 +15,12 @@
             </div>
             <span>3</span>
         </div>
-        <mat-icon class="add-members">person_add_alt</mat-icon>
+        <div (click)="addMembers()" class="add-members" #addMembersREF>
+            <mat-icon  [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
+                person_add_alt
+            </mat-icon>
+        </div>
+
     </div>
 </header>
 <section class="chat-messages">

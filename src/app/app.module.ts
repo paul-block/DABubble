@@ -29,6 +29,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NewMsgComponent } from './new-msg/new-msg.component';
+import { DialogEditMembersComponent } from './dialog-edit-members/dialog-edit-members.component';
+import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-members.component';
 
 
 
@@ -49,6 +51,8 @@ import { NewMsgComponent } from './new-msg/new-msg.component';
     DialogEditChannelComponent,
     ProfileMenuComponent,
     NewMsgComponent,
+    DialogEditMembersComponent,
+    DialogAddMembersComponent,
   ],
   imports: [
     FormsModule,
