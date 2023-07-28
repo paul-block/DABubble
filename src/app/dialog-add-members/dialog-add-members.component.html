@@ -8,8 +8,8 @@
         <span>Entwicklerteam</span>
     </div>
     <div class="relative">
-        <input class="input-name" type="text" placeholder="Name eingeben">
-        <div class="search-people-popup">
+        <input class="input-name" type="text" placeholder="Name eingeben" [(ngModel)]="inputSearchPeople" (keydown)="checkSearchPeopleInput()" (keyup)="checkSearchPeopleInput()">
+        <div class="search-people-popup" [ngClass]="{'d_none': !inputSearch}">
             <div>
                 <img src="/assets/img/small_avatar/avatar_2.svg">
                 <span>Frederik Beck (Du)</span>
