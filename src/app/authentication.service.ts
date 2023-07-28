@@ -128,7 +128,7 @@ export class AuthenticationService {
   async signOut() {
     await this.afAuth.signOut();
     localStorage.removeItem('user');
-    this.router.navigate(['sign-in']);
+    this.router.navigateByUrl('/sign-in');
     this.userData = []
   }
 }
