@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 // Components
+import { NewPasswordComponent } from './new-password/new-password.component';
 import { StartScreenComponent } from './start-screen/start-screen.component';
 import { MainComponent } from './main/main.component';
 import { ChannelDirectChatComponent } from './channel-direct-chat/channel-direct-chat.component';
@@ -57,6 +58,7 @@ import { MatButtonModule } from '@angular/material/button';
     DialogEditMembersComponent,
     DialogAddMembersComponent,
     AddPplToChannelComponent,
+    NewPasswordComponent,
   ],
   imports: [
     FormsModule,
