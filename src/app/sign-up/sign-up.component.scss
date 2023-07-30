@@ -21,6 +21,7 @@
     font-size: 46px;
     font-weight: 700;
     color: #444DF2;
+    text-align: center;
 }
 
 input {
@@ -198,5 +199,74 @@ input {
     }
     100% {
         transform: translateX(+110%);
+    }
+}
+
+@media screen and (max-width: 650px) {
+
+    .signup_div {
+        width: 100%;
+        gap: 33px;
+    }
+
+    .arrow_back {
+        left: 10px;
+        top: 20px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+
+    .signup_div {
+        gap: 29px;
+        padding: 20px;
+    }
+
+
+    input:placeholder-shown {
+        font-size: 12px;
+    }
+
+    .error {
+        margin: 0;
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-height: 950px) {
+
+    .headline {
+        font-size: 30px;
+    }
+
+    .signup_div {
+        gap: 30px;
+        height: 600px;
+    }
+
+}
+@media screen and (max-height: 750px) {
+
+    input {
+        height: 50px;
+    }
+
+    .input_img_2 {
+        top: 13px;
+    }
+
+    .input_img {
+        top: 18px;
+    }
+
+    .signup_div {
+        gap: 14px;
+        height: 477px;
+    }
+
+    .error {
+        top: 51px;
+        font-size: 9px;
+        margin-left: 14px;
     }
 }

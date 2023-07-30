@@ -1,6 +1,6 @@
 <div class="signin_div">
     <span class="headline">Anmeldung</span>
-    <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</span>
+    <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
     <div class="input_div">
         <img class="input_img" src="/assets/img/mail.png" alt="">
         <input type="email" placeholder="beispielname@email.com" (focus)="emailFocus = true" [(ngModel)]="email"  (ngModelChange)="dataChanged($event)">
@@ -26,5 +26,5 @@
     </div>
 </div>
 <div [class.show_confirmation]="authenticationService.signIn_successful" class="confirmation d_none">Erfolgreich angemeldet</div>
-<div [class.show_error]="authenticationService.signIn_error" class="login_error d_none">Passwort oder Email falsch</div>
+<div [class.show_error]="authenticationService.signIn_error" class="login_error">Passwort oder Email falsch</div>
 <div [class.show_shadow]="authenticationService.signIn_successful" class="white_shadow d_none"></div>

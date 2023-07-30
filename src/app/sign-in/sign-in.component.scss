@@ -2,7 +2,7 @@
     z-index: 1;
     box-sizing: border-box;
     width: 606px;
-    height: 769px;
+    height: 818px;
     border-radius: 30px;
     gap: 43px;
     background-color: white;
@@ -13,6 +13,12 @@
 
     span {
         text-align: center;
+    }
+
+    p {
+        font-size: 20px;
+        text-align: center;
+        margin: 0;
     }
 }
 
@@ -191,6 +197,7 @@ input {
 }
 
 .login_error {
+    display: none;
     z-index: 5;
     position: absolute;
     bottom: 50px;
@@ -204,9 +211,8 @@ input {
     height: 150px;
     background-color: red;
     border-radius: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    padding-top: 50px;
 }
 
 .show_confirmation {
@@ -216,6 +222,7 @@ input {
 
 .show_error {
     animation: slide_in 3s ease-in-out;
+    display: block;
 }
 
 .white_shadow {
@@ -253,19 +260,19 @@ input {
 
 @keyframes slide_in {
     0% {
-        transform: translateX(+110%);
+        transform: translateX(+100%);
     }
 
     30% {
-        transform: translateX(0);
+        transform: translateX(-10%);
     }
 
     70% {
-        transform: translateX(0);
+        transform: translateX(-10%);
     }
 
     100% {
-        transform: translateX(+110%);
+        transform: translateX(+100%);
     }
 }
 
@@ -284,25 +291,64 @@ input {
     }
 }
 
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 1000px) {
 
-    .signin_div {
-        gap: 20px;
-        height: 595px;
+    .login_error {
+        width: 265px;
+        height: 75px;
+        font-size: 15px;
+        right: 0;
+        border-radius: 20px;
+        padding-top: 25px;
     }
-
 }
+
 
 @media screen and (max-width: 430px) {
     .signin_div {
         padding: 20px;
     }
+
+    .button_div {
+        gap: 5px;
+    }
+
+    input:placeholder-shown {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-height: 1100px) {
+
+    .signin_div {
+        height: 700px;
+        gap: 25px;
+    }
+
+}
+
+@media screen and (max-height: 950px) {
+
+    .signin_div {
+        height: 589px;
+        gap: 23px;
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    .headline {
+        font-size: 30px;
+    }
+
 }
 
 @media screen and (max-height: 750px) {
 
     input {
         height: 50px;
+        margin-bottom: 5px;
     }
 
     .google_button {
@@ -311,10 +357,24 @@ input {
 
     .signin_div {
         height: 450px;
-        gap: 10px;
+        gap: 8px;
+
+        p {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
     }
 
-    .headline {
-        font-size: 30px;
+    .input_img {
+        top: 18px;
+    }
+
+    .input_img_2 {
+        top: 12px;
+    }
+
+    .error {
+        top: 50px;
+        font-size: 10px;
     }
 }
