@@ -25,7 +25,6 @@
         <div (click)="guestLogin()" class="guest_login_button">Gäste-Login</div>
     </div>
 </div>
-<div [class.show_confirmation]="authenticationService.signIn_successful" class="confirmation">Erfolgreich angemeldet</div>
-<div [class.show_error]="authenticationService.signIn_error" class="login_error">Passwort oder Email falsch</div>
-<div [class.show_shadow]="authenticationService.signIn_successful" class="white_shadow"></div>
-<button (click)="authenticationService.signOut()">logout</button>
+<div [class.show_confirmation]="authenticationService.signIn_successful" class="confirmation d_none">Erfolgreich angemeldet</div>
+<div [class.show_error]="authenticationService.signIn_error" class="login_error d_none">Passwort oder Email falsch</div>
+<div [class.show_shadow]="authenticationService.signIn_successful" class="white_shadow d_none"></div>

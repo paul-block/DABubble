@@ -9,19 +9,27 @@
     transition: 1s;
 }
 
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 0 50px 0 50px;
+}
+
+
 .logo {
     z-index: 2;
     display: flex;
     position: absolute;
     top: calc(50% - 92px);
-    left: calc(50% - 95px);
+    left: calc(50% - 155px);
     color: white;
     font-size: 100px;
     font-weight: 600;
     transition: 700ms;
 
     img {
-        width: 187px;
         height: 184px;
     }
 }
@@ -83,15 +91,8 @@
     &:hover {
         cursor: pointer;
         border: 1px solid #686868;
-        
-    }
-}
 
-.content {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    }
 }
 
 .slide_img {
@@ -148,5 +149,64 @@
         left: 75px;
         opacity: 1;
         scale: 1;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    .logo2 {
+        top: 40px;
+        left: 40px;
+    }
+
+    .sign_in {
+        top: 40px;
+        right: 40px;
+    }
+
+    .logo {
+        left: calc(50% - -28px);
+        font-size: 50px;
+        img {
+            height: 80px;
+        }
+    }
+
+    .logo_text {
+        span {
+            top: 7px;
+        }
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .main_div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sign_in {
+        position: unset;
+        margin-bottom: 50px;
+    }
+
+    .logo2 {
+        margin-top: 50px;
+        position: unset;
+        img {
+            width: 50px;
+        }
+    }
+}
+
+@media screen and (max-height: 860px) {
+    .sign_in {
+        margin-bottom: 25px;
+    }
+
+    .logo2 {
+        margin-top: 35px;
     }
 }

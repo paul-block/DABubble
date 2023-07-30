@@ -1,9 +1,7 @@
 .signup_div {
+    position: relative;
     z-index: 1;
     box-sizing: border-box;
-    position: absolute;
-    left: calc(50% - 303px);
-    top: calc(50% - 385px);
     width: 606px;
     height: 748px;
     border-radius: 30px;

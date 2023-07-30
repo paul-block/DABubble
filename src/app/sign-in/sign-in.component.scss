@@ -1,9 +1,6 @@
 .signin_div {
     z-index: 1;
     box-sizing: border-box;
-    position: absolute;
-    left: calc(50% - 303px);
-    top: calc(50% - 385px);
     width: 606px;
     height: 769px;
     border-radius: 30px;
@@ -79,6 +76,7 @@ input {
     &:focus {
         border: 1px solid #535AF1;
     }
+
     &:focus::placeholder {
         color: transparent;
     }
@@ -189,7 +187,7 @@ input {
     display: flex;
     align-items: center;
     justify-content: center;
-   
+
 }
 
 .login_error {
@@ -245,9 +243,10 @@ input {
 }
 
 .invalid {
-    background-color: #686868 ;
+    background-color: #686868;
+
     &:hover {
-        background-color: #686868 ;
+        background-color: #686868;
         cursor: not-allowed;
     }
 }
@@ -256,13 +255,66 @@ input {
     0% {
         transform: translateX(+110%);
     }
+
     30% {
         transform: translateX(0);
     }
+
     70% {
         transform: translateX(0);
     }
+
     100% {
         transform: translateX(+110%);
+    }
+}
+
+@media screen and (max-width: 750px) {
+
+    .signin_div {
+        width: 100%;
+    }
+
+    .or {
+        justify-content: center;
+
+        img {
+            width: 35%;
+        }
+    }
+}
+
+@media screen and (max-width: 570px) {
+
+    .signin_div {
+        gap: 20px;
+        height: 595px;
+    }
+
+}
+
+@media screen and (max-width: 430px) {
+    .signin_div {
+        padding: 20px;
+    }
+}
+
+@media screen and (max-height: 750px) {
+
+    input {
+        height: 50px;
+    }
+
+    .google_button {
+        height: 50px;
+    }
+
+    .signin_div {
+        height: 450px;
+        gap: 10px;
+    }
+
+    .headline {
+        font-size: 30px;
     }
 }
