@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
-import { NewMsgComponent } from '../new-msg/new-msg.component';
+import { NewMsgService } from '../new-msg.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -12,8 +12,9 @@ export class ChannelSidebarComponent {
   channelsVisible: boolean = true;
   dmsVisible: boolean = true;
   workspaceVisible: boolean = true;
+  openNewMsg: boolean = false;
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private newMsgService: NewMsgService) {
     
   }
 
@@ -32,4 +33,8 @@ export class ChannelSidebarComponent {
   openAddChannel() {
     this.dialog.open(AddChannelComponent);
   } 
+
+  toggleNewMsgComponent() {
+    this.newMsgService.toggleNewMsg();
+  }
 }

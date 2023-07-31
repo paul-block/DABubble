@@ -21,7 +21,7 @@ export class DesktopHeaderComponent {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.position = {
-      top: `${rect.bottom}px`,
+      top: `${rect.bottom + 5}px`,
       right: `25px`,
     };
     dialogConfig.panelClass = 'custom-edit-channel-dialog';
