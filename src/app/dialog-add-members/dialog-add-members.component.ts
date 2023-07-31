@@ -6,7 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./dialog-add-members.component.scss']
 })
 export class DialogAddMembersComponent {
-  // inputSearch: boolean = false;
   inputSearchUser: string = '';
   choosedUser: boolean = false;
 
@@ -24,12 +23,4 @@ export class DialogAddMembersComponent {
     console.log('clearInputName');
     this.choosedUser = false;
   }
-
-  // checkSearchUserInput() {
-  //   if (this.inputSearchUser === '') {
-  //     this.inputSearch = false;
-  //   } else {
-  //     this.inputSearch = true;
-  //   }
-  // }
 }

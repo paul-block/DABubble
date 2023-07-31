@@ -33,6 +33,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
 
 
 
@@ -59,6 +60,7 @@ import { MatButtonModule } from '@angular/material/button';
     DialogAddMembersComponent,
     AddPplToChannelComponent,
     NewPasswordComponent,
+    ChannelDirectSendMessageComponent,
   ],
   imports: [
     FormsModule,

@@ -10,6 +10,8 @@ header {
     padding: 25px 50px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
+    position: sticky;
+    z-index: 1;
 }
 
 .chat-receiver {
@@ -21,6 +23,12 @@ header {
     transition: $hover-transition;
     position: relative;
     cursor: pointer;
+
+    h1,
+    mat-icon {
+        font-size: 24px;
+        font-weight: 700;
+    }
 
     .tag {
         font-style: italic;
@@ -83,7 +91,7 @@ h1 {
         transition: $hover-transition;
     }
 
-    span{
+    span {
         font-size: 18px;
         font-weight: 700;
     }
@@ -127,10 +135,10 @@ h1 {
 
 .chat-messages {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
-    justify-content: flex-end;
-    height: calc(100% - 98px - 170px);
+    height: calc(100% - 98px - 225px);
+    overflow-y: scroll;
     gap: 10px;
 }
 

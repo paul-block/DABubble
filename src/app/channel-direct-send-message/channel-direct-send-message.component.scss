@@ -1,0 +1,79 @@
+$hover-background-color: #ECEEFE;
+$hover-text-color: #535AF1;
+$hover-transition: all ease-in-out 125ms;
+
+.write-new-message {
+    margin: 10px 60px;
+    margin-top: 60px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #adb0d9;
+
+    &:hover {
+        border: 1px solid #797EF3;
+    }
+
+    textarea {
+        font-weight: 400;
+        font-size: 18px;
+        border: none;
+        resize: none;
+    }
+
+    textarea:focus {
+        outline: none;
+    }
+
+    textarea::placeholder {
+        color: #686868;
+    }
+}
+
+.extend-send-message {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.send-icon {
+    color: $hover-text-color;
+    cursor: pointer;
+
+    &:hover {
+        color: #797EF3;
+    }
+}
+
+.extend-message {
+    display: flex;
+    align-items: center;
+    color: #686868;
+
+    &:hover mat-icon {
+        color: black;
+    }
+
+    div {
+        height: 40px;
+        width: 1px;
+        background-color: #ADB0D9;
+        margin: 8px;
+    }
+
+    mat-icon {
+        border-radius: 100%;
+        padding: 8px;
+        cursor: pointer;
+        transition: $hover-transition;
+
+        &:hover {
+            background-color: $hover-background-color;
+            color: $hover-text-color;
+            transition: $hover-transition;
+            font-weight: 600;
+        }
+    }
+}
