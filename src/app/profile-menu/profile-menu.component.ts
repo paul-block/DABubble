@@ -28,4 +28,9 @@ export class ProfileMenuComponent {
   toggleEditDetails() {
     this.editDetailsVisible = !this.editDetailsVisible;
   }
+
+  updateUserDetails() {
+    this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
+    this.dialog.closeAll();
+}
 }
