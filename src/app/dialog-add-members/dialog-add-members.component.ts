@@ -6,14 +6,30 @@ import { Component } from '@angular/core';
   styleUrls: ['./dialog-add-members.component.scss']
 })
 export class DialogAddMembersComponent {
-  inputSearch: boolean = false;
-  inputSearchPeople: string = '';
+  // inputSearch: boolean = false;
+  inputSearchUser: string = '';
+  choosedUser: boolean = false;
 
-  checkSearchPeopleInput() {
-    if (this.inputSearchPeople === '') {
-      this.inputSearch = false;
-    } else {
-      this.inputSearch = true;
-    }
+  selectUser() {
+    this.choosedUser = !this.choosedUser;
+    this.inputSearchUser = '';
   }
+
+  addNewMember() {
+    console.log('newMemberAdded');
+    this.choosedUser = false;
+  }
+
+  clearInputName(){
+    console.log('clearInputName');
+    this.choosedUser = false;
+  }
+
+  // checkSearchUserInput() {
+  //   if (this.inputSearchUser === '') {
+  //     this.inputSearch = false;
+  //   } else {
+  //     this.inputSearch = true;
+  //   }
+  // }
 }

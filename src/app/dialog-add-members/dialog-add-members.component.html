@@ -8,17 +8,25 @@
         <span>Entwicklerteam</span>
     </div>
     <div class="relative">
-        <input class="input-name" type="text" placeholder="Name eingeben" [(ngModel)]="inputSearchPeople" (keydown)="checkSearchPeopleInput()" (keyup)="checkSearchPeopleInput()">
-        <div class="search-people-popup" [ngClass]="{'d_none': !inputSearch}">
-            <div>
+        <input *ngIf="!choosedUser" class="input-name" type="text" placeholder="Name eingeben" [(ngModel)]="inputSearchUser">
+        <div *ngIf="choosedUser" class="input-name-replace">
+            <div class="clear-input-name">
+                <img src="/assets/img/small_avatar/avatar_3.svg">
+                <span>Elise Roth</span>
+                <mat-icon (click)="clearInputName()" >close</mat-icon>
+            </div>
+            
+        </div>
+        <div class="search-user-popup" *ngIf="inputSearchUser.length && !choosedUser">
+            <div (click)="selectUser()">
                 <img src="/assets/img/small_avatar/avatar_2.svg">
                 <span>Frederik Beck (Du)</span>
             </div>
-            <div>
+            <div (click)="selectUser()">
                 <img src="/assets/img/small_avatar/avatar_3.svg">
                 <span>Elise Roth</span>
             </div>
-            <div>
+            <div (click)="selectUser()">
                 <img src="/assets/img/small_avatar/avatar_4.svg">
                 <span>Noah Braun</span>
             </div>
@@ -26,6 +34,6 @@
     </div>
 
     <div class="add-member-channel">
-        <button disabled>Hinzufügen</button>
+        <button (click)="addNewMember()" [disabled]="!choosedUser">Hinzufügen</button>
     </div>
 </section>
