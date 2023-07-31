@@ -72,8 +72,8 @@ export class AuthenticationService {
 
 
   // Sign in with Google
-  GoogleAuth() {
-    this.AuthLogin(new GoogleAuthProvider());
+  async GoogleAuth() {
+    await this.AuthLogin(new GoogleAuthProvider());
   }
 
 

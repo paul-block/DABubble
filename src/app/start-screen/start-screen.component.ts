@@ -22,7 +22,7 @@ export class StartScreenComponent implements OnInit {
     setTimeout(() => this.animationStart = true, 1000);
     setTimeout(() => this.animationLogo = true, 2000);
     setTimeout(() => this.d_none = true, 2900);
-    this.router.navigateByUrl('/new-pw')
+    this.router.navigateByUrl('/sign-in')
   }
 
 }
