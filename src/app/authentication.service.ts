@@ -150,4 +150,22 @@ export class AuthenticationService {
     this.channelList.next(this.userData.channels || []);
   }
 
+  async updateUserDetails(userName: string, email: string) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    
+    if (user !== null) {
+      const userRef = doc(this.db, 'users', user.uid);
+      
+      await updateDoc(userRef, {
+          user_name: userName,
+          email: email
+      });
+      this.userData.user_name = userName;
+      this.userData.email = email;
+    } else {
+      console.error("Kein Benutzer ist eingeloggt");
+    }
+}
+
 }
