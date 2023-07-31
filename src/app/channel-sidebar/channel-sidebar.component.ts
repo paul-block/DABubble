@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddChannelComponent } from '../add-channel/add-channel.component';
+import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { NewMsgService } from '../new-msg.service';
 
 @Component({

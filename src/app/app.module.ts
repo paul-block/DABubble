@@ -20,12 +20,12 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { DesktopHeaderComponent } from './desktop-header/desktop-header.component';
 import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.component';
-import { AddChannelComponent } from './add-channel/add-channel.component';
+import { AddChannelComponent } from './dialog-add-channel/add-channel.component';
 import { DialogEditChannelComponent } from './dialog-edit-channel/dialog-edit-channel.component';
 import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
 import { DialogEditMembersComponent } from './dialog-edit-members/dialog-edit-members.component';
 import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-members.component';
-import { AddPplToChannelComponent } from './add-ppl-to-channel/add-ppl-to-channel.component';
+import { AddPplToChannelComponent } from './dialog-add-ppl-to-channel/add-ppl-to-channel.component';
 import { NewMsgComponent } from './new-msg/new-msg.component';
 // Material API imports
 import { MatCardModule } from '@angular/material/card';
