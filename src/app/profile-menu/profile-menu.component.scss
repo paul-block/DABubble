@@ -1,9 +1,5 @@
 #menu-container {
-    position: fixed;
-    top: 95px;
-    right: 30px;
     width: 180px;
-    height: 80px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
@@ -40,8 +36,8 @@
     flex-direction: column;
     align-items: center;
     position: fixed;
-    top: 95px;
-    right: 30px;
+    top: 80px;
+    right: 25px;
     padding: 45px 40px;
     width: 400px;
     border-top-left-radius: 30px;
@@ -126,8 +122,8 @@
     flex-direction: column;
     align-items: center;
     position: fixed;
-    top: 95px;
-    right: 30px;
+    top: 80px;
+    right: 25px;
     padding: 45px 40px;
     width: 400px;
     border-top-left-radius: 30px;

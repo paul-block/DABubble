@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, ElementRef, ViewChild} from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 
 @Component({
@@ -8,11 +8,29 @@ import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
   styleUrls: ['./desktop-header.component.scss']
 })
 export class DesktopHeaderComponent {
-  constructor(public dialog: MatDialog) {
-    
-  }
+
+  @ViewChild('profile') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
+  profileMenuRef: MatDialogRef<ProfileMenuComponent>;
+  profileMenuOpen: boolean = false;
+
+
+  constructor(private dialog: MatDialog) { }
 
   openProfileMenu() {
-    this.dialog.open(ProfileMenuComponent);
-  } 
+    const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.position = {
+      top: `${rect.bottom}px`,
+      right: `25px`,
+    };
+    dialogConfig.panelClass = 'custom-edit-channel-dialog';
+
+    this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
+    this.profileMenuOpen = true;
+
+    this.profileMenuRef.afterClosed().subscribe(() => {
+      this.profileMenuOpen = false;
+    });
+  }
 }
