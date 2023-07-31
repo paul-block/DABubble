@@ -38,26 +38,38 @@
         box-sizing: border-box;
     }
 
-    #channel-input {
-        position: relative;
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
 
-        img {
-            position: absolute;
-            height: 15px;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+    
+        #channel-input {
+            position: relative;
+
+            img {
+                position: absolute;
+                height: 15px;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
         }
-    }
 
-    #optional-input {
-        padding: 20px 15px;
-    }
+        #optional-input {
+            padding: 20px 15px;
+        }
 
-    button {
-        align-self: flex-end;
-        background-color: #444DF2;
-        color: white;
-    }
+        button {
+            align-self: flex-end;
+            background-color: #444DF2;
+            color: white;
+        }
+
+        button:disabled {
+            background-color: #686868;
+        }
 }
+}
+
 

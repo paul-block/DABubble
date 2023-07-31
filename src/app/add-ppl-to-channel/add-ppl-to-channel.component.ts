@@ -9,9 +9,16 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AddPplToChannelComponent {
   checkboxValue = false;
+  selectedOption: string;
+  certainInput: string;
+
 
   constructor(public dialog: MatDialog) {
     
+  }
+
+  updateCertainInput(value: string) {
+    this.certainInput = value;
   }
 
   closeDialog() {

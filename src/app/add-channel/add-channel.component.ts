@@ -17,7 +17,7 @@ export class AddChannelComponent {
     this.dialog.closeAll();
   } 
 
-  openAddChannel() {
+  openAddPPlToChannel() {
     this.dialog.closeAll();
     this.dialog.open(AddPplToChannelComponent);
   } 

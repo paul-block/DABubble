@@ -5,16 +5,17 @@
     </div>
     <label class="checkbox-container">
         <div class="flex">
-            <input type="checkbox" class="round-checkbox">
+            <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="all">
             <span class="checkmark">Alle Mitglieder von <span id="highlight">OfficeTeam</span> hinzufügen</span>
         </div>
     </label>
     <label class="checkbox-container">
         <div class="flex">
-            <input type="checkbox" class="round-checkbox" [(ngModel)]="checkboxValue">
+            <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="certain">
             <span class="checkmark">Bestimmte Leute hinzufügen</span>
         </div>
-        <input id="certain-input" *ngIf="checkboxValue" type="text" placeholder="Name eingeben">
+        <input id="certain-input" *ngIf="selectedOption === 'certain'" [(ngModel)]="certainInput" type="text"
+            placeholder="Name eingeben">
     </label>
-    <button mat-fab extended>Erstellen</button>
+    <button [disabled]="selectedOption === 'certain' && !certainInput" mat-fab extended>Erstellen</button>
 </div>
