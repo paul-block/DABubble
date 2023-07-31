@@ -1,6 +1,6 @@
 <div id="menu-container">
     <span (click)="toggleDetails()">Profile</span>
-    <span>Log out</span>
+    <span (click)="signOut()">Log out</span>
 </div>
 
 <div id="profileDetails" *ngIf="detailsVisible">
@@ -13,7 +13,7 @@
 
     <div class="middle-part">
         <div class="edit-container">
-            <span id="name">Frederick Beck</span>
+            <span id="name">{{ authService.userData.user_name }}</span>
             <span id="edit" class="pointer" (click)="toggleEditDetails()">Bearbeiten</span>
         </div>
         <img id="status" src="assets/img/status/active.png" alt="">
@@ -23,7 +23,7 @@
     <div class="email-container">
         <img src="assets/img/mail.png" alt="">
         <span id="email-headline">E-Mail-Adresse</span>
-        <span id="email-address">fred.beck@email.com</span>
+        <span id="email-address">{{ authService.userData.email}}</span>
     </div>
 </div>
 
@@ -42,7 +42,7 @@
                 <img src="assets/img/icons/account_circle.png" alt="">
                 <span>Vollständiger Name</span>
             </div>
-            <input type="text" placeholder="Frederick Beck">
+            <input type="text" placeholder="{{ authService.userData.user_name }}">
         </div>
 
         <div id="edit-email">
@@ -50,7 +50,7 @@
                 <img src="assets/img/mail.png" alt="">
                 <span>E-Mail-Adresse</span>
             </div>
-            <input type="text" placeholder="fred.beck@email.com">
+            <input type="text" placeholder="{{ authService.userData.email }}">
         </div>
     </div>
 

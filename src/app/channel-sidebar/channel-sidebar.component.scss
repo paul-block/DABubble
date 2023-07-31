@@ -250,3 +250,17 @@
             user-select: none;
         } 
   }
+
+  .sidebar-hover:hover {
+    background-color: #ECEEFE;
+    border-radius: 20px;
+}
+
+.sidebar-icon-hover:hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ECEEFE;
+    border-radius: 50%;
+    cursor: pointer;
+}

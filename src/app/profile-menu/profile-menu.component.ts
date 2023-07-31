@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../authentication.service';
+import { MatDialog } from '@angular/material/dialog';
+
+
 
 @Component({
   selector: 'app-profile-menu',
@@ -8,6 +12,14 @@ import { Component } from '@angular/core';
 export class ProfileMenuComponent {
   detailsVisible: boolean = false;
   editDetailsVisible: boolean = false;
+
+  constructor(public authService: AuthenticationService, private dialog: MatDialog) {
+  }
+
+  signOut() {
+    this.authService.signOut();
+    this.dialog.closeAll();
+  }
 
   toggleDetails() {
     this.detailsVisible = !this.detailsVisible;

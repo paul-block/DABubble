@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPplToChannelComponent } from '../dialog-add-ppl-to-channel/add-ppl-to-channel.component';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-add-channel',
@@ -8,6 +9,10 @@ import { AddPplToChannelComponent } from '../dialog-add-ppl-to-channel/add-ppl-t
   styleUrls: ['./add-channel.component.scss']
 })
 export class AddChannelComponent {
+  form = new FormGroup({
+    'channel-name': new FormControl(''),
+    'description': new FormControl('')
+  });
 
   constructor(public dialog: MatDialog) {
     
@@ -18,7 +23,14 @@ export class AddChannelComponent {
   } 
 
   openAddPPlToChannel() {
+    const channelName = this.form.controls['channel-name'].value;
+    const description = this.form.controls['description'].value;
     this.dialog.closeAll();
-    this.dialog.open(AddPplToChannelComponent);
-  } 
+
+    const dialogRef = this.dialog.open(AddPplToChannelComponent, {
+      data: { channelName: channelName, description: description }, 
+    });
+  
+  }
+  
 }

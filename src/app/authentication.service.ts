@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { GoogleAuthProvider } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, arrayUnion, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +15,14 @@ import { Router } from '@angular/router';
 export class AuthenticationService {
 
   db = getFirestore();
-  userData: any = []
+  userData: any = [];
   signIn_successful: boolean
   signIn_error: boolean
   email_error: boolean
   signUp_successful: boolean
   userName: string
-
-
-
+  private channelList = new BehaviorSubject<string[]>(this.userData.channels || []);
+  channelList$ = this.channelList.asObservable();
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
 
@@ -36,7 +37,6 @@ export class AuthenticationService {
       }
     });
   }
-
 
   // Sign up with email/password
   async SignUp(email: string, password: string) {
@@ -131,4 +131,23 @@ export class AuthenticationService {
     this.router.navigateByUrl('/sign-in');
     this.userData = []
   }
+
+  async addChannel(channel: string) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    
+    if (user !== null) {
+      const userRef = doc(this.db, 'users', user.uid);
+  
+      return updateDoc(userRef, {
+          channels: arrayUnion(channel)
+      }).then(() => {
+        this.getUserData(user.uid);
+      });
+    } else {
+      console.error("Kein Benutzer ist eingeloggt");
+    }
+    this.channelList.next(this.userData.channels || []);
+  }
+
 }

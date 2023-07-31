@@ -10,6 +10,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { ReactiveFormsModule } from '@angular/forms';
 // Components
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { StartScreenComponent } from './start-screen/start-screen.component';
@@ -58,7 +59,7 @@ import { MatButtonModule } from '@angular/material/button';
     DialogEditMembersComponent,
     DialogAddMembersComponent,
     AddPplToChannelComponent,
-    NewPasswordComponent,
+    NewPasswordComponent
   ],
   imports: [
     FormsModule,
@@ -73,7 +74,8 @@ import { MatButtonModule } from '@angular/material/button';
     BrowserAnimationsModule,
     MatIconModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
