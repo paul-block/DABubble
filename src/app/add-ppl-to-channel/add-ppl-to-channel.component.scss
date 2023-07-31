@@ -60,6 +60,7 @@
       }
 
     .flex {
+        display: flex;
         gap: 10px;
         align-items: center;
     }
@@ -71,10 +72,13 @@
     }
 
     button {
-        
         width: 120px;
         background-color: #444DF2;
         color: white;
         align-self: flex-end;
+
+        &:disabled {
+            background-color: #686868;
+        }
     }
 }
