@@ -8,25 +8,34 @@
     <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
   </div>
 
-  <div class="container-channel-name-description">
+  <div class="container-channel-name-description min-height-name" [ngClass]="{'edit-container-channel-name-description':editName}">
     <div class="space-between">
       <h2>Channel-Name</h2>
-      <span class="edit-text">Bearbeiten</span>
+      <span class="edit-text" (click)="changeEditText('name')">{{ editChannelName }}</span>
     </div>
-    <div>
+    <div class="edit-channel-name" *ngIf="editName">
+      <mat-icon>tag</mat-icon>
+      <input [placeholder]="channelName" [(ngModel)]="channelName" type="text">
+    </div>
+
+    <div *ngIf="!editName">
       <mat-icon>tag</mat-icon>
       <span class="channel-name">Entwicklerteam</span>
     </div>
-
   </div>
-  <div class="container-channel-name-description">
+
+  <div class="container-channel-name-description min-height-description"
+    [ngClass]="{'edit-container-channel-name-description':editDescription}">
     <div class="space-between">
       <h2>Beschreibung</h2>
-      <span class="edit-text">Bearbeiten</span>
+      <span class="edit-text" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
     </div>
-    <span class="channel-description">Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen
+    <span *ngIf="!editDescription" class="channel-description">Dieser Channel ist für alles rund um
+      #Entwicklerteam-Thema vorgesehen. Hier kannst
+      du zusammen
       mit deinem Team Meetings
       abhalten, Dokumente teilen und Entscheidungen treffen.</span>
+    <input class="edit-channel-description" *ngIf="editDescription" type="text" [placeholder]="channelDescription" [(ngModel)]="channelDescription">
     <div class="parting-line"></div>
     <h2>Erstellt von</h2>
     <span class="channel-creator">Noah Braun</span>

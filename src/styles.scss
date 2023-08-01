@@ -1,3 +1,5 @@
+// @import 'assets/styles/fonts.scss';
+
 .d_none {
     display: none !important;
 }
@@ -20,6 +22,28 @@ h6,
 button,
 textarea {
     font-family: 'Nunito', sans-serif !important;
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: #ADB0D9 white;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: white;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #ADB0D9;
+    // border-radius: 10px;
+    border: 3px none #ffffff;
 }
 
 .mat-body,

@@ -69,6 +69,11 @@
                     <span class="tag">#</span>
                     <span>Office-team</span>
                 </div>
+                <div class="pointer inactive-channel sidebar-hover"
+                    *ngFor="let channel of authService.userData.channels">
+                    <span class="tag">#</span>
+                    <span> {{ channel }}</span>
+                </div>
                 <div class="add-channel-container pointer" (click)="openAddChannel()">
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_4093_12456" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"

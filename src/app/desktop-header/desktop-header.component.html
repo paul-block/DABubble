@@ -7,7 +7,7 @@
     </div>
 
     <div id="profile" (click)="openProfileMenu()" #profile>
-        <span id="name">Frederick Beck</span>
+        <span id="name"> {{ authService.userData.user_name }}</span>
         <div class="center pointer">
             <img class="profile-img" src="assets/img/avatar_online_status/avatar1.png" alt="">
             <img src="assets/img/icons/arrow_down.png" alt="">

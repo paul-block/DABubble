@@ -9,15 +9,15 @@
 
     <span>Channel-Name</span>
 
-    <form #form="ngForm">
+    <form [formGroup]="form">
         <div id="channel-input">
             <img src="assets/img/icons/tag.svg" alt="">
-            <input type="text" placeholder="z.B Kooperationsprojekte" name="channel-name" ngModel required>
+            <input type="text" formControlName="channel-name" placeholder="z.B Kooperationsprojekte" required>
         </div>
 
         <span>Beschreibung (optional)</span>
 
-        <input id="optional-input" type="text" placeholder="Dein Text hier" name="description" ngModel>
+        <input id="optional-input" type="text" formControlName="description" placeholder="Dein Text hier">
 
         <button [disabled]="!form.valid" mat-fab extended (click)="openAddPPlToChannel()">Erstellen</button>
     </form>

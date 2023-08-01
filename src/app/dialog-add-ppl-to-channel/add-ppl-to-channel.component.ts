@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-
+import { Component, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-add-ppl-to-channel',
@@ -11,10 +11,15 @@ export class AddPplToChannelComponent {
   checkboxValue = false;
   selectedOption: string;
   certainInput: string;
+  channelName: string;
 
-
-  constructor(public dialog: MatDialog) {
-    
+  constructor(
+    public dialog: MatDialog,  
+    public authService: AuthenticationService,   
+    public dialogRef: MatDialogRef<AddPplToChannelComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.channelName = data.channelName; 
   }
 
   updateCertainInput(value: string) {
@@ -24,4 +29,9 @@ export class AddPplToChannelComponent {
   closeDialog() {
     this.dialog.closeAll();
   } 
+
+  addChannel() {
+    this.authService.addChannel(this.channelName);
+    this.dialog.closeAll();
+  }
 }
