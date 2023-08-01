@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddPplToChannelComponent } from '../dialog-add-ppl-to-channel/add-ppl-to-channel.component';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -43,7 +43,5 @@ export class AddChannelComponent {
     this.addPPlRef.afterClosed().subscribe(() => {
       this.addPplOpen = false;
     });
-  }
-  
-  
+  } 
 }

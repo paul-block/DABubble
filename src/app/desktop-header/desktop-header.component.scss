@@ -1,9 +1,9 @@
 header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     height: 80px;
-
+    position: relative;;
+    width: 100vw;
     padding: 10px 30px;
 
     #logo {
@@ -14,6 +14,8 @@ header {
         display: flex;
         align-items: center;
         gap: 20px;
+        position: absolute;
+        right: 100px;
         cursor: pointer;
 
         .profile-img {
@@ -33,6 +35,7 @@ header {
 
     .input-container {
         position: relative;
+        left: 180px;
 
         input {
             padding: 10px 30px;
