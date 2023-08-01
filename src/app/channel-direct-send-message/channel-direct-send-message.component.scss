@@ -38,11 +38,29 @@ $hover-transition: all ease-in-out 125ms;
     justify-content: space-between;
 }
 
-.send-icon {
-    color: $hover-text-color;
+.send-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: none;
     cursor: pointer;
 
-    &:hover {
+
+
+    mat-icon {
+
+        color: #686868;
+    }
+
+}
+
+.ready-to-send {
+    mat-icon {
+        color: $hover-text-color;
+    }
+
+    &:hover mat-icon {
         color: #797EF3;
     }
 }

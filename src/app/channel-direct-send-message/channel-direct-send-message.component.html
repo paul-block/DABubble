@@ -1,5 +1,5 @@
 <section class="write-new-message">
-    <textarea name="" id="" cols="10" rows="2" [placeholder]="placeholder"></textarea>
+    <textarea name="" id="" cols="10" rows="2" [placeholder]="placeholder" [(ngModel)]="messageField" (keydown)="checkIfEmpty()" (keyup)="checkIfEmpty()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
             <mat-icon>add</mat-icon>
@@ -7,6 +7,9 @@
             <mat-icon>mood</mat-icon>
             <mat-icon>alternate_email</mat-icon>
         </div>
-        <mat-icon class="send-icon">send</mat-icon>
+        <button [ngClass]="{'ready-to-send': readyToSend }" [disabled]="!readyToSend" class="send-message"
+            (click)="sendMessage()">
+            <mat-icon>send</mat-icon>
+        </button>
     </div>
 </section>

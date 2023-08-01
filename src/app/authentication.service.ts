@@ -23,6 +23,8 @@ export class AuthenticationService {
   userName: string
   private channelList = new BehaviorSubject<string[]>(this.userData.channels || []);
   channelList$ = this.channelList.asObservable();
+  private privateMessages = new BehaviorSubject<string[]>(this.userData.messages || []);
+  privateMessages$ = this.privateMessages.asObservable();
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
 
@@ -135,12 +137,12 @@ export class AuthenticationService {
   async addChannel(channel: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-    
+
     if (user !== null) {
       const userRef = doc(this.db, 'users', user.uid);
-  
+
       return updateDoc(userRef, {
-          channels: arrayUnion(channel)
+        channels: arrayUnion(channel)
       }).then(() => {
         this.getUserData(user.uid);
       });
@@ -153,19 +155,37 @@ export class AuthenticationService {
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-    
+
     if (user !== null) {
       const userRef = doc(this.db, 'users', user.uid);
-      
+
       await updateDoc(userRef, {
-          user_name: userName,
-          email: email
+        user_name: userName,
+        email: email
       });
       this.userData.user_name = userName;
       this.userData.email = email;
     } else {
       console.error("Kein Benutzer ist eingeloggt");
     }
-}
+  }
+
+  async newMessage(message: string) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user !== null) {
+      const userRef = doc(this.db, 'users', user.uid, 'messages');
+
+      return updateDoc(userRef, {
+        messages: arrayUnion(message)
+      }).then(() => {
+        this.getUserData(user.uid);
+      });
+    } else {
+      console.error("Kein Benutzer ist eingeloggt");
+    }
+    this.privateMessages.next(this.userData.messages || []);
+  }
 
 }

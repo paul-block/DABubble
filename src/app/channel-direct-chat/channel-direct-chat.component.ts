@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
+import { AuthenticationService } from '../authentication.service';
 
 @Component({
   selector: 'app-channel-direct-chat',
@@ -24,7 +25,10 @@ export class ChannelDirectChatComponent {
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    public authenticationService: AuthenticationService
+    ) { }
 
   editChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
