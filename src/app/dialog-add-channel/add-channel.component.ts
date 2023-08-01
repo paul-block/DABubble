@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddPplToChannelComponent } from '../dialog-add-ppl-to-channel/add-ppl-to-channel.component';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -9,6 +9,11 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./add-channel.component.scss']
 })
 export class AddChannelComponent {
+  addPPlRef: MatDialogRef<AddPplToChannelComponent>;
+  addPplOpen: boolean = false;
+
+
+
   form = new FormGroup({
     'channel-name': new FormControl(''),
     'description': new FormControl('')
@@ -22,15 +27,23 @@ export class AddChannelComponent {
     this.dialog.closeAll();
   } 
 
-  openAddPPlToChannel() {
+  openAddPplToChannel() {
     const channelName = this.form.controls['channel-name'].value;
     const description = this.form.controls['description'].value;
-    this.dialog.closeAll();
-
-    const dialogRef = this.dialog.open(AddPplToChannelComponent, {
-      data: { channelName: channelName, description: description }, 
-    });
   
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'add-channel-dialog';
+    dialogConfig.data = { channelName: channelName, description: description };
+
+    this.dialog.closeAll();
+  
+    this.addPPlRef = this.dialog.open(AddPplToChannelComponent, dialogConfig);
+    this.addPplOpen = true;
+  
+    this.addPPlRef.afterClosed().subscribe(() => {
+      this.addPplOpen = false;
+    });
   }
+  
   
 }

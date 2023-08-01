@@ -19,6 +19,6 @@
 
         <input id="optional-input" type="text" formControlName="description" placeholder="Dein Text hier">
 
-        <button [disabled]="!form.valid" mat-fab extended (click)="openAddPPlToChannel()">Erstellen</button>
+        <button [disabled]="!form.valid" mat-fab extended (click)="openAddPplToChannel()" #create>Erstellen</button>
     </form>
 </div>
