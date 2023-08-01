@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { NewMsgService } from '../new-msg.service';
 import { AuthenticationService } from '../authentication.service';
@@ -16,6 +16,10 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   workspaceVisible: boolean = true;
   openNewMsg: boolean = false;
   private subscriptions: Subscription = new Subscription();
+  @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
+  addChannelRef: MatDialogRef<AddChannelComponent>;
+  addChannelOpen: boolean = false;
+
 
   constructor(public dialog: MatDialog, private newMsgService: NewMsgService, private authService: AuthenticationService) {}
 
@@ -46,7 +50,18 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
   openAddChannel() {
-    this.dialog.open(AddChannelComponent);
+    const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
+    const dialogConfig = new MatDialogConfig();
+
+
+    dialogConfig.panelClass = 'add-channel-dialog';
+
+    this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
+    this.addChannelOpen = true;
+
+    this.addChannelRef.afterClosed().subscribe(() => {
+      this.addChannelOpen = false;
+    });
   }
 
   toggleNewMsgComponent() {
