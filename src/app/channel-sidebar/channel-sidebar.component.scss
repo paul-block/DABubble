@@ -224,7 +224,28 @@
         }
     }
 
-
+    .select-none {
+        user-select: none;
+    }
+    
+    .align-center {
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-hover:hover {
+        background-color: #ECEEFE;
+        border-radius: 20px;
+    }
+    
+    .sidebar-icon-hover:hover {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #ECEEFE;
+        border-radius: 50%;
+        cursor: pointer;
+    }
 }
 
 .vertical-text  {
@@ -253,16 +274,5 @@
         } 
   }
 
-  .sidebar-hover:hover {
-    background-color: #ECEEFE;
-    border-radius: 20px;
-}
 
-.sidebar-icon-hover:hover {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ECEEFE;
-    border-radius: 50%;
-    cursor: pointer;
-}
+
