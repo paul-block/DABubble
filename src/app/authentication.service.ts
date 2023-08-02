@@ -28,19 +28,17 @@ export class AuthenticationService {
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
   searchControlValue = new BehaviorSubject<string>('');
+  email_send: boolean = null;
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.userData = user;
         this.getUserData(user.uid);
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem('user')!);
       } else {
         localStorage.setItem('user', 'null');
-        JSON.parse(localStorage.getItem('user')!);
       }
     });
   }
@@ -92,31 +90,33 @@ export class AuthenticationService {
           this.SetUserData(result.user);
         });
       this.signIn_successful = true
-      setTimeout(() => this.signIn_successful = false, 2000);
+      setTimeout(() => this.signIn_successful = false, 3000);
     } catch (error) {
       window.alert(error.message);
     }
   }
 
   async ForgotPassword(passwordResetEmail: string) {
-    return this.afAuth
+    await this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
+        this.email_send = true
+        setTimeout(() => this.email_send = null, 3000);
       })
       .catch((error) => {
-        window.alert(error);
+        this.email_send = false
+        setTimeout(() => this.email_send = null, 3000);
       });
   }
 
   async SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const userData = {
+    const userDataFirestore = {
       uid: user.uid,
       email: user.email,
       user_name: this.userName,
     };
-    return await userRef.set(userData, {
+     await userRef.set(userDataFirestore, {
       merge: true,
     });
   }
@@ -126,7 +126,6 @@ export class AuthenticationService {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
-    console.log(this.userData);
   }
 
   async signOut() {
@@ -208,7 +207,8 @@ export class AuthenticationService {
 
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();    
-    const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name));
+    const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name)
+     );
     return filtered;
   }
 

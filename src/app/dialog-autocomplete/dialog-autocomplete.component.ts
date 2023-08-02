@@ -18,6 +18,7 @@ export class DialogAutocompleteComponent implements OnInit  {
   constructor(private authService: AuthenticationService) { }
 
   ngOnInit() {
+    
     this.authService.searchControlValue
     .pipe(
       switchMap(value => this.authService.filterUsers(value))

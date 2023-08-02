@@ -10,7 +10,6 @@ import { NewPasswordComponent } from './new-password/new-password.component';
 const routes: Routes = [
   
   {path: '', component: StartScreenComponent, children: [
-    
     {path: 'sign-in', component: SignInComponent},
     {path: 'sign-up', component: SignUpComponent},
     {path: 'forgot-pw', component: ForgotPasswordComponent}
