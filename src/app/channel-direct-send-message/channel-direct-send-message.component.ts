@@ -10,10 +10,11 @@ export class ChannelDirectSendMessageComponent {
   readyToSend: boolean = false;
   placeholder = 'Nachricht an #Entwicklerteam';
   messageField: string = '';
+  messageInfo = [];
 
-constructor(
-  public authenticationService: AuthenticationService
-){}
+  constructor(
+    public authenticationService: AuthenticationService
+  ) { }
 
   checkIfEmpty() {
     if (this.messageField.length) {
@@ -25,5 +26,23 @@ constructor(
 
   sendMessage() {
     this.authenticationService.newMessage(this.messageField);
+    // this.messageInfo = [
+    //   {
+    //     'timestamp': 6262626,
+    //     'text': 'textblablabalbalb',
+    //     'reactionsInfo': [
+    //       {
+    //         'emojiSource': 'rocket.svg',
+    //         'reactionUsers': ['userID3', 'userID5', 'userID10'],
+    //       },
+    //       {
+    //         'emojiName': 'hands',
+    //         'reactionUsers': ['userID1', 'userID2'],
+    //       },
+    //     ],
+    //     'directAnswers': '...answerSidebarInfos...'
+
+    //   }
+    // ];
   }
 }
