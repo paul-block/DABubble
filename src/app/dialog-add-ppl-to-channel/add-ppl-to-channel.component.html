@@ -14,9 +14,9 @@
             <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="certain">
             <span class="checkmark">Bestimmte Leute hinzufügen</span>
         </div>
-        <input id="certain-input" *ngIf="selectedOption === 'certain'" [(ngModel)]="certainInput" type="text"
-            placeholder="Name eingeben">
+        <input [formControl]="searchControl" id="certain-input" *ngIf="selectedOption === 'certain'"
+            [(ngModel)]="certainInput" type="text" placeholder="Name eingeben">
     </label>
-    <button (click)="addChannel()" [disabled]="selectedOption === 'certain' && !certainInput" mat-fab
+    <button (click)="createNewChannel()" [disabled]="selectedOption === 'certain' && !certainInput" mat-fab
         extended>Erstellen</button>
 </div>
