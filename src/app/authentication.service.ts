@@ -169,6 +169,31 @@ export class AuthenticationService {
     });
     this.authorizedChannelsSubject.next(channels);
   }
+
+  async findUserByName(name: string): Promise<string | null> {
+    const usersSnapshot = await getDocs(query(collection(this.db, 'users'), where('user_name', '==', name)));
+  
+    if (!usersSnapshot.empty) {
+      const userDoc = usersSnapshot.docs[0];
+      console.log(userDoc);
+      return userDoc.data().uid;
+    }
+  
+    return null;
+  }
+
+  async addUserToChannel(channelName: string, uid: string) {
+    const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
+  
+    if (!channelSnapshot.empty) {
+      const channelDoc = channelSnapshot.docs[0];
+      await updateDoc(channelDoc.ref, {
+        assignedUsers: arrayUnion(uid)
+      });
+    } else {
+      console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
+    }
+  }
   
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
