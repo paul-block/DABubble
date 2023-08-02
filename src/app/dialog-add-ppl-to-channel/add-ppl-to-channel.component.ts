@@ -30,8 +30,8 @@ export class AddPplToChannelComponent {
     this.dialog.closeAll();
   } 
 
-  addChannel() {
-    this.authService.addChannel(this.channelName);
+  createNewChannel() {
+    this.authService.createNewChannel(this.channelName);
     this.dialog.closeAll();
   }
 }

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
-import firebase from 'firebase/compat';
+import  firebase  from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, arrayUnion, updateDoc } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
@@ -21,16 +21,19 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  private channelList = new BehaviorSubject<string[]>(this.userData.channels || []);
-  channelList$ = this.channelList.asObservable();
+  // private channelList = new BehaviorSubject<string[]>(this.userData.channels || []);
+  // channelList$ = this.channelList.asObservable();
   private privateMessages = new BehaviorSubject<string[]>(this.userData.messages || []);
   privateMessages$ = this.privateMessages.asObservable();
+  public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
+  authorizedChannels = this.authorizedChannelsSubject.asObservable();
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.getUserData(user.uid)
+        this.getUserData(user.uid);
+        this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user')!);
       } else {
@@ -93,7 +96,6 @@ export class AuthenticationService {
     }
   }
 
-
   async ForgotPassword(passwordResetEmail: string) {
     return this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
@@ -104,7 +106,6 @@ export class AuthenticationService {
         window.alert(error);
       });
   }
-
 
   async SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
@@ -126,7 +127,6 @@ export class AuthenticationService {
     console.log(this.userData);
   }
 
-
   async signOut() {
     await this.afAuth.signOut();
     localStorage.removeItem('user');
@@ -134,24 +134,42 @@ export class AuthenticationService {
     this.userData = []
   }
 
-  async addChannel(channel: string) {
+  async createNewChannel(channel: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-
+  
     if (user !== null) {
-      const userRef = doc(this.db, 'users', user.uid);
-
-      return updateDoc(userRef, {
-        channels: arrayUnion(channel)
-      }).then(() => {
-        this.getUserData(user.uid);
-      });
+      try {
+        const channelCollectionRef = collection(this.db, 'channels');
+        const newChannel = {
+          channelName: channel,
+          createdBy: user.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          assignedUsers: [
+            user.uid,
+          ]
+        };
+        const docRef = await addDoc(channelCollectionRef, newChannel);
+        this.getAuthorizedChannels(user.uid);
+      } catch (error) {
+        console.error("Error beim Erstellen eines neuen Channels: ", error);
+      }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
     }
-    this.channelList.next(this.userData.channels || []);
   }
 
+  async getAuthorizedChannels(uid: string) {
+    const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
+    
+    const querySnapshot = await getDocs(allDocuments);
+    const channels: any[] = [];
+    querySnapshot.forEach((doc) => {
+      channels.push(doc.data().channelName);
+    });
+    this.authorizedChannelsSubject.next(channels);
+  }
+  
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;

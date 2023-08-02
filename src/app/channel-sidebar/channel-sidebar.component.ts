@@ -12,29 +12,26 @@ import { Subscription } from 'rxjs';
 })
 export class ChannelSidebarComponent implements OnInit, OnDestroy {
   channelsVisible: boolean = true;
+  authorizedChannels: any[] = []; 
   dmsVisible: boolean = true;
   workspaceVisible: boolean = true;
   openNewMsg: boolean = false;
-  private subscriptions: Subscription = new Subscription();
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
+  channels: any[] = [];
+  private sub: Subscription;
 
-
-  constructor(public dialog: MatDialog, private newMsgService: NewMsgService, private authService: AuthenticationService) {}
+  constructor(public dialog: MatDialog, private newMsgService: NewMsgService, public authService: AuthenticationService) {}
 
   ngOnInit() {
-    // Abonnieren Sie den channelList$ Observable
-    this.subscriptions.add(
-      this.authService.channelList$.subscribe(channels => {
-        // Ihr Code zur Aktualisierung des UIs
-      })
-    );
+    this.sub = this.authService.authorizedChannels.subscribe(channels => {
+      this.channels = channels;
+    });
   }
 
   ngOnDestroy() {
-    // Vergessen Sie nicht, die Subscription zu beenden, wenn die Komponente zerstört wird
-    this.subscriptions.unsubscribe();
+    this.sub.unsubscribe();
   }
 
   toggleChannels() {
@@ -53,7 +50,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
 
-
     dialogConfig.panelClass = 'add-channel-dialog';
 
     this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
@@ -67,4 +63,5 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   toggleNewMsgComponent() {
     this.newMsgService.toggleNewMsg();
   }
+
 }
