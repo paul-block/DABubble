@@ -35,6 +35,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
+import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 
 
 
@@ -62,6 +65,7 @@ import { ChannelDirectSendMessageComponent } from './channel-direct-send-message
     AddPplToChannelComponent,
     NewPasswordComponent,
     ChannelDirectSendMessageComponent,
+    DialogAutocompleteComponent,
   ],
   imports: [
     FormsModule,
@@ -77,7 +81,8 @@ import { ChannelDirectSendMessageComponent } from './channel-direct-send-message
     MatIconModule,
     MatDialogModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   providers: [
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
