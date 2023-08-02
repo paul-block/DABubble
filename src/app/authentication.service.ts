@@ -27,6 +27,7 @@ export class AuthenticationService {
   privateMessages$ = this.privateMessages.asObservable();
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
+  searchControlValue = new BehaviorSubject<string>('');
 
   constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
 
@@ -193,6 +194,25 @@ export class AuthenticationService {
     } else {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
     }
+  }
+
+  async getAllUsers() {
+    const usersSnapshot = await getDocs(collection(this.db, 'users'));
+    let users = [];
+    usersSnapshot.forEach((doc) => {
+        users.push(doc.data());
+      });
+      return users;
+  }
+
+  async filterUsers(name: string): Promise<any[]> {
+    const users = await this.getAllUsers();    
+    const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name));
+    return filtered;
+  }
+
+  setSearchControlValue(value: string): void {
+    this.searchControlValue.next(value);
   }
   
   async updateUserDetails(userName: string, email: string) {

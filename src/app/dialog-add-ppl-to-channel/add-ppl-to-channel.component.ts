@@ -15,8 +15,10 @@ export class AddPplToChannelComponent implements OnInit {
   selectedOption: string;
   certainInput: string;
   channelName: string;
-  searchControl = new FormControl();
+  public searchControl = new FormControl();
   userId: string;
+  hideAutocomplete = true;
+
 
   constructor(
     public dialog: MatDialog,  
@@ -28,24 +30,11 @@ export class AddPplToChannelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchControl.valueChanges
-    .pipe(
-      debounceTime(400)
-    )
-    .subscribe(value => {
-      if (value) {
-        this.authService.findUserByName(value).then(uid => {
-          if (uid) {
-            console.log(`User ID gefunden: ${uid}`);
-            this.userId = uid;
-          } else {
-            console.log('Kein Benutzer gefunden');
-            console.log(value, this.userId)
-          }
-        });
-      }
+    this.searchControl.valueChanges.subscribe(value => {
+      this.authService.setSearchControlValue(value);
+      console.log(value)
     });
-  }
+  }  
 
   updateCertainInput(value: string) {
     this.certainInput = value;
