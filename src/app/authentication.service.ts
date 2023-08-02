@@ -33,6 +33,7 @@ export class AuthenticationService {
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
+        this.userData = user;
         this.getUserData(user.uid);
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
