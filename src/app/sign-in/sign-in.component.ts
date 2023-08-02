@@ -23,7 +23,6 @@ export class SignInComponent {
   async signIn() {
     await this.authenticationService.GoogleAuth()
     if (this.authenticationService.signIn_successful) {
-      console.log('test');
       setTimeout(() => this.router.navigateByUrl('/main'), 1900);
     }
   }

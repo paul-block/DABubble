@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 export class SignUpComponent {
 
   emailFocus: boolean = false
-  name = ''
-  password = ''
-  email = ''
+  name:string = ''
+  password:string = ''
+  email:string = ''
   emailError: boolean = false
   regexEmail = new RegExp('^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$');
   formValid: boolean = false
@@ -31,6 +31,8 @@ export class SignUpComponent {
   dataChanged(value: any, inputfield: string) {
     if (inputfield == 'email') {
       this.emailError = this.regexEmail.test(value)
+      console.log(this.name);
+      
     }
     this.validateForm()
   }
