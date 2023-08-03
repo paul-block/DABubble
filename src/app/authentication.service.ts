@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
-import  firebase  from 'firebase/compat/app';
+import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -21,8 +21,6 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  // private channelList = new BehaviorSubject<string[]>(this.userData.channels || []);
-  // channelList$ = this.channelList.asObservable();
   private privateMessages = new BehaviorSubject<string[]>(this.userData.messages || []);
   privateMessages$ = this.privateMessages.asObservable();
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
@@ -137,7 +135,7 @@ export class AuthenticationService {
   async createNewChannel(channel: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (user !== null) {
       try {
         const channelCollectionRef = collection(this.db, 'channels');
@@ -161,7 +159,7 @@ export class AuthenticationService {
 
   async getAuthorizedChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
-    
+
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {
@@ -172,19 +170,19 @@ export class AuthenticationService {
 
   async findUserByName(name: string): Promise<string | null> {
     const usersSnapshot = await getDocs(query(collection(this.db, 'users'), where('user_name', '==', name)));
-  
+
     if (!usersSnapshot.empty) {
       const userDoc = usersSnapshot.docs[0];
       console.log(userDoc);
       return userDoc.data().uid;
     }
-  
+
     return null;
   }
 
   async addUserToChannel(channelName: string, uid: string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
-  
+
     if (!channelSnapshot.empty) {
       const channelDoc = channelSnapshot.docs[0];
       await updateDoc(channelDoc.ref, {
@@ -194,7 +192,7 @@ export class AuthenticationService {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
     }
   }
-  
+
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -213,22 +211,32 @@ export class AuthenticationService {
     }
   }
 
-  async newMessage(message: string) {
+  async newChat(userReceiverName: string) {
     const auth = getAuth();
     const user = auth.currentUser;
 
     if (user !== null) {
-      const userRef = doc(this.db, 'users', user.uid, 'messages');
+      try {
+        const chatsCollectionRef = await addDoc(collection(this.db, 'users', user.uid, 'chats'), {
+          user_Receiver_ID: userReceiverName,
+          created_At: firebase.firestore.FieldValue.serverTimestamp(),
+        });
 
-      return updateDoc(userRef, {
-        messages: arrayUnion(message)
-      }).then(() => {
-        this.getUserData(user.uid);
-      });
+        const newChatID = chatsCollectionRef.id;
+        const chatDocRef = doc(this.db, 'users', user.uid, 'chats', newChatID);
+        await updateDoc(chatDocRef, {
+          chat_ID: newChatID
+        });
+
+      } catch (error) {
+        console.error("Error beim Erstellen eines neuen Chats: ", error);
+      }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
     }
-    this.privateMessages.next(this.userData.messages || []);
   }
 
+  async newMessage(message: string) {
+
+  }
 }
