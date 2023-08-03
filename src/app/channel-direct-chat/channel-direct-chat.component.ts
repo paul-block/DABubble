@@ -4,6 +4,7 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
 import { AuthenticationService } from '../authentication.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-channel-direct-chat',
@@ -12,6 +13,9 @@ import { AuthenticationService } from '../authentication.service';
 })
 
 export class ChannelDirectChatComponent {
+
+  @Output() threadOpen = new EventEmitter<boolean>();
+
   messageCreator = true;
   toggleEditMessage: boolean = false;
   toggleReactionEmojis: boolean = false;
@@ -28,7 +32,7 @@ export class ChannelDirectChatComponent {
   constructor(
     private dialog: MatDialog,
     public authenticationService: AuthenticationService
-    ) { }
+  ) { }
 
   editChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
@@ -93,7 +97,7 @@ export class ChannelDirectChatComponent {
 
   editMessage() {
     console.log('edit message');
-    
+
   }
 
   resetToggledAreas() {
@@ -114,5 +118,9 @@ export class ChannelDirectChatComponent {
       default:
         break;
     }
+  }
+
+  public openThread(value: boolean) {
+    this.threadOpen.emit(value)   
   }
 }

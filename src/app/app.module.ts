@@ -37,6 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
 import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ThreadComponent } from './thread/thread.component';
 
 
 
@@ -66,6 +67,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     NewPasswordComponent,
     ChannelDirectSendMessageComponent,
     DialogAutocompleteComponent,
+    ThreadComponent,
   ],
   imports: [
     FormsModule,

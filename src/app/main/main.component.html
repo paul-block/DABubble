@@ -2,8 +2,8 @@
 <section class="chat-interaction">
     <!---------------------------------------------- hier Paul component ---------------------------------------->
     <app-channel-sidebar></app-channel-sidebar>
-    <app-channel-direct-chat *ngIf="!openNewMsg" class="container-styling"></app-channel-direct-chat>
+    <app-channel-direct-chat *ngIf="!openNewMsg" class="container-styling" (threadOpen)="setVariable($event)"></app-channel-direct-chat>
     <app-new-msg *ngIf="openNewMsg" class="container-styling"></app-new-msg>
     <!---------------------------------------------- hier antworten fenster (ganz rechts) ---------------------------------------->
-    <div class="placeholder-right container-styling"></div>
+    <app-thread [class.open_thread]="open_thread"  class="thread container-styling"></app-thread>
 </section>
