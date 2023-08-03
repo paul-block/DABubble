@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-thread',
@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class ThreadComponent {
 
+  @Output() threadClose = new EventEmitter<boolean>();
+
+  closeThread(value: boolean) {
+    this.threadClose.emit(value)
+  }
 }
