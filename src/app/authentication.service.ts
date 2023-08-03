@@ -34,7 +34,7 @@ export class AuthenticationService {
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.userData = user
+        this.getUserData(user.uid);
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
       } else {
@@ -48,6 +48,8 @@ export class AuthenticationService {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
+    console.log(docSnap.data());
+    
   }
 
   // Sign up with email/password
