@@ -21,18 +21,17 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  private privateMessages = new BehaviorSubject<string[]>(this.userData.messages || []);
-  privateMessages$ = this.privateMessages.asObservable();
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
   searchControlValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
+  currentChatID: string = 'noChatSelected'
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) { 
+  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        setTimeout(() => this.getUserData(user.uid), 500); 
+        setTimeout(() => this.getUserData(user.uid), 500);
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
       } else {
@@ -234,9 +233,56 @@ export class AuthenticationService {
     }
   }
 
+  async searchChat(user_name) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user !== null) {
+      try {
+        const querySnapshot = await getDocs(collection(this.db, 'users'));
+        let userReceiverID = null;
+
+        querySnapshot.forEach((doc) => {
+          const userData = doc.data();
+          if (userData.user_name === user_name) {
+            userReceiverID = userData.uid;
+          }
+        });
+
+        if (userReceiverID !== null) {
+          const chatsQuerySnapshot = await getDocs(collection(this.db, 'users', user.uid, 'chats'));
+          let chatExists = false;
+          chatsQuerySnapshot.forEach((doc) => {
+            const chatData = doc.data();
+            if (chatData.user_Receiver_ID === userReceiverID) {
+              chatExists = true;
+              this.openChat(user_name);
+            }
+          });
+
+          if (!chatExists) {
+            await this.newChat(userReceiverID);
+          }
+        } else {
+          console.error("Benutzer nicht gefunden");
+          this.currentChatID = 'noChatSelected';
+        }
+      } catch (error) {
+        console.error("Fehler bei der Suche nach einem Chat: ", error);
+        this.currentChatID = 'noChatSelected';
+      }
+    } else {
+      console.error("Kein Benutzer ist eingeloggt");
+      this.currentChatID = 'noChatSelected';
+    }
+  }
+
+
   async newChat(userReceiverName: string) {
     const auth = getAuth();
     const user = auth.currentUser;
+
+    userReceiverName = user.uid;
 
     if (user !== null) {
       try {
@@ -250,16 +296,30 @@ export class AuthenticationService {
         await updateDoc(chatDocRef, {
           chat_ID: newChatID
         });
-
+        this.currentChatID = newChatID;
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
+        this.currentChatID = 'noChatSelected';
       }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
+      this.currentChatID = 'noChatSelected';
     }
   }
 
-  async newMessage(message: string) {
+  async openChat(user_name) {
+    console.log('openchat: ' + user_name);
 
+  }
+
+  async newMessage(message: string) {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (this.currentChatID === 'noChatSelected') {
+      console.log(this.currentChatID);
+    } else {
+
+    }
   }
 }

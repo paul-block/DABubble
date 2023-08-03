@@ -9,15 +9,14 @@ import { AuthenticationService } from '../authentication.service';
 export class ChannelDirectSendMessageComponent {
   readyToSend: boolean = false;
   placeholder = 'Nachricht an #Entwicklerteam';
-  messageField: string = '';
-  messageInfo = [];
+  messageText: string = '';
 
   constructor(
     public authenticationService: AuthenticationService
   ) { }
 
   checkIfEmpty() {
-    if (this.messageField.length) {
+    if (this.messageText.length) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;
@@ -25,7 +24,6 @@ export class ChannelDirectSendMessageComponent {
   }
 
   sendMessage() {
-    // this.authenticationService.newMessage(this.messageField);
-    this.authenticationService.newChat(this.messageField);
+    this.authenticationService.newMessage(this.messageText);
   }
 }
