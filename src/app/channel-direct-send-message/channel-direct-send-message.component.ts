@@ -25,24 +25,7 @@ export class ChannelDirectSendMessageComponent {
   }
 
   sendMessage() {
-    this.authenticationService.newMessage(this.messageField);
-    // this.messageInfo = [
-    //   {
-    //     'timestamp': 6262626,
-    //     'text': 'textblablabalbalb',
-    //     'reactionsInfo': [
-    //       {
-    //         'emojiSource': 'rocket.svg',
-    //         'reactionUsers': ['userID3', 'userID5', 'userID10'],
-    //       },
-    //       {
-    //         'emojiName': 'hands',
-    //         'reactionUsers': ['userID1', 'userID2'],
-    //       },
-    //     ],
-    //     'directAnswers': '...answerSidebarInfos...'
-
-    //   }
-    // ];
+    // this.authenticationService.newMessage(this.messageField);
+    this.authenticationService.newChat(this.messageField);
   }
 }

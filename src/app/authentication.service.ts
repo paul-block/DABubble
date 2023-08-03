@@ -21,8 +21,6 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  // private channelList = new BehaviorSubject<string[]>(this.userData.channels || []);
-  // channelList$ = this.channelList.asObservable();
   private privateMessages = new BehaviorSubject<string[]>(this.userData.messages || []);
   privateMessages$ = this.privateMessages.asObservable();
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
@@ -236,22 +234,32 @@ export class AuthenticationService {
     }
   }
 
-  async newMessage(message: string) {
+  async newChat(userReceiverName: string) {
     const auth = getAuth();
     const user = auth.currentUser;
 
     if (user !== null) {
-      const userRef = doc(this.db, 'users', user.uid, 'messages');
+      try {
+        const chatsCollectionRef = await addDoc(collection(this.db, 'users', user.uid, 'chats'), {
+          user_Receiver_ID: userReceiverName,
+          created_At: firebase.firestore.FieldValue.serverTimestamp(),
+        });
 
-      return updateDoc(userRef, {
-        messages: arrayUnion(message)
-      }).then(() => {
-        this.getUserData(user.uid);
-      });
+        const newChatID = chatsCollectionRef.id;
+        const chatDocRef = doc(this.db, 'users', user.uid, 'chats', newChatID);
+        await updateDoc(chatDocRef, {
+          chat_ID: newChatID
+        });
+
+      } catch (error) {
+        console.error("Error beim Erstellen eines neuen Chats: ", error);
+      }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
     }
-    this.privateMessages.next(this.userData.messages || []);
   }
 
+  async newMessage(message: string) {
+
+  }
 }

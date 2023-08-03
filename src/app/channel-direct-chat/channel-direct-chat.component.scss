@@ -343,6 +343,7 @@ h1 {
     background-color: white;
     border: 1px solid #ADB0D9;
     gap: 5px;
+    user-select: none;
 
     mat-icon {
         display: none;
