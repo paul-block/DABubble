@@ -46,13 +46,16 @@ header {
 
 .thread_main {
     box-sizing: border-box;
-    padding: 15px;
+    padding: 15px 0 15px 0;
 }
 
 .type_message {
+    margin-left: 15px;
+    margin-right: 15px;
+    box-sizing: border-box;
     position: relative;
     padding-top: 5px;
-    width: 100%;
+    width: calc(100% - 30px);
     height: 145px;
     border: 1px solid #ADB0D9;
     border-radius: 20px;
@@ -87,7 +90,83 @@ header {
     }
 }
 
+.message_div {
+    transition: 200ms;
+    box-sizing: border-box;
+    padding:15px;
+    padding-bottom: 0;
+    position: relative;
+    width: 100%;
+    display: flex; 
+    align-items: flex-start;
+    &:hover {
+        background-color: #ECEEFE;
+        :nth-child(2) {
+            .message {
+                background-color: white;
+            }
+        }
+    }
+}
+
+.message_sub {
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    width: 100%;
+}
+
+.message {
+    box-sizing: border-box;
+    font-size: 18px;
+    padding: 15px;
+    background-color: #ECEEFE;
+    border-radius: 0px 20px 20px 20px;
+}
+
+.bottom_line {
+    margin-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    margin-left: -85px;
+    width: calc(100% + 70px);
+    display: flex;
+    align-items: center;
+    background-color: white !important;
+    :nth-child(1) {
+        cursor: pointer;
+        width: 216px;
+        font-size: 18px;
+        color: #ADB0D9;
+    }
+}
+
+.line {
+    
+    height: 1px;
+    width: 100%;
+    background-color: #ADB0D9;
+}
+
+.user_time {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    :nth-child(1) {
+        font-size: 18px;
+        font-weight: 700;
+    }
+    :nth-child(2) {
+        font-size: 14px;
+        font-weight: 400;
+        color: #686868;
+    }
+}
+
 .icons {
+    gap: 3px;
     position: absolute;
     bottom: 15px;
     display: flex;
@@ -100,6 +179,8 @@ header {
 }
 
 .send_button {
+    height: 24px;
+    width: 24px;
     position: absolute;
     right: 10px;
     bottom: 19px;
