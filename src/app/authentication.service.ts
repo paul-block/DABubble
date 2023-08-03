@@ -6,13 +6,13 @@ import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timeout } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService implements OnInit {
+export class AuthenticationService {
 
   db = getFirestore();
   userData: any = [];
@@ -30,12 +30,11 @@ export class AuthenticationService implements OnInit {
   searchControlValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) { }
+  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) { 
 
-  ngOnInit(): void {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.getUserData(user.uid);
+        setTimeout(() => this.getUserData(user.uid), 500); 
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
       } else {
