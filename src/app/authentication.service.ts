@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
-import  firebase  from 'firebase/compat/app';
+import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
@@ -12,12 +12,12 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService implements OnInit {
 
   db = getFirestore();
   userData: any = [];
   signIn_successful: boolean
-  signIn_error: boolean 
+  signIn_error: boolean
   email_error: boolean
   signUp_successful: boolean
   userName: string
@@ -30,8 +30,9 @@ export class AuthenticationService {
   searchControlValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
+  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) { }
 
+  ngOnInit(): void {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.getUserData(user.uid);
@@ -44,12 +45,12 @@ export class AuthenticationService {
   }
 
 
-  async getUserData(uid: string) {  
+  async getUserData(uid: string) {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
     console.log(docSnap.data());
-    
+
   }
 
   // Sign up with email/password
@@ -124,7 +125,7 @@ export class AuthenticationService {
       email: user.email,
       user_name: this.userName
     };
-     await userRef.set(userDataFirestore, {
+    await userRef.set(userDataFirestore, {
       merge: true,
     });
   }
@@ -140,7 +141,7 @@ export class AuthenticationService {
   async createNewChannel(channel: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (user !== null) {
       try {
         const channelCollectionRef = collection(this.db, 'channels');
@@ -164,7 +165,7 @@ export class AuthenticationService {
 
   async getAuthorizedChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
-    
+
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {
@@ -175,19 +176,19 @@ export class AuthenticationService {
 
   async findUserByName(name: string): Promise<string | null> {
     const usersSnapshot = await getDocs(query(collection(this.db, 'users'), where('user_name', '==', name)));
-  
+
     if (!usersSnapshot.empty) {
       const userDoc = usersSnapshot.docs[0];
       console.log(userDoc);
       return userDoc.data().uid;
     }
-  
+
     return null;
   }
 
   async addUserToChannel(channelName: string, uid: string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
-  
+
     if (!channelSnapshot.empty) {
       const channelDoc = channelSnapshot.docs[0];
       await updateDoc(channelDoc.ref, {
@@ -202,22 +203,22 @@ export class AuthenticationService {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
     let users = [];
     usersSnapshot.forEach((doc) => {
-        users.push(doc.data());
-      });
-      return users;
+      users.push(doc.data());
+    });
+    return users;
   }
 
   async filterUsers(name: string): Promise<any[]> {
-    const users = await this.getAllUsers();    
+    const users = await this.getAllUsers();
     const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name)
-     );
+    );
     return filtered;
   }
 
   setSearchControlValue(value: string): void {
     this.searchControlValue.next(value);
   }
-  
+
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
