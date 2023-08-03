@@ -60,9 +60,20 @@ export class SignUpComponent {
   }
 
 
-  async signUp() {
-    this.authenticationService.userName = this.name
-    if (this.formValid) await this.authenticationService.SignUp(this.email, this.password)
+  //async signUp() {
+  //  this.authenticationService.userName = this.name
+  //  if (this.formValid) await this.authenticationService.SignUp(this.email, this.password)
+  //  if (this.authenticationService.signUp_successful) {
+  //    setTimeout(() => this.router.navigateByUrl('/sign-in'), 1900);
+  //  }
+    
+
+  //`}
+
+
+  async signUp( ) {
+    this.authenticationService.userName = 'test'
+      await this.authenticationService.SignUp('test@test.de', 'Amidala6%')
     if (this.authenticationService.signUp_successful) {
       setTimeout(() => this.router.navigateByUrl('/sign-in'), 1900);
     }

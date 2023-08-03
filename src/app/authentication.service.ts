@@ -17,7 +17,7 @@ export class AuthenticationService {
   db = getFirestore();
   userData: any = [];
   signIn_successful: boolean
-  signIn_error: boolean
+  signIn_error: boolean 
   email_error: boolean
   signUp_successful: boolean
   userName: string
@@ -34,13 +34,20 @@ export class AuthenticationService {
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.getUserData(user.uid);
+        this.userData = user
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
       } else {
         localStorage.setItem('user', 'null');
       }
     });
+  }
+
+
+  async getUserData(uid: string) {  
+    const userRef = doc(this.db, "users", uid);
+    let docSnap = await getDoc(userRef);
+    this.userData = docSnap.data()
   }
 
   // Sign up with email/password
@@ -60,7 +67,6 @@ export class AuthenticationService {
         window.alert(error.message)
     }
   }
-
 
   // Sign in with email/password
   async SignIn(email: string, password: string) {
@@ -114,19 +120,13 @@ export class AuthenticationService {
     const userDataFirestore = {
       uid: user.uid,
       email: user.email,
-      user_name: this.userName,
+      user_name: this.userName
     };
      await userRef.set(userDataFirestore, {
       merge: true,
     });
   }
 
-
-  async getUserData(uid: string) {
-    const userRef = doc(this.db, "users", uid);
-    let docSnap = await getDoc(userRef);
-    this.userData = docSnap.data()
-  }
 
   async signOut() {
     await this.afAuth.signOut();
