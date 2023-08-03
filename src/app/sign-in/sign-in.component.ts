@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
-import { SelectMultipleControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-in',
@@ -23,7 +22,6 @@ export class SignInComponent {
   async signIn() {
     await this.authenticationService.GoogleAuth()
     if (this.authenticationService.signIn_successful) {
-      console.log('test');
       setTimeout(() => this.router.navigateByUrl('/main'), 1900);
     }
   }

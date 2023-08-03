@@ -10,22 +10,22 @@ import { Router } from '@angular/router';
 export class SignUpComponent {
 
   emailFocus: boolean = false
-  name = ''
-  password = ''
-  email = ''
+  name: string = ''
+  password: string = ''
+  email: string = ''
   emailError: boolean = false
   regexEmail = new RegExp('^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$');
   formValid: boolean = false
   nameFocus: boolean = false
   passwordFocus: boolean = false
   validPassword: boolean = false
-  match:boolean = false
+  match: boolean = false
   matchPassword: string
-  passwordConfirmed:boolean = false
+  passwordConfirmed: boolean = false
 
 
 
-  constructor(public authenticationService: AuthenticationService, private router:Router) { }
+  constructor(public authenticationService: AuthenticationService, private router: Router) { }
 
 
   dataChanged(value: any, inputfield: string) {
@@ -63,8 +63,7 @@ export class SignUpComponent {
   async signUp() {
     this.authenticationService.userName = this.name
     if (this.formValid) await this.authenticationService.SignUp(this.email, this.password)
-    if (this.authenticationService.signUp_successful) {
-      setTimeout(() => this.router.navigateByUrl('/sign-in'), 1900);
-    }
+    if (this.authenticationService.signUp_successful) setTimeout(() => this.router.navigateByUrl('/sign-in'), 1900);
   }
 }
+

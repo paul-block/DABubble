@@ -8,11 +8,16 @@ import { NewMsgService } from '../new-msg.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent {
-  openNewMsg:boolean;
+  open_thread: boolean
+  openNewMsg: boolean;
   private _subscription: Subscription;
 
-  
+
   constructor(private NewMsgService: NewMsgService) {
     this._subscription = this.NewMsgService.openNewMsg$.subscribe(open => this.openNewMsg = open);
+  }
+
+  setVariable(value: boolean) {
+    this.open_thread = value
   }
 }

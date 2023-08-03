@@ -10,11 +10,17 @@
     margin-left: 25px;
 }
 
-.placeholder-right {
-    width: 300px;
+.thread {
+    overflow: hidden;
+    transition: 300ms;
+    width: 0px;
     height: 100%;
     background-color: white;
     margin-right: 25px;
+}
+
+.open_thread {
+    width: 30%;
 }
 
 .container-styling {

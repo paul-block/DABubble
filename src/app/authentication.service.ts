@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
@@ -6,7 +6,7 @@ import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timeout } from 'rxjs';
 
 
 @Injectable({
@@ -25,20 +25,29 @@ export class AuthenticationService {
   privateMessages$ = this.privateMessages.asObservable();
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
+  searchControlValue = new BehaviorSubject<string>('');
+  email_send: boolean = null;
 
-  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {
+  constructor(private auth: Auth, public afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) { 
 
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        this.getUserData(user.uid);
+        setTimeout(() => this.getUserData(user.uid), 500); 
         this.getAuthorizedChannels(user.uid);
         localStorage.setItem('user', JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem('user')!);
       } else {
         localStorage.setItem('user', 'null');
-        JSON.parse(localStorage.getItem('user')!);
       }
     });
+  }
+
+
+  async getUserData(uid: string) {
+    const userRef = doc(this.db, "users", uid);
+    let docSnap = await getDoc(userRef);
+    this.userData = docSnap.data()
+    console.log(docSnap.data());
+
   }
 
   // Sign up with email/password
@@ -58,7 +67,6 @@ export class AuthenticationService {
         window.alert(error.message)
     }
   }
-
 
   // Sign in with email/password
   async SignIn(email: string, password: string) {
@@ -88,42 +96,37 @@ export class AuthenticationService {
           this.SetUserData(result.user);
         });
       this.signIn_successful = true
-      setTimeout(() => this.signIn_successful = false, 2000);
+      setTimeout(() => this.signIn_successful = false, 3000);
     } catch (error) {
       window.alert(error.message);
     }
   }
 
   async ForgotPassword(passwordResetEmail: string) {
-    return this.afAuth
+    await this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
-        window.alert('Password reset email sent, check your inbox.');
+        this.email_send = true
+        setTimeout(() => this.email_send = null, 3000);
       })
       .catch((error) => {
-        window.alert(error);
+        this.email_send = false
+        setTimeout(() => this.email_send = null, 3000);
       });
   }
 
   async SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const userData = {
+    const userDataFirestore = {
       uid: user.uid,
       email: user.email,
-      user_name: this.userName,
+      user_name: this.userName
     };
-    return await userRef.set(userData, {
+    await userRef.set(userDataFirestore, {
       merge: true,
     });
   }
 
-
-  async getUserData(uid: string) {
-    const userRef = doc(this.db, "users", uid);
-    let docSnap = await getDoc(userRef);
-    this.userData = docSnap.data()
-    console.log(this.userData);
-  }
 
   async signOut() {
     await this.afAuth.signOut();
@@ -191,6 +194,26 @@ export class AuthenticationService {
     } else {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
     }
+  }
+
+  async getAllUsers() {
+    const usersSnapshot = await getDocs(collection(this.db, 'users'));
+    let users = [];
+    usersSnapshot.forEach((doc) => {
+      users.push(doc.data());
+    });
+    return users;
+  }
+
+  async filterUsers(name: string): Promise<any[]> {
+    const users = await this.getAllUsers();
+    const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name)
+    );
+    return filtered;
+  }
+
+  setSearchControlValue(value: string): void {
+    this.searchControlValue.next(value);
   }
 
   async updateUserDetails(userName: string, email: string) {
