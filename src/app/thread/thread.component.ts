@@ -44,7 +44,6 @@ export class ThreadComponent implements OnInit {
         uid: this.authenticationService.userData.user_name
       }
       this.emojis.push(emoji)
-      console.log(this.emojis);
     }
   };
 
@@ -54,7 +53,6 @@ export class ThreadComponent implements OnInit {
       if (element.emoji == emoji) {
         element.count += 1
         this.emoji_exist = true
-        console.log(this.emojis);
       }
     });
   }

@@ -26,7 +26,7 @@
             <div class="message">Welche Version ist aktuell von Angular?</div>
             <div class="emoji_main">
                 <div *ngFor="let emoji of emojis; let i = index" class="emoji_count">
-                    <ngx-emoji class="center" [emoji]="emojis[i].emoji" size="24">{{emojis[i].count}}</ngx-emoji>
+                    <ngx-emoji class="center" [emoji]="emojis[i].emoji" size="24"></ngx-emoji>
                     <span>{{emojis[i].count}}</span>
                 </div>
             </div>

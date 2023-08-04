@@ -1,4 +1,5 @@
 <header>
+    <button (click)="openThread(true)" >test // open Thread \\ test</button>
     <div class="chat-receiver" [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()"
         #editChannelREF>
         <mat-icon class="tag">tag</mat-icon>
@@ -57,7 +58,7 @@
                 </div>
             </div>
             <div class="gap-10 items-center">
-                <span class="chat-message-answers-amount"(click)="openThread(true)">2 Antworten</span>
+                <span class="chat-message-answers-amount">2 Antworten</span>
                 <span class="last-message-time">Letzte Antwort 14:56 Uhr</span>
             </div>
         </div>
