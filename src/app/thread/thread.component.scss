@@ -12,6 +12,42 @@ header {
     z-index: 1;
 }
 
+.emoji_picker {
+    z-index: 4;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0px;
+   
+}
+
+.d_block {
+    display: block ;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+}
+
+.emoji_main {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.emoji_count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 20px;
+    width: 64px;
+    height: 34px;
+    background-color: white;
+    border: 1px solid #ADB0D9;
+}
+
 .header_content {
     width: 100%;
     display: flex;

@@ -9,11 +9,12 @@
 </header>
 <div class="thread_main">
     <div class="message_div">
+        <emoji-mart [class.d_block]="emojiPicker_open" class="emoji_picker" (emojiClick)="addEmoji($event)"></emoji-mart>
         <div class="bottom_line">
             <span>2 Antworten</span>
             <div class="line"></div>
         </div>
-        <div class="reaction_emojy">
+        <div (click)="openEmojiPicker()" (click)="stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>  
         </div>
         <img src="/assets/img/small_avatar/avatar_1.svg" alt="">
@@ -23,6 +24,13 @@
                 <span>Uhrzeit</span>
             </div>
             <div class="message">Welche Version ist aktuell von Angular?</div>
+            <div class="emoji_main">
+                <div *ngFor="let emoji of emojis; let i = index" class="emoji_count">
+                    <ngx-emoji class="center" [emoji]="emojis[i].emoji" size="24">{{emojis[i].count}}</ngx-emoji>
+                    <span>{{emojis[i].count}}</span>
+                </div>
+            </div>
+            
           
         </div>
        
@@ -41,9 +49,10 @@
         <img class="send_button" src="/assets/img/icons/send (1).png" alt="">
     </div>
 </div>
-<div>{{emoji}}</div>
 
 
 
-<emoji-mart (emojiClick)="addEmoji($event)"></emoji-mart>
+
+
+
 
