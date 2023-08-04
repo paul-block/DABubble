@@ -11,6 +11,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 // Components
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { StartScreenComponent } from './start-screen/start-screen.component';
@@ -70,6 +72,8 @@ import { ThreadComponent } from './thread/thread.component';
     ThreadComponent,
   ],
   imports: [
+    EmojiComponent,
+    PickerComponent,
     FormsModule,
     RouterModule,
     BrowserModule,
