@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { emojis } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+
 import { AuthenticationService } from '../authentication.service';
 
 
@@ -10,6 +10,10 @@ import { AuthenticationService } from '../authentication.service';
 })
 export class ThreadComponent implements OnInit {
   emoji_exist: boolean;
+  who_react: string = 'test'
+  comment_value: string = ''
+  comments = []
+  picker_index: number
 
 
   constructor(public authenticationService: AuthenticationService) { }
@@ -28,28 +32,32 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  openEmojiPicker() {
+  openEmojiPicker(i: number) {
+    this.picker_index = i
     this.emojiPicker_open = true
   }
 
 
-  addEmoji($event: any) {
+  addEmoji($event: any, i: number) {
     this.emoji_exist = false
     this.emojiPicker_open = false
-    this.checkIfEmojyExist($event.emoji.colons)
+    this.checkIfEmojiExist($event.emoji.colons, i)
     if (!this.emoji_exist) {
-      let emoji = {
+      let emoji_data = {
         emoji: $event.emoji.colons,
         count: 1,
-        uid: this.authenticationService.userData.user_name
+        react_users: this.authenticationService.userData.user_name
       }
-      this.emojis.push(emoji)
+      this.comments[i].emoji_data.push(emoji_data)
     }
-  };
+    console.log(this.comments);
+
+  }
 
 
-  checkIfEmojyExist(emoji: string) {
-      this.emojis.forEach(element => {
+
+  checkIfEmojiExist(emoji: string, i: number) {
+    this.comments[i].emoji_data.forEach(element => {
       if (element.emoji == emoji) {
         element.count += 1
         this.emoji_exist = true
@@ -59,12 +67,29 @@ export class ThreadComponent implements OnInit {
 
 
   bodyClicked = () => {
-     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
+    if (this.emojiPicker_open == true) this.emojiPicker_open = false;
   };
+
 
   stopPropagation(event: Event) {
-       event.stopPropagation();
+    event.stopPropagation();
   };
 
+
+  postComment() {
+    if (this.comment_value.length > 0) {
+      let time_stamp = new Date()
+      let comment_data = {
+        comment: this.comment_value,
+        user: this.authenticationService.userData.user_name,
+        time: time_stamp,
+        avatar: '',
+        emoji_data: [],
+      }
+      this.comments.push(comment_data)
+      this.comment_value = ''
+      console.log(this.comments);
+    }
+  }
 }
 

@@ -31,6 +31,7 @@ import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-membe
 import { AddPplToChannelComponent } from './dialog-add-ppl-to-channel/add-ppl-to-channel.component';
 import { NewMsgComponent } from './new-msg/new-msg.component';
 // Material API imports
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -72,6 +73,7 @@ import { ThreadComponent } from './thread/thread.component';
     ThreadComponent,
   ],
   imports: [
+    MatTooltipModule,
     EmojiComponent,
     PickerComponent,
     FormsModule,

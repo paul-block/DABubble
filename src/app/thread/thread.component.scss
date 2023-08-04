@@ -130,6 +130,30 @@ header {
     }
 }
 
+.comment_div {
+    transition: 200ms;
+    box-sizing: border-box;
+    padding: 15px;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+
+    &:hover {
+        background-color: #ECEEFE;
+
+        .message {
+            background-color: white;
+        }
+
+        .reaction_emojy {
+            display: flex;
+            animation: 225ms shortSlideInRight ease-in-out;
+        }
+    }
+}
+
 .message_div {
     transition: 200ms;
     box-sizing: border-box;
@@ -294,6 +318,11 @@ textarea {
         font-size: 18px;
         color: #686868;
     }
+}
+
+.inactive {
+    pointer-events: none;
+    filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%) contrast(94%);
 }
 
 @keyframes shortSlideInRight {

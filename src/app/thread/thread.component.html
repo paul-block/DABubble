@@ -8,14 +8,17 @@
     </div>
 </header>
 <div class="thread_main">
+
+
     <div class="message_div">
-        <emoji-mart [class.d_block]="emojiPicker_open" class="emoji_picker" (emojiClick)="addEmoji($event)"></emoji-mart>
+        <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -1" class="emoji_picker"
+            (emojiClick)="addEmoji($event, -1)"></emoji-mart>
         <div class="bottom_line">
-            <span>2 Antworten</span>
+            <span>{{comments.length}} Antworten</span>
             <div class="line"></div>
         </div>
-        <div (click)="openEmojiPicker()" (click)="stopPropagation($event)" class="reaction_emojy">
-            <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>  
+        <div (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">
+            <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
         <img src="/assets/img/small_avatar/avatar_1.svg" alt="">
         <div class="message_sub">
@@ -25,18 +28,41 @@
             </div>
             <div class="message">Welche Version ist aktuell von Angular?</div>
             <div class="emoji_main">
-                <div *ngFor="let emoji of emojis; let i = index" class="emoji_count">
-                    <ngx-emoji class="center" [emoji]="emojis[i].emoji" size="24"></ngx-emoji>
-                    <span>{{emojis[i].count}}</span>
+                <div *ngFor="let emoji of emojis; let i = index" class="emoji_count"
+                    matTooltip="{{who_react}} hat reagiert">
+                    <ngx-emoji class="center" [emoji]="comments[i].emoji_data.emoji" size="24"></ngx-emoji>
+                    <span>{{comments[i].emoji_data.count}}</span>
                 </div>
             </div>
-            
-          
         </div>
-       
     </div>
+
+
+    <div  class="comment_div" *ngFor="let comment of comments; let i = index">
+        <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker" (emojiClick)="addEmoji($event, i)"></emoji-mart>
+        <div (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
+            <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
+        </div>
+        <img src="/assets/img/small_avatar/avatar_1.svg" alt="">
+        <div class="message_sub">
+            <div class="user_time">
+                <span>{{comments[i].user}}</span>
+                <span>Uhrzeit</span>
+            </div>
+            <div class="message">{{comments[i].comment}}</div>
+            <div class="emoji_main">
+                <div *ngFor="let emoji of comments[i].emoji_data; let j = index" class="emoji_count"
+                    matTooltip="{{who_react}} hat reagiert">
+                    <ngx-emoji class="center" [emoji]="comments[i].emoji_data[j].emoji" size="24"></ngx-emoji>
+                    <span>{{comments[i].emoji_data[j].count}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="type_message">
-        <textarea type="text" placeholder="Antworten..."></textarea>
+        <textarea type="text" [(ngModel)]="comment_value" placeholder="Antworten..."></textarea>
         <div class="icons_main">
             <div class="icons">
                 <div class="plus">
@@ -46,13 +72,6 @@
                 <div class="hover"><img src="/assets/img/icons/alternate_email.png" alt=""></div>
             </div>
         </div>
-        <img class="send_button" src="/assets/img/icons/send (1).png" alt="">
+        <img [class.inactive]="comment_value.length < 1" class="send_button" src="/assets/img/icons/send (1).png" alt="" (click)="postComment()">
     </div>
 </div>
-
-
-
-
-
-
-
