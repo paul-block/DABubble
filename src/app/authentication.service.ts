@@ -181,6 +181,7 @@ export class AuthenticationService {
 
     return null;
   }
+  
 
   async addUserToChannel(channelName: string, uid: string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
@@ -204,12 +205,14 @@ export class AuthenticationService {
     return users;
   }
 
+
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
     const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name)
     );
     return filtered;
   }
+
 
   setSearchControlValue(value: string): void {
     this.searchControlValue.next(value);

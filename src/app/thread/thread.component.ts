@@ -14,6 +14,7 @@ export class ThreadComponent implements OnInit {
   comment_value: string = ''
   comments = []
   picker_index: number
+  response:string = 'Antwort'
 
 
   constructor(public authenticationService: AuthenticationService) { }
@@ -88,8 +89,19 @@ export class ThreadComponent implements OnInit {
       }
       this.comments.push(comment_data)
       this.comment_value = ''
+      if(this.comments.length > 1) this.response = 'Antworten'
+      if(this.comments.length < 2) this.response = 'Antwort'
       console.log(this.comments);
     }
   }
+
+
+  addEmojitoTextarea($event) {
+    console.log($event.emoji);
+    let unicodeCode: string = $event.emoji.unified
+    let emoji = String.fromCodePoint(parseInt(unicodeCode, 16));
+    this.comment_value += emoji
+  }
+
 }
 

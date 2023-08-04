@@ -11,7 +11,7 @@
 }
 
 .thread {
-    overflow: hidden;
+    display: none;
     transition: 300ms;
     width: 0px;
     height: 100%;
@@ -21,6 +21,7 @@
 
 .open_thread {
     width: 30%;
+    display: block;
 }
 
 .container-styling {
