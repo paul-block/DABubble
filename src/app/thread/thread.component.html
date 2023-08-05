@@ -54,7 +54,7 @@
                 <div class="message">{{comments[i].comment}}</div>
                 <div class="emoji_main">
                     <div *ngFor="let emoji of comments[i].emoji_data; let j = index" class="emoji_count"
-                        matTooltip="{{who_react}} hat reagiert">
+                        matTooltip="{{react_user}} hat reagiert">
                         <ngx-emoji class="center" [emoji]="comments[i].emoji_data[j].emoji" size="24"></ngx-emoji>
                         <span>{{comments[i].emoji_data[j].count}}</span>
                     </div>

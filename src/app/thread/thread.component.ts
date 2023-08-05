@@ -10,7 +10,7 @@ import { AuthenticationService } from '../authentication.service';
 })
 export class ThreadComponent implements OnInit {
   emoji_exist: boolean;
-  who_react: string = 'test'
+  react_user: string = 'test'
   comment_value: string = ''
   comments = []
   picker_index: number
