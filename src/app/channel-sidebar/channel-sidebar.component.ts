@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
-import { NewMsgService } from '../new-msg.service';
-import { AuthenticationService } from '../authentication.service';
 import { Subscription } from 'rxjs';
+import { NewMsgService } from 'src/services/new-msg.service';
+import { ChannelService } from 'src/services/channel.service';
+import { ChannelDirectchatService } from 'src/services/directchat.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -12,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class ChannelSidebarComponent implements OnInit, OnDestroy {
   channelsVisible: boolean = true;
-  authorizedChannels: any[] = []; 
+  authorizedChannels: any[] = [];
   dmsVisible: boolean = true;
   workspaceVisible: boolean = true;
   openNewMsg: boolean = false;
@@ -22,10 +23,15 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   channels: any[] = [];
   private sub: Subscription;
 
-  constructor(public dialog: MatDialog, private newMsgService: NewMsgService, public authService: AuthenticationService) {}
+  constructor(
+    public dialog: MatDialog,
+    private newMsgService: NewMsgService,
+    public channelService: ChannelService,
+    public directChatService: ChannelDirectchatService
+  ) { }
 
   ngOnInit() {
-    this.sub = this.authService.authorizedChannels.subscribe(channels => {
+    this.sub = this.channelService.authorizedChannels.subscribe(channels => {
       this.channels = channels;
     });
   }

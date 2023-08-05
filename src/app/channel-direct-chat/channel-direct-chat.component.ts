@@ -3,8 +3,8 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
-import { AuthenticationService } from '../authentication.service';
 import { Output, EventEmitter } from '@angular/core';
+import { AuthenticationService } from 'src/services/authentication.service';
 
 @Component({
   selector: 'app-channel-direct-chat',

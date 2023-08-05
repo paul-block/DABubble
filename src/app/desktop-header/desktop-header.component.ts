@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'src/services/authentication.service';
 
 @Component({
   selector: 'app-desktop-header',

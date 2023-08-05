@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'src/services/authentication.service';
 
 
 @Component({

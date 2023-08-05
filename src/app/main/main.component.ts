@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { NewMsgService } from '../new-msg.service';
+import { NewMsgService } from 'src/services/new-msg.service';
 
 @Component({
   selector: 'app-main',
