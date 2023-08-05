@@ -14,7 +14,8 @@ export class ThreadComponent implements OnInit {
   comment_value: string = ''
   comments = []
   picker_index: number
-  response:string = 'Antwort'
+  response: string = 'Antwort'
+  message = []
 
 
   constructor(public authenticationService: AuthenticationService) { }
@@ -47,21 +48,30 @@ export class ThreadComponent implements OnInit {
       let emoji_data = {
         emoji: $event.emoji.colons,
         count: 1,
-        react_users: this.authenticationService.userData.user_name
+        react_users: [this.authenticationService.userData.user_name]
       }
       this.comments[i].emoji_data.push(emoji_data)
     }
     console.log(this.comments);
-
   }
-
 
 
   checkIfEmojiExist(emoji: string, i: number) {
     this.comments[i].emoji_data.forEach(element => {
       if (element.emoji == emoji) {
-        element.count += 1
         this.emoji_exist = true
+        if (element.react_users.includes(this.authenticationService.userData.user_name)) {
+          let k = element.react_users.indexOf(this.authenticationService.userData.user_name)
+          element.react_users.splice(k, 1)
+          element.count -= 1
+          if (element.count == 0) {
+            let j = this.comments[i].emoji_data.indexOf(element)
+            this.comments[i].emoji_data.splice(j, 1)
+          }
+        }
+        else
+          element.react_users.push(this.authenticationService.userData.user_name)
+          element.count += 1
       }
     });
   }
@@ -89,19 +99,44 @@ export class ThreadComponent implements OnInit {
       }
       this.comments.push(comment_data)
       this.comment_value = ''
-      if(this.comments.length > 1) this.response = 'Antworten'
-      if(this.comments.length < 2) this.response = 'Antwort'
+      if (this.comments.length > 1) this.response = 'Antworten'
+      if (this.comments.length < 2) this.response = 'Antwort'
       console.log(this.comments);
     }
   }
 
 
-  addEmojitoTextarea($event) {
-    console.log($event.emoji);
+  addEmojitoTextarea($event: any) {
+    this.emojiPicker_open = false
     let unicodeCode: string = $event.emoji.unified
     let emoji = String.fromCodePoint(parseInt(unicodeCode, 16));
     this.comment_value += emoji
   }
 
+
+  checkIfEmojiExistinMessage($event: any) {
+    if (this.message.length == 0) return
+    this.message.forEach(element => {
+      if (element.emoji == $event.emoji.colons) {
+        element.count += 1
+        this.emoji_exist = true
+      }
+    });
+  }
+
+
+  addEmojiToMessage($event: any) {
+    this.emojiPicker_open = false
+    this.emoji_exist = false
+    this.checkIfEmojiExistinMessage($event)
+    if (!this.emoji_exist) {
+      let emoji_data = {
+        emoji: $event.emoji.colons,
+        count: 1,
+        react_users: this.authenticationService.userData.user_name
+      }
+      this.message.push(emoji_data)
+    }
+  }
 }
 
