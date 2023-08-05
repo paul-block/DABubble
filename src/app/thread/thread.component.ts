@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { AuthenticationService } from '../authentication.service';
+import { FirestoreThreadDataService } from '../firestore-thread-data.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  constructor(public authenticationService: AuthenticationService) { }
+  constructor(public authenticationService: AuthenticationService, public fsDataThreadService: FirestoreThreadDataService) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
   selectedEmoji: string
@@ -29,10 +30,12 @@ export class ThreadComponent implements OnInit {
 
   ngOnInit(): void {
     document.body.addEventListener('click', this.bodyClicked);
+    this.fsDataThreadService.getMessages()
   }
 
   closeThread(value: boolean) {
     this.threadClose.emit(value)
+    this.fsDataThreadService.thread_open = false
   }
 
 
@@ -103,7 +106,7 @@ export class ThreadComponent implements OnInit {
       this.comment_value = ''
       if (this.comments.length > 1) this.response = 'Antworten'
       if (this.comments.length < 2) this.response = 'Antwort'
-      console.log(this.comments);
+      this.fsDataThreadService.saveThread(this.comments)
     }
   }
 
@@ -138,7 +141,6 @@ export class ThreadComponent implements OnInit {
         react_users: [this.authenticationService.userData.user_name]
       }
       this.channel_message.emoji_data.push(emoji_data)
-      console.log(this.channel_message);
       
     }
   }

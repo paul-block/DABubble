@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NewMsgService } from '../new-msg.service';
+import { FirestoreThreadDataService } from '../firestore-thread-data.service';
 
 @Component({
   selector: 'app-main',
@@ -13,7 +14,7 @@ export class MainComponent {
   private _subscription: Subscription;
 
 
-  constructor(private NewMsgService: NewMsgService) {
+  constructor(private NewMsgService: NewMsgService,  public fsDataThreadService: FirestoreThreadDataService) {
     this._subscription = this.NewMsgService.openNewMsg$.subscribe(open => this.openNewMsg = open);
   }
 

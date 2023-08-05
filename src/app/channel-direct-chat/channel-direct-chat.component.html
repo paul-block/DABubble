@@ -1,5 +1,5 @@
 <header>
-    <button (click)="openThread(true)" >test // open Thread \\ test</button>
+    <button (click)="openThread(true)">test // open Thread \\ test</button>
     <div class="chat-receiver" [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()"
         #editChannelREF>
         <mat-icon class="tag">tag</mat-icon>
@@ -17,14 +17,17 @@
             <span>3</span>
         </div>
         <div (click)="addMembers()" class="add-members" #addMembersREF>
-            <mat-icon  [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
+            <mat-icon [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
                 person_add_alt
             </mat-icon>
         </div>
 
     </div>
 </header>
-
+<div>
+    <h3>Testnachrichten</h3>
+    <div *ngFor="let message of fsDataThreadService.channel_messages; let i = index">{{fsDataThreadService.channel_messages[i].message}}<button (click)="fsDataThreadService.openThread(i)">Antworten</button></div>
+</div>
 <section class="chat-messages">
     <div class="chat-messages-date">
         <div class="parting-line"></div>
