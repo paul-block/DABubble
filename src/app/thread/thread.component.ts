@@ -15,7 +15,9 @@ export class ThreadComponent implements OnInit {
   comments = []
   picker_index: number
   response: string = 'Antwort'
-  message = []
+  channel_message = {
+    emoji_data: []
+  }
 
 
   constructor(public authenticationService: AuthenticationService) { }
@@ -23,7 +25,7 @@ export class ThreadComponent implements OnInit {
   @Output() threadClose = new EventEmitter<boolean>();
   selectedEmoji: string
   emojiPicker_open: boolean = false;
-  emojis = []
+  
 
   ngOnInit(): void {
     document.body.addEventListener('click', this.bodyClicked);
@@ -115,8 +117,8 @@ export class ThreadComponent implements OnInit {
 
 
   checkIfEmojiExistinMessage($event: any) {
-    if (this.message.length == 0) return
-    this.message.forEach(element => {
+    if (this.channel_message.emoji_data.length == 0) return
+    this.channel_message.emoji_data.forEach(element => {
       if (element.emoji == $event.emoji.colons) {
         element.count += 1
         this.emoji_exist = true
@@ -133,9 +135,11 @@ export class ThreadComponent implements OnInit {
       let emoji_data = {
         emoji: $event.emoji.colons,
         count: 1,
-        react_users: this.authenticationService.userData.user_name
+        react_users: [this.authenticationService.userData.user_name]
       }
-      this.message.push(emoji_data)
+      this.channel_message.emoji_data.push(emoji_data)
+      console.log(this.channel_message);
+      
     }
   }
 }

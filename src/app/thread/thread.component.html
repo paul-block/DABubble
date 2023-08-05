@@ -25,10 +25,10 @@
                 </div>
                 <div class="message">Welche Version ist aktuell von Angular?</div>
                 <div class="emoji_main">
-                    <div *ngFor="let emoji of emojis; let i = index" class="emoji_count"
+                    <div *ngFor="let emoji of channel_message.emoji_data; let i = index" class="emoji_count"
                         matTooltip="{{who_react}} hat reagiert">
-                        <ngx-emoji class="center" [emoji]="comments[i].emoji_data.emoji" size="24"></ngx-emoji>
-                        <span>{{comments[i].emoji_data.count}}</span>
+                        <ngx-emoji class="center" [emoji]="channel_message.emoji_data[i].emoji" size="24"></ngx-emoji>
+                        <span>{{channel_message.emoji_data[i].count}}</span>
                     </div>
                 </div>
             </div>
