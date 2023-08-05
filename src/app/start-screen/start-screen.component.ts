@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
+import { FirestoreThreadDataService } from '../firestore-thread-data.service';
 
 @Component({
   selector: 'app-start-screen',
@@ -14,7 +15,7 @@ export class StartScreenComponent implements OnInit {
   d_none: boolean = false
   active: boolean = false
 
-  constructor(private firestoreService: AuthenticationService, private router: Router) {
+  constructor(private firestoreService: AuthenticationService, private router: Router, public fsDataThreadService: FirestoreThreadDataService) {
 
   }
 

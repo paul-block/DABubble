@@ -45,8 +45,6 @@ export class AuthenticationService {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
-    console.log(docSnap.data());
-
   }
 
   // Sign up with email/password
