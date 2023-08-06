@@ -11,12 +11,12 @@ import { BehaviorSubject, timeout } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ChannelDirectchatService {
+export class DirectChatService {
   db = getFirestore();
   currentChatID: string = 'noChatSelected'
 
   constructor() { }
-  
+
   async searchChat(user_name) {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -40,7 +40,9 @@ export class ChannelDirectchatService {
             const chatData = doc.data();
             if (chatData.user_Receiver_ID === userReceiverID) {
               chatExists = true;
+              this.currentChatID = chatData.chat_ID;
               this.openChat(user_name);
+
             }
           });
 
@@ -49,15 +51,12 @@ export class ChannelDirectchatService {
           }
         } else {
           console.error("Benutzer nicht gefunden");
-          this.currentChatID = 'noChatSelected';
         }
       } catch (error) {
         console.error("Fehler bei der Suche nach einem Chat: ", error);
-        this.currentChatID = 'noChatSelected';
       }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
-      this.currentChatID = 'noChatSelected';
     }
   }
 
@@ -83,17 +82,15 @@ export class ChannelDirectchatService {
         this.currentChatID = newChatID;
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
-        this.currentChatID = 'noChatSelected';
       }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
-      this.currentChatID = 'noChatSelected';
     }
   }
 
   async openChat(user_name) {
     console.log('openchat: ' + user_name);
-
+    console.log('opened chat: ' + this.currentChatID);
   }
 
   async newMessage(message: string) {
@@ -103,7 +100,17 @@ export class ChannelDirectchatService {
     if (this.currentChatID === 'noChatSelected') {
       console.log(this.currentChatID);
     } else {
+      console.log(message);
 
+      const messagesCollectionRef = await addDoc(collection(this.db, 'users', user.uid, 'chats', this.currentChatID, 'messages'), {
+        chat_message: message,
+        user_Sender_ID: user.uid,
+        created_At: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      const newMessageID = messagesCollectionRef.id;
+      await updateDoc(messagesCollectionRef, {
+        message_ID: newMessageID
+      });
     }
   }
 

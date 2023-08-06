@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
-import { ChannelDirectchatService } from 'src/services/directchat.service';
+import { DirectChatService } from 'src/services/directchat.service';
 
 @Component({
   selector: 'app-channel-direct-send-message',
@@ -13,8 +13,8 @@ export class ChannelDirectSendMessageComponent {
   messageText: string = '';
 
   constructor(
-    public authenticationService: AuthenticationService,
-    public directChatService: ChannelDirectchatService
+    public authService: AuthenticationService,
+    public directChatService: DirectChatService
   ) { }
 
   checkIfEmpty() {

@@ -4,7 +4,7 @@ import { AddChannelComponent } from '../dialog-add-channel/add-channel.component
 import { Subscription } from 'rxjs';
 import { NewMsgService } from 'src/services/new-msg.service';
 import { ChannelService } from 'src/services/channel.service';
-import { ChannelDirectchatService } from 'src/services/directchat.service';
+import { DirectChatService } from 'src/services/directchat.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -27,7 +27,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private newMsgService: NewMsgService,
     public channelService: ChannelService,
-    public directChatService: ChannelDirectchatService
+    public directChatService: DirectChatService
   ) { }
 
   ngOnInit() {
