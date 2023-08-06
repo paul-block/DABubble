@@ -48,6 +48,7 @@ export class FirestoreThreadDataService {
 
 
   async getMessages() {
+    this.channel_messages = []
     const colRef = collection(this.db, "channel_messages");
     const docsSnap = await getDocs(colRef);
     docsSnap.forEach(doc => {

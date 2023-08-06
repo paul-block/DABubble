@@ -53,7 +53,7 @@
                 <div class="message">{{fsDataThreadService.comments[i].comment}}</div>
                 <div class="emoji_main">
                     <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" class="emoji_count"
-                        matTooltip="{{react_user}} hat reagiert">
+                        matTooltip="{{fsDataThreadService.comments[i].emoji_data[j].react_users.join(', ')}} hat reagiert">
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji" size="24"></ngx-emoji>
                         <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
                     </div>

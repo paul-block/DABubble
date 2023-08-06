@@ -33,6 +33,7 @@ export class ThreadComponent implements OnInit {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
   }
+  
 
   closeThread(value: boolean) {
     this.threadClose.emit(value)
@@ -82,7 +83,6 @@ export class ThreadComponent implements OnInit {
       }
     });
     this.fsDataThreadService.updateData()
-    
   }
 
 
@@ -144,7 +144,6 @@ export class ThreadComponent implements OnInit {
         react_users: [this.authenticationService.userData.user_name]
       }
       this.channel_message.emoji_data.push(emoji_data)
-
     }
   }
 }
