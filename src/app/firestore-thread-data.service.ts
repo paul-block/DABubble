@@ -17,7 +17,7 @@ export class FirestoreThreadDataService {
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
   channel_messages = [];
-  thread_open: boolean;
+  thread_open: boolean = false
   current_message: any;
   current_message_id: string;
   comments = []
@@ -29,8 +29,6 @@ export class FirestoreThreadDataService {
 
   async saveThread(data: { comment: string; user: any; time: Date; avatar: string; emoji_data: any[]; }) {
     this.comments.push(data)
-    console.log(this.comments);
-
     const docRef = doc(this.db, "threads", this.current_message_id);
     await updateDoc(docRef, {
       comments: this.comments

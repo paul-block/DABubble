@@ -41,8 +41,16 @@
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker"
                 (emojiClick)="addEmoji($event, i)"
                 [style]="{ position: 'absolute', top: '0px', left: '0px' }"></emoji-mart>
-            <div (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
+            <div *ngIf="fsDataThreadService.comments[i].user != authenticationService.userData.user_name" (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
                 <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
+            </div>
+            <div *ngIf="fsDataThreadService.comments[i].user == authenticationService.userData.user_name" (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
+                <div class="emojy">
+                    <img src="/assets/img/icons/add_reaction.png" alt="">
+                </div>
+                <div class="emojy" (click)="editComment(i)" (click)="stopPropagation($event)">
+                    <img src="/assets/img/icons/more_vert.png">
+                </div>
             </div>
             <img src="/assets/img/small_avatar/avatar_1.svg" alt="">
             <div class="message_sub">
@@ -50,11 +58,13 @@
                     <span>{{fsDataThreadService.comments[i].user}}</span>
                     <span>Uhrzeit</span>
                 </div>
-                <div class="message">{{fsDataThreadService.comments[i].comment}}</div>
+                <div class="message" [class.message_user]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name" >{{fsDataThreadService.comments[i].comment}}</div>
                 <div class="emoji_main">
-                    <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" class="emoji_count"
+                    <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index"
+                        class="emoji_count"
                         matTooltip="{{fsDataThreadService.comments[i].emoji_data[j].react_users.join(', ')}} hat reagiert">
-                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji" size="24"></ngx-emoji>
+                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
+                            size="24"></ngx-emoji>
                         <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
                     </div>
                 </div>
@@ -65,7 +75,7 @@
         <div class="type_message">
             <div class="z_index">
                 <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
-            (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
+                    (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
             </div>
             <textarea type="text" [(ngModel)]="comment_value" placeholder="Antworten..."></textarea>
             <div class="icons_main">

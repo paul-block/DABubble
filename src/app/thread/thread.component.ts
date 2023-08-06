@@ -146,5 +146,10 @@ export class ThreadComponent implements OnInit {
       this.channel_message.emoji_data.push(emoji_data)
     }
   }
+
+  editComment(i:number) {
+    console.log(i);
+    
+  }
 }
 
