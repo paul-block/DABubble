@@ -5,5 +5,5 @@
     <app-channel-direct-chat *ngIf="!openNewMsg" class="container-styling" (threadOpen)="setVariable($event)"></app-channel-direct-chat>
     <app-new-msg *ngIf="openNewMsg" class="container-styling"></app-new-msg>
     <!---------------------------------------------- hier antworten fenster (ganz rechts) ---------------------------------------->
-    <app-thread (threadClose)="setVariable($event)" [class.open_thread]="open_thread"  class="thread container-styling"></app-thread>
+    <app-thread (threadClose)="setVariable($event)" [class.open_thread]="fsDataThreadService.thread_open"  class="thread container-styling"></app-thread>
 </section>

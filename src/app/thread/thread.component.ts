@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 
 
 @Component({
@@ -11,27 +12,32 @@ export class ThreadComponent implements OnInit {
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ''
-  comments = []
   picker_index: number
   response: string = 'Antwort'
   channel_message = {
     emoji_data: []
   }
+  emoji_data = []
+
+  
 
 
-  constructor(public authenticationService: AuthenticationService) { }
+  constructor(public authenticationService: AuthenticationService, public fsDataThreadService: FirestoreThreadDataService) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
   selectedEmoji: string
   emojiPicker_open: boolean = false;
-  
+
 
   ngOnInit(): void {
     document.body.addEventListener('click', this.bodyClicked);
+    this.fsDataThreadService.getMessages()
   }
+  
 
   closeThread(value: boolean) {
     this.threadClose.emit(value)
+    this.fsDataThreadService.thread_open = false
   }
 
 
@@ -51,14 +57,14 @@ export class ThreadComponent implements OnInit {
         count: 1,
         react_users: [this.authenticationService.userData.user_name]
       }
-      this.comments[i].emoji_data.push(emoji_data)
+      this.fsDataThreadService.comments[i].emoji_data.push(emoji_data)
+      this.fsDataThreadService.updateData()
     }
-    console.log(this.comments);
   }
 
 
   checkIfEmojiExist(emoji: string, i: number) {
-    this.comments[i].emoji_data.forEach(element => {
+    this.fsDataThreadService.comments[i].emoji_data.forEach(element => {
       if (element.emoji == emoji) {
         this.emoji_exist = true
         if (element.react_users.includes(this.authenticationService.userData.user_name)) {
@@ -66,15 +72,17 @@ export class ThreadComponent implements OnInit {
           element.react_users.splice(k, 1)
           element.count -= 1
           if (element.count == 0) {
-            let j = this.comments[i].emoji_data.indexOf(element)
-            this.comments[i].emoji_data.splice(j, 1)
+            let j = this.fsDataThreadService.comments[i].emoji_data.indexOf(element)
+            this.fsDataThreadService.comments[i].emoji_data.splice(j, 1)
+            this.fsDataThreadService.updateData()
           }
         }
         else
           element.react_users.push(this.authenticationService.userData.user_name)
-          element.count += 1
+        element.count += 1
       }
     });
+    this.fsDataThreadService.updateData()
   }
 
 
@@ -96,13 +104,12 @@ export class ThreadComponent implements OnInit {
         user: this.authenticationService.userData.user_name,
         time: time_stamp,
         avatar: '',
-        emoji_data: [],
+        emoji_data: []
       }
-      this.comments.push(comment_data)
+      this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
-      if (this.comments.length > 1) this.response = 'Antworten'
-      if (this.comments.length < 2) this.response = 'Antwort'
-      console.log(this.comments);
+      if (this.fsDataThreadService.comments.length > 1) this.response = 'Antworten'
+      if (this.fsDataThreadService.comments.length < 2) this.response = 'Antwort'
     }
   }
 
@@ -137,9 +144,12 @@ export class ThreadComponent implements OnInit {
         react_users: [this.authenticationService.userData.user_name]
       }
       this.channel_message.emoji_data.push(emoji_data)
-      console.log(this.channel_message);
-      
     }
+  }
+
+  editComment(i:number) {
+    console.log(i);
+    
   }
 }
 

@@ -5,6 +5,8 @@ import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-m
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
 import { Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
+
 
 @Component({
   selector: 'app-channel-direct-chat',
@@ -31,7 +33,8 @@ export class ChannelDirectChatComponent {
 
   constructor(
     private dialog: MatDialog,
-    public authenticationService: AuthenticationService
+    public authenticationService: AuthenticationService,
+    public fsDataThreadService: FirestoreThreadDataService
   ) { }
 
   editChannel() {

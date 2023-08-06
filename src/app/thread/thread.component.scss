@@ -25,7 +25,7 @@ header {
 }
 
 .d_block {
-    display: block ;
+    display: block;
 }
 
 .center {
@@ -139,6 +139,7 @@ header {
 }
 
 .comment_div {
+    width: min-content;
     transition: 200ms;
     box-sizing: border-box;
     padding: 15px;
@@ -158,7 +159,11 @@ header {
         .reaction_emojy {
             display: flex;
             animation: 225ms shortSlideInRight ease-in-out;
+            width: min-content;
+            padding-left: 5px;
+            padding-right: 5px;
         }
+
     }
 }
 
@@ -223,7 +228,6 @@ header {
     }
 }
 
-
 .message_sub {
     gap: 8px;
     display: flex;
@@ -238,6 +242,11 @@ header {
     padding: 15px;
     background-color: #ECEEFE;
     border-radius: 0px 20px 20px 20px;
+}
+
+.message_user {
+    background-color: #797EF3 !important;
+    color: white !important;
 }
 
 .bottom_line {
