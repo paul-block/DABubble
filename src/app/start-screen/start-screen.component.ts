@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'src/services/authentication.service';
 import { Router } from '@angular/router';
-import { FirestoreThreadDataService } from '../firestore-thread-data.service';
+import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 
 @Component({
   selector: 'app-start-screen',

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
-import { FirestoreThreadDataService } from '../firestore-thread-data.service';
+import { AuthenticationService } from 'src/services/authentication.service';
+import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 
 
 @Component({

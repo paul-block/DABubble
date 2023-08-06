@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthenticationService } from '../authentication.service';
+import { AuthenticationService } from 'src/services/authentication.service';
+import { ChannelService } from 'src/services/channel.service';
 import { debounceTime } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 
@@ -24,7 +25,8 @@ export class AddPplToChannelComponent implements OnInit {
     public dialog: MatDialog,  
     public authService: AuthenticationService,   
     public dialogRef: MatDialogRef<AddPplToChannelComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public channelService: ChannelService,   
   ) {
     this.channelName = data.channelName; 
   }
@@ -45,8 +47,8 @@ export class AddPplToChannelComponent implements OnInit {
   } 
 
   createNewChannel() {
-    this.authService.createNewChannel(this.channelName);
-    this.authService.addUserToChannel(this.channelName, this.userId)
+    this.channelService.createNewChannel(this.channelName);
+    this.channelService.addUserToChannel(this.channelName, this.userId)
     this.dialog.closeAll();
   }
 }
