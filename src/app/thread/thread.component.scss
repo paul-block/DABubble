@@ -208,6 +208,7 @@ header {
 }
 
 .emojy {
+    position: relative;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -247,6 +248,45 @@ header {
 .message_user {
     background-color: #797EF3 !important;
     color: white !important;
+}
+
+.edit_comment {
+    z-index: 10;
+    background-color: white;
+    position: absolute;
+    top: 5px;
+    right: 40px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px 0 10px;
+    height: 67px;
+    border-radius: 30px 0px 30px 30px;
+    box-shadow: 0px 6px 14px 0px #00000033;
+    font-size: 20px;
+    font-weight: 500;
+    span {
+        cursor: pointer;
+    }
+
+}
+
+.edit_hover {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 250px;
+    height: 50px;
+    transition: 200ms;
+    border-radius: 35px;
+    &:hover {
+        background-color: #ECEEFE;
+    }
+}
+
+.show_edit_comment {
+    display: flex ;
+    animation: none;
 }
 
 .bottom_line {

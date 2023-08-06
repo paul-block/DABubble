@@ -18,8 +18,9 @@ export class ThreadComponent implements OnInit {
     emoji_data: []
   }
   emoji_data = []
+  edit_comment: boolean = false;
 
-  
+
 
 
   constructor(public authenticationService: AuthenticationService, public fsDataThreadService: FirestoreThreadDataService) { }
@@ -33,7 +34,7 @@ export class ThreadComponent implements OnInit {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
   }
-  
+
 
   closeThread(value: boolean) {
     this.threadClose.emit(value)
@@ -88,6 +89,7 @@ export class ThreadComponent implements OnInit {
 
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
+    if (this.edit_comment == true) this.edit_comment = false;
   };
 
 
@@ -147,9 +149,11 @@ export class ThreadComponent implements OnInit {
     }
   }
 
-  editComment(i:number) {
-    console.log(i);
-    
+  editComment(i: number, x: boolean) {
+    this.edit_comment = true
+    if (this.edit_comment && x) {
+      this.edit_comment = false
+    }
   }
 }
 
