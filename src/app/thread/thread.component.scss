@@ -265,6 +265,7 @@ header {
     box-shadow: 0px 6px 14px 0px #00000033;
     font-size: 20px;
     font-weight: 500;
+
     span {
         cursor: pointer;
     }
@@ -279,13 +280,14 @@ header {
     height: 50px;
     transition: 200ms;
     border-radius: 35px;
+
     &:hover {
         background-color: #ECEEFE;
     }
 }
 
 .show_edit_comment {
-    display: flex ;
+    display: flex;
     animation: none;
 }
 
@@ -380,6 +382,17 @@ textarea {
 .inactive {
     pointer-events: none;
     filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%) contrast(94%);
+}
+
+.mat-tooltip-panel {
+    .mat-tooltip {
+        color: pink;
+        background-color: white;
+        border: 1px solid #eeeeee;
+        border-radius: 3px;
+        font-size: 15px;
+        padding: 10px;
+    }
 }
 
 @keyframes shortSlideInRight {
