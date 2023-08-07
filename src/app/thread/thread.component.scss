@@ -404,16 +404,27 @@ textarea {
 
 .react_user {
     position: absolute;
-    top: 0;
+    top: -113px;
+    left: 28px;
     background-color: #444DF2 ;
     width: 169px ;
     height: 112px ;
     border-radius: 30px 30px 30px 0px;
-    display: none ;
+    display: none;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    span {
+        font-size: 18px;
+    }
+    p {
+        margin: 0;
+        font-size: 16;
+    }
 }
 
 .show_react_user {
-    z-index: 50;
+    z-index: 20;
     display: flex;
 }

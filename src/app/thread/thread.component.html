@@ -70,9 +70,14 @@
                     <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)" class="emoji_count">
                         <div class="react_user" [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
                             <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"size="24" ></ngx-emoji>
+                           
+                                <span>{{fsDataThreadService.comments[i].emoji_data[j].react_users}}</span>
+                                <p>hat reagiert</p> 
+                            
                         </div>
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"size="24" ></ngx-emoji>
                         <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
+                        
                     </div>
                 </div>
             </div>
