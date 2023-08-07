@@ -67,10 +67,11 @@
                     {{fsDataThreadService.comments[i].comment}}
                 </div>
                 <div class="emoji_main">
-                    <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index"
-                        class="emoji_count" matTooltip="{{fsDataThreadService.comments[i].emoji_data[j].react_users.join(', ')}} hat reagiert"   [matTooltipPosition]="'above'">
-                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
-                            size="24"></ngx-emoji>
+                    <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)" class="emoji_count">
+                        <div class="react_user" [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
+                            <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"size="24" ></ngx-emoji>
+                        </div>
+                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"size="24" ></ngx-emoji>
                         <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
                     </div>
                 </div>

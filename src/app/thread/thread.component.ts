@@ -19,6 +19,9 @@ export class ThreadComponent implements OnInit {
   }
   emoji_data = []
   edit_comment: boolean = false;
+  comment_index: number;
+  emoji_index: number;
+  hovered_emoji: boolean = false
 
 
 
@@ -154,6 +157,17 @@ export class ThreadComponent implements OnInit {
     if (this.edit_comment && x) {
       this.edit_comment = false
     }
+  }
+
+
+  showReactUsers(i:number, j:number) {
+   if(this.hovered_emoji == false) this.hovered_emoji = true
+   this.comment_index = i
+   this.emoji_index = j 
+  }
+
+  closeShowReactUsers() {
+    if(this.hovered_emoji == true) this.hovered_emoji = false
   }
 }
 
