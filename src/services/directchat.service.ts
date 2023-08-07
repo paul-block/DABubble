@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, orderBy, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject, timeout } from 'rxjs';
 
@@ -14,6 +14,7 @@ import { BehaviorSubject, timeout } from 'rxjs';
 export class DirectChatService {
   db = getFirestore();
   currentChatID: string = 'noChatSelected'
+  directChatMessages = [];
 
   constructor() { }
 
@@ -23,10 +24,10 @@ export class DirectChatService {
 
     if (user !== null) {
       try {
-        const querySnapshot = await getDocs(collection(this.db, 'users'));
+        const docDirectChatsSnapshot = await getDocs(collection(this.db, 'users'));
         let userReceiverID = null;
 
-        querySnapshot.forEach((doc) => {
+        docDirectChatsSnapshot.forEach((doc) => {
           const userData = doc.data();
           if (userData.user_name === user_name) {
             userReceiverID = userData.uid;
@@ -91,6 +92,7 @@ export class DirectChatService {
   async openChat(user_name) {
     console.log('openchat: ' + user_name);
     console.log('opened chat: ' + this.currentChatID);
+    this.getMessages();
   }
 
   async newMessage(message: string) {
@@ -105,13 +107,56 @@ export class DirectChatService {
       const messagesCollectionRef = await addDoc(collection(this.db, 'users', user.uid, 'chats', this.currentChatID, 'messages'), {
         chat_message: message,
         user_Sender_ID: user.uid,
+        user_Sender_Name: await this.getNameFromUid(user.uid),
         created_At: firebase.firestore.FieldValue.serverTimestamp(),
       });
       const newMessageID = messagesCollectionRef.id;
       await updateDoc(messagesCollectionRef, {
-        message_ID: newMessageID
+        message_ID: newMessageID,
       });
+      this.getMessages();
     }
   }
+
+  async getMessages() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    this.directChatMessages = [];
+    const chatMessagesRef = collection(this.db, 'users', user.uid, 'chats', this.currentChatID, 'messages');
+    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
+
+    docDirectChatMessagesSnapshot.forEach((doc) => {
+      const userData = doc.data();
+      this.directChatMessages.unshift(userData);
+    });
+  }
+
+
+  getTimestampTime(timestamp) {
+    const dateObj = timestamp.toDate();
+    const hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes();
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`;
+  }
+
+  async getNameFromUid(uid: string) {
+    try {
+      const userDocRef = doc(this.db, 'users', uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists) {
+        const userData = userDocSnapshot.data();
+        return userData.user_name;
+      } else {
+        console.log('Benutzer nicht gefunden');
+        return 'deleted User';
+      }
+    } catch (error) {
+      console.error('Fehler beim Abrufen des Benutzernamens:', error);
+      return 'user not existing';
+    }
+  }
+
 
 }
