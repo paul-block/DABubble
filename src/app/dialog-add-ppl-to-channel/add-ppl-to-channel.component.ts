@@ -16,9 +16,13 @@ export class AddPplToChannelComponent implements OnInit {
   selectedOption: string;
   certainInput: string;
   channelName: string;
+  description: string;
   public searchControl = new FormControl();
   userId: string;
   hideAutocomplete = true;
+
+  selectedUserNames: string[] = [];
+
 
 
   constructor(
@@ -29,26 +33,33 @@ export class AddPplToChannelComponent implements OnInit {
     public channelService: ChannelService,   
   ) {
     this.channelName = data.channelName; 
+    this.description = data.description;
   }
 
   ngOnInit(): void {
-    this.searchControl.valueChanges.subscribe(value => {
-      this.authService.setSearchControlValue(value);
-      console.log(value)
+    this.searchControl.valueChanges.subscribe(inputValue => {
+      this.authService.updateCertainUserValue(inputValue);
+      console.log(inputValue)
     });
+    this.channelService.currentUserId.subscribe(userId => {
+      this.userId = userId;
+    });
+    this.channelService.userSelected$.subscribe(
+      userName => {
+        this.selectedUserNames.push(userName);
+      }
+    );
   }  
-
-  updateCertainInput(value: string) {
-    this.certainInput = value;
-  }
 
   closeDialog() {
     this.dialog.closeAll();
   } 
 
   createNewChannel() {
-    this.channelService.createNewChannel(this.channelName);
+    this.channelService.createNewChannel(this.channelName, this.description);
+    if (this.certainInput && this.certainInput.length > 0) {
     this.channelService.addUserToChannel(this.channelName, this.userId)
+    }
     this.dialog.closeAll();
   }
 }

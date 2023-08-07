@@ -54,10 +54,14 @@
                 top: 50%;
                 transform: translateY(-50%);
             }
+            
+            input {
+                padding: 20px 50px;
+            }
         }
 
         #optional-input {
-            padding: 20px 15px;
+            padding: 20px 30px;
         }
 
         button {

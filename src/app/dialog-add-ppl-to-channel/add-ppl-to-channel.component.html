@@ -16,6 +16,10 @@
         </div>
         <input [formControl]="searchControl" id="certain-input" *ngIf="selectedOption === 'certain'"
             [(ngModel)]="certainInput" type="text" placeholder="Name eingeben">
+        <div class="relative">
+            <span class="selected-user" *ngFor="let userName of selectedUserNames"> {{ userName }}</span>
+        </div>
+
     </label>
     <button (click)="createNewChannel()" [disabled]="selectedOption === 'certain' && !certainInput" mat-fab
         extended>Erstellen</button>
