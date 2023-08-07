@@ -11,7 +11,7 @@
     <div class="thread_content">
         <div class="message_div">
             <div class="bottom_line" *ngIf="fsDataThreadService.comments.length > 0">
-                <span>{{fsDataThreadService.comments.length}} {{response}}</span>
+                <span>{{fsDataThreadService.comments.length}} {{fsDataThreadService.response}}</span>
                 <div class="line"></div>
             </div>
             <div (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">

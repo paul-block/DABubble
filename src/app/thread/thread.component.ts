@@ -33,6 +33,7 @@ export class ThreadComponent implements OnInit {
   emojiPicker_open: boolean = false;
 
 
+
   ngOnInit(): void {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
@@ -160,14 +161,14 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  showReactUsers(i:number, j:number) {
-   if(this.hovered_emoji == false) this.hovered_emoji = true
-   this.comment_index = i
-   this.emoji_index = j 
+  showReactUsers(i: number, j: number) {
+    if (this.hovered_emoji == false) this.hovered_emoji = true
+    this.comment_index = i
+    this.emoji_index = j
   }
 
   closeShowReactUsers() {
-    if(this.hovered_emoji == true) this.hovered_emoji = false
+    if (this.hovered_emoji == true) this.hovered_emoji = false
   }
 }
 

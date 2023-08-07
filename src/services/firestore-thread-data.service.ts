@@ -21,6 +21,7 @@ export class FirestoreThreadDataService {
   current_message: any;
   current_message_id: string;
   comments = []
+  response: string;
 
 
 
@@ -60,6 +61,8 @@ export class FirestoreThreadDataService {
     this.current_message = this.channel_messages[i].message
     this.validateIdFromMessage(i);
     this.loadThread();
+    if (this.comments.length > 1) this.response = 'Antworten'
+    if (this.comments.length < 2) this.response = 'Antwort'
 
   }
 
