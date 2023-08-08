@@ -21,7 +21,7 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  searchControlValue = new BehaviorSubject<string>('');
+  addCertainUserValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
 
 
@@ -135,8 +135,6 @@ export class AuthenticationService {
     this.userData = []
   }
 
-
-
   async getAllUsers() {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
     let users = [];
@@ -148,13 +146,14 @@ export class AuthenticationService {
 
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
-    const filtered = users.filter(user => user.user_name?.toLowerCase().startsWith(name)
+    const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
     );
-    return filtered;
+    console.log(filteredUser);
+    return filteredUser;
   }
 
-  setSearchControlValue(value: string): void {
-    this.searchControlValue.next(value);
+  updateCertainUserValue(value: string): void {
+    this.addCertainUserValue.next(value);
   }
 
   async updateUserDetails(userName: string, email: string) {

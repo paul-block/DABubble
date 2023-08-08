@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs } from '@angular/fire/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +13,26 @@ export class ChannelService {
   db = getFirestore();
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
+  userIdSubject = new BehaviorSubject<string | undefined>(undefined);
+  currentUserId = this.userIdSubject.asObservable();
+  private userSelectedSource = new Subject<string>();
+  userSelected$ = this.userSelectedSource.asObservable();
+
 
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
   ) { }
 
-  async createNewChannel(channel: string) {
+  getUserId(uid:string) {
+    this.userIdSubject.next(uid);
+  }
+
+  selectUser(userName: string) {
+    this.userSelectedSource.next(userName);
+  }
+
+  async createNewChannel(channel: string, description?: string){
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -32,7 +45,8 @@ export class ChannelService {
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           assignedUsers: [
             user.uid,
-          ]
+          ],
+          description: description
         };
         const docRef = await addDoc(channelCollectionRef, newChannel);
         this.getAuthorizedChannels(user.uid);
