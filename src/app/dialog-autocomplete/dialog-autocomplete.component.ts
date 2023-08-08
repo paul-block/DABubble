@@ -10,32 +10,29 @@ import { switchMap } from 'rxjs/operators';
   styleUrls: ['./dialog-autocomplete.component.scss']
 })
 export class DialogAutocompleteComponent implements OnInit  {
-  // kann wahrscheinlich weg 
-  userNameControl = new FormControl();
-
   filteredUsers: any[] = [];
 
 
   constructor(private authService: AuthenticationService, private channelService: ChannelService) { }
 
   ngOnInit() {
-    // this.authService.addCertainUserValue
-    // .pipe(
-    //   switchMap(value => this.authService.filterUsers(value))
-    // )
-    // .subscribe(users => {
-    //   this.filteredUsers = users;
-    // });
+    this.authService.addCertainUserValue
+    .pipe(
+      switchMap(value => this.authService.filterUsers(value))
+    )
+    .subscribe(users => {
+      this.filteredUsers = users;
+    });
   }
 
-  // addUser(uid: string, userName: string) {
-  //   this.getUserId(uid);
-  //   this.channelService.selectUser(userName);
-  // }
+  addUser(uid: string, userName: string) {
+    this.getUserId(uid);
+    this.channelService.selectUser(userName);
+  }
 
-  // getUserId(uid: string) {
-  //   this.channelService.getUserId(uid);
-  //   console.log(uid)
-  // }
+  getUserId(uid: string) {
+    this.channelService.getUserId(uid);
+    console.log(uid)
+  }
 
 }

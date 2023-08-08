@@ -37,18 +37,18 @@ export class AddPplToChannelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.searchControl.valueChanges.subscribe(inputValue => {
-    //   this.authService.updateCertainUserValue(inputValue);
-    //   console.log(inputValue)
-    // });
-    // this.channelService.currentUserId.subscribe(userId => {
-    //   this.userId = userId;
-    // });
-    // this.channelService.userSelected$.subscribe(
-    //   userName => {
-    //     this.selectedUserNames.push(userName);
-    //   }
-    // );
+    this.searchControl.valueChanges.subscribe(inputValue => {
+      this.authService.updateCertainUserValue(inputValue);
+      console.log(inputValue)
+    });
+    this.channelService.currentUserId.subscribe(userId => {
+      this.userId = userId;
+    });
+    this.channelService.userSelected$.subscribe(
+      userName => {
+        this.selectedUserNames.push(userName);
+      }
+    );
   }  
 
   closeDialog() {
@@ -56,7 +56,7 @@ export class AddPplToChannelComponent implements OnInit {
   } 
 
   createNewChannel() {
-    this.channelService.createNewChannel(this.channelName); //, this.description
+    this.channelService.createNewChannel(this.channelName, this.description); //, this.description
     if (this.certainInput && this.certainInput.length > 0) {
     this.channelService.addUserToChannel(this.channelName, this.userId)
     }
