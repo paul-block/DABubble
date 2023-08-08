@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
+import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -25,7 +27,11 @@ export class ThreadComponent implements OnInit {
 
 
 
-  constructor(public authenticationService: AuthenticationService, public fsDataThreadService: FirestoreThreadDataService) { }
+  constructor(
+    public authenticationService: AuthenticationService,
+    public fsDataThreadService: FirestoreThreadDataService,
+    public dialog: MatDialog
+  ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
   selectedEmoji: string
@@ -76,11 +82,13 @@ export class ThreadComponent implements OnInit {
     else {
       this.fsDataThreadService.comments[i].emoji_data[j].count -= 1
       this.fsDataThreadService.comments[i].emoji_data[j].react_users.splice(index, 1)
-      if (this.fsDataThreadService.comments[i].emoji_data[j].count == 0) this.fsDataThreadService.comments[i].emoji_data.splice(j, 1)
-      this.hovered_emoji = false
+      if (this.fsDataThreadService.comments[i].emoji_data[j].count == 0) {
+        this.fsDataThreadService.comments[i].emoji_data.splice(j, 1)
+        this.hovered_emoji = false
+      }
     }
     console.log(this.fsDataThreadService.comments[i]);
-    
+
     this.fsDataThreadService.updateData()
   }
 
@@ -172,7 +180,7 @@ export class ThreadComponent implements OnInit {
   }
 
   editComment(i: number, x: boolean) {
-   
+    this.dialog.open(DialogEditCommentComponent)
   }
 
 
@@ -185,5 +193,7 @@ export class ThreadComponent implements OnInit {
   closeShowReactUsers() {
     if (this.hovered_emoji == true) this.hovered_emoji = false
   }
+
+
 }
 

@@ -41,6 +41,7 @@ import { ChannelDirectSendMessageComponent } from './channel-direct-send-message
 import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ThreadComponent } from './thread/thread.component';
+import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
 
 
 
@@ -71,6 +72,7 @@ import { ThreadComponent } from './thread/thread.component';
     ChannelDirectSendMessageComponent,
     DialogAutocompleteComponent,
     ThreadComponent,
+    DialogEditCommentComponent,
   ],
   imports: [
     MatTooltipModule,
