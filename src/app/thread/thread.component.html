@@ -11,7 +11,11 @@
     <div class="thread_content">
         <div class="message_div">
             <div class="bottom_line" *ngIf="fsDataThreadService.comments.length > 0">
-                <span>{{fsDataThreadService.comments.length}} {{fsDataThreadService.response}}</span>
+                <div>
+                    <span>{{fsDataThreadService.comments.length}} Antwort</span>
+                    <div *ngIf="fsDataThreadService.comments?.length > 1">en</div>
+                </div>
+
                 <div class="line"></div>
             </div>
             <div (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">
@@ -37,10 +41,9 @@
         </div>
 
 
-        <div class="comment_div" *ngFor="let comment of fsDataThreadService.comments; let i = index">
-            <div [class.show_edit_comment]="edit_comment && fsDataThreadService.comments[i].user == authenticationService.userData.user_name" class="edit_comment">
-                <div class="edit_hover" (click)="editComment(i, true)" (click)="stopPropagation($event)"><span>Nachricht bearbeiten</span></div>
-            </div>
+        <div class="comment_div"
+            [class.row_reverse]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name" *ngFor="let comment of fsDataThreadService.comments; let i = index">
+            
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker"
                 (emojiClick)="addEmoji($event, i)"
                 [style]="{ position: 'absolute', top: '0px', left: '0px' }"></emoji-mart>
@@ -63,21 +66,30 @@
                     <span>{{fsDataThreadService.comments[i].user}}</span>
                     <span>Uhrzeit</span>
                 </div>
-                <div class="message"[class.message_user]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name">
+                <div class="message"
+                    [class.message_user]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name">
                     {{fsDataThreadService.comments[i].comment}}
                 </div>
                 <div class="emoji_main">
-                    <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)" class="emoji_count">
-                        <div class="react_user" [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
-                            <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"size="24" ></ngx-emoji>
-                           
-                                <span>{{fsDataThreadService.comments[i].emoji_data[j].react_users}}</span>
-                                <p>hat reagiert</p> 
-                            
+                    <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index"
+                        (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)" class="emoji_count"
+                        (click)="addOrRemoveEmoji(i, j)">
+                        <div class="react_user"
+                            [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
+                            <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
+                                size="24"></ngx-emoji>
+
+                            <span>{{fsDataThreadService.comments[i].emoji_data[j]?.react_users?.join(' und ')}}</span>
+                            <div *ngIf="fsDataThreadService.comments[i].emoji_data[j]?.react_users?.length < 2">hat
+                                reagiert</div>
+                            <div *ngIf="fsDataThreadService.comments[i].emoji_data[j]?.react_users?.length > 1">haben
+                                reagiert</div>
+
                         </div>
-                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"size="24" ></ngx-emoji>
+                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
+                            size="24"></ngx-emoji>
                         <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
-                        
+
                     </div>
                 </div>
             </div>

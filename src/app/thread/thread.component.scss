@@ -38,6 +38,7 @@ header {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    cursor: pointer;
 }
 
 .emoji_count {
@@ -161,9 +162,6 @@ header {
         .reaction_emojy {
             display: flex;
             animation: 225ms shortSlideInRight ease-in-out;
-            width: min-content;
-            padding-left: 5px;
-            padding-right: 5px;
         }
 
     }
@@ -305,7 +303,8 @@ header {
     align-items: center;
     background-color: white !important;
 
-    :nth-child(1) {
+    :nth-of-type(1) {
+        display: flex;
         width: 175px;
         font-size: 18px;
         color: #ADB0D9;
@@ -403,6 +402,11 @@ textarea {
 }
 
 .react_user {
+    box-sizing: border-box;
+    padding: 0 5px 0 5px;
+    z-index: -10;
+    transition: 200ms;
+    opacity: 0;
     position: absolute;
     top: -113px;
     left: 28px;
@@ -410,13 +414,15 @@ textarea {
     width: 169px ;
     height: 112px ;
     border-radius: 30px 30px 30px 0px;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     color: white;
+    text-align: center;
     span {
         font-size: 18px;
+
     }
     p {
         margin: 0;
@@ -427,4 +433,24 @@ textarea {
 .show_react_user {
     z-index: 20;
     display: flex;
+    opacity: 1;
+}
+
+.row_reverse {
+    flex-direction: row-reverse;
+    .message {
+        border-radius: 20px 0px 20px 20px;
+    }
+    .message_sub {
+        margin-left: 0;
+        margin-right: 20px;
+    }
+    .user_time {
+        flex-direction: row-reverse;
+    }
+    .reaction_emojy {
+        right: 280px;
+        width: min-content;
+        padding: 0 5px 0 5px;
+    }
 }

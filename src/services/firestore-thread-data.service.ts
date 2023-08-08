@@ -21,14 +21,12 @@ export class FirestoreThreadDataService {
   current_message: any;
   current_message_id: string;
   comments = []
-  response: string;
-
 
 
   constructor() {}
 
 
-  async saveThread(data: { comment: string; user: any; time: Date; avatar: string; emoji_data: any[]; }) {
+  async saveThread(data) {
     this.comments.push(data)
     const docRef = doc(this.db, "threads", this.current_message_id);
     await updateDoc(docRef, {
@@ -61,9 +59,6 @@ export class FirestoreThreadDataService {
     this.current_message = this.channel_messages[i].message
     this.validateIdFromMessage(i);
     this.loadThread();
-    if (this.comments.length > 1) this.response = 'Antworten'
-    if (this.comments.length < 2) this.response = 'Antwort'
-
   }
 
   validateIdFromMessage(i: number) {
@@ -80,7 +75,7 @@ export class FirestoreThreadDataService {
       }
       await setDoc(docRef, thread_data);
     } else {
-      const docRef = doc(this.db, "threads", this.current_message_id);
+
       this.comments = docSnap.data().comments
       console.log(this.comments);
 

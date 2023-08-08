@@ -18,7 +18,6 @@ export class ThreadComponent implements OnInit {
     emoji_data: []
   }
   emoji_data = []
-  edit_comment: boolean = false;
   comment_index: number;
   emoji_index: number;
   hovered_emoji: boolean = false
@@ -68,6 +67,26 @@ export class ThreadComponent implements OnInit {
   }
 
 
+  addOrRemoveEmoji(i: number, j: number) {
+    let index = this.fsDataThreadService.comments[i].emoji_data[j].react_users.indexOf(this.authenticationService.userData.user_name)
+    if (index == -1) {
+      this.fsDataThreadService.comments[i].emoji_data[j].count += 1
+      this.fsDataThreadService.comments[i].emoji_data[j].react_users.push(this.authenticationService.userData.user_name)
+    }
+    else {
+      this.fsDataThreadService.comments[i].emoji_data[j].count -= 1
+      this.fsDataThreadService.comments[i].emoji_data[j].react_users.splice(index, 1)
+      if (this.fsDataThreadService.comments[i].emoji_data[j].count == 0) this.fsDataThreadService.comments[i].emoji_data.splice(j, 1)
+      this.hovered_emoji = false
+    }
+    console.log(this.fsDataThreadService.comments[i]);
+    
+    this.fsDataThreadService.updateData()
+  }
+
+
+
+
   checkIfEmojiExist(emoji: string, i: number) {
     this.fsDataThreadService.comments[i].emoji_data.forEach(element => {
       if (element.emoji == emoji) {
@@ -93,7 +112,6 @@ export class ThreadComponent implements OnInit {
 
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
-    if (this.edit_comment == true) this.edit_comment = false;
   };
 
 
@@ -154,10 +172,7 @@ export class ThreadComponent implements OnInit {
   }
 
   editComment(i: number, x: boolean) {
-    this.edit_comment = true
-    if (this.edit_comment && x) {
-      this.edit_comment = false
-    }
+   
   }
 
 
