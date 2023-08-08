@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs } from '@angular/fire/firestore';
+import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
@@ -17,12 +17,20 @@ export class ChannelService {
   currentUserId = this.userIdSubject.asObservable();
   private userSelectedSource = new Subject<string>();
   userSelected$ = this.userSelectedSource.asObservable();
+  private showSelectedUserDiv = new BehaviorSubject<boolean>(false);
+  showSelectedUser$ = this.showSelectedUserDiv.asObservable();
+  showAutoComplete = new BehaviorSubject<boolean>(true);
+  showAutoComplete$ = this.showAutoComplete.asObservable();
 
 
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
   ) { }
+
+  showSelectedUser(value: boolean) {
+    this.showSelectedUserDiv.next(value);
+  }
 
   getUserId(uid:string) {
     this.userIdSubject.next(uid);
@@ -31,6 +39,25 @@ export class ChannelService {
   selectUser(userName: string) {
     this.userSelectedSource.next(userName);
   }
+
+  toggleAutocomplete(value:boolean) {
+    this.showAutoComplete.next(value);
+  }
+
+  async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
+      const channelRef = doc(this.db, 'channels', channelName);
+      const channelSnapshot = await getDoc(channelRef);
+  
+      if (channelSnapshot.exists()) {
+          const channelData = channelSnapshot.data();
+          const assignedUsers = channelData?.assignedUsers || [];
+          return assignedUsers;
+      } else {
+          console.log(`Channel with name ${channelName} does not exist.`);
+          return [];
+      }
+  }
+
 
   async createNewChannel(channel: string, description?: string){
     const auth = getAuth();

@@ -13,7 +13,7 @@ export class DialogAutocompleteComponent implements OnInit  {
   filteredUsers: any[] = [];
 
 
-  constructor(private authService: AuthenticationService, private channelService: ChannelService) { }
+  constructor(private authService: AuthenticationService, public channelService: ChannelService) { }
 
   ngOnInit() {
     this.authService.addCertainUserValue
@@ -27,7 +27,10 @@ export class DialogAutocompleteComponent implements OnInit  {
 
   addUser(uid: string, userName: string) {
     this.getUserId(uid);
+    this.channelService.showSelectedUser(true);
     this.channelService.selectUser(userName);
+    this.channelService.toggleAutocomplete(false);
+    this.authService.updateCertainUserValue(userName);
   }
 
   getUserId(uid: string) {

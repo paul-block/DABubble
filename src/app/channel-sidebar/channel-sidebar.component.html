@@ -61,19 +61,21 @@
                 </svg>
             </div>
 
+
             <div class="channel-second-row select-none" *ngIf="channelsVisible">
-                <div class="active-channel br-20 pointer">
+
+                <div class="pointer active-channel sidebar-hover br-20">
                     <span class="tag">#</span>
-                    <span>Entwicklerteam</span>
+                    <span> {{ channels[channels.length - 1] }}</span>
                 </div>
-                <div class="pointer inactive-channel sidebar-hover">
-                    <span class="tag">#</span>
-                    <span>Office-team</span>
-                </div>
-                <div class="pointer inactive-channel sidebar-hover" *ngFor="let channel of channels">
-                    <span class="tag">#</span>
-                    <span> {{ channel }}</span>
-                </div>
+
+                <ng-container *ngFor="let channel of channels; let isLast = last">
+                    <div *ngIf="!isLast" class="pointer inactive-channel sidebar-hover">
+                        <span class="tag">#</span>
+                        <span>{{ channel }}</span>
+                    </div>
+                </ng-container>
+
                 <div class="add-channel-container pointer" (click)="openAddChannel()">
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_4093_12456" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"

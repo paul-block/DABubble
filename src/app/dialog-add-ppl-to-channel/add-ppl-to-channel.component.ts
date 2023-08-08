@@ -20,6 +20,8 @@ export class AddPplToChannelComponent implements OnInit {
   public searchControl = new FormControl();
   userId: string;
   hideAutocomplete = true;
+  userSelected = false;
+  DelevoperTeamChannelRef = 'wj2711ZpKNhh8ulqBG0p';
 
   selectedUserNames: string[] = [];
 
@@ -37,6 +39,9 @@ export class AddPplToChannelComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.addCertainUserValue.subscribe(value => {
+      this.searchControl.setValue(value, { emitEvent: false }); 
+  });
     this.searchControl.valueChanges.subscribe(inputValue => {
       this.authService.updateCertainUserValue(inputValue);
       console.log(inputValue)
@@ -51,15 +56,37 @@ export class AddPplToChannelComponent implements OnInit {
     );
   }  
 
+  removeUserName(name: string) {
+    const index = this.selectedUserNames.indexOf(name);
+    if (index > -1) {
+        this.selectedUserNames.splice(index, 1);
+    }
+  }
+
+  deleteSelectedUser(userName: string) {
+    this.removeUserName(userName);
+    this.authService.updateCertainUserValue('');
+    this.channelService.showSelectedUser(false);
+    this.channelService.toggleAutocomplete(true);
+  }
+
   closeDialog() {
     this.dialog.closeAll();
   } 
 
-  createNewChannel() {
-    this.channelService.createNewChannel(this.channelName, this.description); //, this.description
-    if (this.certainInput && this.certainInput.length > 0) {
+  async createNewChannel() {
+    this.channelService.createNewChannel(this.channelName, this.description);
+
+    if (this.selectedOption === 'all') {
+      const members = await this.channelService.getAllMembersOfCertainChannel(this.DelevoperTeamChannelRef);
+      members.forEach( member => {
+        this.channelService.addUserToChannel(this.channelName, member);
+      })
+    } else if (this.selectedOption === 'certain' &&this.certainInput && this.certainInput.length > 0) {
     this.channelService.addUserToChannel(this.channelName, this.userId)
     }
+    this.channelService.showSelectedUser(false); 
+    this.channelService.toggleAutocomplete(true);
     this.dialog.closeAll();
   }
 }
