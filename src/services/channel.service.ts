@@ -58,7 +58,6 @@ export class ChannelService {
       }
   }
 
-
   async createNewChannel(channel: string, description?: string){
     const auth = getAuth();
     const user = auth.currentUser;
