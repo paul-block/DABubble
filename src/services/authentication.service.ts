@@ -43,6 +43,12 @@ export class AuthenticationService {
     });
   }
 
+  getUid(){
+    const auth = getAuth();
+    const user = auth.currentUser;
+    return user.uid;
+  }
+
 
   async getUserData(uid: string) {
     const userRef = doc(this.db, "users", uid);
