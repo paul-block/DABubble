@@ -27,8 +27,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private newMsgService: NewMsgService,
     public channelService: ChannelService,
-    public directChatService: DirectChatService
-  ) { }
+    public directChatService: DirectChatService,
+  ) {}
 
   ngOnInit() {
     this.sub = this.channelService.authorizedChannels.subscribe(channels => {
@@ -71,3 +71,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 }
+function getAuth() {
+  throw new Error('Function not implemented.');
+}
+

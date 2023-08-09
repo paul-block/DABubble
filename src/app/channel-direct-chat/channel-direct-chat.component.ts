@@ -19,7 +19,7 @@ export class ChannelDirectChatComponent {
 
   @Output() threadOpen = new EventEmitter<boolean>();
 
-  messageCreator = true;
+  messageCreator = false;
   toggleEditMessage: boolean = false;
   toggleReactionEmojis: boolean = false;
   isEditChannelDialogOpen: boolean = false;
@@ -34,7 +34,7 @@ export class ChannelDirectChatComponent {
 
   constructor(
     private dialog: MatDialog,
-    public authenticationService: AuthenticationService,
+    public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public dataDirectChatService: DirectChatService
   ) { }
@@ -124,7 +124,12 @@ export class ChannelDirectChatComponent {
     }
   }
 
+  isMessageCreator(user_Sender_ID) {
+    const currentUserID = this.authService.getUid();
+    return user_Sender_ID === currentUserID;
+  }
+
   public openThread(value: boolean) {
-    this.threadOpen.emit(value)   
+    this.threadOpen.emit(value)
   }
 }

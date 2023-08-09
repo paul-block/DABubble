@@ -6,7 +6,8 @@
     <label class="checkbox-container">
         <div class="flex">
             <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="all">
-            <span class="checkmark">Alle Mitglieder von <span id="highlight">Test</span> hinzufügen</span>
+            <span *ngIf="selectedOption === 'all'" class="checkmark">Alle Mitglieder von <span
+                    id="highlight">Test</span> hinzufügen</span>
         </div>
     </label>
     <label class="checkbox-container">

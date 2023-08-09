@@ -43,6 +43,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
 import {MatInputModule} from '@angular/material/input';
+import { SearchbarComponent } from './searchbar/searchbar.component';
 
 
 
@@ -74,6 +75,7 @@ import {MatInputModule} from '@angular/material/input';
     DialogAutocompleteComponent,
     ThreadComponent,
     DialogEditCommentComponent,
+    SearchbarComponent,
   ],
   imports: [
     MatInputModule,

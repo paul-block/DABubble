@@ -109,21 +109,21 @@
         *ngFor="let chatMessage of dataDirectChatService.directChatMessages; let i = index;">
         <!-- ------------------------------logged in user message-------------------------------- -->
         <div (mouseleave)="resetToggledAreas()"
-            [ngStyle]="{'justify-content':messageCreator === false ? 'flex-start' : 'flex-end' }"
+            [ngStyle]="{'justify-content':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'flex-start' : 'flex-end' }"
             class="chat-message-container">
-            <img [ngStyle]="{'order':messageCreator === false ? '0' : '1' }"
+            <img [ngStyle]="{'order':isMessageCreator(chatMessage.user_Sender_ID) === false ? '0' : '1' }"
                 src="/assets/img/small_avatar/avatar_2.svg">
             <div class="chat-message-details">
-                <div [ngStyle]="{'flex-direction':messageCreator === false ? 'row' : 'row-reverse' }"
+                <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
                     <span class="chat-message-name">{{ chatMessage.user_Sender_Name }}</span>
                     <span class="last-message-time">{{ dataDirectChatService.getTimestampTime(chatMessage.created_At) }}</span>
                 </div>
-                <div [ngClass]="{'message-creator':messageCreator === true}" class="chat-message-text">
+                <div [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}" class="chat-message-text">
                     {{ chatMessage.chat_message }}
                 </div>
                 <!-- message quick reactions -->
-                <div [ngStyle]="{'flex-direction':messageCreator === false ? 'row' : 'row-reverse' }"
+                <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="chat-message-details-reactions">
                     <svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
@@ -147,14 +147,14 @@
                     </div>
                 </div>
                 <!-- direct answers -->
-                <div [ngStyle]="{'flex-direction':messageCreator === false ? 'row' : 'row-reverse' }"
+                <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
                     <span class="chat-message-answers-amount">x Antworten</span>
                     <span class="last-message-time">Letzte Antwort xx:xx Uhr</span>
                 </div>
             </div>
             <!-- reaction bar -->
-            <div [ngClass]="{'reaction-bar-sender':messageCreator === true}" class="reaction-bar">
+            <div [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}" class="reaction-bar">
                 <img src="/assets/img/icons/check_mark_emoji.svg">
                 <img src="/assets/img/icons/hands_up_emoji.svg">
                 <div (click)="toggleArea('emojis')" class="reaction-bar-emoji">

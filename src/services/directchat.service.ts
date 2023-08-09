@@ -18,32 +18,27 @@ export class DirectChatService {
 
   constructor() { }
 
-  async searchChat(user_name) {
+  async searchChat(userReceiverID) {
     const auth = getAuth();
     const user = auth.currentUser;
 
+    if ('currentUser' === userReceiverID) {
+      userReceiverID = user.uid;
+    }
+
     if (user !== null) {
       try {
-        const docDirectChatsSnapshot = await getDocs(collection(this.db, 'users'));
-        let userReceiverID = null;
-
-        docDirectChatsSnapshot.forEach((doc) => {
-          const userData = doc.data();
-          if (userData.user_name === user_name) {
-            userReceiverID = userData.uid;
-          }
-        });
-
+        this.currentChatID = null;
         if (userReceiverID !== null) {
-          const chatsQuerySnapshot = await getDocs(collection(this.db, 'users', user.uid, 'chats'));
+          const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
           let chatExists = false;
-          chatsQuerySnapshot.forEach((doc) => {
-            const chatData = doc.data();
-            if (chatData.user_Receiver_ID === userReceiverID) {
+          docChatsSnapshot.forEach((chat) => {
+            const chatData = chat.data();
+            const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
+            if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
               chatExists = true;
               this.currentChatID = chatData.chat_ID;
-              this.openChat(user_name);
-
+              this.openChat();
             }
           });
 
@@ -62,21 +57,20 @@ export class DirectChatService {
   }
 
 
-  async newChat(userReceiverName: string) {
+  async newChat(userReceiverID: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-
-    userReceiverName = user.uid;
+    this.directChatMessages = [];
 
     if (user !== null) {
       try {
-        const chatsCollectionRef = await addDoc(collection(this.db, 'users', user.uid, 'chats'), {
-          user_Receiver_ID: userReceiverName,
+        const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
+          chat_Member_IDs: [user.uid, userReceiverID],
           created_At: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
         const newChatID = chatsCollectionRef.id;
-        const chatDocRef = doc(this.db, 'users', user.uid, 'chats', newChatID);
+        const chatDocRef = doc(this.db, 'chats', newChatID);
         await updateDoc(chatDocRef, {
           chat_ID: newChatID
         });
@@ -89,11 +83,22 @@ export class DirectChatService {
     }
   }
 
-  async openChat(user_name) {
-    console.log('openchat: ' + user_name);
+  async openChat() {
     console.log('opened chat: ' + this.currentChatID);
     this.getMessages();
   }
+
+  async getMessages() {
+    this.directChatMessages = [];
+    const chatMessagesRef = collection(this.db, 'chats', this.currentChatID, 'messages');
+    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
+
+    docDirectChatMessagesSnapshot.forEach((doc) => {
+      const userData = doc.data();
+      this.directChatMessages.unshift(userData);
+    });
+  }
+
 
   async newMessage(message: string) {
     const auth = getAuth();
@@ -104,7 +109,7 @@ export class DirectChatService {
     } else {
       console.log(message);
 
-      const messagesCollectionRef = await addDoc(collection(this.db, 'users', user.uid, 'chats', this.currentChatID, 'messages'), {
+      const messagesCollectionRef = await addDoc(collection(this.db, 'chats', this.currentChatID, 'messages'), {
         chat_message: message,
         user_Sender_ID: user.uid,
         user_Sender_Name: await this.getNameFromUid(user.uid),
@@ -118,19 +123,7 @@ export class DirectChatService {
     }
   }
 
-  async getMessages() {
-    const auth = getAuth();
-    const user = auth.currentUser;
 
-    this.directChatMessages = [];
-    const chatMessagesRef = collection(this.db, 'users', user.uid, 'chats', this.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-
-    docDirectChatMessagesSnapshot.forEach((doc) => {
-      const userData = doc.data();
-      this.directChatMessages.unshift(userData);
-    });
-  }
 
 
   getTimestampTime(timestamp) {
