@@ -3,7 +3,7 @@
  }
 
 .container {
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     background-color: white;
@@ -37,4 +37,8 @@
                     font-size: 18px;
                 }
         }
+}
+
+.flex {
+  display: flex !important;
 }

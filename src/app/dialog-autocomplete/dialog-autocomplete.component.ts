@@ -22,8 +22,11 @@ export class DialogAutocompleteComponent implements OnInit  {
     )
     .subscribe(users => {
       this.filteredUsers = users;
+      console.log(this.filteredUsers);
     });
+
   }
+
 
   addUser(uid: string, userName: string) {
     this.getUserId(uid);

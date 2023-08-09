@@ -1,4 +1,4 @@
-<div class="container" *ngIf="channelService.showAutoComplete$ | async">
+<div class="container" *ngIf="channelService.showAutoComplete$ | async" [ngClass]="{'flex': filteredUsers.length != 0}">
     <div *ngFor="let user of filteredUsers" class="dm-profile pointer sidebar-hover"
         (click)="addUser(user.uid, user.user_name)">
         <img src="assets/img/avatar_online_status/avatar3.png" alt="">
