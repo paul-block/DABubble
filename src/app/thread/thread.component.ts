@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 
 @Component({
@@ -23,6 +23,7 @@ export class ThreadComponent implements OnInit {
   comment_index: number;
   emoji_index: number;
   hovered_emoji: boolean = false
+  edit_comment: boolean = false;
 
 
 
@@ -120,6 +121,7 @@ export class ThreadComponent implements OnInit {
 
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
+    if (this.edit_comment == true) this.edit_comment = false;
   };
 
 
@@ -179,9 +181,27 @@ export class ThreadComponent implements OnInit {
     }
   }
 
-  editComment(i: number, x: boolean) {
-    this.dialog.open(DialogEditCommentComponent)
+
+  openEditCommentMenu() {
+    this.edit_comment = true
+
   }
+
+  openEditComment(i: number) {
+    
+    const dialogRef = this.dialog.open(DialogEditCommentComponent, {
+      data: { comment: this.fsDataThreadService.comments[i].comment },
+      panelClass: 'my-dialog'
+      
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fsDataThreadService.comments[i].comment = result;
+        this.fsDataThreadService.updateData()
+      }
+    });
+  }
+
 
 
   showReactUsers(i: number, j: number) {

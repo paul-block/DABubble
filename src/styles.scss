@@ -107,3 +107,10 @@ textarea {
     justify-content: center;
     align-items: center;
 }
+
+.mat-mdc-dialog-container {
+
+    .mdc-dialog__surface {
+        border-radius: 20px !important;
+    }
+}

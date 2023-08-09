@@ -1,1 +1,5 @@
-<p>dialog-edit-comment works!</p>
+<textarea matInput [(ngModel)]="data.comment"></textarea>
+<div class="button_div">
+    <button (click)="onNoClick()">No Thanks</button>
+    <button [mat-dialog-close]="data.comment">Speichern</button>
+</div>

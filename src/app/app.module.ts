@@ -42,6 +42,7 @@ import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autoco
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
+import {MatInputModule} from '@angular/material/input';
 
 
 
@@ -75,6 +76,7 @@ import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-co
     DialogEditCommentComponent,
   ],
   imports: [
+    MatInputModule,
     MatTooltipModule,
     EmojiComponent,
     PickerComponent,

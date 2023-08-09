@@ -43,7 +43,14 @@
 
         <div class="comment_div"
             [class.row_reverse]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name" *ngFor="let comment of fsDataThreadService.comments; let i = index">
-            
+            <div [class.show_edit_comment]="edit_comment && fsDataThreadService.comments[i].user == authenticationService.userData.user_name" class="edit_comment" (click)="openEditComment(i)">
+                <div class="edit_hover" (click)="openEditComment(i)" (click)="stopPropagation($event)">
+                    <span>Nachricht bearbeiten</span>
+                </div>
+                <div class="edit_hover" (click)="openEditComment(i)" (click)="stopPropagation($event)">
+                    <span>Nachricht löschen</span>
+                </div>
+            </div>
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker"
                 (emojiClick)="addEmoji($event, i)"
                 [style]="{ position: 'absolute', top: '0px', left: '0px' }"></emoji-mart>
@@ -56,8 +63,8 @@
                 <div class="emojy">
                     <img src="/assets/img/icons/add_reaction.png" alt="">
                 </div>
-                <div class="emojy" (click)="editComment(i, false)" (click)="stopPropagation($event)">
-                    <img src="/assets/img/icons/edit.png">
+                <div class="emojy" (click)="openEditCommentMenu()" (click)="stopPropagation($event)">
+                    <img src="/assets/img/icons/more_vert.png">
                 </div>
             </div>
             <img src="/assets/img/small_avatar/avatar_1.svg" alt="">
