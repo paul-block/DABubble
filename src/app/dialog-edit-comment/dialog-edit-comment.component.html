@@ -1,5 +1,12 @@
+<emoji-mart *ngIf="emojiPicker_open" class="emoji_picker"
+    (emojiClick)="addEmoji($event)"
+    [style]="{ position: 'absolute', top: '0px', left: '0px', width: '100%' }">
+</emoji-mart>
 <textarea matInput [(ngModel)]="data.comment"></textarea>
 <div class="button_div">
-    <button (click)="onNoClick()">No Thanks</button>
+    <div (click)="openEmojiPicker()"  class="reaction_emojy">
+        <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
+    </div>
+    <button  (click)="onNoClick()">Abbrechen</button>
     <button [mat-dialog-close]="data.comment">Speichern</button>
 </div>

@@ -1,24 +1,96 @@
-
+@mixin content_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 textarea {
-    resize: none;
-    outline: none;
-    border: 1px solid #ADB0D9;
-
+  padding: 5px;
+  border: 1px solid #adb0d9;
+  height: 100%;
+  width: 100%;
+  resize: none;
+  outline: none;
+  font-size: 18px;
+  border-radius: 20px;
+  color: #686868;
+  &:focus {
+    color: black;
+  }
 }
 
 :host {
-    width: 355px;
-    height: 155px;
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    padding: 8px 16px 16px;
-   
-   
+  gap: 20px;
+  min-width: min-content;
+  height: 250px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  background: #fff;
+  padding: 20px;
+  overflow: hidden;
 }
 
 .button_div {
-    display: flex;
+  gap: 32px;
+  display: flex;
+  :nth-child(2),
+  :nth-child(3) {
+    transition: 200ms;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 141px;
+    height: 49px;
+    @include content_center();
+    border: 1px solid #797ef3;
+    box-shadow: 7px 5px 10px -4px rgba(0, 0, 0, 0.51);
+    border-radius: 50px;
+    background-color: white;
+    color: #444df2;
+    &:hover {
+      background-color: #444df2;
+      color: white;
+    }
+  }
+  :nth-child(3) {
+    background-color: #444df2;
+    color: white;
+    &:hover {
+      background-color: #797ef3;
+    }
+  }
 }
 
+.emojy {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 200ms;
+  border-radius: 100%;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+
+  &:hover {
+    background-color: #eceefe;
+
+    img {
+      transform: scale(1.05);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
+        brightness(97%) contrast(94%);
+    }
+  }
+}
+
+button {
+  border: none;
+}
+
+.emoji_picker {
+    z-index: 2;
+    width: 100% !important;
+}

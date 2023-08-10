@@ -5,6 +5,10 @@
     display: none !important;
 }
 
+.d_block {
+    display: block;
+}
+
 html,
 body {
     height: 100%;
@@ -34,7 +38,7 @@ textarea {
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-    width: 12px;
+    width: 4px;
 }
 
 *::-webkit-scrollbar-track {
@@ -112,5 +116,6 @@ textarea {
 
     .mdc-dialog__surface {
         border-radius: 20px !important;
+       overflow: hidden;
     }
 }

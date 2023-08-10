@@ -44,6 +44,7 @@ import { ThreadComponent } from './thread/thread.component';
 import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
 import {MatInputModule} from '@angular/material/input';
 import { SearchbarComponent } from './searchbar/searchbar.component';
+import { DialogDeleteCommentComponent } from './dialog-delete-comment/dialog-delete-comment.component';
 
 
 
@@ -76,6 +77,7 @@ import { SearchbarComponent } from './searchbar/searchbar.component';
     ThreadComponent,
     DialogEditCommentComponent,
     SearchbarComponent,
+    DialogDeleteCommentComponent,
   ],
   imports: [
     MatInputModule,

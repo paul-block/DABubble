@@ -5,15 +5,30 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-dialog-edit-comment',
   templateUrl: './dialog-edit-comment.component.html',
   styleUrls: ['./dialog-edit-comment.component.scss']
-  
+
 })
 export class DialogEditCommentComponent {
 
-  constructor(public dialogRef: MatDialogRef<DialogEditCommentComponent>,  @Inject(MAT_DIALOG_DATA) public data: {comment: string}) {
+  emojiPicker_open: boolean = false
+
+  constructor(public dialogRef: MatDialogRef<DialogEditCommentComponent>, @Inject(MAT_DIALOG_DATA) public data: { comment: string }) {
 
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+
+  openEmojiPicker() {
+    this.emojiPicker_open = true
+  }
+
+
+  addEmoji($event: any) {
+    this.emojiPicker_open = false
+    let unicodeCode: string = $event.emoji.unified
+    let emoji = String.fromCodePoint(parseInt(unicodeCode, 16));
+    this.data.comment += emoji
   }
 }
