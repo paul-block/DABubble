@@ -1,5 +1,5 @@
 <section class="write-new-message">
-    <textarea name="" id="" cols="10" rows="2" [placeholder]="placeholder" [(ngModel)]="messageText" (keydown)="checkIfEmpty()" (keyup)="checkIfEmpty()"></textarea>
+    <textarea name="" id="" cols="10" rows="2" [placeholder]="placeholder" [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
             <mat-icon>add</mat-icon>
@@ -7,8 +7,8 @@
             <mat-icon>mood</mat-icon>
             <mat-icon>alternate_email</mat-icon>
         </div>
-        <button [ngClass]="{'ready-to-send': readyToSend }" [disabled]="!readyToSend" class="send-message"
-            (click)="sendMessage()">
+        <button [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend" class="send-message"
+            (click)="directChatService.newMessage(this.msgService.messageText)">
             <mat-icon>send</mat-icon>
         </button>
     </div>

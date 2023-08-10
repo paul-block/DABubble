@@ -1,0 +1,25 @@
+<section class="edit-message-container">
+    <div class="edit-message">
+        <textarea name="" id="" cols="10" rows="2" [(ngModel)]="msgService.messageText"
+            (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()"></textarea>
+        <div class="extend-send-message">
+            <div class="extend-message">
+                <mat-icon>mood</mat-icon>
+            </div>
+            <div class="edit-message-buttons">
+                <button class="cancel-edit-message"
+                    (click)="msgService.editMessageText = false; msgService.messageText = '';">
+                    Abbrechen
+                </button>
+                <button class="save-edit-message" [ngClass]="{'ready-to-save': msgService.readyToSend }"
+                    [disabled]="!msgService.readyToSend" (click)="msgService.saveEditedMessage()">
+                    Speichern
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="img-user">
+        <img src="/assets/img/small_avatar/avatar_2.svg">
+    </div>
+
+</section>
