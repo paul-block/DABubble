@@ -2,7 +2,8 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class ThreadComponent implements OnInit {
   emoji_index: number;
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
+  edit_comment_index: boolean;
 
 
 
@@ -138,7 +140,8 @@ export class ThreadComponent implements OnInit {
         user: this.authenticationService.userData.user_name,
         time: time_stamp,
         avatar: '',
-        emoji_data: []
+        emoji_data: [],
+        text_edited: false
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
@@ -182,21 +185,36 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  openEditCommentMenu() {
+  openEditCommentMenu(i: boolean) {
     this.edit_comment = true
-
+    this.edit_comment_index = i
   }
 
   openEditComment(i: number) {
-    
+    this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
       data: { comment: this.fsDataThreadService.comments[i].comment },
       panelClass: 'my-dialog'
-      
+
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.fsDataThreadService.comments[i].comment = result;
+        this.fsDataThreadService.comments[i].text_edited = true
+        this.fsDataThreadService.updateData()
+      }
+    });
+  }
+
+  openDeleteComment(i: number) {
+    this.edit_comment = false;
+    const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
+      data: { comment: this.fsDataThreadService.comments[i].comment },
+      panelClass: 'my-dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fsDataThreadService.comments.splice(i, 1)
         this.fsDataThreadService.updateData()
       }
     });

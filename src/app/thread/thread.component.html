@@ -8,6 +8,8 @@
             </div>
         </div>
     </header>
+
+
     <div class="thread_content">
         <div class="message_div">
             <div class="bottom_line" *ngIf="fsDataThreadService.comments.length > 0">
@@ -43,11 +45,11 @@
 
         <div class="comment_div"
             [class.row_reverse]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name" *ngFor="let comment of fsDataThreadService.comments; let i = index">
-            <div [class.show_edit_comment]="edit_comment && fsDataThreadService.comments[i].user == authenticationService.userData.user_name" class="edit_comment" (click)="openEditComment(i)">
+            <div [class.show_edit_comment]="edit_comment && fsDataThreadService.comments[i].user == authenticationService.userData.user_name && edit_comment_index == i" class="edit_comment" (click)="openEditComment(i)">
                 <div class="edit_hover" (click)="openEditComment(i)" (click)="stopPropagation($event)">
                     <span>Nachricht bearbeiten</span>
                 </div>
-                <div class="edit_hover" (click)="openEditComment(i)" (click)="stopPropagation($event)">
+                <div class="edit_hover" (click)="openDeleteComment(i)" (click)="stopPropagation($event)">
                     <span>Nachricht löschen</span>
                 </div>
             </div>
@@ -59,11 +61,11 @@
                 <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
             </div>
             <div *ngIf="fsDataThreadService.comments[i].user == authenticationService.userData.user_name"
-                (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
+                (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy_user">
                 <div class="emojy">
                     <img src="/assets/img/icons/add_reaction.png" alt="">
                 </div>
-                <div class="emojy" (click)="openEditCommentMenu()" (click)="stopPropagation($event)">
+                <div class="emojy" (click)="openEditCommentMenu(i)" (click)="stopPropagation($event)">
                     <img src="/assets/img/icons/more_vert.png">
                 </div>
             </div>
@@ -76,6 +78,7 @@
                 <div class="message"
                     [class.message_user]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name">
                     {{fsDataThreadService.comments[i].comment}}
+                    <div *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
                 </div>
                 <div class="emoji_main">
                     <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index"

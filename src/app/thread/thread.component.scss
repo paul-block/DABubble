@@ -141,6 +141,24 @@ header {
     }
 }
 
+.reaction_emojy_user {
+    padding: 0 5px 0 5px;
+    display: flex;
+    transition: 200ms;
+    position: absolute;
+    top: -23px;
+    left: 0;
+    opacity: 0;
+    z-index: -100;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    height: 46px;
+    border: 1px solid #ADB0D9;
+    border-radius: 25px 25px 0 25px;
+}
+
 .comment_div {
     width: min-content;
     transition: 200ms;
@@ -154,6 +172,10 @@ header {
 
     &:hover {
         background-color: #ECEEFE;
+        .reaction_emojy_user {
+            opacity: 1;
+            z-index: 10;
+        }
 
         .message {
             background-color: white;
@@ -163,7 +185,6 @@ header {
             display: flex;
             animation: 225ms shortSlideInRight ease-in-out;
         }
-
     }
 }
 
@@ -248,6 +269,9 @@ header {
 .message_user {
     background-color: #797EF3 !important;
     color: white !important;
+    :nth-child(1) {
+        font-size: 10px;
+    }
 }
 
 .edit_comment {
