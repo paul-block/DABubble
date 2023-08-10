@@ -23,13 +23,14 @@
 
     </div>
 </header>
-<div>
-    <h3>Testnachrichten</h3>
-    <div *ngFor="let message of fsDataThreadService.channel_messages; let i = index">
-        {{fsDataThreadService.channel_messages[i].message}}<button
-            (click)="fsDataThreadService.openThread(i)">Antworten</button></div>
-</div> 
+
 <section class="chat-messages">
+    <div>
+        <h3>Testnachrichten</h3>
+        <div *ngFor="let message of fsDataThreadService.channel_messages; let i = index">
+            {{fsDataThreadService.channel_messages[i].message}}<button
+                (click)="fsDataThreadService.openThread(i)">Antworten</button></div>
+    </div> 
     <div class="chat-messages-date">
         <div class="parting-line"></div>
         <div class="messages-date">Dienstag, 14 Januar</div>
