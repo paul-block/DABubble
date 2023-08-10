@@ -2,15 +2,26 @@ $hover-background-color: #ECEEFE;
 $hover-text-color: #535AF1;
 $hover-transition: all ease-in-out 125ms;
 
-.write-new-message {
+.edit-message-container {
     transition: $hover-transition;
-    margin: 10px 60px;
-    margin-top: 60px;
+    background-color: $hover-background-color;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    padding: 10px 60px;
+}
+
+.edit-message {
+    // margin: 10px 60px;
+    padding: 10px 60px;
     padding: 20px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
     border: 1px solid #adb0d9;
+    width: 100%;
+    height: 130px;
+    background-color: white;
 
     &:hover {
         border: 1px solid #797EF3;
@@ -21,6 +32,8 @@ $hover-transition: all ease-in-out 125ms;
         font-size: 18px;
         border: none;
         resize: none;
+        height: 100%;
+        background-color: transparent;
     }
 
     textarea:focus {
@@ -47,23 +60,11 @@ $hover-transition: all ease-in-out 125ms;
     border: none;
     cursor: pointer;
 
-
-
     mat-icon {
 
         color: #686868;
     }
 
-}
-
-.ready-to-send {
-    mat-icon {
-        color: $hover-text-color;
-    }
-
-    &:hover mat-icon {
-        color: #797EF3;
-    }
 }
 
 .extend-message {
@@ -94,5 +95,57 @@ $hover-transition: all ease-in-out 125ms;
             transition: $hover-transition;
             font-weight: 600;
         }
+    }
+}
+
+.edit-message-buttons {
+    gap: 25px;
+    display: flex;
+}
+
+.save-edit-message {
+    padding: 12px 25px;
+    border-radius: 25px;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    background-color: $hover-text-color;
+    border: transparent;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #797EF3;
+    }
+
+    &:disabled {
+        background-color: #686868;
+    }
+}
+
+
+.cancel-edit-message {
+    background-color: white;
+    color: $hover-text-color;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 12px 25px;
+    border: unset;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: $hover-transition;
+
+    &:hover {
+        background-color: #797EF3;
+        color: white;
+        transition: $hover-transition;
+    }
+}
+
+.img-user {
+    display: flex;
+    align-items: flex-start;
+
+    img {
+        margin-top: 10px;
     }
 }

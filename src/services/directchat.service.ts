@@ -1,19 +1,14 @@
-import { Injectable, OnInit } from '@angular/core';
-import { Auth, User } from '@angular/fire/auth';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { GoogleAuthProvider, getAuth } from 'firebase/auth';
+import { Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, arrayUnion, updateDoc, collection, addDoc, orderBy, query, where, onSnapshot, getDocs } from '@angular/fire/firestore';
-import { Router } from '@angular/router';
-import { BehaviorSubject, timeout } from 'rxjs';
+import { doc, getDoc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs } from '@angular/fire/firestore';
+import { getAuth } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DirectChatService {
   db = getFirestore();
-  currentChatID: string = 'noChatSelected'
+  currentChatID: string = 'noChatSelected';
   directChatMessages = [];
 
   constructor() { }

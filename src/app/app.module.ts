@@ -45,6 +45,7 @@ import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-co
 import {MatInputModule} from '@angular/material/input';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { DialogDeleteCommentComponent } from './dialog-delete-comment/dialog-delete-comment.component';
+import { ChannelDirectEditMessageComponent } from './channel-direct-edit-message/channel-direct-edit-message.component';
 
 
 
@@ -78,6 +79,7 @@ import { DialogDeleteCommentComponent } from './dialog-delete-comment/dialog-del
     DialogEditCommentComponent,
     SearchbarComponent,
     DialogDeleteCommentComponent,
+    ChannelDirectEditMessageComponent,
   ],
   imports: [
     MatInputModule,

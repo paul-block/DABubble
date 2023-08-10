@@ -7,6 +7,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DirectChatService } from 'src/services/directchat.service';
+import { MessagesService } from 'src/services/messages.service';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class ChannelDirectChatComponent {
     private dialog: MatDialog,
     public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
-    public dataDirectChatService: DirectChatService
+    public dataDirectChatService: DirectChatService,
+    public msgService: MessagesService,
   ) { }
 
   editChannel() {
@@ -99,10 +101,6 @@ export class ChannelDirectChatComponent {
 
   }
 
-  editMessage() {
-    console.log('edit message');
-
-  }
 
   resetToggledAreas() {
     this.toggleReactionEmojis = false;
@@ -126,7 +124,12 @@ export class ChannelDirectChatComponent {
 
   isMessageCreator(user_Sender_ID) {
     const currentUserID = this.authService.getUid();
-    return user_Sender_ID === currentUserID;
+    if (currentUserID) {
+      return user_Sender_ID === currentUserID;
+    } else {
+      return false;
+    }
+
   }
 
   public openThread(value: boolean) {
