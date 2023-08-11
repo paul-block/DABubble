@@ -114,17 +114,17 @@
         </div>
 
         <div class="dm-selection select-none" *ngIf="dmsVisible">
-            <div class="dm-profile pointer sidebar-hover" (click)="directChatService.searchChat('currentUser')">
+            <div class="dm-profile pointer sidebar-hover" (click)="searchChatAndGetMessages('currentUser')">
                 <img src="assets/img/avatar_online_status/avatar1.png" alt="">
                 <span>Frederick Beck (Du)</span>
             </div>
 
-            <div class="dm-profile pointer sidebar-hover" (click)="directChatService.searchChat('DW7g7I5TcxQmyml9hAMr2lpYAak1')">
+            <div class="dm-profile pointer sidebar-hover" (click)="searchChatAndGetMessages('DW7g7I5TcxQmyml9hAMr2lpYAak1')">
                 <img src="assets/img/avatar_online_status/avatar2.png" alt="">
                 <span>Sofia Müller (Chattest)</span>
             </div>
 
-            <div class="dm-profile pointer sidebar-hover"(click)="directChatService.searchChat('O2J9SYWhFrSW9EZgUqKm0bFdvIU2')">
+            <div class="dm-profile pointer sidebar-hover"(click)="searchChatAndGetMessages('O2J9SYWhFrSW9EZgUqKm0bFdvIU2')">
                 <img src="assets/img/avatar_online_status/avatar3.png" alt="">
                 <span>Noah Braun (Philipp R)</span>
             </div>

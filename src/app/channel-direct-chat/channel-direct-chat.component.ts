@@ -20,7 +20,7 @@ export class ChannelDirectChatComponent {
 
   @Output() threadOpen = new EventEmitter<boolean>();
 
-  messageCreator = false;
+  messageCreator: boolean = false;
   toggleEditMessage: boolean = false;
   toggleReactionEmojis: boolean = false;
   isEditChannelDialogOpen: boolean = false;
@@ -130,6 +130,29 @@ export class ChannelDirectChatComponent {
       return false;
     }
 
+  }
+
+  messageDateRange(chatMessage) {
+    this.msgService.getTimestampDate(chatMessage.created_At);
+    const messageDate = chatMessage.created_At.toDate();
+
+    if (this.msgService.previousMessageDate === null) {
+      this.msgService.previousMessageDate = messageDate;
+      return true; // Erste Nachricht, also immer als unterschiedlich behandeln
+    }
+
+    const previousDate = this.msgService.previousMessageDate;
+    this.msgService.previousMessageDate = messageDate;
+
+    if (
+      messageDate.getDate() !== previousDate.getDate() ||
+      messageDate.getMonth() !== previousDate.getMonth() ||
+      messageDate.getFullYear() !== previousDate.getFullYear()
+    ) {
+      return true; // Das Datum ist unterschiedlich, also geben Sie true zurück
+    } else {
+      return false; // Das Datum ist gleich, also geben Sie false zurück
+    }
   }
 
   public openThread(value: boolean) {

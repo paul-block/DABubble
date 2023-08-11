@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { NewMsgService } from 'src/services/new-msg.service';
 import { ChannelService } from 'src/services/channel.service';
 import { DirectChatService } from 'src/services/directchat.service';
+import { MessagesService } from 'src/services/messages.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -28,6 +29,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     private newMsgService: NewMsgService,
     public channelService: ChannelService,
     public directChatService: DirectChatService,
+    public msgService: MessagesService
   ) {}
 
   ngOnInit() {
@@ -69,6 +71,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   toggleNewMsgComponent() {
     this.newMsgService.toggleNewMsg();
   }
+
+  async searchChatAndGetMessages(userReceiverID){
+    await this.directChatService.searchChat(userReceiverID);
+    this.msgService.getMessages();
+  }
+  
 
 }
 function getAuth() {

@@ -43,12 +43,11 @@ export class AuthenticationService {
     });
   }
 
-  getUid(){
+  getUid() {
     const auth = getAuth();
     const user = auth.currentUser;
     return user.uid;
   }
-
 
   async getUserData(uid: string) {
     const userRef = doc(this.db, "users", uid);
@@ -56,26 +55,26 @@ export class AuthenticationService {
     this.userData = docSnap.data()
   }
 
- // Sign up with email/password
- async SignUp(email: string, password: string) {
-  try {
-    const result = await this.afAuth
-      .createUserWithEmailAndPassword(email, password).then((result) => {
-        this.SetUserData(result.user);
-      })
-    this.signUp_successful = true
-    setTimeout(() => this.signUp_successful = false, 3000);
-  } catch (error) {
-    if (error.message == 'Firebase: Error (auth/email-already-in-use).') {
-      this.email_error = true
-      setTimeout(() => this.email_error = false, 3000);
-    } else
-      window.alert(error.message)
+  // Sign up with email/password
+  async SignUp(email: string, password: string) {
+    try {
+      const result = await this.afAuth
+        .createUserWithEmailAndPassword(email, password).then((result) => {
+          this.SetUserData(result.user);
+        })
+      this.signUp_successful = true
+      setTimeout(() => this.signUp_successful = false, 3000);
+    } catch (error) {
+      if (error.message == 'Firebase: Error (auth/email-already-in-use).') {
+        this.email_error = true
+        setTimeout(() => this.email_error = false, 3000);
+      } else
+        window.alert(error.message)
+    }
   }
-}
 
-   // Sign in with email/password
-   async SignIn(email: string, password: string) {
+  // Sign in with email/password
+  async SignIn(email: string, password: string) {
     try {
       const result = await this.afAuth
         .signInWithEmailAndPassword(email, password)
@@ -180,4 +179,22 @@ export class AuthenticationService {
     }
   }
 
+
+  async getNameFromUid(uid: string) {
+    try {
+      const userDocRef = doc(this.db, 'users', uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists) {
+        const userData = userDocSnapshot.data();
+        return userData.user_name;
+      } else {
+        console.log('Benutzer nicht gefunden');
+        return 'deleted User';
+      }
+    } catch (error) {
+      console.error('Fehler beim Abrufen des Benutzernamens:', error);
+      return 'user not existing';
+    }
+  }
 }

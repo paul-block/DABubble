@@ -8,7 +8,7 @@
             <mat-icon>alternate_email</mat-icon>
         </div>
         <button [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend" class="send-message"
-            (click)="directChatService.newMessage(this.msgService.messageText)">
+            (click)="msgService.newMessage()">
             <mat-icon>send</mat-icon>
         </button>
     </div>

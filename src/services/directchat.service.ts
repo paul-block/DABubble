@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getDoc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,6 @@ export class DirectChatService {
   currentChatID: string = 'noChatSelected';
   directChatMessages = [];
 
-  constructor() { }
 
   async searchChat(userReceiverID) {
     const auth = getAuth();
@@ -33,7 +33,6 @@ export class DirectChatService {
             if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
               chatExists = true;
               this.currentChatID = chatData.chat_ID;
-              this.openChat();
             }
           });
 
@@ -77,74 +76,5 @@ export class DirectChatService {
       console.error("Kein Benutzer ist eingeloggt");
     }
   }
-
-  async openChat() {
-    console.log('opened chat: ' + this.currentChatID);
-    this.getMessages();
-  }
-
-  async getMessages() {
-    this.directChatMessages = [];
-    const chatMessagesRef = collection(this.db, 'chats', this.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-
-    docDirectChatMessagesSnapshot.forEach((doc) => {
-      const userData = doc.data();
-      this.directChatMessages.unshift(userData);
-    });
-  }
-
-
-  async newMessage(message: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (this.currentChatID === 'noChatSelected') {
-      console.log(this.currentChatID);
-    } else {
-      console.log(message);
-
-      const messagesCollectionRef = await addDoc(collection(this.db, 'chats', this.currentChatID, 'messages'), {
-        chat_message: message,
-        user_Sender_ID: user.uid,
-        user_Sender_Name: await this.getNameFromUid(user.uid),
-        created_At: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      const newMessageID = messagesCollectionRef.id;
-      await updateDoc(messagesCollectionRef, {
-        message_ID: newMessageID,
-      });
-      this.getMessages();
-    }
-  }
-
-
-
-
-  getTimestampTime(timestamp) {
-    const dateObj = timestamp.toDate();
-    const hours = dateObj.getHours();
-    const minutes = dateObj.getMinutes();
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`;
-  }
-
-  async getNameFromUid(uid: string) {
-    try {
-      const userDocRef = doc(this.db, 'users', uid);
-      const userDocSnapshot = await getDoc(userDocRef);
-
-      if (userDocSnapshot.exists) {
-        const userData = userDocSnapshot.data();
-        return userData.user_name;
-      } else {
-        console.log('Benutzer nicht gefunden');
-        return 'deleted User';
-      }
-    } catch (error) {
-      console.error('Fehler beim Abrufen des Benutzernamens:', error);
-      return 'user not existing';
-    }
-  }
-
 
 }
