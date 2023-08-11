@@ -12,7 +12,7 @@ import { getFirestore, collection } from "firebase/firestore";
 
 export class FirestoreThreadDataService {
 
-
+  
   db = getFirestore();
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
@@ -20,10 +20,11 @@ export class FirestoreThreadDataService {
   thread_open: boolean = false
   current_message: any;
   current_message_id: string;
-  comments = []
+  comments:any[] = []
 
 
-  constructor() {}
+  constructor() { }
+
 
 
   async saveThread(data) {
@@ -81,7 +82,31 @@ export class FirestoreThreadDataService {
 
     }
   }
+
+
+  getTimeSince(timestamp: number) {
+  
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    const timeDifference = nowInSeconds - timestamp;
+  
+    const seconds = timeDifference % 60;
+    const minutes = Math.floor((timeDifference / 60) % 60);
+    const hours = Math.floor((timeDifference / 3600) % 24);
+    const days = Math.floor(timeDifference / 86400);
+  
+    if (days > 1) return `vor ${days} Tagen`;
+    else if (days == 1) return `vor ${days} Tag`;
+    else if (hours == 1) return `vor ${hours} Stunde`;
+     else if (hours > 1) return `vor ${hours} Stunden`;
+     else if (minutes > 1)   return ` vor ${minutes} Minuten `;
+     else if (minutes == 1)   return ` vor ${minutes} Minute `;
+     else return `gerade eben`;
+    
+  }
 }
+
+
+
 
 
 

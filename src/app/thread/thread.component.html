@@ -73,7 +73,7 @@
             <div class="message_sub">
                 <div class="user_time">
                     <span>{{fsDataThreadService.comments[i].user}}</span>
-                    <span>Uhrzeit</span>
+                    <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.comments[i].time.seconds)}}</span>
                 </div>
                 <div class="message"
                     [class.message_user]="fsDataThreadService.comments[i].user == authenticationService.userData.user_name">

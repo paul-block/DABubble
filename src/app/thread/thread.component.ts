@@ -26,6 +26,7 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: boolean;
+  
 
 
 
@@ -44,7 +45,7 @@ export class ThreadComponent implements OnInit {
 
   ngOnInit(): void {
     document.body.addEventListener('click', this.bodyClicked);
-    this.fsDataThreadService.getMessages()
+    this.fsDataThreadService.getMessages()   
   }
 
 
@@ -141,7 +142,8 @@ export class ThreadComponent implements OnInit {
         time: time_stamp,
         avatar: '',
         emoji_data: [],
-        text_edited: false
+        text_edited: false,
+        time_since: ''
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
@@ -231,7 +233,5 @@ export class ThreadComponent implements OnInit {
   closeShowReactUsers() {
     if (this.hovered_emoji == true) this.hovered_emoji = false
   }
-
-
 }
 
