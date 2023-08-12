@@ -138,7 +138,7 @@ export class ChannelDirectChatComponent {
 
     if (this.msgService.previousMessageDate === null) {
       this.msgService.previousMessageDate = messageDate;
-      return true; // Erste Nachricht, also immer als unterschiedlich behandeln
+      return true; 
     }
 
     const previousDate = this.msgService.previousMessageDate;
@@ -149,9 +149,9 @@ export class ChannelDirectChatComponent {
       messageDate.getMonth() !== previousDate.getMonth() ||
       messageDate.getFullYear() !== previousDate.getFullYear()
     ) {
-      return true; // Das Datum ist unterschiedlich, also geben Sie true zurück
+      return true;
     } else {
-      return false; // Das Datum ist gleich, also geben Sie false zurück
+      return false;
     }
   }
 

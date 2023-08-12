@@ -66,7 +66,7 @@ export class MessagesService {
 
     docDirectChatMessagesSnapshot.forEach((doc) => {
       const userData = doc.data();
-      this.directChatService.directChatMessages.unshift(userData);
+      this.directChatService.directChatMessages.push(userData);
     });
   }
 
