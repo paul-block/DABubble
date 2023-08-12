@@ -4,6 +4,8 @@ import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.s
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
+import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiService } from '../emoji.service';
 
 
 @Component({
@@ -26,6 +28,7 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: boolean;
+  array:any
   
 
 
@@ -34,6 +37,7 @@ export class ThreadComponent implements OnInit {
   constructor(
     public authenticationService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
+    public emojiService: EmojiService,
     public dialog: MatDialog
   ) { }
 
@@ -61,63 +65,22 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  addEmoji($event: any, i: number) {
-    this.emoji_exist = false
+
+  addEmojiInThread($event: any, i: number) {
+    let array = this.fsDataThreadService.comments
+    let user = this.authenticationService.userData.user_name
     this.emojiPicker_open = false
-    this.checkIfEmojiExist($event.emoji.colons, i)
-    if (!this.emoji_exist) {
-      let emoji_data = {
-        emoji: $event.emoji.colons,
-        count: 1,
-        react_users: [this.authenticationService.userData.user_name]
-      }
-      this.fsDataThreadService.comments[i].emoji_data.push(emoji_data)
-      this.fsDataThreadService.updateData()
-    }
-  }
-
-
-  addOrRemoveEmoji(i: number, j: number) {
-    let index = this.fsDataThreadService.comments[i].emoji_data[j].react_users.indexOf(this.authenticationService.userData.user_name)
-    if (index == -1) {
-      this.fsDataThreadService.comments[i].emoji_data[j].count += 1
-      this.fsDataThreadService.comments[i].emoji_data[j].react_users.push(this.authenticationService.userData.user_name)
-    }
-    else {
-      this.fsDataThreadService.comments[i].emoji_data[j].count -= 1
-      this.fsDataThreadService.comments[i].emoji_data[j].react_users.splice(index, 1)
-      if (this.fsDataThreadService.comments[i].emoji_data[j].count == 0) {
-        this.fsDataThreadService.comments[i].emoji_data.splice(j, 1)
-        this.hovered_emoji = false
-      }
-    }
-    console.log(this.fsDataThreadService.comments[i]);
-
+    this.fsDataThreadService.comments = this.emojiService.addEmoji($event, i, array, user)
+    console.log(this.fsDataThreadService.comments);
     this.fsDataThreadService.updateData()
   }
 
 
-
-
-  checkIfEmojiExist(emoji: string, i: number) {
-    this.fsDataThreadService.comments[i].emoji_data.forEach(element => {
-      if (element.emoji == emoji) {
-        this.emoji_exist = true
-        if (element.react_users.includes(this.authenticationService.userData.user_name)) {
-          let k = element.react_users.indexOf(this.authenticationService.userData.user_name)
-          element.react_users.splice(k, 1)
-          element.count -= 1
-          if (element.count == 0) {
-            let j = this.fsDataThreadService.comments[i].emoji_data.indexOf(element)
-            this.fsDataThreadService.comments[i].emoji_data.splice(j, 1)
-            this.fsDataThreadService.updateData()
-          }
-        }
-        else
-          element.react_users.push(this.authenticationService.userData.user_name)
-        element.count += 1
-      }
-    });
+  addOrRemoveEmojIinThread(i:number,j:number) {
+    let array = this.fsDataThreadService.comments
+    let user = this.authenticationService.userData.user_name
+    this.hovered_emoji = false
+    this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i,j, array, user )
     this.fsDataThreadService.updateData()
   }
 
@@ -166,7 +129,6 @@ export class ThreadComponent implements OnInit {
     this.channel_message.emoji_data.forEach(element => {
       if (element.emoji == $event.emoji.colons) {
         element.count += 1
-        this.emoji_exist = true
       }
     });
   }

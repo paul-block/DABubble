@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { doc, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
 import * as firebase from 'firebase/compat';
 import { getFirestore, collection } from "firebase/firestore";
+import { AuthenticationService } from './authentication.service';
 
 
 
@@ -23,8 +24,7 @@ export class FirestoreThreadDataService {
   comments:any[] = []
 
 
-  constructor() { }
-
+  constructor( public authenticationService: AuthenticationService) { }
 
 
   async saveThread(data) {
@@ -62,6 +62,8 @@ export class FirestoreThreadDataService {
     this.loadThread();
   }
 
+
+
   validateIdFromMessage(i: number) {
     this.current_message_id = this.channel_messages[i].id
   }
@@ -76,24 +78,18 @@ export class FirestoreThreadDataService {
       }
       await setDoc(docRef, thread_data);
     } else {
-
       this.comments = docSnap.data().comments
-      console.log(this.comments);
-
     }
   }
 
 
   getTimeSince(timestamp: number) {
-  
     const nowInSeconds = Math.floor(Date.now() / 1000);
     const timeDifference = nowInSeconds - timestamp;
-  
     const seconds = timeDifference % 60;
     const minutes = Math.floor((timeDifference / 60) % 60);
     const hours = Math.floor((timeDifference / 3600) % 24);
     const days = Math.floor(timeDifference / 86400);
-  
     if (days > 1) return `vor ${days} Tagen`;
     else if (days == 1) return `vor ${days} Tag`;
     else if (hours == 1) return `vor ${hours} Stunde`;
@@ -101,9 +97,11 @@ export class FirestoreThreadDataService {
      else if (minutes > 1)   return ` vor ${minutes} Minuten `;
      else if (minutes == 1)   return ` vor ${minutes} Minute `;
      else return `gerade eben`;
-    
   }
 }
+
+
+
 
 
 
