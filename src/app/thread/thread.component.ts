@@ -5,7 +5,7 @@ import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-c
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
-import { EmojiService } from '../emoji.service';
+import { EmojiService } from '../../services/emoji.service';
 
 
 @Component({
