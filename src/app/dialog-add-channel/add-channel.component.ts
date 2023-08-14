@@ -12,16 +12,12 @@ export class AddChannelComponent {
   addPPlRef: MatDialogRef<AddPplToChannelComponent>;
   addPplOpen: boolean = false;
 
-
-
   form = new FormGroup({
     'channel-name': new FormControl(''),
     'description': new FormControl('')
   });
 
-  constructor(public dialog: MatDialog) {
-    
-  }
+  constructor(public dialog: MatDialog) {}
 
   closeDialog() {
     this.dialog.closeAll();

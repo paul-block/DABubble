@@ -50,7 +50,7 @@
     </div>
 
     <div class="results" *ngIf="filteredUsers.length > 0 && searchValue.length > 0">
-        <div class="result-row" *ngFor="let user of filteredUsers">
+        <div class="result-row" *ngFor="let user of filteredUsers" (click)="openProfile()">
             <img src="assets/img/icons/account_circle.svg" alt="">
             <span>{{ user }}</span>
         </div>

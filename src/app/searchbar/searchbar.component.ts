@@ -1,6 +1,9 @@
 import { Component, ElementRef  } from '@angular/core';
 import { getFirestore, collection, getDocs } from '@angular/fire/firestore';
 import { HostListener } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
+
 
 
 @Component({
@@ -23,7 +26,10 @@ export class SearchbarComponent {
   filteredChannels: Array<string> = [];
   filteredChannelMessages: Array<string> = [];
 
-  constructor(private elementRef: ElementRef) {}
+  profileRef;
+  profileRefOpen = false;
+
+  constructor(private elementRef: ElementRef, private dialog: MatDialog) {}
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
@@ -118,5 +124,20 @@ export class SearchbarComponent {
         this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
           this.showResults = true; 
         } else this.showResults = false;
+      }
+
+      openProfile() {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.panelClass = 'add-channel-dialog';
+        dialogConfig.data = { user_name: 'Test Name', user_email: 'testhausen@test.com' };
+
+        this.dialog.closeAll();
+      
+        this.profileRef = this.dialog.open(DialogProfileComponent, dialogConfig);
+        this.profileRefOpen = true;
+      
+        this.profileRef.afterClosed().subscribe(() => {
+          this.profileRefOpen = false;
+        });
       }
 }
