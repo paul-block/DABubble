@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
@@ -14,6 +14,8 @@ import { EmojiService } from '../../services/emoji.service';
   styleUrls: ['./thread.component.scss']
 })
 export class ThreadComponent implements OnInit {
+
+  @ViewChild('messageTextarea') messageTextarea: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ''
@@ -28,7 +30,8 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: boolean;
-  array:any
+  all_users:any
+  open_users: boolean;
   
 
 
@@ -50,6 +53,9 @@ export class ThreadComponent implements OnInit {
   ngOnInit(): void {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()   
+    this.all_users = this.authenticationService.getAllUsers()
+    console.log(this.all_users);
+    
   }
 
 
@@ -71,7 +77,6 @@ export class ThreadComponent implements OnInit {
     let user = this.authenticationService.userData.user_name
     this.emojiPicker_open = false
     this.fsDataThreadService.comments = this.emojiService.addEmoji($event, i, array, user)
-    console.log(this.fsDataThreadService.comments);
     this.fsDataThreadService.updateData()
   }
 
@@ -88,6 +93,7 @@ export class ThreadComponent implements OnInit {
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
+    if (this.open_users == true) this.open_users = false;
   };
 
 
@@ -192,8 +198,20 @@ export class ThreadComponent implements OnInit {
     this.emoji_index = j
   }
 
+
   closeShowReactUsers() {
     if (this.hovered_emoji == true) this.hovered_emoji = false
+  }
+
+
+  openUsers() {
+    this.open_users = true
+  }
+
+
+  addUserToTextarea(i:number) {
+    this.comment_value += '@' + this.all_users.__zone_symbol__value[i].user_name
+    this.messageTextarea.nativeElement.focus();
   }
 }
 

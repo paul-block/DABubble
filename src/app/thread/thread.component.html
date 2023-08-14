@@ -107,11 +107,20 @@
 
 
         <div class="type_message">
+            <div class="at_user_div" *ngIf="open_users">
+                <div>
+                    <div class="user" *ngFor="let user of all_users.__zone_symbol__value; let i = index" (click)="addUserToTextarea(i)" >
+                        <img class="user_img" src="/assets/img/00c.Charaters.png" alt="">
+                        <div>{{all_users.__zone_symbol__value[i].user_name}}</div>
+                    </div>
+                </div>
+                
+            </div>
             <div class="z_index">
                 <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
                     (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
             </div>
-            <textarea type="text" [(ngModel)]="comment_value" placeholder="Antworten..."></textarea>
+            <textarea #messageTextarea type="text" [(ngModel)]="comment_value" placeholder="Antworten..."></textarea>
             <div class="icons_main">
                 <div class="icons">
                     <div class="plus">
@@ -119,7 +128,7 @@
                     </div>
                     <div class="hover"><img src="/assets/img/icons/sentiment_satisfied.png"
                             (click)="openEmojiPicker(-2)" (click)="stopPropagation($event)"></div>
-                    <div class="hover"><img src="/assets/img/icons/alternate_email.png" alt=""></div>
+                    <div class="hover"><img src="/assets/img/icons/alternate_email.png" (click)="openUsers()" (click)="stopPropagation($event)"></div>
                 </div>
             </div>
             <img [class.inactive]="comment_value.length < 1" class="send_button" src="/assets/img/icons/send (1).png"

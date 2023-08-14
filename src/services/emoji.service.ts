@@ -43,8 +43,8 @@ export class EmojiService {
   }
 
 
-  checkIfEmojiExist(emoji: string, i: number, array, user:string) {
-    array[i].emoji_data.forEach(element => {
+  checkIfEmojiExist(emoji: string, i: number, array: { emoji_data: any[]; }[], user:string) {
+    array[i].emoji_data.forEach((element: { emoji: string; react_users: string[]; count: number; }) => {
       if (element.emoji == emoji) {
         this.emoji_exist = true
         if (element.react_users.includes(user)) {
