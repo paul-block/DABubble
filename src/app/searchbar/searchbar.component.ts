@@ -1,5 +1,5 @@
 import { Component, ElementRef  } from '@angular/core';
-import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc } from '@angular/fire/firestore';
+import { getFirestore, collection, getDocs } from '@angular/fire/firestore';
 import { HostListener } from '@angular/core';
 
 
@@ -12,28 +12,30 @@ import { HostListener } from '@angular/core';
 export class SearchbarComponent {
   db = getFirestore();
   showResults = false;
+  isLoading = false;
   searchValue = '';
-  currentCategory = '';  
-  items: Array<string> = [];
-  filteredItems: Array<string> = [];
-  showAll = false;
 
-  constructor(private elementRef: ElementRef) {
+  usersSet: Set<string> = new Set();
+  channelsSet: Set<string> = new Set();
+  filteredChannelMessagesSet: Set<string> = new Set();
 
-  }
+  filteredUsers: Array<string> = [];
+  filteredChannels: Array<string> = [];
+  filteredChannelMessages: Array<string> = [];
+
+  constructor(private elementRef: ElementRef) {}
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
     const inputElement = this.elementRef.nativeElement.querySelector('.input-container input');
     const searchContainer = this.elementRef.nativeElement.querySelector('.search-container');
 
-    if (inputElement.contains(event.target) || searchContainer.contains(event.target)) {
+    if (inputElement.contains(event.target) || searchContainer && searchContainer.contains(event.target)) {
       return;
     }
-
-    this.clear();
-    // this.searchValue = '';
     this.showResults = false;
   }
+
   @HostListener(':click', ['$event'])
   handleClickInside(event: Event) {
     const resultRows = this.elementRef.nativeElement.querySelectorAll('.result-row span');
@@ -48,29 +50,73 @@ export class SearchbarComponent {
     }
   }
 
-  onSearchValueChange() {
-    this.filteredItems = this.items.filter(item => 
-      item.toLowerCase().startsWith(this.searchValue.toLowerCase())
+  async onSearchValueChange() {
+    if (this.searchValue.length == 0) this.showResults = false; 
+    else {
+
+    this.isLoading = true;
+    this.showResults = true; 
+
+    this.usersSet.clear();
+    this.channelsSet.clear();
+    this.filteredChannelMessagesSet.clear();
+    this.filteredChannels = [];
+    this.filteredUsers = [];
+    this.filteredChannelMessages = [];
+  
+    await this.search('channels');
+    await this.search('users');
+    await this.searchMessagesInChannels();
+
+    this.filteredChannels = Array.from(this.channelsSet).filter(channel => 
+      channel.toLowerCase().startsWith(this.searchValue.toLowerCase())
     );
-    if (this.filteredItems.length > 0) this.showAll = false;
-    else this.showAll = true;
-  }
+    this.filteredUsers = Array.from(this.usersSet).filter(user =>
+      user.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    );
+    this.filteredChannelMessages = Array.from(this.filteredChannelMessagesSet);
 
-  async search(collectionName: string) {
-    this.showAll = true;
-    this.searchValue = '';
-    this.clear();
-    this.currentCategory = collectionName;
-    const collectionRef = collection(this.db, collectionName);
-    const querySnapshot = await getDocs(collectionRef);
-    querySnapshot.forEach((doc) => {
-      if (collectionName === 'channels') this.items.push(doc.data().channelName);
-      if (collectionName === 'users') this.items.push(doc.data().user_name);
-    });
-  }
+    this.isLoading = false;
+    this.show();
+}    
+}
 
-  clear() {
-    this.filteredItems = [];
-    this.items = [];
+    async search(collectionName: string) {
+      const collectionRef = collection(this.db, collectionName);
+      const querySnapshot = await getDocs(collectionRef);
+      querySnapshot.forEach((doc) => {
+        if (collectionName === 'channels') this.channelsSet.add(doc.data().channelName);
+        if (collectionName === 'users') this.usersSet.add(doc.data().user_name);
+      });
+    }
+
+
+    async searchMessagesInChannels() {
+      const channelsRef = collection(this.db, 'channels');
+      const channelsSnapshot = await getDocs(channelsRef);
+  
+      for (let channelDoc of channelsSnapshot.docs) {
+          const channelName = channelDoc.data().channelName;
+          const messagesRef = collection(channelDoc.ref, 'channel_messages');
+          const messagesSnapshot = await getDocs(messagesRef);
+          
+          messagesSnapshot.docs.forEach(messageDoc => {
+              const message = messageDoc.data().message;
+              const messageSender = messageDoc.data().user_name;
+  
+              if (message.toLowerCase().startsWith(this.searchValue.toLowerCase())) {
+                  const combinedMessage = `${message} in #${channelName} von: ${messageSender}`;
+                  this.filteredChannelMessagesSet.add(combinedMessage);
+              }
+          });
+      }
   }
+  
+  show() {
+    if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||  
+        this.searchValue.length > 0 && this.filteredUsers.length > 0 || 
+        this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
+          this.showResults = true; 
+        } else this.showResults = false;
+      }
 }
