@@ -52,6 +52,8 @@ export class AuthenticationService {
         users.push(doc.data())
       })
       this.all_users = users
+      console.log(this.all_users);
+      
     });
   }
 

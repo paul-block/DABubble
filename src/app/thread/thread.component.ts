@@ -104,12 +104,10 @@ export class ThreadComponent implements OnInit {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
-        user: this.authenticationService.userData.user_name,
         time: time_stamp,
         uid: this.authenticationService.getUid(),
         emoji_data: [],
         text_edited: false,
-        email: this.authenticationService.userData.email
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
@@ -217,11 +215,21 @@ export class ThreadComponent implements OnInit {
     return user.avatar
   }
 
+  getUserName(uid:string) {
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
+    return user.user_name
+  }
 
-  openProfile(user: string, email: string) {
+  getUserEmail(uid:string) {
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
+    return user.email
+  }
+
+
+  openProfile(uid: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'add-channel-dialog';
-    dialogConfig.data = { user_name: user, user_email: email };
+    dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid) };
     this.dialog.open(DialogProfileComponent, dialogConfig);
   }
 }
