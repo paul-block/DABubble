@@ -79,7 +79,5 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   
 
 }
-function getAuth() {
-  throw new Error('Function not implemented.');
-}
+
 

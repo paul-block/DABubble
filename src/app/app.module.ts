@@ -47,6 +47,7 @@ import {MatInputModule} from '@angular/material/input';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { DialogDeleteCommentComponent } from './dialog-delete-comment/dialog-delete-comment.component';
 import { ChannelDirectEditMessageComponent } from './channel-direct-edit-message/channel-direct-edit-message.component';
+import { DialogProfileComponent } from './dialog-profile/dialog-profile.component';
 import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 
 
@@ -83,6 +84,7 @@ import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
     SearchbarComponent,
     DialogDeleteCommentComponent,
     ChannelDirectEditMessageComponent,
+    DialogProfileComponent,
   ],
   imports: [
     AngularFireStorageModule,
