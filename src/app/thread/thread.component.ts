@@ -163,7 +163,6 @@ export class ThreadComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
       data: { comment: this.fsDataThreadService.comments[i].comment },
       panelClass: 'my-dialog'
-
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -173,6 +172,7 @@ export class ThreadComponent implements OnInit {
       }
     });
   }
+  
 
   openDeleteComment(i: number) {
     this.edit_comment = false;
