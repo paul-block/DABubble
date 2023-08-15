@@ -3,11 +3,11 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, updateDoc, collection, getDocs } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot } from '@angular/fire/firestore';
+import { collection } from '@firebase/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from './channel.service';
-import { ref } from '@angular/fire/database';
 import { getStorage } from "firebase/storage";
 
 
@@ -26,8 +26,8 @@ export class AuthenticationService {
   userName: string
   addCertainUserValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
-  storage = getStorage();
   googleUser_exist: boolean;
+  all_users: any[];
 
 
   constructor(
@@ -44,6 +44,15 @@ export class AuthenticationService {
       } else {
         localStorage.setItem('user', 'null');
       }
+    });  
+    const dbRef = collection(this.db, "users");
+    onSnapshot(dbRef, docsSnap => {
+      const users:any[] = []
+      docsSnap.forEach(doc => {
+        users.push(doc.data())
+      })
+      this.all_users = users
+      console.log(this.all_users);
     });
   }
 
@@ -121,7 +130,7 @@ export class AuthenticationService {
         return
       }
     });
-    if(this.googleUser_exist != true) await this.SetUserData(user);
+    if (this.googleUser_exist != true) await this.SetUserData(user);
   }
 
 
@@ -169,6 +178,11 @@ export class AuthenticationService {
       users.push(doc.data());
     });
     return users;
+  }
+
+
+   async getAllUsers2() {
+   
   }
 
 
@@ -228,6 +242,5 @@ export class AuthenticationService {
       avatar: image
     });
     this.getUserData(this.getUid())
-    console.log(this.userData);
   }
 }

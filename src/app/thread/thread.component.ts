@@ -53,7 +53,7 @@ export class ThreadComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
-     this.all_users = await this.authenticationService.getAllUsers()
+    this.all_users = await this.authenticationService.getAllUsers()
   }
 
 
@@ -213,7 +213,7 @@ export class ThreadComponent implements OnInit {
 
 
   getImageUrl(uid:string):string {
-    const user = this.all_users.find(element => element.uid === uid);
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
     return user.avatar
   }
 }
