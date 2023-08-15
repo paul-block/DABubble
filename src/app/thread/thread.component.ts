@@ -2,11 +2,12 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from '../../services/emoji.service';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
+import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 
 
 @Component({
@@ -16,6 +17,8 @@ import { DialogProfileComponent } from '../dialog-profile/dialog-profile.compone
 })
 export class ThreadComponent implements OnInit {
 
+
+  profileMenuRef: MatDialogRef<ProfileMenuComponent>;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
@@ -215,22 +218,41 @@ export class ThreadComponent implements OnInit {
     return user.avatar
   }
 
-  getUserName(uid:string) {
+  getUserName(uid: string) {
     const user = this.authenticationService.all_users.find(element => element.uid === uid);
     return user.user_name
   }
 
-  getUserEmail(uid:string) {
+  getUserEmail(uid: string) {
     const user = this.authenticationService.all_users.find(element => element.uid === uid);
     return user.email
   }
 
 
   openProfile(uid: string) {
+    if (this.getUserName(uid) == this.authenticationService.userData.user_name) this.openCurrentUserDetails()
+    else {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.panelClass = 'add-channel-dialog';
+      dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid), user_id: uid};
+      this.dialog.open(DialogProfileComponent, dialogConfig);
+    }
+  }
+
+
+
+  openCurrentUserDetails() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'add-channel-dialog';
-    dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid) };
-    this.dialog.open(DialogProfileComponent, dialogConfig);
+      dialogConfig.position = {
+        top: '80',
+        right: '25'
+      };
+      dialogConfig.panelClass = 'custom-edit-channel-dialog';
+      this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
+      this.fsDataThreadService.detailsVisible = true
+      this.profileMenuRef.afterClosed().subscribe(() => {
+        this.fsDataThreadService.detailsVisible = false
+      });
   }
 }
 

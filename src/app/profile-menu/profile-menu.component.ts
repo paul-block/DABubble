@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 
 
 
@@ -24,8 +25,13 @@ export class ProfileMenuComponent {
   imageUrl: string;
 
 
-  constructor(public authService: AuthenticationService, private dialog: MatDialog, private storage: AngularFireStorage) {
-  }
+  constructor(
+    public authService: AuthenticationService,
+    private dialog: MatDialog,
+    private storage: AngularFireStorage,
+    public fsDataThreadService: FirestoreThreadDataService,
+    public dialogRef: MatDialogRef<ProfileMenuComponent>
+  ) {}
 
   signOut() {
     this.authService.signOut();
@@ -33,7 +39,12 @@ export class ProfileMenuComponent {
   }
 
   toggleDetails() {
+    if (this.fsDataThreadService.detailsVisible){
+      this.fsDataThreadService.detailsVisible = false
+      this.onNoClick()
+    }
     this.detailsVisible = !this.detailsVisible;
+    
   }
 
   toggleEditDetails() {
@@ -43,6 +54,7 @@ export class ProfileMenuComponent {
   updateUserDetails() {
     this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
     this.dialog.closeAll();
+    this.fsDataThreadService.detailsVisible = false
   }
 
 
@@ -93,5 +105,10 @@ export class ProfileMenuComponent {
         this.file_error = true
       }
     );
+  }
+
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

@@ -1,9 +1,9 @@
-<div id="menu-container">
+<div *ngIf="!fsDataThreadService.detailsVisible" id="menu-container">
     <span (click)="toggleDetails()">Profil</span>
     <span (click)="signOut()">Log out</span>
 </div>
 
-<div id="profileDetails" *ngIf="detailsVisible">
+<div id="profileDetails" *ngIf="detailsVisible || fsDataThreadService.detailsVisible">
     <div class="header-container">
         <span>Profil</span>
         <img class="sidebar-icon-hover" (click)="toggleDetails()" src="assets/img/icons/close.png" alt="">

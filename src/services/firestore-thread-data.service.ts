@@ -22,6 +22,7 @@ export class FirestoreThreadDataService {
   current_message: any;
   current_message_id: string;
   comments:any[] = []
+  detailsVisible: boolean = false;
 
 
   constructor( public authenticationService: AuthenticationService) { }

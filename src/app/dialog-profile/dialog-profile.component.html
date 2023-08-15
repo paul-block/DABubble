@@ -4,7 +4,7 @@
         <img class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="" (click)="close()">
     </div>
 
-    <img class="profileImg" src="assets/img/big_avatar/avatar_1.svg" alt="">
+    <img  class="profileImg" [src]="getImageUrl(user_id)" alt="">
 
     <div class="middle-part">
         <div class="edit-container">
