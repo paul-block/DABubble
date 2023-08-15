@@ -207,15 +207,13 @@ export class ThreadComponent implements OnInit {
 
 
   addUserToTextarea(i: number) {
-    this.comment_value += '@' + this.all_users.__zone_symbol__value[i].user_name
+    this.comment_value += '@' + this.all_users[i].user_name
     this.messageTextarea.nativeElement.focus();
   }
 
 
   getImageUrl(uid:string):string {
     const user = this.all_users.find(element => element.uid === uid);
-    console.log(this.all_users);
-    
     return user.avatar
   }
 }

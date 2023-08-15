@@ -110,7 +110,7 @@
             <div class="at_user_div" *ngIf="open_users">
                 <div>
                     <div class="user" *ngFor="let user of all_users; let i = index" (click)="addUserToTextarea(i)" >
-                        <img class="user_img" src="/assets/img/00c.Charaters.png" alt="">
+                        <img class="user_img" [src]="getImageUrl(all_users[i].uid)">
                         <div>{{all_users[i].user_name}}</div>
                     </div>
                 </div>
