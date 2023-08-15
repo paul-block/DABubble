@@ -348,6 +348,14 @@ header {
   display: flex;
   align-items: center;
   gap: 20px;
+  :nth-child(1) {
+    transition: 200ms;
+    cursor: pointer;
+    &:hover {
+      color: #535AF1;
+    }
+  }
+
 
   :nth-child(1) {
     font-size: 18px;

@@ -2,10 +2,11 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from '../../services/emoji.service';
+import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 
 
 @Component({
@@ -30,7 +31,6 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: boolean;
-  all_users: any
   open_users: boolean;
 
 
@@ -53,7 +53,6 @@ export class ThreadComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
-    this.all_users = await this.authenticationService.getAllUsers()
   }
 
 
@@ -110,6 +109,7 @@ export class ThreadComponent implements OnInit {
         uid: this.authenticationService.getUid(),
         emoji_data: [],
         text_edited: false,
+        email: this.authenticationService.userData.email
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
@@ -207,14 +207,22 @@ export class ThreadComponent implements OnInit {
 
 
   addUserToTextarea(i: number) {
-    this.comment_value += '@' + this.all_users[i].user_name
+    this.comment_value += '@' + this.authenticationService.all_users[i].user_name
     this.messageTextarea.nativeElement.focus();
   }
 
 
-  getImageUrl(uid:string):string {
+  getImageUrl(uid: string): string {
     const user = this.authenticationService.all_users.find(element => element.uid === uid);
     return user.avatar
+  }
+
+
+  openProfile(user: string, email: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'add-channel-dialog';
+    dialogConfig.data = { user_name: user, user_email: email };
+    this.dialog.open(DialogProfileComponent, dialogConfig);
   }
 }
 

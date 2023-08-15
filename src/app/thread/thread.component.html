@@ -72,7 +72,7 @@
             <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.comments[i].uid)">
             <div class="message_sub">
                 <div class="user_time">
-                    <span>{{fsDataThreadService.comments[i].user}}</span>
+                    <span (click)="openProfile(fsDataThreadService.comments[i].user, fsDataThreadService.comments[i].email)" >{{fsDataThreadService.comments[i].user}}</span>
                     <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.comments[i].time.seconds)}}</span>
                 </div>
                 <div class="message"
@@ -111,7 +111,7 @@
                 <div>
                     <div class="user" *ngFor="let user of authenticationService.all_users; let i = index" (click)="addUserToTextarea(i)" >
                         <img class="user_img" [src]="authenticationService.all_users[i].avatar">
-                        <div>{{all_users[i].user_name}}</div>
+                        <div>{{authenticationService.all_users[i].user_name}}</div>
                     </div>
                 </div>
                 
