@@ -13,6 +13,7 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 // Components
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { StartScreenComponent } from './start-screen/start-screen.component';
@@ -46,6 +47,8 @@ import {MatInputModule} from '@angular/material/input';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { DialogDeleteCommentComponent } from './dialog-delete-comment/dialog-delete-comment.component';
 import { ChannelDirectEditMessageComponent } from './channel-direct-edit-message/channel-direct-edit-message.component';
+import { DialogProfileComponent } from './dialog-profile/dialog-profile.component';
+import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 
 
 
@@ -56,6 +59,7 @@ import { ChannelDirectEditMessageComponent } from './channel-direct-edit-message
 
 @NgModule({
   declarations: [
+    ChooseAvatarComponent,
     AppComponent,
     StartScreenComponent,
     MainComponent,
@@ -80,8 +84,10 @@ import { ChannelDirectEditMessageComponent } from './channel-direct-edit-message
     SearchbarComponent,
     DialogDeleteCommentComponent,
     ChannelDirectEditMessageComponent,
+    DialogProfileComponent,
   ],
   imports: [
+    AngularFireStorageModule,
     MatInputModule,
     MatTooltipModule,
     EmojiComponent,

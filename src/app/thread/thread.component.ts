@@ -1,11 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from '../../services/emoji.service';
+import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 
 
 @Component({
@@ -14,6 +15,8 @@ import { EmojiService } from '../../services/emoji.service';
   styleUrls: ['./thread.component.scss']
 })
 export class ThreadComponent implements OnInit {
+
+  @ViewChild('messageTextarea') messageTextarea: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ''
@@ -28,8 +31,8 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: boolean;
-  array:any
-  
+  open_users: boolean;
+
 
 
 
@@ -47,9 +50,9 @@ export class ThreadComponent implements OnInit {
 
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
-    this.fsDataThreadService.getMessages()   
+    this.fsDataThreadService.getMessages()
   }
 
 
@@ -71,16 +74,15 @@ export class ThreadComponent implements OnInit {
     let user = this.authenticationService.userData.user_name
     this.emojiPicker_open = false
     this.fsDataThreadService.comments = this.emojiService.addEmoji($event, i, array, user)
-    console.log(this.fsDataThreadService.comments);
     this.fsDataThreadService.updateData()
   }
 
 
-  addOrRemoveEmojIinThread(i:number,j:number) {
+  addOrRemoveEmojIinThread(i: number, j: number) {
     let array = this.fsDataThreadService.comments
     let user = this.authenticationService.userData.user_name
     this.hovered_emoji = false
-    this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i,j, array, user )
+    this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i, j, array, user)
     this.fsDataThreadService.updateData()
   }
 
@@ -88,6 +90,7 @@ export class ThreadComponent implements OnInit {
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
+    if (this.open_users == true) this.open_users = false;
   };
 
 
@@ -101,17 +104,15 @@ export class ThreadComponent implements OnInit {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
-        user: this.authenticationService.userData.user_name,
         time: time_stamp,
-        avatar: '',
+        uid: this.authenticationService.getUid(),
         emoji_data: [],
         text_edited: false,
-        time_since: ''
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
-      if (this.fsDataThreadService.comments.length > 1) this.response = 'Antworten'
-      if (this.fsDataThreadService.comments.length < 2) this.response = 'Antwort'
+      if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
+      if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
     }
   }
 
@@ -192,8 +193,44 @@ export class ThreadComponent implements OnInit {
     this.emoji_index = j
   }
 
+
   closeShowReactUsers() {
     if (this.hovered_emoji == true) this.hovered_emoji = false
+  }
+
+
+  openUsers() {
+    this.open_users = true
+  }
+
+
+  addUserToTextarea(i: number) {
+    this.comment_value += '@' + this.authenticationService.all_users[i].user_name
+    this.messageTextarea.nativeElement.focus();
+  }
+
+
+  getImageUrl(uid: string): string {
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
+    return user.avatar
+  }
+
+  getUserName(uid:string) {
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
+    return user.user_name
+  }
+
+  getUserEmail(uid:string) {
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
+    return user.email
+  }
+
+
+  openProfile(uid: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'add-channel-dialog';
+    dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid) };
+    this.dialog.open(DialogProfileComponent, dialogConfig);
   }
 }
 

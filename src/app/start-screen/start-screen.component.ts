@@ -15,11 +15,14 @@ export class StartScreenComponent implements OnInit {
   d_none: boolean = false
   active: boolean = false
 
-  constructor(private firestoreService: AuthenticationService, private router: Router, public fsDataThreadService: FirestoreThreadDataService) {
+  constructor(
+    private firestoreService: AuthenticationService,
+    private router: Router,
+    public fsDataThreadService: FirestoreThreadDataService,
+    public authenticationService: AuthenticationService,
+  ) { }
 
-  }
-
-  ngOnInit(): void {    
+  ngOnInit(): void {
     setTimeout(() => this.animationStart = true, 1000);
     setTimeout(() => this.animationLogo = true, 2000);
     setTimeout(() => this.d_none = true, 2900);

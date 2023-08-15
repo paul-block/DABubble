@@ -1,5 +1,5 @@
 <div id="menu-container">
-    <span (click)="toggleDetails()">Profile</span>
+    <span (click)="toggleDetails()">Profil</span>
     <span (click)="signOut()">Log out</span>
 </div>
 
@@ -9,7 +9,7 @@
         <img class="sidebar-icon-hover" (click)="toggleDetails()" src="assets/img/icons/close.png" alt="">
     </div>
 
-    <img class="profileImg" src="assets/img/big_avatar/avatar_1.svg" alt="">
+    <img class="profileImg" [src]="authService.userData.avatar" alt="">
 
     <div class="middle-part">
         <div class="edit-container">
@@ -33,7 +33,7 @@
         <img (click)="toggleEditDetails()" class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="">
     </div>
 
-    <img class="profileImg" src="assets/img/big_avatar/avatar_1.svg" alt="">
+    <img class="profileImg" [src]="authService.userData.avatar" (click)="editAvatarImage()">
 
     <div class="middle-part">
 
@@ -60,5 +60,23 @@
         <button id="save-btn" mat-fab extended (click)="updateUserDetails()">Speichern</button>
 
     </div>
+</div>
 
+
+<div class="edit_avatar_div" *ngIf="editAvatarVisible">
+    <div class="header-container">
+        <span>Dein Profilbild bearbeiten</span>
+        <img (click)="closeEditAvatar()" class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="">
+    </div>
+    <img class="profileImg" [src]="authService.userData.avatar">
+    <span>Wähle einen Standard Avatar...</span>
+    <div class="avatar_images">
+        <div (click)="setAvatar(images[i])" *ngFor="let img of images; let i = index">
+            <img src="{{images[i]}}" alt="">
+        </div>
+    </div>
+    <span>oder lade selbst ein Bild hoch.</span>
+    <input id="fileInput" type="file" (change)="onFileSelected($event)">
+    <label class="upload_button" for="fileInput">Foto hochladen</label>
+    <div class="error" *ngIf="file_error">Bitte wähle ein Bildformat !</div>
 </div>

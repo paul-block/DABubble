@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { AuthenticationService } from 'src/services/authentication.service';
@@ -13,9 +13,12 @@ export class DesktopHeaderComponent {
   @ViewChild('profile') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   profileMenuRef: MatDialogRef<ProfileMenuComponent>;
   profileMenuOpen: boolean = false;
+  all_users: any[];
 
 
   constructor(private dialog: MatDialog, public authService: AuthenticationService) { }
+
+
 
   openProfileMenu() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();

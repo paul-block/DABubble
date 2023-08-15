@@ -28,7 +28,7 @@ export class FirestoreThreadDataService {
 
 
   async saveThread(data) {
-    this.comments.push(data)
+  this.comments.push(data)
     const docRef = doc(this.db, "threads", this.current_message_id);
     await updateDoc(docRef, {
       comments: this.comments

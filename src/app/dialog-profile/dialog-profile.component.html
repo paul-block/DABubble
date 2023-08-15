@@ -1,0 +1,26 @@
+<div id="profileDetails">
+    <div class="header-container">
+        <span>Profil</span>
+        <img class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="" (click)="close()">
+    </div>
+
+    <img class="profileImg" src="assets/img/big_avatar/avatar_1.svg" alt="">
+
+    <div class="middle-part">
+        <div class="edit-container">
+            <span id="name">{{ user_name }}</span>
+        </div>
+        <img id="status" src="assets/img/status/active.png" alt="">
+    </div>
+
+    <div class="email-container">
+        <img src="assets/img/mail.png" alt="">
+        <span id="email-headline">E-Mail-Adresse</span>
+        <span id="email-address">{{ user_email }}</span>
+    </div>
+
+    <div id="msg-btn" (click)="sendMsg()">
+        <img src="assets/img/icons/msg_icon.svg" alt="">
+        <span>Nachricht</span>
+    </div>
+</div>

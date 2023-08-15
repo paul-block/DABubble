@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, updateDoc, collection, getDocs } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot } from '@angular/fire/firestore';
+import { collection } from '@firebase/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from './channel.service';
+import { getStorage } from "firebase/storage";
+
 
 
 @Injectable({
@@ -23,15 +26,16 @@ export class AuthenticationService {
   userName: string
   addCertainUserValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
+  googleUser_exist: boolean;
+  all_users: any[];
 
 
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
     private router: Router,
-    public channelService: ChannelService
+    public channelService: ChannelService,
   ) {
-
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         setTimeout(() => this.getUserData(user.uid), 500);
@@ -40,8 +44,19 @@ export class AuthenticationService {
       } else {
         localStorage.setItem('user', 'null');
       }
+    });  
+    const dbRef = collection(this.db, "users");
+    onSnapshot(dbRef, docsSnap => {
+      const users:any[] = []
+      docsSnap.forEach(doc => {
+        users.push(doc.data())
+      })
+      this.all_users = users
+      console.log(this.all_users);
+      
     });
   }
+
 
   getUid() {
     const auth = getAuth();
@@ -49,11 +64,13 @@ export class AuthenticationService {
     return user.uid;
   }
 
+
   async getUserData(uid: string) {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
   }
+
 
   // Sign up with email/password
   async SignUp(email: string, password: string) {
@@ -72,6 +89,7 @@ export class AuthenticationService {
         window.alert(error.message)
     }
   }
+
 
   // Sign in with email/password
   async SignIn(email: string, password: string) {
@@ -95,17 +113,27 @@ export class AuthenticationService {
 
   async AuthLogin(provider: firebase.auth.AuthProvider | GoogleAuthProvider) {
     try {
-      const result = await this.afAuth
-        .signInWithPopup(provider).then((result) => {
-          this.userName = result.user.displayName
-          this.SetUserData(result.user);
-        });
-      this.signIn_successful = true
+      const result = await this.afAuth.signInWithPopup(provider);
+      this.userName = result.user.displayName;
+      await this.isEmailRegistered(result.user.email, result.user)
+      this.signIn_successful = true;
       setTimeout(() => this.signIn_successful = false, 3000);
     } catch (error) {
       window.alert(error.message);
     }
   }
+
+
+  async isEmailRegistered(email: string, user: firebase.User) {
+    (await this.getAllUsers()).forEach(element => {
+      if (element.email == email) {
+        this.googleUser_exist = true
+        return
+      }
+    });
+    if (this.googleUser_exist != true) await this.SetUserData(user);
+  }
+
 
   async ForgotPassword(passwordResetEmail: string) {
     await this.afAuth
@@ -120,16 +148,19 @@ export class AuthenticationService {
       });
   }
 
+
   async SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userDataFirestore = {
       uid: user.uid,
       email: user.email,
-      user_name: this.userName
+      user_name: this.userName,
+      avatar: '/assets/img/big_avatar/81. Profile.png'
     };
     await userRef.set(userDataFirestore, {
       merge: true,
     });
+    this.getUserData(user.uid)
   }
 
 
@@ -140,6 +171,7 @@ export class AuthenticationService {
     this.userData = []
   }
 
+
   async getAllUsers() {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
     let users = [];
@@ -149,6 +181,12 @@ export class AuthenticationService {
     return users;
   }
 
+
+   async getAllUsers2() {
+   
+  }
+
+
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
@@ -157,9 +195,11 @@ export class AuthenticationService {
     return filteredUser;
   }
 
+
   updateCertainUserValue(value: string): void {
     this.addCertainUserValue.next(value);
   }
+
 
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
@@ -179,4 +219,12 @@ export class AuthenticationService {
     }
   }
 
+
+  async setAvatarImage(image: string) {
+    const docRef = doc(this.db, "users", this.getUid());
+    await updateDoc(docRef, {
+      avatar: image
+    });
+    this.getUserData(this.getUid())
+  }
 }
