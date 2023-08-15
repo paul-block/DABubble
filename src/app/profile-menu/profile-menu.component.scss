@@ -60,6 +60,7 @@
 
         .profileImg {
             width: 200px;
+            height: 200px;
             border-radius: 50%;
         }
 
@@ -146,7 +147,9 @@
 
     .profileImg {
         width: 200px;
+        height: 200px;
         border-radius: 50%;
+        cursor: pointer;
     }
 
     .middle-part {
