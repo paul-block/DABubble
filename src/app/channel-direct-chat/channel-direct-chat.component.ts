@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
@@ -8,6 +8,7 @@ import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DirectChatService } from 'src/services/directchat.service';
 import { MessagesService } from 'src/services/messages.service';
+import { EmojiService } from 'src/services/emoji.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class ChannelDirectChatComponent {
 
   messageCreator: boolean = false;
   toggleEditMessage: boolean = false;
-  toggleReactionEmojis: boolean = false;
+  // toggleReactionEmojis: boolean = false;
   isEditChannelDialogOpen: boolean = false;
   isEditMembersDialogOpen: boolean = false;
   isAddMembersDialogOpen: boolean = false;
@@ -33,12 +34,16 @@ export class ChannelDirectChatComponent {
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;
 
+  hovered_emoji: boolean = false
+  emoji_index: number;
+
   constructor(
     private dialog: MatDialog,
     public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public dataDirectChatService: DirectChatService,
     public msgService: MessagesService,
+    public emojiService: EmojiService,
   ) { }
 
   editChannel() {
@@ -103,19 +108,27 @@ export class ChannelDirectChatComponent {
 
 
   resetToggledAreas() {
-    this.toggleReactionEmojis = false;
+    this.emojiService.emojiPicker_open = false;
     this.toggleEditMessage = false;
+    this.emojiService.picker_reaction_bar = false;
   }
 
   toggleArea(toggleArea) {
     switch (toggleArea) {
       case 'more':
-        this.toggleReactionEmojis = false;
+        this.emojiService.emojiPicker_open = false;
+        this.emojiService.picker_reaction_bar = false;
         this.toggleEditMessage = !this.toggleEditMessage;
         break;
       case 'emojis':
         this.toggleEditMessage = false;
-        this.toggleReactionEmojis = !this.toggleReactionEmojis;
+        this.emojiService.picker_reaction_bar = false;
+        this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
+        break;
+      case 'emojiReactionBar':
+        this.toggleEditMessage = false;
+        this.emojiService.emojiPicker_open = false;
+        this.emojiService.picker_reaction_bar = !this.emojiService.picker_reaction_bar;
         break;
       default:
         break;
@@ -132,28 +145,32 @@ export class ChannelDirectChatComponent {
 
   }
 
-  messageDateRange(chatMessage) {
-    this.msgService.getTimestampDate(chatMessage.created_At);
-    const messageDate = chatMessage.created_At.toDate();
-
-    if (this.msgService.previousMessageDate === null) {
-      this.msgService.previousMessageDate = messageDate;
-      return true; 
-    }
-
-    const previousDate = this.msgService.previousMessageDate;
-    this.msgService.previousMessageDate = messageDate;
-
-    if (
-      messageDate.getDate() !== previousDate.getDate() ||
-      messageDate.getMonth() !== previousDate.getMonth() ||
-      messageDate.getFullYear() !== previousDate.getFullYear()
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+  addEmojiInMessage($event: any, i: number, chatMessage) {
+    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let user = this.authService.userData.user_name;
+    this.emojiService.emojiPicker_open = false;
+    this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
+    this.msgService.updateMessagesReactions(chatMessage);
   }
+
+  addOrRemoveEmojiClickEmojis(i: number, j: number, chatMessage) {
+    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let user = this.authService.userData.user_name;
+    this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
+    this.msgService.updateMessagesReactions(chatMessage);
+  }
+
+
+  showReactUsers(i: number, j: number) {
+    if (this.hovered_emoji == false) this.hovered_emoji = true
+    this.emoji_index = j
+  }
+
+
+  closeShowReactUsers() {
+    if (this.hovered_emoji == true) this.hovered_emoji = false
+  }
+
 
   public openThread(value: boolean) {
     this.threadOpen.emit(value)

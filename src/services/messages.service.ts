@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getDoc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
@@ -16,10 +16,12 @@ export class MessagesService {
   editMessageText = false;
   readyToSend: boolean = false;
   messageDateRange: string = '';
+  emoji_data = [];
+
 
   constructor(
     public directChatService: DirectChatService,
-    public authService: AuthenticationService,
+    public authService: AuthenticationService
   ) { }
 
   checkIfEmpty() {
@@ -42,9 +44,11 @@ export class MessagesService {
       const messagesCollectionRef = await addDoc(collection(this.db, 'chats', this.directChatService.currentChatID, 'messages'), {
         chat_message: this.messageText,
         user_Sender_ID: user.uid,
-        user_Sender_Name: await this.authService.getNameFromUid(user.uid),
+        user_Sender_Name: await this.authService.userData.user_name,
         created_At: firebase.firestore.FieldValue.serverTimestamp(),
-        chat_message_edited: false
+        chat_message_edited: false,
+        avatar: '',
+        emoji_data: [],
       })
 
       const newMessageID = messagesCollectionRef.id;
@@ -63,6 +67,7 @@ export class MessagesService {
     this.previousMessageDate === null
     const chatMessagesRef = collection(this.db, 'chats', this.directChatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
+
 
     docDirectChatMessagesSnapshot.forEach((doc) => {
       const userData = doc.data();
@@ -131,4 +136,41 @@ export class MessagesService {
     }
   }
 
+  async updateMessagesReactions(chatMessage) {
+    const docRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', chatMessage.message_ID);
+    await updateDoc(docRef, {
+      emoji_data: this.emoji_data,
+    }).then(() => {
+      console.log(chatMessage.message_ID);
+
+    });
+  }
+
+
+  messageTimeStampRange(chatMessage) {
+    return true;
+    setTimeout(() => {
+      this.getTimestampDate(chatMessage.created_At);
+      const messageDate = chatMessage.created_At.toDate();
+
+      if (this.previousMessageDate === null) {
+        this.previousMessageDate = messageDate;
+        return true;
+      }
+
+      const previousDate = this.previousMessageDate;
+      this.previousMessageDate = messageDate;
+
+      if (
+        messageDate.getDate() !== previousDate.getDate() ||
+        messageDate.getMonth() !== previousDate.getMonth() ||
+        messageDate.getFullYear() !== previousDate.getFullYear()
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }, 0);
+
+  }
 }

@@ -6,7 +6,11 @@
 }
 
 .d_block {
-    display: block;
+    display: block !important;
+}
+
+.d_flex{
+    display: flex !important;
 }
 
 html,

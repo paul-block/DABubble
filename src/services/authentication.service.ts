@@ -179,22 +179,4 @@ export class AuthenticationService {
     }
   }
 
-
-  async getNameFromUid(uid: string) {
-    try {
-      const userDocRef = doc(this.db, 'users', uid);
-      const userDocSnapshot = await getDoc(userDocRef);
-
-      if (userDocSnapshot.exists) {
-        const userData = userDocSnapshot.data();
-        return userData.user_name;
-      } else {
-        console.log('Benutzer nicht gefunden');
-        return 'deleted User';
-      }
-    } catch (error) {
-      console.error('Fehler beim Abrufen des Benutzernamens:', error);
-      return 'user not existing';
-    }
-  }
 }

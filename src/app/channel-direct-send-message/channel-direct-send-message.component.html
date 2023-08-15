@@ -1,14 +1,22 @@
 <section class="write-new-message">
-    <textarea name="" id="" cols="10" rows="2" [placeholder]="placeholder" [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()"></textarea>
+
+    <textarea name="" id="" cols="10" rows="2" [placeholder]="placeholder" [(ngModel)]="msgService.messageText"
+        (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
             <mat-icon>add</mat-icon>
-            <div></div>
-            <mat-icon>mood</mat-icon>
+            <div class="parting-line"></div>
+            <div class="z_index">
+                <emoji-mart [class.d_block]="emojiService.emojiPicker_open && emojiService.picker_index == -2" class="emoji_picker"
+                    (emojiClick)="addEmojitoTextarea($event)">
+                </emoji-mart>
+                <mat-icon (click)="emojiService.openEmojiPicker(-2);">mood</mat-icon>
+            </div>
+
             <mat-icon>alternate_email</mat-icon>
         </div>
-        <button [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend" class="send-message"
-            (click)="msgService.newMessage()">
+        <button [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend"
+            class="send-message" (click)="msgService.newMessage()">
             <mat-icon>send</mat-icon>
         </button>
     </div>

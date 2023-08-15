@@ -5,7 +5,10 @@ import { Injectable } from '@angular/core';
 })
 export class EmojiService {
   emoji_exist: boolean = false
-
+  textMessage: string = '';
+  emojiPicker_open: boolean = false;
+  picker_index: number;
+  picker_reaction_bar: boolean = false;
   constructor() { }
 
 
@@ -43,7 +46,7 @@ export class EmojiService {
   }
 
 
-  checkIfEmojiExist(emoji: string, i: number, array, user:string) {
+  checkIfEmojiExist(emoji: string, i: number, array, user: string) {
     array[i].emoji_data.forEach(element => {
       if (element.emoji == emoji) {
         this.emoji_exist = true
@@ -55,12 +58,27 @@ export class EmojiService {
             let index = array[i].emoji_data.indexOf(element)
             array[i].emoji_data.splice(index, 1)
           }
-        }
-        else
-          element.react_users.push(user)
-        element.count += 1
+        } else
+          element.react_users.push(user);
+        element.count += 1;
       }
     });
+  }
+
+
+  addEmojitoTextarea($event: any) {
+    this.emojiPicker_open = false;
+    let unicodeCode: string = $event.emoji.unified;
+    let emoji = String.fromCodePoint(parseInt(unicodeCode, 16));
+    this.textMessage += emoji;
+  }
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  };
+
+  openEmojiPicker(i: number) {
+    this.picker_index = i;
   }
 }
 

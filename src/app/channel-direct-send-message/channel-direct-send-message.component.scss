@@ -75,13 +75,6 @@ $hover-transition: all ease-in-out 125ms;
         color: black;
     }
 
-    div {
-        height: 40px;
-        width: 1px;
-        background-color: #ADB0D9;
-        margin: 8px;
-    }
-
     mat-icon {
         border-radius: 100%;
         padding: 8px;
@@ -95,4 +88,27 @@ $hover-transition: all ease-in-out 125ms;
             font-weight: 600;
         }
     }
+}
+
+.z_index {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    position: relative;
+}
+
+.emoji_picker {
+    display: none;
+    z-index: 10;
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+}
+
+.parting-line {
+    height: 40px;
+    width: 1px;
+    background-color: #ADB0D9;
+    margin: 8px;
 }
