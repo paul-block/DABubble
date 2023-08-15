@@ -12,7 +12,7 @@
 
     <div class="thread_content">
         <div class="message_div">
-            <div class="bottom_line" *ngIf="fsDataThreadService.comments.length > 0">
+            <div class="bottom_line" *ngIf="fsDataThreadService.comments?.length > 0">
                 <div>
                     <span>{{fsDataThreadService.comments.length}} Antwort</span>
                     <div *ngIf="fsDataThreadService.comments?.length > 1">en</div>
@@ -69,7 +69,7 @@
                     <img src="/assets/img/icons/more_vert.png">
                 </div>
             </div>
-            <img src="/assets/img/small_avatar/avatar_1.svg" alt="">
+            <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.comments[i].uid)">
             <div class="message_sub">
                 <div class="user_time">
                     <span>{{fsDataThreadService.comments[i].user}}</span>
@@ -109,9 +109,9 @@
         <div class="type_message">
             <div class="at_user_div" *ngIf="open_users">
                 <div>
-                    <div class="user" *ngFor="let user of all_users.__zone_symbol__value; let i = index" (click)="addUserToTextarea(i)" >
+                    <div class="user" *ngFor="let user of all_users; let i = index" (click)="addUserToTextarea(i)" >
                         <img class="user_img" src="/assets/img/00c.Charaters.png" alt="">
-                        <div>{{all_users.__zone_symbol__value[i].user_name}}</div>
+                        <div>{{all_users[i].user_name}}</div>
                     </div>
                 </div>
                 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { Router } from '@angular/router';
 
@@ -22,7 +22,8 @@ export class SignInComponent {
   async signIn() {
     await this.authenticationService.GoogleAuth()
     if (this.authenticationService.signIn_successful) {
-      setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+      if(this.authenticationService.googleUser_exist)  setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+      else setTimeout(() => this.router.navigateByUrl('/choose-avatar'), 1900);
     }
   }
 

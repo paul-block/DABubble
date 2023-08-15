@@ -6,13 +6,15 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
+import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 
 const routes: Routes = [
   
   {path: '', component: StartScreenComponent, children: [
     {path: 'sign-in', component: SignInComponent},
     {path: 'sign-up', component: SignUpComponent},
-    {path: 'forgot-pw', component: ForgotPasswordComponent}
+    {path: 'forgot-pw', component: ForgotPasswordComponent},
+    {path: 'choose-avatar', component: ChooseAvatarComponent}
     
   ]},
   {path: 'new-pw', component: NewPasswordComponent},

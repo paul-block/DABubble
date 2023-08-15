@@ -30,9 +30,9 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: boolean;
-  all_users:any
+  all_users: any
   open_users: boolean;
-  
+
 
 
 
@@ -50,12 +50,10 @@ export class ThreadComponent implements OnInit {
 
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
-    this.fsDataThreadService.getMessages()   
-    this.all_users = this.authenticationService.getAllUsers()
-    console.log(this.all_users);
-    
+    this.fsDataThreadService.getMessages()
+     this.all_users = await this.authenticationService.getAllUsers()
   }
 
 
@@ -81,11 +79,11 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  addOrRemoveEmojIinThread(i:number,j:number) {
+  addOrRemoveEmojIinThread(i: number, j: number) {
     let array = this.fsDataThreadService.comments
     let user = this.authenticationService.userData.user_name
     this.hovered_emoji = false
-    this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i,j, array, user )
+    this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i, j, array, user)
     this.fsDataThreadService.updateData()
   }
 
@@ -109,15 +107,14 @@ export class ThreadComponent implements OnInit {
         comment: this.comment_value,
         user: this.authenticationService.userData.user_name,
         time: time_stamp,
-        avatar: '',
+        uid: this.authenticationService.getUid(),
         emoji_data: [],
         text_edited: false,
-        time_since: ''
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
-      if (this.fsDataThreadService.comments.length > 1) this.response = 'Antworten'
-      if (this.fsDataThreadService.comments.length < 2) this.response = 'Antwort'
+      if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
+      if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
     }
   }
 
@@ -209,9 +206,17 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  addUserToTextarea(i:number) {
+  addUserToTextarea(i: number) {
     this.comment_value += '@' + this.all_users.__zone_symbol__value[i].user_name
     this.messageTextarea.nativeElement.focus();
+  }
+
+
+  getImageUrl(uid:string):string {
+    const user = this.all_users.find(element => element.uid === uid);
+    console.log(this.all_users);
+    
+    return user.avatar
   }
 }
 
