@@ -72,8 +72,6 @@ export class FirestoreThreadDataService {
   async loadThread() {
     const docRef = doc(this.db, "threads", this.current_message_id);
     const docSnap = await getDoc(docRef);
-    console.log(docSnap.data());
-    
     if (docSnap.data() == undefined) {
       let thread_data = {
         comments: []
