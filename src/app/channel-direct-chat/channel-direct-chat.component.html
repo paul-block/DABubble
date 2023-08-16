@@ -23,7 +23,6 @@
 
     </div>
 </header>
-
 <section class="chat-messages">
     <div>
         <h3>Testnachrichten</h3>
@@ -33,9 +32,9 @@
     </div>
     <div class="chat-message-container"
         *ngFor="let chatMessage of dataDirectChatService.directChatMessages; let i = index;">
-        <div *ngIf="msgService.messageTimeStampRange(chatMessage)" class="chat-messages-date">
+        <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== dataDirectChatService.directChatMessages[i - 1].created_At.toDate().toDateString()" class="chat-messages-date">
             <div class="parting-line"></div>
-            <div class="messages-date">{{ msgService.messageDateRange }}</div>
+            <div class="messages-date">{{ msgService.formatDate(chatMessage.created_At) }}</div>
         </div>
         <div [ngStyle]="{'justify-content':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'flex-start' : 'flex-end' }"
             class="chat-message" (mouseleave)="resetToggledAreas()">

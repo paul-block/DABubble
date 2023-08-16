@@ -116,25 +116,7 @@ export class MessagesService {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`;
   }
 
-  getTimestampDate(timestamp) {
-    const today = new Date();
-    const date = timestamp.toDate();
-
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long'
-    };
-    if (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    ) {
-      this.messageDateRange = 'Heute';
-    } else {
-      this.messageDateRange = new Intl.DateTimeFormat('de-DE', options).format(date);
-    }
-  }
+  
 
   async updateMessagesReactions(chatMessage) {
     const docRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', chatMessage.message_ID);
@@ -147,30 +129,15 @@ export class MessagesService {
   }
 
 
-  messageTimeStampRange(chatMessage) {
-    return true;
-    setTimeout(() => {
-      this.getTimestampDate(chatMessage.created_At);
-      const messageDate = chatMessage.created_At.toDate();
+  formatDate(timestamp): string {
+    const date = timestamp.toDate();
+    const now = new Date();
 
-      if (this.previousMessageDate === null) {
-        this.previousMessageDate = messageDate;
-        return true;
-      }
-
-      const previousDate = this.previousMessageDate;
-      this.previousMessageDate = messageDate;
-
-      if (
-        messageDate.getDate() !== previousDate.getDate() ||
-        messageDate.getMonth() !== previousDate.getMonth() ||
-        messageDate.getFullYear() !== previousDate.getFullYear()
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }, 0);
-
+    if (date.toDateString() === now.toDateString()) {
+      return 'Heute';
+    } else {
+      const options = { weekday: 'long', day: 'numeric', month: 'long' };
+      return date.toLocaleDateString('de-DE', options);
+    }
   }
 }
