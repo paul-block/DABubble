@@ -1,7 +1,7 @@
 <div class="container">
     <header>
         <span>Neue Nachricht</span>
-        <input type="text" placeholder="An: #channel, oder @jemand oder E-Mail-Adresse">
+        <input [(ngModel)]="inputValue" type="text" placeholder="An: #channel, oder @jemand oder E-Mail-Adresse">
     </header>
 
     <app-channel-direct-send-message></app-channel-direct-send-message>

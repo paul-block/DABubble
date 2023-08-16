@@ -44,15 +44,15 @@
     <div class="results" *ngIf="filteredChannels.length > 0 && searchValue.length > 0">
         <div class="result-row" *ngFor="let channel of filteredChannels">
             <img src="assets/img/icons/workspaces.svg" alt="">
-            <span>#</span>
+            <span class="channel-tag">#</span>
             <span>{{ channel }}</span>
         </div>
     </div>
 
     <div class="results" *ngIf="filteredUsers.length > 0 && searchValue.length > 0">
-        <div class="result-row" *ngFor="let user of filteredUsers" (click)="openProfile()">
+        <div class="result-row" *ngFor="let user of filteredUsers" (click)="openProfile(user)">
             <img src="assets/img/icons/account_circle.svg" alt="">
-            <span>{{ user }}</span>
+            <span>{{ user.user_name }}</span>
         </div>
     </div>
 

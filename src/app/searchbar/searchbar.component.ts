@@ -18,11 +18,11 @@ export class SearchbarComponent {
   isLoading = false;
   searchValue = '';
 
-  usersSet: Set<string> = new Set();
+  usersSet: Set<any> = new Set();
   channelsSet: Set<string> = new Set();
   filteredChannelMessagesSet: Set<string> = new Set();
 
-  filteredUsers: Array<string> = [];
+  filteredUsers: Array<any> = [];
   filteredChannels: Array<string> = [];
   filteredChannelMessages: Array<string> = [];
 
@@ -78,7 +78,7 @@ export class SearchbarComponent {
       channel.toLowerCase().startsWith(this.searchValue)
     );
     this.filteredUsers = Array.from(this.usersSet).filter(user =>
-      user.toLowerCase().startsWith(this.searchValue.toLowerCase())
+      user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
     );
     this.filteredChannelMessages = Array.from(this.filteredChannelMessagesSet);
 
@@ -87,12 +87,21 @@ export class SearchbarComponent {
 }    
 }
 
+    // async search(collectionName: string) {
+    //   const collectionRef = collection(this.db, collectionName);
+    //   const querySnapshot = await getDocs(collectionRef);
+    //   querySnapshot.forEach((doc) => {
+    //     if (collectionName === 'channels') this.channelsSet.add(doc.data().channelName);
+    //     if (collectionName === 'users') this.usersSet.add(doc.data().user_name);
+    //   });
+    // }
+
     async search(collectionName: string) {
       const collectionRef = collection(this.db, collectionName);
       const querySnapshot = await getDocs(collectionRef);
       querySnapshot.forEach((doc) => {
         if (collectionName === 'channels') this.channelsSet.add(doc.data().channelName);
-        if (collectionName === 'users') this.usersSet.add(doc.data().user_name);
+        if (collectionName === 'users') this.usersSet.add(doc.data());
       });
     }
 
@@ -111,25 +120,26 @@ export class SearchbarComponent {
               const messageSender = messageDoc.data().user_name;
   
               if (message.toLowerCase().startsWith(this.searchValue.toLowerCase())) {
-                  const combinedMessage = `${message} in #${channelName} von: ${messageSender}`;
+                  const combinedMessage = `"${message}" in #${channelName} von: ${messageSender}`;
                   this.filteredChannelMessagesSet.add(combinedMessage);
               }
           });
       }
   }
   
-  show() {
-    if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||  
-        this.searchValue.length > 0 && this.filteredUsers.length > 0 || 
-        this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
-          this.showResults = true; 
-        } else this.showResults = false;
-      }
+    show() {
+      if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||  
+          this.searchValue.length > 0 && this.filteredUsers.length > 0 || 
+          this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
+            this.showResults = true; 
+          } else this.showResults = false;
+        }
 
-      openProfile() {
+     openProfile(user) {
+        this.searchValue = '';
         const dialogConfig = new MatDialogConfig();
         dialogConfig.panelClass = 'add-channel-dialog';
-        dialogConfig.data = { user_name: 'Test Name', user_email: 'testhausen@test.com' };
+        dialogConfig.data = { user_name: user.user_name, user_email: user.email, user_id: user.uid, user_status: user.status };
 
         this.dialog.closeAll();
       
@@ -139,5 +149,5 @@ export class SearchbarComponent {
         this.profileRef.afterClosed().subscribe(() => {
           this.profileRefOpen = false;
         });
-      }
+    }
 }

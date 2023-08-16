@@ -4,22 +4,31 @@
         <img class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="" (click)="close()">
     </div>
 
-    <img  class="profileImg" [src]="getImageUrl(user_id)" alt="">
+    <img class="profileImg" [src]="getImageUrl(user_id)" alt="">
 
     <div class="middle-part">
         <div class="edit-container">
             <span id="name">{{ user_name }}</span>
         </div>
-        <img id="status" src="assets/img/status/active.png" alt="">
+        <div class="status">
+            <svg [ngClass]="{'offline': user_status === 'Abwesend'}" width="16" height="17" viewBox="0 0 16 17"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8.5" r="8" fill="#92C83E" />
+            </svg>
+            <span [ngClass]="{'offline': user_status === 'Abwesend'}"> {{ user_status }}</span>
+        </div>
     </div>
 
     <div class="email-container">
-        <img src="assets/img/mail.png" alt="">
-        <span id="email-headline">E-Mail-Adresse</span>
+        <div>
+            <img src="assets/img/mail.png" alt="">
+            <span id="email-headline">E-Mail-Adresse</span>
+        </div>
+
         <span id="email-address">{{ user_email }}</span>
     </div>
 
-    <div id="msg-btn" (click)="sendMsg()">
+    <div id="msg-btn" (click)="sendMsg(user_name)">
         <img src="assets/img/icons/msg_icon.svg" alt="">
         <span>Nachricht</span>
     </div>
