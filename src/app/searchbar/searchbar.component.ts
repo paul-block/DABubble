@@ -75,7 +75,7 @@ export class SearchbarComponent {
     await this.searchMessagesInChannels();
 
     this.filteredChannels = Array.from(this.channelsSet).filter(channel => 
-      channel.toLowerCase().startsWith(this.searchValue.toLowerCase())
+      channel.toLowerCase().startsWith(this.searchValue)
     );
     this.filteredUsers = Array.from(this.usersSet).filter(user =>
       user.toLowerCase().startsWith(this.searchValue.toLowerCase())
