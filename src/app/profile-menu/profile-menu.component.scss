@@ -336,3 +336,28 @@ input[type="file"] {
     color: red;
     font-size: 20px;
 }
+
+.buttons {
+    width: 100%;
+    justify-content: space-between;
+    display: flex;
+}
+
+.save_button {
+    transition: 200ms;
+    font-weight: 700;
+    font-size: 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #444DF2;
+    border-radius: 25px;
+    width: 137px;
+    height: 49px;
+
+    &:hover {
+        background-color: #797EF3;
+        cursor: pointer;
+    }
+}

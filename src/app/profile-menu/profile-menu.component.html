@@ -76,7 +76,10 @@
         </div>
     </div>
     <span>oder lade selbst ein Bild hoch.</span>
-    <input id="fileInput" type="file" (change)="onFileSelected($event)">
-    <label class="upload_button" for="fileInput">Foto hochladen</label>
-    <div class="error" *ngIf="file_error">Bitte wähle ein Bildformat !</div>
+    <div class="buttons">
+        <input id="file" type="file" (change)="onFileSelected($event)">
+        <label class="upload_button" for="file">Foto hochladen</label>
+        <div class="save_button" (click)="saveNewAvatar()">Speichern</div>
+    </div>
+    <!--- <div class="error" *ngIf="file_error">Bitte wähle ein Bildformat !</div> -->
 </div>
