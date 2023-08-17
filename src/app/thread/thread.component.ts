@@ -88,6 +88,7 @@ export class ThreadComponent implements OnInit {
 
 
   addOrRemoveEmojIinThread(i: number, j: number) {
+    this.fsDataThreadService.current_changed_index = i
     let array = this.fsDataThreadService.comments
     let user = this.authenticationService.userData.user_name
     this.hovered_emoji = false

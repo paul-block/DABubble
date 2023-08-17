@@ -1,6 +1,6 @@
-import { Injectable,  } from '@angular/core';
+import { Injectable, } from '@angular/core';
 import { doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
-import { getFirestore, collection  } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
@@ -20,7 +20,7 @@ import { distinctUntilChanged, distinctUntilKeyChanged, takeUntil } from 'rxjs/o
 
 export class FirestoreThreadDataService {
 
-  private destroy$: Subject<void> = new Subject();
+
   db = getFirestore();
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
@@ -31,20 +31,19 @@ export class FirestoreThreadDataService {
   comments: any[] = []
   detailsVisible: boolean = false;
   selectedFile: File = null;
-  fileType: string | undefined;
-  documentData: any = {};
- 
+  current_changed_index: number
+
 
 
   constructor(public authenticationService: AuthenticationService,
     private storage: AngularFireStorage,
     private angularFireDatabase: AngularFireDatabase,
     private firestore: AngularFirestore
-  ) { 
-   
+  ) {
+
   }
-    
-  
+
+
 
 
   async saveThread(data) {
@@ -87,7 +86,7 @@ export class FirestoreThreadDataService {
   validateIdFromMessage(i: number) {
     this.current_message_id = this.channel_messages[i].id
     this.loadThread(this.current_message_id)
- 
+
   }
 
 
@@ -111,34 +110,23 @@ export class FirestoreThreadDataService {
   }
 
   async onFileSelected(event: any) {
-   
-}
 
-async loadThread(documentId: string) {
-  const docRef = doc(this.db, 'threads', documentId);
-  onSnapshot(doc(this.db, "threads", documentId), async (doc) => {
-    const changedData = doc.data();
-    
-    
-    if (changedData) {
-      this.comments = changedData.comments
-   
-    } else {
-      let thread_data = {
-        comments:  []
+  }
+
+  async loadThread(documentId: string) {
+    const docRef = doc(this.db, 'threads', documentId);
+    onSnapshot(doc(this.db, "threads", documentId), async (doc) => {
+      const changedData = doc.data();
+      if (changedData) {
+        this.comments = changedData.comments
+      } else {
+        let thread_data = {
+          comments: []
+        }
+        await setDoc(docRef, thread_data);
       }
-      await setDoc(docRef, thread_data);
-    }
-  });
-}
-
-
-
-
-
-
-
-
+    });
+  }
 }
 
 

@@ -91,7 +91,7 @@ export class ProfileMenuComponent {
   setAvatar(image: string) {
     this.file_error = false
     this.authService.setAvatarImage(image)
-    this.imageUrl = image
+   
   }
 
 
@@ -118,7 +118,7 @@ export class ProfileMenuComponent {
   }
 
   saveNewAvatar() {
-    this.setAvatar(this.imageUrl)
+    this.setAvatar(this.authService.userData.avatar)
     this.onNoClick()
   }
 
