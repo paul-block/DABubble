@@ -7,10 +7,10 @@
             <mat-icon>add</mat-icon>
             <div class="parting-line"></div>
             <div class="z_index">
-                <emoji-mart [class.d_block]="emojiService.emojiPicker_open && emojiService.picker_index == -2" class="emoji_picker"
-                    (emojiClick)="addEmojitoTextarea($event)">
+                <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2" class="emoji_picker"
+                    (emojiClick)="addEmojitoTextarea($event);">
                 </emoji-mart>
-                <mat-icon (click)="emojiService.openEmojiPicker(-2);">mood</mat-icon>
+                <mat-icon (click)="toggleEmojiPicker(); emojiService.openEmojiPicker(-2);">mood</mat-icon>
             </div>
 
             <mat-icon>alternate_email</mat-icon>

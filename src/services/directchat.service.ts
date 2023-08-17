@@ -76,5 +76,6 @@ export class DirectChatService {
       console.error("Kein Benutzer ist eingeloggt");
     }
   }
+  
 
 }

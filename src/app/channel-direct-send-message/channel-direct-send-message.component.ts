@@ -23,4 +23,9 @@ export class ChannelDirectSendMessageComponent {
     this.msgService.messageText = this.emojiService.textMessage;
     this.msgService.checkIfEmpty();
   }
+
+  toggleEmojiPicker() {    
+    this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
+  }
+
 }

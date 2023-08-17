@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
@@ -23,18 +23,21 @@ export class ChannelDirectChatComponent {
 
   messageCreator: boolean = false;
   toggleEditMessage: boolean = false;
-  // toggleReactionEmojis: boolean = false;
   isEditChannelDialogOpen: boolean = false;
   isEditMembersDialogOpen: boolean = false;
   isAddMembersDialogOpen: boolean = false;
   @ViewChild('editChannelREF') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   @ViewChild('editMembersREF') public ElementEditMembersRef: ElementRef<HTMLDivElement>;
   @ViewChild('addMembersREF') public ElementAddMembersRef: ElementRef;
+  @ViewChild('emojiContainerREF') public ElementChatContainerRef: ElementRef;
+  @ViewChildren('emojiMessagePopupREF') ElementEmojiMessagePopupsRef: QueryList<ElementRef>;
+  @ViewChildren('emojiPopupReactionBarREF') ElementEmojiPopupReactionBarRef: QueryList<ElementRef>;
+
   dialogEditChannelRef: MatDialogRef<DialogEditChannelComponent>;
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;
 
-  hovered_emoji: boolean = false
+  hovered_emoji: boolean = false;
   emoji_index: number;
 
   constructor(
@@ -45,6 +48,7 @@ export class ChannelDirectChatComponent {
     public msgService: MessagesService,
     public emojiService: EmojiService,
   ) { }
+
 
   editChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
@@ -63,6 +67,7 @@ export class ChannelDirectChatComponent {
       this.isEditChannelDialogOpen = false;
     });
   }
+
 
   editMembers() {
     const rect = this.ElementEditMembersRef.nativeElement.getBoundingClientRect();
@@ -87,6 +92,7 @@ export class ChannelDirectChatComponent {
 
   }
 
+
   addMembers() {
     const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
@@ -103,7 +109,6 @@ export class ChannelDirectChatComponent {
     this.dialogAddMembersRef.afterClosed().subscribe(() => {
       this.isAddMembersDialogOpen = false;
     });
-
   }
 
 
@@ -112,6 +117,7 @@ export class ChannelDirectChatComponent {
     this.toggleEditMessage = false;
     this.emojiService.picker_reaction_bar = false;
   }
+
 
   toggleArea(toggleArea) {
     switch (toggleArea) {
@@ -135,6 +141,7 @@ export class ChannelDirectChatComponent {
     }
   }
 
+
   isMessageCreator(user_Sender_ID) {
     const currentUserID = this.authService.getUid();
     if (currentUserID) {
@@ -145,6 +152,7 @@ export class ChannelDirectChatComponent {
 
   }
 
+
   addEmojiInMessage($event: any, i: number, chatMessage) {
     let chatMessages = this.dataDirectChatService.directChatMessages;
     let user = this.authService.userData.user_name;
@@ -152,6 +160,7 @@ export class ChannelDirectChatComponent {
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);
   }
+
 
   addOrRemoveEmojiClickEmojis(i: number, j: number, chatMessage) {
     let chatMessages = this.dataDirectChatService.directChatMessages;

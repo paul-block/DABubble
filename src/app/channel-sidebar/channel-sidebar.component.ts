@@ -74,11 +74,11 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.newMsgService.toggleNewMsg();
   }
 
-  async searchChatAndGetMessages(userReceiverID){
+  async searchChatAndGetMessages(userReceiverID) {
     await this.directChatService.searchChat(userReceiverID);
     this.msgService.getMessages();
   }
-  
+
 
 }
 
