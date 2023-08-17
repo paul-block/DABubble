@@ -521,3 +521,8 @@ h1 {
     display: flex;
     gap: 5px;
 }
+
+.open-picker-below{
+    bottom: unset;
+    top: 30px;
+}

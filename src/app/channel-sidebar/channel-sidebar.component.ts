@@ -30,7 +30,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public channelService: ChannelService,
     public directChatService: DirectChatService,
     public msgService: MessagesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.sub = this.channelService.authorizedChannels.subscribe(channels => {
@@ -72,11 +72,11 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.newMsgService.toggleNewMsg();
   }
 
-  async searchChatAndGetMessages(userReceiverID){
+  async searchChatAndGetMessages(userReceiverID) {
     await this.directChatService.searchChat(userReceiverID);
     this.msgService.getMessages();
   }
-  
+
 
 }
 

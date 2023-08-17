@@ -4,6 +4,7 @@ import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDo
 import { getAuth } from '@angular/fire/auth';
 import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
+import { EmojiService } from './emoji.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,12 @@ export class MessagesService {
   messageDateRange: string = '';
   emoji_data = [];
 
-
   constructor(
     public directChatService: DirectChatService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public emojiService: EmojiService,
   ) { }
+
 
   checkIfEmpty() {
     if (this.messageText.length) {
@@ -63,6 +65,7 @@ export class MessagesService {
   }
 
   async getMessages() {
+    this.emojiService.resetInitializedEmojiRef();
     this.directChatService.directChatMessages = [];
     this.previousMessageDate === null
     const chatMessagesRef = collection(this.db, 'chats', this.directChatService.currentChatID, 'messages');
@@ -140,4 +143,5 @@ export class MessagesService {
       return date.toLocaleDateString('de-DE', options);
     }
   }
+  
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, QueryList } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,14 @@ export class EmojiService {
   emojiPicker_open: boolean = false;
   picker_index: number;
   picker_reaction_bar: boolean = false;
+  openPickerBelow: boolean = false;
+
+  initializedEmojiMessageRef = false;
+  initializedEmojiReactionBarRef = false;
+
+  ArrayEmojiMessagePopupsRef = [];
+  ArrayEmojiPopupReactionBarRef = [];
+
   constructor() { }
 
 
@@ -46,7 +54,7 @@ export class EmojiService {
   }
 
 
-  checkIfEmojiExist(emoji: string, i: number, array: { emoji_data: any[]; }[], user:string) {
+  checkIfEmojiExist(emoji: string, i: number, array: { emoji_data: any[]; }[], user: string) {
     array[i].emoji_data.forEach((element: { emoji: string; react_users: string[]; count: number; }) => {
       if (element.emoji == emoji) {
         this.emoji_exist = true
@@ -80,6 +88,62 @@ export class EmojiService {
   openEmojiPicker(i: number) {
     this.picker_index = i;
   }
+
+  async initEmojiMessageElements(ElementEmojiMessagePopupsRef: QueryList<ElementRef>) {
+
+    this.ArrayEmojiMessagePopupsRef = [];
+
+    ElementEmojiMessagePopupsRef.forEach((popupRef) => {
+      this.ArrayEmojiMessagePopupsRef.push(popupRef);
+    });
+    console.log(ElementEmojiMessagePopupsRef);
+  }
+
+  async initEmojiReactionBarElements(ElementEmojiPopupReactionBarRef: QueryList<ElementRef>) {
+    this.ArrayEmojiPopupReactionBarRef = [];
+
+    ElementEmojiPopupReactionBarRef.forEach((popupRef) => {
+      this.ArrayEmojiPopupReactionBarRef.push(popupRef);
+    });
+    console.log(ElementEmojiPopupReactionBarRef);
+  }
+
+
+  async checkOpenEmojiPopupAboveOrBelow(i: number, section: string, chatContainer: ElementRef, ElementEmojiMessagePopupsRef: QueryList<ElementRef>, ElementEmojiPopupReactionBarRef: QueryList<ElementRef>) {
+    const container = chatContainer.nativeElement.getBoundingClientRect();
+    const emojiPickerHeight = 427;
+
+    let emojiPopup: ElementRef;
+    if (section === 'Message') {
+      if (!this.initializedEmojiMessageRef) {
+        await this.initEmojiMessageElements(ElementEmojiMessagePopupsRef);
+      }
+      emojiPopup = this.ArrayEmojiMessagePopupsRef[i];
+      this.initializedEmojiMessageRef = true;
+
+    } else if (section === 'ReactionBar') {
+      if (!this.initializedEmojiReactionBarRef) {
+        await this.initEmojiReactionBarElements(ElementEmojiPopupReactionBarRef);
+      }
+      emojiPopup = this.ArrayEmojiPopupReactionBarRef[i];
+      this.initializedEmojiReactionBarRef = true;
+    }
+
+    const emojiPopupRect = emojiPopup.nativeElement.getBoundingClientRect();
+
+    if (emojiPopupRect.top - emojiPickerHeight < container.top) {
+      this.openPickerBelow = true;
+    } else {
+      this.openPickerBelow = false;
+    }
+  }
+
+
+  resetInitializedEmojiRef() {
+    this.initializedEmojiMessageRef = false;
+    this.initializedEmojiReactionBarRef = false;
+  }
+
 }
 
 
