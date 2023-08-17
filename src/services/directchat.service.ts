@@ -11,7 +11,8 @@ export class DirectChatService {
   db = getFirestore();
   currentChatID: string = 'noChatSelected';
   directChatMessages = [];
-
+  currentChatData;
+  messageToPlaceholder: string = 'Nachricht an ...';
 
   async searchChat(userReceiverID) {
     const auth = getAuth();
@@ -33,6 +34,7 @@ export class DirectChatService {
             if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
               chatExists = true;
               this.currentChatID = chatData.chat_ID;
+              this.currentChatData = chatData;
             }
           });
 
@@ -76,6 +78,6 @@ export class DirectChatService {
       console.error("Kein Benutzer ist eingeloggt");
     }
   }
-  
+
 
 }

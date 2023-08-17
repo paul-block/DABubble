@@ -149,7 +149,6 @@ export class ChannelDirectChatComponent {
     } else {
       return false;
     }
-
   }
 
 

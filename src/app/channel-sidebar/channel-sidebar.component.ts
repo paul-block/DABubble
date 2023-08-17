@@ -74,6 +74,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   async searchChatAndGetMessages(userReceiverID) {
     await this.directChatService.searchChat(userReceiverID);
+    // this.directChatService.textAreaMessageTo();
+    this.directChatService.messageToPlaceholder = 'Nachricht an' + this.directChatService.currentChatData.chat_Member_IDs[1];
     this.msgService.getMessages();
   }
 

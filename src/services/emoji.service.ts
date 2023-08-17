@@ -111,16 +111,14 @@ export class EmojiService {
 
   async checkOpenEmojiPopupAboveOrBelow(i: number, section: string, chatContainer: ElementRef, ElementEmojiMessagePopupsRef: QueryList<ElementRef>, ElementEmojiPopupReactionBarRef: QueryList<ElementRef>) {
     const container = chatContainer.nativeElement.getBoundingClientRect();
-    const emojiPickerHeight = 427;
-
     let emojiPopup: ElementRef;
+    
     if (section === 'Message') {
       if (!this.initializedEmojiMessageRef) {
         await this.initEmojiMessageElements(ElementEmojiMessagePopupsRef);
       }
       emojiPopup = this.ArrayEmojiMessagePopupsRef[i];
       this.initializedEmojiMessageRef = true;
-
     } else if (section === 'ReactionBar') {
       if (!this.initializedEmojiReactionBarRef) {
         await this.initEmojiReactionBarElements(ElementEmojiPopupReactionBarRef);
@@ -128,8 +126,12 @@ export class EmojiService {
       emojiPopup = this.ArrayEmojiPopupReactionBarRef[i];
       this.initializedEmojiReactionBarRef = true;
     }
+    this.decidePopupOpenAboveOrBelow(emojiPopup, container);
+  }
 
+  decidePopupOpenAboveOrBelow(emojiPopup, container){
     const emojiPopupRect = emojiPopup.nativeElement.getBoundingClientRect();
+    const emojiPickerHeight = 427;
 
     if (emojiPopupRect.top - emojiPickerHeight < container.top) {
       this.openPickerBelow = true;

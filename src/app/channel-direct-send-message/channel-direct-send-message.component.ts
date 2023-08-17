@@ -10,8 +10,10 @@ import { MessagesService } from 'src/services/messages.service';
   styleUrls: ['./channel-direct-send-message.component.scss']
 })
 export class ChannelDirectSendMessageComponent {
-  placeholder = 'Nachricht an #Entwicklerteam';
-
+  test:string = 'test';
+  placeholder = 'Nachricht an' + this.test;
+  
+  // placeholder = 'Nachricht an' + this.directChatService.currentChatData.chat_Member_IDs[0];
   constructor(
     public directChatService: DirectChatService,
     public msgService: MessagesService,
