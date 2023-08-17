@@ -12,12 +12,8 @@ export class NewMsgComponent {
   inputValue:string;
 
     constructor(public newMsgService:NewMsgService) {
-      if (this.newMsgService.directedFromProfileButton) {
-        this.inputValue = 'An: ' + this.newMsgService.user_name;
+    //  if (this.newMsgService.directedFromProfileButton) {
+    //    this.inputValue = 'An: ' + this.newMsgService.user_name;
       }
     }
 
-    
-
-
-}

@@ -8,6 +8,8 @@ import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from '../../services/emoji.service';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -35,6 +37,9 @@ export class ThreadComponent implements OnInit {
   edit_comment: boolean = false;
   edit_comment_index: boolean;
   open_users: boolean;
+  open_attachment_menu: boolean;
+  uploadProgress: number = 0;
+  
 
 
 
@@ -44,7 +49,8 @@ export class ThreadComponent implements OnInit {
     public authenticationService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public emojiService: EmojiService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private storage: AngularFireStorage
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
@@ -94,6 +100,7 @@ export class ThreadComponent implements OnInit {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
     if (this.open_users == true) this.open_users = false;
+    if (this.open_attachment_menu == true) this.open_attachment_menu = false
   };
 
 
@@ -253,6 +260,11 @@ export class ThreadComponent implements OnInit {
       this.profileMenuRef.afterClosed().subscribe(() => {
         this.fsDataThreadService.detailsVisible = false
       });
+  }
+
+
+  openAttachmentMenu() {
+    this.open_attachment_menu = true
   }
 }
 

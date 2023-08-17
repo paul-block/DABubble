@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { doc, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
-import * as firebase from 'firebase/compat';
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+
+
+
 
 
 
@@ -13,7 +17,7 @@ import { AuthenticationService } from './authentication.service';
 
 export class FirestoreThreadDataService {
 
-  
+
   db = getFirestore();
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
@@ -21,15 +25,20 @@ export class FirestoreThreadDataService {
   thread_open: boolean = false
   current_message: any;
   current_message_id: string;
-  comments:any[] = []
+  comments: any[] = []
   detailsVisible: boolean = false;
+  selectedFile: File = null;
+  fileType: string | undefined;
 
 
-  constructor( public authenticationService: AuthenticationService) { }
+  constructor(public authenticationService: AuthenticationService,
+    private storage: AngularFireStorage,
+    private angularFireDatabase: AngularFireDatabase,
+  ) { }
 
 
   async saveThread(data) {
-  this.comments.push(data)
+    this.comments.push(data)
     const docRef = doc(this.db, "threads", this.current_message_id);
     await updateDoc(docRef, {
       comments: this.comments
@@ -94,15 +103,18 @@ export class FirestoreThreadDataService {
     if (days > 1) return `vor ${days} Tagen`;
     else if (days == 1) return `vor ${days} Tag`;
     else if (hours == 1) return `vor ${hours} Stunde`;
-     else if (hours > 1) return `vor ${hours} Stunden`;
-     else if (minutes > 1)   return ` vor ${minutes} Minuten `;
-     else if (minutes == 1)   return ` vor ${minutes} Minute `;
-     else return `gerade eben`;
+    else if (hours > 1) return `vor ${hours} Stunden`;
+    else if (minutes > 1) return ` vor ${minutes} Minuten `;
+    else if (minutes == 1) return ` vor ${minutes} Minute `;
+    else return `gerade eben`;
   }
+
+  async onFileSelected(event: any) {
+   
 }
 
 
-
+}
 
 
 

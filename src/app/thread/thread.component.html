@@ -46,10 +46,10 @@
         <div class="comment_div"
             [class.row_reverse]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name" *ngFor="let comment of fsDataThreadService.comments; let i = index">
             <div [class.show_edit_comment]="edit_comment && getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name && edit_comment_index == i" class="edit_comment" (click)="openEditComment(i)">
-                <div class="edit_hover" (click)="openEditComment(i)" (click)="stopPropagation($event)">
+                <div class="menu_button" (click)="openEditComment(i)" (click)="stopPropagation($event)">
                     <span>Nachricht bearbeiten</span>
                 </div>
-                <div class="edit_hover" (click)="openDeleteComment(i)" (click)="stopPropagation($event)">
+                <div class="menu_button" (click)="openDeleteComment(i)" (click)="stopPropagation($event)">
                     <span>Nachricht löschen</span>
                 </div>
             </div>
@@ -88,18 +88,15 @@
                             [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
                             <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
                                 size="24"></ngx-emoji>
-
                             <span>{{fsDataThreadService.comments[i].emoji_data[j]?.react_users?.join(' und ')}}</span>
                             <div *ngIf="fsDataThreadService.comments[i].emoji_data[j]?.react_users?.length < 2">hat
                                 reagiert</div>
                             <div *ngIf="fsDataThreadService.comments[i].emoji_data[j]?.react_users?.length > 1">haben
                                 reagiert</div>
-
                         </div>
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
                             size="24"></ngx-emoji>
                         <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
-
                     </div>
                 </div>
             </div>
@@ -107,6 +104,10 @@
 
 
         <div class="type_message">
+            <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
+                <input id="fileInput" type="file" (change)="fsDataThreadService.onFileSelected($event)" >
+                <label class="menu_button" for="fileInput">Datei anhängen</label>
+            </div>
             <div class="at_user_div" *ngIf="open_users">
                 <div>
                     <div class="user" *ngFor="let user of authenticationService.all_users; let i = index" (click)="addUserToTextarea(i)" >
@@ -123,7 +124,7 @@
             <textarea #messageTextarea type="text" [(ngModel)]="comment_value" placeholder="Antworten..."></textarea>
             <div class="icons_main">
                 <div class="icons">
-                    <div class="plus">
+                    <div class="plus" (click)="openAttachmentMenu()" (click)="stopPropagation($event)">
                         <div class="hover"><img src="/assets/img/icons/add.png" alt=""></div>
                     </div>
                     <div class="hover"><img src="/assets/img/icons/sentiment_satisfied.png"
@@ -135,3 +136,5 @@
                 alt="" (click)="postComment()">
         </div>
     </div>
+
+   
