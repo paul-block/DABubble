@@ -6,6 +6,7 @@ import { NewMsgService } from 'src/services/new-msg.service';
 import { ChannelService } from 'src/services/channel.service';
 import { DirectChatService } from 'src/services/directchat.service';
 import { MessagesService } from 'src/services/messages.service';
+import { AuthenticationService } from 'src/services/authentication.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -29,8 +30,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     private newMsgService: NewMsgService,
     public channelService: ChannelService,
     public directChatService: DirectChatService,
-    public msgService: MessagesService
-  ) { }
+    public msgService: MessagesService,
+    public authService: AuthenticationService
+  ) {}
 
   ngOnInit() {
     this.sub = this.channelService.authorizedChannels.subscribe(channels => {
