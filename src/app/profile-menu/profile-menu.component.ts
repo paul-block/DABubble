@@ -119,6 +119,7 @@ export class ProfileMenuComponent {
 
   saveNewAvatar() {
     this.setAvatar(this.imageUrl)
+    this.onNoClick()
   }
 
 
