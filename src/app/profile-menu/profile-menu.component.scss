@@ -292,7 +292,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 25px;
-    width: 167px;
+    width: 49px;
     height: 49px;
     padding: 0 10px 0 10px;
 
@@ -300,6 +300,9 @@
         background-color: #444DF2;
         cursor: pointer;
         color: white;
+        img {
+            filter: invert(99%) sepia(2%) saturate(393%) hue-rotate(45deg) brightness(120%) contrast(100%);
+        }
     }
 }
 
@@ -338,7 +341,7 @@ input[type="file"] {
 }
 
 .buttons {
-    width: 100%;
+    width: 80%;
     justify-content: space-between;
     display: flex;
 }
@@ -355,9 +358,36 @@ input[type="file"] {
     border-radius: 25px;
     width: 137px;
     height: 49px;
-
+    box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
     &:hover {
         background-color: #797EF3;
         cursor: pointer;
+    }
+}
+
+.upload_div {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.abort_button {
+    transition: 200ms;
+    box-sizing: border-box;
+    color: #444DF2;
+    font-weight: 700;
+    font-size: 18px;
+    border: 1px solid #797EF3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    height: 49px;
+    padding: 0 10px 0 10px;
+    box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    &:hover {
+        background-color: #444DF2;
+        cursor: pointer;
+        color: white;
     }
 }
