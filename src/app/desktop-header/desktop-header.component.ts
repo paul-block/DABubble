@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
-import { AuthenticationService } from 'src/services/authentication.service';
-import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
+import { AuthenticationService } from 'services/authentication.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 
 @Component({
   selector: 'app-desktop-header',

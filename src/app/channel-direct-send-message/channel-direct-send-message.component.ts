@@ -1,8 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
-import { DirectChatService } from 'src/services/directchat.service';
-import { EmojiService } from 'src/services/emoji.service';
-import { MessagesService } from 'src/services/messages.service';
+import { AuthenticationService } from 'services/authentication.service';
+import { DirectChatService } from 'services/directchat.service';
+import { EmojiService } from 'services/emoji.service';
+import { MessagesService } from 'services/messages.service';
 
 @Component({
   selector: 'app-channel-direct-send-message',

@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } fr
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { Subscription } from 'rxjs';
-import { NewMsgService } from 'src/services/new-msg.service';
-import { ChannelService } from 'src/services/channel.service';
-import { DirectChatService } from 'src/services/directchat.service';
-import { MessagesService } from 'src/services/messages.service';
-import { AuthenticationService } from 'src/services/authentication.service';
+import { NewMsgService } from 'services/new-msg.service';
+import { ChannelService } from 'services/channel.service';
+import { DirectChatService } from 'services/directchat.service';
+import { MessagesService } from 'services/messages.service';
+import { AuthenticationService } from 'services/authentication.service';
 
 @Component({
   selector: 'app-channel-sidebar',

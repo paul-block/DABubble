@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit} from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthenticationService } from 'src/services/authentication.service';
-import { ChannelService } from 'src/services/channel.service';
+import { AuthenticationService } from 'services/authentication.service';
+import { ChannelService } from 'services/channel.service';
 import { debounceTime } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 

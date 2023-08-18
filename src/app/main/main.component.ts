@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
-import { NewMsgService } from 'src/services/new-msg.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { NewMsgService } from 'services/new-msg.service';
 
 @Component({
   selector: 'app-main',

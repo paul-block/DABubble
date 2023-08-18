@@ -42,7 +42,6 @@ export class MessagesService {
       console.log(this.directChatService.currentChatID);
     } else {
       console.log(this.messageText);
-
       const messagesCollectionRef = await addDoc(collection(this.db, 'chats', this.directChatService.currentChatID, 'messages'), {
         chat_message: this.messageText,
         user_Sender_ID: user.uid,
@@ -59,12 +58,21 @@ export class MessagesService {
       }).then(() => {
         this.messageText = '';
       });
-
-      this.getMessages();
+      this.getNewMessage();
     }
   }
 
+
+  async getNewMessage() {
+    const chatMessagesRef = collection(this.db, 'chats', this.directChatService.currentChatID, 'messages');
+    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
+    const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
+    this.directChatService.directChatMessages.push(latestDocument);
+  }
+
+
   async getMessages() {
+    
     this.emojiService.resetInitializedEmojiRef();
     this.directChatService.directChatMessages = [];
     this.previousMessageDate === null

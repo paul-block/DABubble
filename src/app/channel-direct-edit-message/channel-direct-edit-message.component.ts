@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DirectChatService } from 'src/services/directchat.service';
-import { MessagesService } from 'src/services/messages.service';
+import { DirectChatService } from 'services/directchat.service';
+import { MessagesService } from 'services/messages.service';
 
 @Component({
   selector: 'app-channel-direct-edit-message',

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
+import { AuthenticationService } from 'services/authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';

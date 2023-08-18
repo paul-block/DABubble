@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
+import { AuthenticationService } from 'services/authentication.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
-import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 
 
 

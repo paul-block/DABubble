@@ -106,8 +106,8 @@
             </div>
             <div [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                 class="reaction-bar">
-                <img src="/assets/img/icons/check_mark_emoji.svg">
-                <img src="/assets/img/icons/hands_up_emoji.svg">
+                <img src="/assets/img/icons/check_mark_emoji.svg" (click)="addEmojiInMessage(emojiService.checkMarkManualEvent, i, chatMessage);">
+                <img src="/assets/img/icons/hands_up_emoji.svg" (click)="addEmojiInMessage(emojiService.raisedHandsManualEvent, i, chatMessage);">
                 <div class="reaction-bar-emoji">
                     <svg #emojiPopupReactionBarREF (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojiReactionBar'); emojiService.openEmojiPicker(i);"
                         width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">

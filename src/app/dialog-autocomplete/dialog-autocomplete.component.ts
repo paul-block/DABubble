@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { AuthenticationService } from 'src/services/authentication.service';
-import { ChannelService } from 'src/services/channel.service';
+import { AuthenticationService } from 'services/authentication.service';
+import { ChannelService } from 'services/channel.service';
 import { switchMap } from 'rxjs/operators';
 
 @Component({

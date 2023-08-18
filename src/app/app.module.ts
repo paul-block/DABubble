@@ -31,24 +31,26 @@ import { DialogEditMembersComponent } from './dialog-edit-members/dialog-edit-me
 import { DialogAddMembersComponent } from './dialog-add-members/dialog-add-members.component';
 import { AddPplToChannelComponent } from './dialog-add-ppl-to-channel/add-ppl-to-channel.component';
 import { NewMsgComponent } from './new-msg/new-msg.component';
-// Material API imports
-import {MatTooltipModule} from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
-import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ThreadComponent } from './thread/thread.component';
-import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
-import {MatInputModule} from '@angular/material/input';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { DialogDeleteCommentComponent } from './dialog-delete-comment/dialog-delete-comment.component';
 import { ChannelDirectEditMessageComponent } from './channel-direct-edit-message/channel-direct-edit-message.component';
 import { DialogProfileComponent } from './dialog-profile/dialog-profile.component';
 import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
+import { ThreadComponent } from './thread/thread.component';
+import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
+import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
+import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
+// Material API imports
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+
+
 
 
 

@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
+import { AuthenticationService } from 'services/authentication.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
-import { NewMsgService } from 'src/services/new-msg.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { NewMsgService } from 'services/new-msg.service';
 
 @Component({
   selector: 'app-dialog-profile',

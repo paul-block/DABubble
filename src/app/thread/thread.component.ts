@@ -1,6 +1,6 @@
 import { Component ,ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
-import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
+import { AuthenticationService } from 'services/authentication.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';

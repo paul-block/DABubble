@@ -4,11 +4,11 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
 import { Output, EventEmitter } from '@angular/core';
-import { AuthenticationService } from 'src/services/authentication.service';
-import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
-import { DirectChatService } from 'src/services/directchat.service';
-import { MessagesService } from 'src/services/messages.service';
-import { EmojiService } from 'src/services/emoji.service';
+import { AuthenticationService } from 'services/authentication.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { DirectChatService } from 'services/directchat.service';
+import { MessagesService } from 'services/messages.service';
+import { EmojiService } from 'services/emoji.service';
 
 
 @Component({
