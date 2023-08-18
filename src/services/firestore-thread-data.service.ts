@@ -1,8 +1,15 @@
-import { Injectable } from '@angular/core';
-import { doc, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
-import * as firebase from 'firebase/compat';
+import { Injectable, } from '@angular/core';
+import { doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Observable, Subject } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { distinctUntilChanged, distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
+
+
+
 
 
 
@@ -13,7 +20,7 @@ import { AuthenticationService } from './authentication.service';
 
 export class FirestoreThreadDataService {
 
-  
+
   db = getFirestore();
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
@@ -21,15 +28,26 @@ export class FirestoreThreadDataService {
   thread_open: boolean = false
   current_message: any;
   current_message_id: string;
-  comments:any[] = []
+  comments: any[] = []
   detailsVisible: boolean = false;
+  selectedFile: File = null;
+  current_changed_index: number
 
 
-  constructor( public authenticationService: AuthenticationService) { }
+
+  constructor(public authenticationService: AuthenticationService,
+    private storage: AngularFireStorage,
+    private angularFireDatabase: AngularFireDatabase,
+    private firestore: AngularFirestore
+  ) {
+
+  }
+
+
 
 
   async saveThread(data) {
-  this.comments.push(data)
+    this.comments.push(data)
     const docRef = doc(this.db, "threads", this.current_message_id);
     await updateDoc(docRef, {
       comments: this.comments
@@ -42,6 +60,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
+
   }
 
 
@@ -60,28 +79,18 @@ export class FirestoreThreadDataService {
     this.thread_open = true
     this.current_message = this.channel_messages[i].message
     this.validateIdFromMessage(i);
-    this.loadThread();
   }
 
 
 
   validateIdFromMessage(i: number) {
     this.current_message_id = this.channel_messages[i].id
+    this.loadThread(this.current_message_id)
+
   }
 
 
-  async loadThread() {
-    const docRef = doc(this.db, "threads", this.current_message_id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.data() == undefined) {
-      let thread_data = {
-        comments: []
-      }
-      await setDoc(docRef, thread_data);
-    } else {
-      this.comments = docSnap.data().comments
-    }
-  }
+
 
 
   getTimeSince(timestamp: number) {
@@ -94,13 +103,31 @@ export class FirestoreThreadDataService {
     if (days > 1) return `vor ${days} Tagen`;
     else if (days == 1) return `vor ${days} Tag`;
     else if (hours == 1) return `vor ${hours} Stunde`;
-     else if (hours > 1) return `vor ${hours} Stunden`;
-     else if (minutes > 1)   return ` vor ${minutes} Minuten `;
-     else if (minutes == 1)   return ` vor ${minutes} Minute `;
-     else return `gerade eben`;
+    else if (hours > 1) return `vor ${hours} Stunden`;
+    else if (minutes > 1) return ` vor ${minutes} Minuten `;
+    else if (minutes == 1) return ` vor ${minutes} Minute `;
+    else return `gerade eben`;
+  }
+
+  async onFileSelected(event: any) {
+
+  }
+
+  async loadThread(documentId: string) {
+    const docRef = doc(this.db, 'threads', documentId);
+    onSnapshot(doc(this.db, "threads", documentId), async (doc) => {
+      const changedData = doc.data();
+      if (changedData) {
+        this.comments = changedData.comments
+      } else {
+        let thread_data = {
+          comments: []
+        }
+        await setDoc(docRef, thread_data);
+      }
+    });
   }
 }
-
 
 
 

@@ -3,7 +3,6 @@ import { AuthenticationService } from 'src/services/authentication.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 
 
@@ -23,6 +22,7 @@ export class ProfileMenuComponent {
   uploadProgress: number = 0;
   selectedFile: File = null;
   imageUrl: string;
+  current_imageUrl: string
 
 
   constructor(
@@ -31,25 +31,29 @@ export class ProfileMenuComponent {
     private storage: AngularFireStorage,
     public fsDataThreadService: FirestoreThreadDataService,
     public dialogRef: MatDialogRef<ProfileMenuComponent>
-  ) {}
+  ) { }
 
   signOut() {
     this.authService.signOut();
     this.dialog.closeAll();
   }
 
+
   toggleDetails() {
-    if (this.fsDataThreadService.detailsVisible){
+    if (this.fsDataThreadService.detailsVisible) {
       this.fsDataThreadService.detailsVisible = false
       this.onNoClick()
     }
     this.detailsVisible = !this.detailsVisible;
-    
   }
+
+
 
   toggleEditDetails() {
     this.editDetailsVisible = !this.editDetailsVisible;
   }
+
+
 
   updateUserDetails() {
     this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
@@ -66,23 +70,28 @@ export class ProfileMenuComponent {
 
 
   closeEditAvatar() {
+    this.authService.userData.avatar = this.current_imageUrl
     this.editAvatarVisible = false
     this.editDetailsVisible = true
   }
 
 
-  async onFileSelected(event: any) {
-    this.file_error = false
-    this.selectedFile = event.target.files[0];
-    if (this.selectedFile && this.selectedFile.type.startsWith('image/')) this.uploadImage();
-    else this.file_error = true
+  onFileSelected($event: any) {
+    this.current_imageUrl = this.authService.userData.avatar
+    this.file_error = false;
+    this.selectedFile = $event.target.files[0];
+    if (this.selectedFile && this.selectedFile.type.startsWith('image/')) {
+      this.uploadImage();
+    } else {
+      this.file_error = true;
+    }
   }
 
 
   setAvatar(image: string) {
     this.file_error = false
     this.authService.setAvatarImage(image)
-    this.imageUrl = image
+   
   }
 
 
@@ -97,7 +106,8 @@ export class ProfileMenuComponent {
     uploadTask.snapshotChanges().pipe(
       finalize(() => {
         fileRef.getDownloadURL().subscribe(downloadURL => {
-          this.setAvatar(downloadURL)
+          this.imageUrl = downloadURL
+          this.authService.userData.avatar = downloadURL
         });
       })
     ).subscribe(
@@ -107,8 +117,14 @@ export class ProfileMenuComponent {
     );
   }
 
+  saveNewAvatar() {
+    this.setAvatar(this.authService.userData.avatar)
+    this.onNoClick()
+  }
+
 
   onNoClick(): void {
     this.dialogRef.close();
+    this.authService.userData.avatar = this.current_imageUrl
   }
 }

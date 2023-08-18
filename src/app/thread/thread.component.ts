@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component ,ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { FirestoreThreadDataService } from 'src/services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
@@ -8,12 +8,14 @@ import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from '../../services/emoji.service';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
-  styleUrls: ['./thread.component.scss']
+  styleUrls: ['./thread.component.scss'],
 })
 export class ThreadComponent implements OnInit {
 
@@ -35,6 +37,9 @@ export class ThreadComponent implements OnInit {
   edit_comment: boolean = false;
   edit_comment_index: boolean;
   open_users: boolean;
+  open_attachment_menu: boolean;
+  uploadProgress: number = 0;
+  
 
 
 
@@ -44,7 +49,8 @@ export class ThreadComponent implements OnInit {
     public authenticationService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public emojiService: EmojiService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private storage: AngularFireStorage
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
@@ -82,6 +88,7 @@ export class ThreadComponent implements OnInit {
 
 
   addOrRemoveEmojIinThread(i: number, j: number) {
+    this.fsDataThreadService.current_changed_index = i
     let array = this.fsDataThreadService.comments
     let user = this.authenticationService.userData.user_name
     this.hovered_emoji = false
@@ -94,6 +101,7 @@ export class ThreadComponent implements OnInit {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
     if (this.open_users == true) this.open_users = false;
+    if (this.open_attachment_menu == true) this.open_attachment_menu = false
   };
 
 
@@ -253,6 +261,11 @@ export class ThreadComponent implements OnInit {
       this.profileMenuRef.afterClosed().subscribe(() => {
         this.fsDataThreadService.detailsVisible = false
       });
+  }
+
+
+  openAttachmentMenu() {
+    this.open_attachment_menu = true
   }
 }
 

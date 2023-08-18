@@ -75,8 +75,15 @@
             <img src="{{images[i]}}" alt="">
         </div>
     </div>
-    <span>oder lade selbst ein Bild hoch.</span>
-    <input id="fileInput" type="file" (change)="onFileSelected($event)">
-    <label class="upload_button" for="fileInput">Foto hochladen</label>
-    <div class="error" *ngIf="file_error">Bitte wähle ein Bildformat !</div>
+    <div class="upload_div">
+        <span>oder lade selbst ein Bild hoch.</span>
+        <input id="file" type="file" (change)="onFileSelected($event)">
+        <label class="upload_button" for="file"><img src="/assets/img/icons/arrow_up.png" alt=""></label>
+    </div>
+   
+    <div class="buttons">
+        <div class="save_button" (click)="saveNewAvatar()">Speichern</div>
+        <div class="abort_button" (click)="onNoClick()">Abbrechen</div>
+    </div>
+    <!--- <div class="error" *ngIf="file_error">Bitte wähle ein Bildformat !</div> -->
 </div>

@@ -123,3 +123,7 @@ textarea {
        overflow: hidden;
     }
 }
+
+input[type="file"] {
+    display: none;
+  }

@@ -51,9 +51,7 @@ export class AuthenticationService {
       docsSnap.forEach(doc => {
         users.push(doc.data())
       })
-      this.all_users = users
-      console.log(this.all_users);
-      
+      this.all_users = users   
     });
   }
 

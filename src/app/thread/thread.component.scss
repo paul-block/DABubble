@@ -299,7 +299,7 @@ header {
   }
 }
 
-.edit_hover {
+.menu_button {
   align-items: center;
   justify-content: center;
   display: flex;
@@ -307,7 +307,7 @@ header {
   height: 50px;
   transition: 200ms;
   border-radius: 35px;
-
+  cursor: pointer;
   &:hover {
     background-color: #eceefe;
   }
@@ -536,3 +536,6 @@ textarea {
   height: 50px;
   border-radius: 100%;
 }
+
+
+
