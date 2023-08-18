@@ -3,6 +3,7 @@ import firebase from 'firebase/compat/app';
 import { doc, getFirestore, updateDoc, collection, addDoc, getDocs } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,10 @@ export class DirectChatService {
   directChatMessages = [];
   currentChatData;
   messageToPlaceholder: string = 'Nachricht an ...';
+
+  constructor(
+    public authService: AuthenticationService,
+  ) { }
 
   async searchChat(userReceiverID) {
     const auth = getAuth();
@@ -80,4 +85,17 @@ export class DirectChatService {
   }
 
 
+  textAreaMessageTo() {
+    this.getReceiverName()
+    this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
+  }
+
+
+  getReceiverName() {
+    if (this.currentChatData.chat_Member_IDs[0] === this.authService.getUid()) {
+      this.authService.getUserData(this.currentChatData.chat_Member_IDs[1]);
+    } else {
+      this.authService.getUserData(this.currentChatData.chat_Member_IDs[0]);
+    }
+  }
 }

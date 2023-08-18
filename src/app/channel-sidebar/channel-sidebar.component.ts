@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { AuthenticationService } from 'src/services/authentication.service';
   templateUrl: './channel-sidebar.component.html',
   styleUrls: ['./channel-sidebar.component.scss'],
 })
-export class ChannelSidebarComponent implements OnInit, OnDestroy {
+export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
   channelsVisible: boolean = true;
   authorizedChannels: any[] = [];
   dmsVisible: boolean = true;
@@ -33,6 +33,13 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public msgService: MessagesService,
     public authService: AuthenticationService
   ) {}
+
+  ngAfterViewInit(): void {
+    // console.log(this.authService.userData);
+    // this.searchChatAndGetMessages(this.authService.userData.user_name);
+    
+    
+  }
 
   ngOnInit() {
     this.sub = this.channelService.authorizedChannels.subscribe(channels => {
@@ -76,8 +83,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   async searchChatAndGetMessages(userReceiverID) {
     await this.directChatService.searchChat(userReceiverID);
-    // this.directChatService.textAreaMessageTo();
-    this.directChatService.messageToPlaceholder = 'Nachricht an' + this.directChatService.currentChatData.chat_Member_IDs[1];
+    this.directChatService.textAreaMessageTo();
     this.msgService.getMessages();
   }
 
