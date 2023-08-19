@@ -10,6 +10,7 @@ import { DirectChatService } from 'services/directchat.service';
 import { MessagesService } from 'services/messages.service';
 import { EmojiService } from 'services/emoji.service';
 import { Observable, Subscription } from 'rxjs';
+import { doc, getFirestore, onSnapshot } from '@angular/fire/firestore';
 
 
 @Component({
@@ -21,7 +22,7 @@ import { Observable, Subscription } from 'rxjs';
 export class ChannelDirectChatComponent{
 
   @Output() threadOpen = new EventEmitter<boolean>();
-
+  db = getFirestore();
   messageCreator: boolean = false;
   toggleEditMessage: boolean = false;
   isEditChannelDialogOpen: boolean = false;
@@ -205,4 +206,7 @@ export class ChannelDirectChatComponent{
   public openThread(value: boolean) {
     this.threadOpen.emit(value)
   }
+
+
+  
 }

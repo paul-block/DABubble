@@ -526,3 +526,11 @@ h1 {
     bottom: unset;
     top: 30px;
 }
+
+.answers {
+    gap: 3px;
+    display: flex;
+    font-size: 18px;
+    font-weight: 400;
+    color: #535AF1;
+}

@@ -1,5 +1,5 @@
 import { Injectable, } from '@angular/core';
-import { doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
+import { doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -7,6 +7,8 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Observable, Subject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { distinctUntilChanged, distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
+import { DirectChatService } from './directchat.service';
+import { MessagesService } from './messages.service';
 
 
 
@@ -35,16 +37,13 @@ export class FirestoreThreadDataService {
   fake_array = []
 
 
-
   constructor(public authenticationService: AuthenticationService,
     private storage: AngularFireStorage,
     private angularFireDatabase: AngularFireDatabase,
-    private firestore: AngularFirestore
-  ) {
-
-  }
-
-
+    private firestore: AngularFirestore,
+    private dataDirectChatService: DirectChatService,
+    private messageSevice:MessagesService
+  ) {}
 
 
   async saveThread(data) {
@@ -53,6 +52,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
+    this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
 
 
@@ -82,6 +82,14 @@ export class FirestoreThreadDataService {
     this.validateIdFromMessage(i);
   }
 
+  openDirectChatThread(i: number) {
+    this.thread_open = true
+    this.current_message = this.dataDirectChatService.directChatMessages[i].chat_message
+    console.log(this.dataDirectChatService.directChatMessages[i]);
+    this.current_message_id = this.dataDirectChatService.directChatMessages[i].message_ID
+    this.loadThread(this.current_message_id)
+  }
+
 
 
   validateIdFromMessage(i: number) {
@@ -89,9 +97,6 @@ export class FirestoreThreadDataService {
     this.loadThread(this.current_message_id)
 
   }
-
-
-
 
 
   getTimeSince(timestamp: number) {

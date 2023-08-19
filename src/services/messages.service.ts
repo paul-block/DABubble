@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
@@ -21,6 +21,7 @@ export class MessagesService {
   emoji_data = [];
   messageIndex: number = null;
   private scrollSubject = new Subject<void>();
+  answers_count: any;
 
   constructor(
     public directChatService: DirectChatService,
@@ -52,6 +53,7 @@ export class MessagesService {
         created_At: firebase.firestore.FieldValue.serverTimestamp(),
         chat_message_edited: false,
         emoji_data: [],
+        answers: 0
       })
 
       const newMessageID = messagesCollectionRef.id;
@@ -63,6 +65,24 @@ export class MessagesService {
       });
 
     }
+  }
+
+ async saveNumberOfAnswers(id:string) {
+    await this.getNumberOfAnswers(id)
+    console.log(this.answers_count);
+    const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
+    const data = {
+      answers: this.answers_count
+    };
+    updateDoc(messageRef, data)
+  }
+
+
+  async getNumberOfAnswers(id:string) {
+    const docRef = doc(this.db, "threads", id);
+    const docSnap = await getDoc(docRef);
+   this.answers_count = docSnap.data().comments.length
+    
   }
 
 

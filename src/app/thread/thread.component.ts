@@ -8,6 +8,7 @@ import { EmojiService } from '../../services/emoji.service';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { MessagesService } from 'services/messages.service';
 
 
 
