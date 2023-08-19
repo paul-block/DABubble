@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
@@ -9,6 +9,7 @@ import { FirestoreThreadDataService } from 'services/firestore-thread-data.servi
 import { DirectChatService } from 'services/directchat.service';
 import { MessagesService } from 'services/messages.service';
 import { EmojiService } from 'services/emoji.service';
+import { Observable, Subscription } from 'rxjs';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { EmojiService } from 'services/emoji.service';
   styleUrls: ['./channel-direct-chat.component.scss']
 })
 
-export class ChannelDirectChatComponent {
+export class ChannelDirectChatComponent{
 
   @Output() threadOpen = new EventEmitter<boolean>();
 
@@ -29,7 +30,7 @@ export class ChannelDirectChatComponent {
   @ViewChild('editChannelREF') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   @ViewChild('editMembersREF') public ElementEditMembersRef: ElementRef<HTMLDivElement>;
   @ViewChild('addMembersREF') public ElementAddMembersRef: ElementRef;
-  @ViewChild('emojiContainerREF') public ElementChatContainerRef: ElementRef;
+  @ViewChild('ChatContainerREF') public ElementChatContainerRef: ElementRef;
   @ViewChildren('emojiMessagePopupREF') ElementEmojiMessagePopupsRef: QueryList<ElementRef>;
   @ViewChildren('emojiPopupReactionBarREF') ElementEmojiPopupReactionBarRef: QueryList<ElementRef>;
 
@@ -49,6 +50,27 @@ export class ChannelDirectChatComponent {
     public emojiService: EmojiService,
   ) { }
 
+  private scrollSubscription: Subscription;
+
+  ngOnInit(): void {
+    // Auf Scroll-Benachrichtigungen vom Service hören
+    this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
+      this.scrollToBottom();
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Abonnement aufräumen
+    if (this.scrollSubscription) {
+      this.scrollSubscription.unsubscribe();
+    }
+  }
+
+  scrollToBottom() {
+    if (this.ElementChatContainerRef) {
+      this.ElementChatContainerRef.nativeElement.scrollTop = this.ElementChatContainerRef.nativeElement.scrollHeight;
+    }
+  }
 
   editChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();

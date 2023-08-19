@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
 import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class MessagesService {
   messageDateRange: string = '';
   emoji_data = [];
   messageIndex: number = null;
+  private scrollSubject = new Subject<void>();
 
   constructor(
     public directChatService: DirectChatService,
@@ -59,7 +61,7 @@ export class MessagesService {
         this.getNewMessage();
         this.messageText = '';
       });
-      
+
     }
   }
 
@@ -85,11 +87,17 @@ export class MessagesService {
     const chatMessagesRef = collection(this.db, 'chats', this.directChatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
 
-
     docDirectChatMessagesSnapshot.forEach((doc) => {
       const userData = doc.data();
       this.directChatService.directChatMessages.push(userData);
     });
+    setTimeout(() => {
+      this.scrollSubject.next();
+    }, 0);
+  }
+
+  get scrollObservable() {
+    return this.scrollSubject.asObservable();
   }
 
   async editMessage(i: number, chatMessage) {
