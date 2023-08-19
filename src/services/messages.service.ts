@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
@@ -18,6 +18,7 @@ export class MessagesService {
   readyToSend: boolean = false;
   messageDateRange: string = '';
   emoji_data = [];
+  messageIndex: number = null;
 
   constructor(
     public directChatService: DirectChatService,
@@ -48,7 +49,6 @@ export class MessagesService {
         user_Sender_Name: await this.authService.userData.user_name,
         created_At: firebase.firestore.FieldValue.serverTimestamp(),
         chat_message_edited: false,
-        avatar: '',
         emoji_data: [],
       })
 
@@ -56,9 +56,10 @@ export class MessagesService {
       await updateDoc(messagesCollectionRef, {
         message_ID: newMessageID,
       }).then(() => {
+        this.getNewMessage();
         this.messageText = '';
       });
-      this.getNewMessage();
+      
     }
   }
 
@@ -70,9 +71,14 @@ export class MessagesService {
     this.directChatService.directChatMessages.push(latestDocument);
   }
 
+  async getChangedMessage() {
+    const currentMessage = this.directChatService.directChatMessages[this.messageIndex];
+    currentMessage.chat_message = this.messageText;
+    currentMessage.chat_message_edited = true;
+  }
+
 
   async getMessages() {
-    
     this.emojiService.resetInitializedEmojiRef();
     this.directChatService.directChatMessages = [];
     this.previousMessageDate === null
@@ -86,7 +92,8 @@ export class MessagesService {
     });
   }
 
-  async editMessage(chatMessage) {
+  async editMessage(i: number, chatMessage) {
+    this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     this.editMessageText = true;
     this.messageText = chatMessage.chat_message;
@@ -94,30 +101,37 @@ export class MessagesService {
 
   async saveEditedMessage() {
     try {
+      this.getChangedMessage();
       const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', this.messageID);
+
       await updateDoc(messageRef, {
         chat_message: this.messageText,
         chat_message_edited: true
       }).then(() => {
         this.messageText = '';
         this.editMessageText = false;
-        this.getMessages();
+
       });
     } catch (error) {
       console.error('Error editing message:', error);
     }
+
   }
 
-  async deleteMessage(chatMessage) {
+  async deleteMessage(i: number, chatMessage) {
+    this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     try {
+      this.spliceMessage();
       const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', this.messageID);
-      await deleteDoc(messageRef).then(() => {
-        this.getMessages();
-      });
+      await deleteDoc(messageRef)
     } catch (error) {
       console.error('Error deleting message:', error);
     }
+  }
+
+  async spliceMessage() {
+    this.directChatService.directChatMessages.splice(this.messageIndex, 1);
   }
 
   getTimestampTime(timestamp) {
@@ -127,7 +141,7 @@ export class MessagesService {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`;
   }
 
-  
+
 
   async updateMessagesReactions(chatMessage) {
     const docRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', chatMessage.message_ID);
@@ -151,5 +165,5 @@ export class MessagesService {
       return date.toLocaleDateString('de-DE', options);
     }
   }
-  
+
 }
