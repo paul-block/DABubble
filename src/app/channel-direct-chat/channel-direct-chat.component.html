@@ -23,7 +23,7 @@
 
     </div>
 </header>
-<section class="chat-messages" #emojiContainerREF>
+<section class="chat-messages" #ChatContainerREF>
     <div>
         <h3>Testnachrichten</h3>
         <div *ngFor="let message of fsDataThreadService.channel_messages; let i = index">
@@ -142,9 +142,9 @@
                 <div (click)="toggleArea('more')" class="reaction-bar-more">
                     <mat-icon>more_vert</mat-icon>
                     <div class="edit-message" *ngIf="toggleEditMessage">
-                        <span (click)="msgService.editMessage(chatMessage)">Nachricht
+                        <span (click)="msgService.editMessage(i, chatMessage)">Nachricht
                             bearbeiten</span>
-                        <span (click)="msgService.deleteMessage(chatMessage)">Nachricht
+                        <span (click)="msgService.deleteMessage(i, chatMessage)">Nachricht
                             löschen</span>
                     </div>
                 </div>
