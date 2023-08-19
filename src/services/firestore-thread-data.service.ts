@@ -32,6 +32,7 @@ export class FirestoreThreadDataService {
   detailsVisible: boolean = false;
   selectedFile: File = null;
   current_changed_index: number
+  fake_array = []
 
 
 
@@ -75,7 +76,7 @@ export class FirestoreThreadDataService {
   }
 
 
-  async openThread(i: never) {
+  async openThread(i: number) {
     this.thread_open = true
     this.current_message = this.channel_messages[i].message
     this.validateIdFromMessage(i);
@@ -119,6 +120,7 @@ export class FirestoreThreadDataService {
       const changedData = doc.data();
       if (changedData) {
         this.comments = changedData.comments
+        this.fake_array.length = this.comments.length
       } else {
         let thread_data = {
           comments: []

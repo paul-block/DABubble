@@ -21,7 +21,10 @@ header {
 
 .emoji_picker {
   display: none;
-  z-index: 10;
+  z-index: 20;
+  position: absolute;
+  left: 0;
+  top: -10px;
 }
 
 .d_block {
@@ -536,6 +539,5 @@ textarea {
   height: 50px;
   border-radius: 100%;
 }
-
 
 

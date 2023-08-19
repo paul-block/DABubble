@@ -63,6 +63,7 @@ export class ProfileMenuComponent {
 
 
   editAvatarImage() {
+    this.current_imageUrl = this.authService.userData.avatar
     this.editDetailsVisible = false
     this.editAvatarVisible = true
     this.detailsVisible = false
@@ -77,7 +78,7 @@ export class ProfileMenuComponent {
 
 
   onFileSelected($event: any) {
-    this.current_imageUrl = this.authService.userData.avatar
+   
     this.file_error = false;
     this.selectedFile = $event.target.files[0];
     if (this.selectedFile && this.selectedFile.type.startsWith('image/')) {

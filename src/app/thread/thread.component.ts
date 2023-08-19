@@ -1,15 +1,14 @@
-import { Component ,ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component ,ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild ,AfterViewInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
-import { Emoji } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiService } from '../../services/emoji.service';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { finalize } from 'rxjs/operators';
+
 
 
 @Component({
@@ -19,9 +18,11 @@ import { finalize } from 'rxjs/operators';
 })
 export class ThreadComponent implements OnInit {
 
-
+  
   profileMenuRef: MatDialogRef<ProfileMenuComponent>;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
+  @ViewChild('picker', { static: false }) picker: ElementRef;
+
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ''
@@ -39,7 +40,7 @@ export class ThreadComponent implements OnInit {
   open_users: boolean;
   open_attachment_menu: boolean;
   uploadProgress: number = 0;
-  
+ 
 
 
 
@@ -50,14 +51,12 @@ export class ThreadComponent implements OnInit {
     public fsDataThreadService: FirestoreThreadDataService,
     public emojiService: EmojiService,
     public dialog: MatDialog,
-    private storage: AngularFireStorage
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
   selectedEmoji: string
   emojiPicker_open: boolean = false;
-
-
+  
 
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
@@ -74,8 +73,8 @@ export class ThreadComponent implements OnInit {
   openEmojiPicker(i: number) {
     this.picker_index = i
     this.emojiPicker_open = true
+    this.getPosition()
   }
-
 
 
   addEmojiInThread($event: any, i: number) {
@@ -266,6 +265,22 @@ export class ThreadComponent implements OnInit {
 
   openAttachmentMenu() {
     this.open_attachment_menu = true
+  }
+
+
+  getPosition() {
+    console.log(this.picker.nativeElement);
+    
+    if (this.picker) {
+      const nativeElement = this.picker.nativeElement;
+      const rect = nativeElement.getBoundingClientRect();
+
+      console.log('Position des div-Elements:');
+      console.log('Top:', rect.top);
+      console.log('Left:', rect.left);
+      console.log('Bottom:', rect.bottom);
+      console.log('Right:', rect.right);
+    }
   }
 }
 
