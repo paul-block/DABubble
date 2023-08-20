@@ -166,7 +166,7 @@ export class ChannelDirectChatComponent{
 
 
   isMessageCreator(user_Sender_ID) {
-    const currentUserID = this.authService.getUid();
+    const currentUserID = this.authService.userData.uid
     if (currentUserID) {
       return user_Sender_ID === currentUserID;
     } else {

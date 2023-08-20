@@ -4,9 +4,7 @@ import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { Observable, Subject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { distinctUntilChanged, distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { DirectChatService } from './directchat.service';
 import { MessagesService } from './messages.service';
 
@@ -35,6 +33,9 @@ export class FirestoreThreadDataService {
   selectedFile: File = null;
   current_changed_index: number
   fake_array = []
+  chat_type: string;
+  current_chat_data: any;
+  direct_chat_index: number;
 
 
   constructor(public authenticationService: AuthenticationService,
@@ -52,7 +53,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
-    this.messageSevice.saveNumberOfAnswers(this.current_message_id)
+    if(this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
 
 
@@ -61,9 +62,8 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
-
+    if(this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
-
 
 
   async getMessages() {
@@ -77,25 +77,28 @@ export class FirestoreThreadDataService {
 
 
   async openThread(i: number) {
+    this.chat_type = 'channel'
     this.thread_open = true
     this.current_message = this.channel_messages[i].message
     this.validateIdFromMessage(i);
   }
 
+
   openDirectChatThread(i: number) {
+    this.current_chat_data = this.dataDirectChatService.directChatMessages[i]
+    this.direct_chat_index = i
     this.thread_open = true
     this.current_message = this.dataDirectChatService.directChatMessages[i].chat_message
     console.log(this.dataDirectChatService.directChatMessages[i]);
     this.current_message_id = this.dataDirectChatService.directChatMessages[i].message_ID
     this.loadThread(this.current_message_id)
+    this.chat_type = 'direct'
   }
-
 
 
   validateIdFromMessage(i: number) {
     this.current_message_id = this.channel_messages[i].id
     this.loadThread(this.current_message_id)
-
   }
 
 
@@ -114,6 +117,7 @@ export class FirestoreThreadDataService {
     else if (minutes == 1) return ` vor ${minutes} Minute `;
     else return `gerade eben`;
   }
+
 
   async onFileSelected(event: any) {
 

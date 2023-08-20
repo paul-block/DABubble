@@ -36,6 +36,7 @@ export class ProfileMenuComponent {
   signOut() {
     this.authService.signOut();
     this.dialog.closeAll();
+    this.fsDataThreadService.thread_open = false
   }
 
 

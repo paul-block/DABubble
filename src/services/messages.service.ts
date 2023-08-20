@@ -67,22 +67,21 @@ export class MessagesService {
     }
   }
 
- async saveNumberOfAnswers(id:string) {
+  async saveNumberOfAnswers(id: string) {
     await this.getNumberOfAnswers(id)
-    console.log(this.answers_count);
     const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
     const data = {
       answers: this.answers_count
     };
-    updateDoc(messageRef, data)
+     updateDoc(messageRef, data) 
   }
 
 
-  async getNumberOfAnswers(id:string) {
+  async getNumberOfAnswers(id: string) {
     const docRef = doc(this.db, "threads", id);
     const docSnap = await getDoc(docRef);
-   this.answers_count = docSnap.data().comments.length
-    
+    this.answers_count = docSnap.data().comments.length
+
   }
 
 
