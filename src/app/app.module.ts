@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { HttpClientModule } from '@angular/common/http';
 // Components
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { StartScreenComponent } from './start-screen/start-screen.component';
@@ -89,6 +90,7 @@ import { MatInputModule } from '@angular/material/input';
     DialogProfileComponent,
   ],
   imports: [
+    HttpClientModule,
     AngularFireStorageModule,
     MatInputModule,
     MatTooltipModule,

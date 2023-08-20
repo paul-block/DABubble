@@ -7,6 +7,8 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DirectChatService } from './directchat.service';
 import { MessagesService } from './messages.service';
+import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable, Subscription, finalize } from 'rxjs';
 
 
 
@@ -31,11 +33,18 @@ export class FirestoreThreadDataService {
   comments: any[] = []
   detailsVisible: boolean = false;
   selectedFile: File = null;
+  subscription: Subscription | undefined;
   current_changed_index: number
   fake_array = []
   chat_type: string;
   current_chat_data: any;
   direct_chat_index: number;
+  progress: number;
+  uploadProgress: number;
+  upload_array = {
+    file_name: [],
+    download_link: []
+  }
 
 
   constructor(public authenticationService: AuthenticationService,
@@ -43,7 +52,8 @@ export class FirestoreThreadDataService {
     private angularFireDatabase: AngularFireDatabase,
     private firestore: AngularFirestore,
     private dataDirectChatService: DirectChatService,
-    private messageSevice:MessagesService
+    private messageSevice:MessagesService,
+    private http: HttpClient
   ) {}
 
 
@@ -118,10 +128,6 @@ export class FirestoreThreadDataService {
   }
 
 
-  async onFileSelected(event: any) {
-
-  }
-
   async loadThread(documentId: string) {
     const docRef = doc(this.db, 'threads', documentId);
     onSnapshot(doc(this.db, "threads", documentId), async (doc) => {
@@ -136,6 +142,41 @@ export class FirestoreThreadDataService {
         await setDoc(docRef, thread_data);
       }
     });
+  }
+
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile.name);
+    this.upload_array.file_name.push(this.selectedFile.name)
+    this.uploadImage()
+  }
+
+
+  uploadImage() {
+    const filePath = this.authenticationService.userData.uid + '/' + this.selectedFile.name;
+    const fileRef = this.storage.ref(filePath);
+    const uploadTask = this.storage.upload(filePath, this.selectedFile);
+    uploadTask.percentageChanges().subscribe(progress => {
+      this.uploadProgress = progress;
+    });
+    uploadTask.snapshotChanges().pipe(
+      finalize(() => {
+        fileRef.getDownloadURL().subscribe(downloadURL => {
+      this.upload_array.download_link.push(downloadURL)
+        });
+      })
+    ).subscribe(
+      error => {
+       
+      }
+    );
+  }
+
+
+  deleteFile(filePath: string): Observable<void> {
+    const fileRef = this.storage.ref(filePath);
+    return fileRef.delete();
   }
 }
 

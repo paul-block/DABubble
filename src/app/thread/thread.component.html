@@ -154,6 +154,7 @@
 
 
     <div class="type_message">
+       
         <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
             <input id="fileInput" type="file" (change)="fsDataThreadService.onFileSelected($event)">
             <label class="menu_button" for="fileInput">Datei anhängen</label>
@@ -186,5 +187,14 @@
         </div>
         <img [class.inactive]="comment_value.length < 1" class="send_button" src="/assets/img/icons/send (1).png" alt=""
             (click)="postComment()">
+    </div>
+    <div class="upload_main">
+        <div *ngFor="let file of fsDataThreadService.upload_array.file_name; let i = index" class="upload_content">
+            <a target="_blank" rel="noopener noreferrer" [href]="fsDataThreadService.upload_array.download_link[i]" download>{{fsDataThreadService.upload_array.file_name[i]}}</a>
+            <div class="progress_load"></div>
+            <div class="delete_file">
+                <img (click)="removeFile(i)" src="/assets/img/icons/close.png" alt="">
+            </div>
+        </div>
     </div>
 </div>

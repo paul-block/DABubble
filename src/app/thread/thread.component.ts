@@ -7,7 +7,6 @@ import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-de
 import { EmojiService } from '../../services/emoji.service';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { MessagesService } from 'services/messages.service';
 import { DirectChatService } from 'services/directchat.service';
 
@@ -24,7 +23,6 @@ export class ThreadComponent implements OnInit {
   profileMenuRef: MatDialogRef<ProfileMenuComponent>;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
   @ViewChild('picker', { static: false }) picker: ElementRef;
-
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ''
@@ -42,8 +40,6 @@ export class ThreadComponent implements OnInit {
   open_users: boolean;
   open_attachment_menu: boolean;
   uploadProgress: number = 0;
-
-
 
 
 
@@ -121,6 +117,7 @@ export class ThreadComponent implements OnInit {
         uid: this.authenticationService.getUid(),
         emoji_data: [],
         text_edited: false,
+        uploaded_files: []
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
@@ -318,5 +315,19 @@ export class ThreadComponent implements OnInit {
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
   }
+
+
+  removeFile(i:number) {
+    let filePath = this.authenticationService.userData.uid + '/' + this.fsDataThreadService.upload_array.file_name[i]
+    this.fsDataThreadService.upload_array.file_name.splice(i,1)
+    this.fsDataThreadService.upload_array.download_link.splice(i,1)
+    this.fsDataThreadService.deleteFile(filePath)
+  }
+
+
+
+
+
+
 }
 
