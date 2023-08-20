@@ -1,4 +1,4 @@
-import { Component ,ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild ,AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild, AfterViewInit, Renderer2 } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
@@ -20,7 +20,7 @@ import { DirectChatService } from 'services/directchat.service';
 })
 export class ThreadComponent implements OnInit {
 
-  
+
   profileMenuRef: MatDialogRef<ProfileMenuComponent>;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
   @ViewChild('picker', { static: false }) picker: ElementRef;
@@ -42,7 +42,7 @@ export class ThreadComponent implements OnInit {
   open_users: boolean;
   open_attachment_menu: boolean;
   uploadProgress: number = 0;
- 
+
 
 
 
@@ -60,7 +60,7 @@ export class ThreadComponent implements OnInit {
   @Output() threadClose = new EventEmitter<boolean>();
   selectedEmoji: string
   emojiPicker_open: boolean = false;
-  
+
 
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
@@ -169,20 +169,35 @@ export class ThreadComponent implements OnInit {
   }
 
   openEditComment(i: number) {
+      this.edit_comment = false;
+      const dialogRef = this.dialog.open(DialogEditCommentComponent, {
+        data: { comment: this.fsDataThreadService.comments[i].comment },
+        panelClass: 'my-dialog'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.fsDataThreadService.comments[i].comment = result;
+          this.fsDataThreadService.comments[i].text_edited = true
+          this.fsDataThreadService.updateData()
+        }
+      });
+  }
+
+  openEditMessage() {
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
-      data: { comment: this.fsDataThreadService.comments[i].comment },
+      data: { comment: this.fsDataThreadService.current_chat_data.chat_message },
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.fsDataThreadService.comments[i].comment = result;
-        this.fsDataThreadService.comments[i].text_edited = true
-        this.fsDataThreadService.updateData()
+        this.fsDataThreadService.current_chat_data.chat_message = result;
+        this.fsDataThreadService.current_chat_data.chat_message_edited = true
+        this.msgService.saveEditedMessageFromThread(this.fsDataThreadService.current_chat_data)
       }
     });
   }
-  
+
 
   openDeleteComment(i: number) {
     this.edit_comment = false;
@@ -195,6 +210,21 @@ export class ThreadComponent implements OnInit {
         this.fsDataThreadService.comments.splice(i, 1)
         this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
         this.fsDataThreadService.updateData()
+      }
+    });
+  }
+
+
+  openDeleteMessage() {
+    this.edit_comment = false;
+    const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
+      data: { comment: this.fsDataThreadService.current_chat_data.chat_message },
+      panelClass: 'my-dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fsDataThreadService.current_chat_data.chat_message = result;
+        this.msgService.deleteMessage( this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
       }
     });
   }
@@ -245,7 +275,7 @@ export class ThreadComponent implements OnInit {
     else {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.panelClass = 'add-channel-dialog';
-      dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid), user_id: uid};
+      dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid), user_id: uid };
       this.dialog.open(DialogProfileComponent, dialogConfig);
     }
   }
@@ -254,16 +284,16 @@ export class ThreadComponent implements OnInit {
 
   openCurrentUserDetails() {
     const dialogConfig = new MatDialogConfig();
-      dialogConfig.position = {
-        top: '80',
-        right: '25'
-      };
-      dialogConfig.panelClass = 'custom-edit-channel-dialog';
-      this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
-      this.fsDataThreadService.detailsVisible = true
-      this.profileMenuRef.afterClosed().subscribe(() => {
-        this.fsDataThreadService.detailsVisible = false
-      });
+    dialogConfig.position = {
+      top: '80',
+      right: '25'
+    };
+    dialogConfig.panelClass = 'custom-edit-channel-dialog';
+    this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
+    this.fsDataThreadService.detailsVisible = true
+    this.profileMenuRef.afterClosed().subscribe(() => {
+      this.fsDataThreadService.detailsVisible = false
+    });
   }
 
 

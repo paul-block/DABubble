@@ -145,8 +145,20 @@ export class MessagesService {
     } catch (error) {
       console.error('Error editing message:', error);
     }
-
   }
+
+
+  async saveEditedMessageFromThread(chat) {
+    let id = chat.message_ID
+    let message = chat.chat_message
+    let edited = chat.chat_message_edited
+    const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
+    await updateDoc(messageRef, {
+      chat_message: message,
+      chat_message_edited: edited
+    })
+  } 
+  
 
   async deleteMessage(i: number, chatMessage) {
     this.messageIndex = i;

@@ -15,11 +15,11 @@
 
 
         <div [class.show_edit_comment]="edit_comment && edit_comment_index == -1  "
-            class="edit_comment" (click)="openEditComment(i)">
-            <div class="menu_button" (click)="msgService.editMessage(-1, fsDataThreadService.current_chat_data)" (click)="stopPropagation($event)">
+            class="edit_comment" (click)="openEditComment(-1)">
+            <div class="menu_button" (click)="openEditMessage()" (click)="stopPropagation($event)">
                 <span>Nachricht bearbeiten</span>
             </div>
-            <div class="menu_button" (click)="openDeleteComment(i)" (click)="stopPropagation($event)">
+            <div class="menu_button" (click)="openDeleteMessage()" (click)="stopPropagation($event)">
                 <span>Nachricht löschen</span>
             </div>
         </div>

@@ -112,11 +112,7 @@ export class ProfileMenuComponent {
           this.authService.userData.avatar = downloadURL
         });
       })
-    ).subscribe(
-      error => {
-        this.file_error = true
-      }
-    );
+      )
   }
 
   saveNewAvatar() {
