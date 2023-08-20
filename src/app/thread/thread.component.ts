@@ -279,5 +279,14 @@ export class ThreadComponent implements OnInit {
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
   }
+
+
+  addEmojiInDirectMessage($event: any, i: number) {
+    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let user = this.authenticationService.userData.user_name;
+    this.emojiPicker_open = false;
+    this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
+    this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
+  }
 }
 

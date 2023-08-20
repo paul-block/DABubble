@@ -22,6 +22,7 @@ export class MessagesService {
   messageIndex: number = null;
   private scrollSubject = new Subject<void>();
   answers_count: any;
+  time: any;
 
   constructor(
     public directChatService: DirectChatService,
@@ -53,7 +54,8 @@ export class MessagesService {
         created_At: firebase.firestore.FieldValue.serverTimestamp(),
         chat_message_edited: false,
         emoji_data: [],
-        answers: 0
+        answers: 0,
+        last_answer: ''
       })
 
       const newMessageID = messagesCollectionRef.id;
@@ -71,7 +73,8 @@ export class MessagesService {
     await this.getNumberOfAnswers(id)
     const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
     const data = {
-      answers: this.answers_count
+      answers: this.answers_count,
+      last_answer: this.time
     };
      updateDoc(messageRef, data) 
   }
@@ -81,7 +84,7 @@ export class MessagesService {
     const docRef = doc(this.db, "threads", id);
     const docSnap = await getDoc(docRef);
     this.answers_count = docSnap.data().comments.length
-
+    this.time = docSnap.data().comments[this.answers_count - 1].time.seconds
   }
 
 

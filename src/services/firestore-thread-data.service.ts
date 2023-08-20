@@ -89,7 +89,6 @@ export class FirestoreThreadDataService {
     this.direct_chat_index = i
     this.thread_open = true
     this.current_message = this.dataDirectChatService.directChatMessages[i].chat_message
-    console.log(this.dataDirectChatService.directChatMessages[i]);
     this.current_message_id = this.dataDirectChatService.directChatMessages[i].message_ID
     this.loadThread(this.current_message_id)
     this.chat_type = 'direct'

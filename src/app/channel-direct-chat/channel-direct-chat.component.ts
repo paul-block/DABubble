@@ -208,5 +208,11 @@ export class ChannelDirectChatComponent{
   }
 
 
+  getImageUrl(uid: string): string {
+    const user = this.authService.all_users.find(element => element.uid === uid);
+    return user.avatar
+  }
+
+
   
 }

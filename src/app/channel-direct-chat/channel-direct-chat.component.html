@@ -38,8 +38,8 @@
         </div>
         <div [ngStyle]="{'justify-content':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'flex-start' : 'flex-end' }"
             class="chat-message" (mouseleave)="resetToggledAreas()">
-            <img [ngStyle]="{'order':isMessageCreator(chatMessage.user_Sender_ID) === false ? '0' : '1' }"
-                src="/assets/img/small_avatar/avatar_2.svg">
+            <img class="avatar_img" [ngStyle]="{'order':isMessageCreator(chatMessage.user_Sender_ID) === false ? '0' : '1' }"
+                [src]="getImageUrl(chatMessage.user_Sender_ID)">
             <div class="chat-message-details">
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
@@ -101,10 +101,11 @@
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
                     <div class="answers">
-                        <div>{{dataDirectChatService.directChatMessages[i]?.answers}}</div>
-                        <span class="chat-message-answers-amount" (click)="fsDataThreadService.openDirectChatThread(i)">Antworten</span>
+                        <div *ngIf="dataDirectChatService.directChatMessages[i]?.answers > 0" >{{dataDirectChatService.directChatMessages[i]?.answers}}</div>
+                        <span  *ngIf="dataDirectChatService.directChatMessages[i]?.answers == 0 || dataDirectChatService.directChatMessages[i]?.answers > 1" class="chat-message-answers-amount" (click)="fsDataThreadService.openDirectChatThread(i)">Antworten</span>
+                        <span *ngIf="dataDirectChatService.directChatMessages[i]?.answers == 1" class="chat-message-answers-amount" (click)="fsDataThreadService.openDirectChatThread(i)">Antwort</span>
                     </div>
-                    <span class="last-message-time">Letzte Antwort xx:xx Uhr</span>
+                    <span *ngIf="dataDirectChatService.directChatMessages[i]?.answers > 0" class="last-message-time">Letze Antwort {{fsDataThreadService.getTimeSince(dataDirectChatService.directChatMessages[i]?.last_answer)}}</span>
                 </div>
             </div>
             <div [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
