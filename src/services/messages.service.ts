@@ -71,6 +71,7 @@ export class MessagesService {
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
     const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
     this.directChatService.directChatMessages.push(latestDocument);
+    this.scrollToBottom();
   }
 
   async getChangedMessage() {
@@ -91,6 +92,10 @@ export class MessagesService {
       const userData = doc.data();
       this.directChatService.directChatMessages.push(userData);
     });
+    this.scrollToBottom()
+  }
+
+  scrollToBottom(){
     setTimeout(() => {
       this.scrollSubject.next();
     }, 0);
