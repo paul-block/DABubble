@@ -10,37 +10,6 @@
         <div class="loader"></div>
     </div>
 
-    <!-- <div class="categorie-container">
-        <div class="categorie" (click)="search('channels')">
-            <img src="assets/img/icons/workspaces.svg" alt="">
-            <span>Channels</span>
-        </div>
-
-        <div class="categorie" (click)="search('chats')">
-            <img src="assets/img/icons/account_circle.svg" alt="">
-            <span>Direktnachrichten</span>
-        </div>
-
-        <div class="categorie" (click)="search('users')">
-            <img src="assets/img/icons/workspaces.svg" alt="">
-            <span>Profile</span>
-        </div>
-    </div> -->
-
-    <!-- <div class="results" *ngIf="showAll">
-        <div class="result-row" *ngFor="let item of items">
-            <span *ngIf="currentCategory === 'channels'">#</span>
-            <span>{{ item }}</span>
-        </div>
-    </div> -->
-
-    <!-- <div class="results" *ngIf="searchValue">
-        <div class="result-row" *ngFor="let item of filteredItems">
-            <span *ngIf="currentCategory === 'channels'">#</span>
-            <span>{{ item }}</span>
-        </div>
-    </div> -->
-
     <div class="results" *ngIf="filteredChannels.length > 0 && searchValue.length > 0">
         <div class="result-row" *ngFor="let channel of filteredChannels">
             <img src="assets/img/icons/workspaces.svg" alt="">

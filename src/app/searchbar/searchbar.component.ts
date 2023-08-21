@@ -87,15 +87,6 @@ export class SearchbarComponent {
 }    
 }
 
-    // async search(collectionName: string) {
-    //   const collectionRef = collection(this.db, collectionName);
-    //   const querySnapshot = await getDocs(collectionRef);
-    //   querySnapshot.forEach((doc) => {
-    //     if (collectionName === 'channels') this.channelsSet.add(doc.data().channelName);
-    //     if (collectionName === 'users') this.usersSet.add(doc.data().user_name);
-    //   });
-    // }
-
     async search(collectionName: string) {
       const collectionRef = collection(this.db, collectionName);
       const querySnapshot = await getDocs(collectionRef);
