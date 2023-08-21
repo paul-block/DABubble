@@ -50,6 +50,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
+import { ChatPlaceholderComponent } from './chat-placeholder/chat-placeholder.component';
 
 
 
@@ -88,6 +90,8 @@ import { MatInputModule } from '@angular/material/input';
     DialogDeleteCommentComponent,
     ChannelDirectEditMessageComponent,
     DialogProfileComponent,
+    ChatMessagesComponent,
+    ChatPlaceholderComponent,
   ],
   imports: [
     HttpClientModule,

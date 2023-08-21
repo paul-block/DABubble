@@ -21,18 +21,20 @@ export class ChannelService {
   showSelectedUser$ = this.showSelectedUserDiv.asObservable();
   showAutoComplete = new BehaviorSubject<boolean>(true);
   showAutoComplete$ = this.showAutoComplete.asObservable();
-
-
+  currentChannelID: string = 'noChannelSelected';
+  channels: any[] = [];
+  
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
   ) { }
+  
 
   showSelectedUser(value: boolean) {
     this.showSelectedUserDiv.next(value);
   }
 
-  getUserId(uid:string) {
+  getUserId(uid: string) {
     this.userIdSubject.next(uid);
   }
 
@@ -40,41 +42,43 @@ export class ChannelService {
     this.userSelectedSource.next(userName);
   }
 
-  toggleAutocomplete(value:boolean) {
+  toggleAutocomplete(value: boolean) {
     this.showAutoComplete.next(value);
   }
 
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
-      const channelRef = doc(this.db, 'channels', channelName);
-      const channelSnapshot = await getDoc(channelRef);
-  
-      if (channelSnapshot.exists()) {
-          const channelData = channelSnapshot.data();
-          const assignedUsers = channelData?.assignedUsers || [];
-          return assignedUsers;
-      } else {
-          console.log(`Channel with name ${channelName} does not exist.`);
-          return [];
-      }
+    const channelRef = doc(this.db, 'channels', channelName);
+    const channelSnapshot = await getDoc(channelRef);
+
+    if (channelSnapshot.exists()) {
+      const channelData = channelSnapshot.data();
+      const assignedUsers = channelData?.assignedUsers || [];
+      return assignedUsers;
+    } else {
+      console.log(`Channel with name ${channelName} does not exist.`);
+      return [];
+    }
   }
 
-  async createNewChannel(channel: string, description?: string){
+  async createNewChannel(channel: string, description?: string) {
     const auth = getAuth();
     const user = auth.currentUser;
 
     if (user !== null) {
       try {
-        const channelCollectionRef = collection(this.db, 'channels');
-        const newChannel = {
+        const channelCollectionRef = await addDoc(collection(this.db, 'channels'),{
           channelName: channel,
           createdBy: user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          assignedUsers: [
-            user.uid,
-          ],
+          assignedUsers: [user.uid,],
           description: description
-        };
-        const docRef = await addDoc(channelCollectionRef, newChannel);
+        });
+
+        const newChannelID = channelCollectionRef.id;
+        await updateDoc(channelCollectionRef, {
+          channel_ID: newChannelID,
+        });
+
         this.getAuthorizedChannels(user.uid);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
@@ -90,7 +94,7 @@ export class ChannelService {
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {
-      channels.push(doc.data().channelName);
+      channels.push(doc.data());
     });
     this.authorizedChannelsSubject.next(channels);
   }
@@ -119,4 +123,5 @@ export class ChannelService {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
     }
   }
+
 }

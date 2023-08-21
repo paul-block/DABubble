@@ -23,7 +23,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
-  channels: any[] = [];
   private sub: Subscription;
 
   constructor(
@@ -34,18 +33,14 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     public msgService: MessagesService,
     public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
-    // console.log(this.authService.userData);
-    // this.searchChatAndGetMessages(this.authService.userData.user_name);
-    
-    
   }
 
   ngOnInit() {
     this.sub = this.channelService.authorizedChannels.subscribe(channels => {
-      this.channels = channels;
+      this.channelService.channels = channels;
     });
   }
 
@@ -84,13 +79,31 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async searchChatAndGetMessages(userReceiverID) {
+    this.directChatService.currentChatSection = 'chats';
     await this.directChatService.searchChat(userReceiverID);
     this.directChatService.textAreaMessageTo();
     this.msgService.getMessages();
-    this.fsDataThreadService.thread_open = false
+    this.fsDataThreadService.thread_open = false;
+  }
+
+  checkIfSameChatID(userReceiverID) {
+    return this.directChatService.currentChatID !== userReceiverID;
   }
 
 
+  async openChannel(channelID) {
+    if (this.directChatService.currentChatID !== channelID) {
+      this.directChatService.currentChatSection = 'channels';
+      try {
+        this.directChatService.currentChatID = channelID;
+        this.directChatService.textAreaMessageTo();
+        this.msgService.getMessages();
+        this.fsDataThreadService.thread_open = false;
+      } catch (error) {
+        console.error("Fehler bei öffnen des Channels: ", error);
+      }
+    }
+  }
 }
 
 

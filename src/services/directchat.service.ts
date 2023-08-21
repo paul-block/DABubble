@@ -4,19 +4,23 @@ import { doc, getFirestore, updateDoc, collection, addDoc, getDocs } from '@angu
 import { getAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
+import { ChannelService } from './channel.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DirectChatService {
   db = getFirestore();
+  currentChatSection = 'noChatSectionSelected';
   currentChatID: string = 'noChatSelected';
   directChatMessages = [];
   currentChatData;
   messageToPlaceholder: string = 'Nachricht an ...';
 
+
   constructor(
     public authService: AuthenticationService,
+    public channelService: ChannelService,
   ) { }
 
   async searchChat(userReceiverID) {
@@ -86,8 +90,14 @@ export class DirectChatService {
 
 
   textAreaMessageTo() {
-    this.getReceiverName()
-    this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
+    if (this.currentChatSection === 'chats') {
+      this.getReceiverName();
+      this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
+    } else if(this.currentChatSection === 'channels'){
+        this.getCurrentChatData();
+        this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
+    }
+
   }
 
 
@@ -97,5 +107,9 @@ export class DirectChatService {
     } else {
       this.authService.getUserData(this.currentChatData.chat_Member_IDs[0]);
     }
+  }
+
+  getCurrentChatData() {
+    this.currentChatData = this.channelService.channels.filter(channel => channel.channel_ID === this.currentChatID);
   }
 }

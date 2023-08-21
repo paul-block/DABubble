@@ -23,7 +23,6 @@
                          6.15625C5.32299 6.21875 5.16674 6.25 5.00008 6.25C4.83341 6.25 4.67716 6.21875 4.53133 
                          6.15625C4.38549 6.09375 4.25008 6 4.12508 5.875Z" fill="black" />
                     </svg>
-
                     <div class="workspace">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_4093_12437" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
@@ -36,7 +35,6 @@
                                     fill="black" />
                             </g>
                         </svg>
-
                         <span class="select-none">Channels</span>
                     </div>
                 </div>
@@ -60,19 +58,14 @@
                     </defs>
                 </svg>
             </div>
-
-
             <div class="channel-second-row select-none" *ngIf="channelsVisible">
-
-                <div class="pointer active-channel sidebar-hover br-20">
-                    <span class="tag">#</span>
-                    <span> {{ channels[channels.length - 1] }}</span>
-                </div>
-
-                <ng-container *ngFor="let channel of channels; let isLast = last">
-                    <div *ngIf="!isLast" class="pointer inactive-channel sidebar-hover">
+                <ng-container *ngFor="let channel of channelService.channels; let isLast = last">
+                    <div *ngIf="!isLast"
+                        [ngClass]="{'active-channel': channel.channel_ID === directChatService.currentChatID}"
+                        class="pointer inactive-channel sidebar-hover"
+                        (click)="openChannel(channel.channel_ID)">
                         <span class="tag">#</span>
-                        <span>{{ channel }}</span>
+                        <span>{{ channel.channelName }}</span>
                     </div>
                 </ng-container>
 
