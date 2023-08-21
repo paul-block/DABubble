@@ -41,10 +41,57 @@
                     border: 1px solid #ADB0D9
                 }
             }
-
-           
         }
+
+        *::-webkit-scrollbar {
+            width: 0px !important;
+        }
+       
+       #autocomplete {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           background-color: white;
+           position: absolute;
+           top: 130px;
+           left: 85px;
+           padding: 15px 20px;
+           width: 320px;
+           max-height: 100px;
+           border: 1px solid #ADB0D9;
+           border-radius: 0 30px 30px 30px;
+           overflow-y: scroll;
+           overflow-x: hidden;
+           
+       
+               .dm-profile {
+                   display: flex;
+                   align-items: center;
+                   justify-content: flex-start;
+                   height: 50px;
+                   width: 100%;
+                   padding: 5px 10px;
+       
+                       span {
+                           font-size: 18px;
+                       }
+               }
+
+               img {
+                    width: 20px;
+                    margin-right: 10px;
+               }
+
+                .tag {
+                    margin-right: 2px;
+                }
+       }
 }
+
+.d-none {
+    display: none !important;
+}
+
 
 app-channel-direct-send-message {
     margin-bottom: 21px !important;

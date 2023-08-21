@@ -40,15 +40,11 @@ export class NewMsgService {
       return;
     }
 
-    const userName = userDoc.data().user_name; // Extrahieren des Benutzernamens
-
-  
+    const userName = userDoc.data().user_name;
+     
     if (channelOrUserInput.startsWith('#') || channelOrUserInput.includes('#')) {
-      // Hier behandeln wir die Channel-Logik
-
-      const channelName = channelOrUserInput.substring(1); // Entfernen Sie das "An: #"
+      const channelName = channelOrUserInput.substring(1); 
       console.log(channelName);
-      // Channel in Ihrer Datenbank finden
       const channelsCollection = collection(this.db, 'channels');
       const channelQuery = query(channelsCollection, where('channelName', '==', channelName));
       const channelSnapshot = await getDocs(channelQuery);
@@ -62,14 +58,11 @@ export class NewMsgService {
       });
   
       if (channelDocRef) {
-        // User ist in der assignedUsers-Liste des Channels
         const channelMessagesCollectionRef = collection(channelDocRef, 'channel_messages');
         await addDoc(channelMessagesCollectionRef, {
           message: messageText,
           user_id: currentUserUID,
-          // Hier setzen Sie den Benutzernamen, es sei denn, Sie haben ihn irgendwo verfügbar.
           user_name: userName,
-          // Sie müssen dies durch den tatsächlichen Benutzernamen ersetzen
           created_At: firebase.firestore.FieldValue.serverTimestamp(),
         });
         console.log('Nachricht zum Channel hinzugefügt');
@@ -78,176 +71,70 @@ export class NewMsgService {
       }
   
     } else if (channelOrUserInput.startsWith('@') || channelOrUserInput.includes('@')) {
- // Es handelt sich um einen Benutzer
+
       const receiverUID = this.user_id;
-
-      // Überprüfen, ob ein Chat-Dokument mit den beiden User-IDs bereits existiert
       const chatCollection = collection(this.db, 'chats');
-      const chatQuery = query(chatCollection, where('chat_Member_IDs', 'array-contains', currentUserUID));
-      const chatSnapshot = await getDocs(chatQuery);
-
+  
       let chatDocExists = false;
       let chatDocRef;
-
-      chatSnapshot.forEach(doc => {
-        const chatData = doc.data();
-        if (chatData.chat_Member_IDs.includes(receiverUID)) {
-          chatDocExists = true;
-          chatDocRef = doc;
-        }
-      });
-
-      // Dokument aktualisieren oder erstellen
-      if (chatDocExists && chatDocRef) {
-        // Chat-Dokument gefunden, fügen Sie die neue Nachricht hinzu
-        const messagesCollectionRef = collection(chatDocRef.ref, 'messages');
-        await addDoc(messagesCollectionRef, {
-          chat_message: messageText,
-          user_Sender_ID: currentUserUID,
-          user_name: userName,
-          created_At: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        console.log('chat dokument gefunden, fügt neues dokument in die vorhandenen messages');
+  
+      if (currentUserUID === receiverUID) {
+          const sortedUIDs = [currentUserUID, receiverUID].sort();
+          const selfChatQuery = query(chatCollection, where('chat_Member_IDs', '==', sortedUIDs));
+          const selfChatSnapshot = await getDocs(selfChatQuery);
+  
+          selfChatSnapshot.forEach(doc => {
+              const chatData = doc.data();
+              if (chatData.chat_Member_IDs.includes(receiverUID) && chatData.chat_Member_IDs.includes(currentUserUID)) {
+                  chatDocExists = true;
+                  chatDocRef = doc;
+              }
+          });
       } else {
-        // Kein Chat-Dokument gefunden, neues erstellen
-        const newChatRef = await addDoc(chatCollection, {
-          chat_Member_IDs: [currentUserUID, receiverUID],
-          created_At: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-              
-        console.log('kein chat gefunden, erstelle neuen');
-
-        const newMessagesCollectionRef = collection(newChatRef, 'messages');
-        await addDoc(newMessagesCollectionRef, {
-          chat_message: messageText,
-          user_Sender_ID: currentUserUID,
-          user_name: userName,
-          created_At: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-              
-        console.log('neue nachricht in neuen chat hinzugefügt');
+          const otherChatQuery = query(chatCollection, where('chat_Member_IDs', 'array-contains', currentUserUID));
+          const otherChatSnapshot = await getDocs(otherChatQuery);
+  
+          otherChatSnapshot.forEach(doc => {
+              const chatData = doc.data();
+              if (chatData.chat_Member_IDs.includes(receiverUID)) {
+                  chatDocExists = true;
+                  chatDocRef = doc;
+              }
+          });
       }
   
-    } else {
+      if (chatDocExists && chatDocRef) {
+          const messagesCollectionRef = collection(chatDocRef.ref, 'messages');
+          await addDoc(messagesCollectionRef, {
+              chat_message: messageText,
+              user_Sender_ID: currentUserUID,
+              user_name: userName,
+              created_At: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          console.log('chat dokument gefunden, fügt neues dokument in die vorhandenen messages');
+      } else {
+          const newChatRef = await addDoc(chatCollection, {
+              chat_Member_IDs: [currentUserUID, receiverUID].sort(),
+              created_At: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+                
+          console.log('kein chat gefunden, erstelle neuen');
+  
+          const newMessagesCollectionRef = collection(newChatRef, 'messages');
+          await addDoc(newMessagesCollectionRef, {
+              chat_message: messageText,
+              user_Sender_ID: currentUserUID,
+              user_name: userName,
+              created_At: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+                
+          console.log('neue nachricht in neuen chat hinzugefügt');
+      }
+  
+  } else {
       console.error('Ungültiger Eingabewert. Es sollte mit # oder @ beginnen.');
-    }
   }
+  }  
 
-
-//   async addOrUpdateChat(messageText: string, channelOrUserInput: string) {
-//     const auth = getAuth();
-//     const currentUserUID = auth.currentUser.uid;
-  
-//     if (channelOrUserInput.startsWith('An: #')) {
-//       // Hier behandeln wir die Channel-Logik
-//       const channelName = channelOrUserInput.substring(4); // Entfernen Sie das "#"
-//       // Verwenden Sie channelName, um den richtigen Channel in Ihrer Datenbank zu finden und Nachrichten hinzuzufügen/aktualisieren.
-//       // Hinweis: Sie müssen den Code hier vervollständigen, um die Nachricht zum richtigen Kanal hinzuzufügen.
-  
-//     } else if (channelOrUserInput.startsWith('An: @') || channelOrUserInput.includes('@')) {
-//       // Es handelt sich um einen Benutzer
-//       const receiverUID = this.user_id;
-
-//       // Überprüfen, ob ein Chat-Dokument mit den beiden User-IDs bereits existiert
-//       const chatCollection = collection(this.db, 'chats');
-//       const chatQuery = query(chatCollection, where('chat_Member_IDs', 'array-contains', currentUserUID));
-//       const chatSnapshot = await getDocs(chatQuery);
-
-//       let chatDocExists = false;
-//       let chatDocRef;
-
-//       chatSnapshot.forEach(doc => {
-//         const chatData = doc.data();
-//         if (chatData.chat_Member_IDs.includes(receiverUID)) {
-//           chatDocExists = true;
-//           chatDocRef = doc;
-//         }
-//       });
-
-//       // Dokument aktualisieren oder erstellen
-//       if (chatDocExists && chatDocRef) {
-//         // Chat-Dokument gefunden, fügen Sie die neue Nachricht hinzu
-//         const messagesCollectionRef = collection(chatDocRef.ref, 'messages');
-//         await addDoc(messagesCollectionRef, {
-//           chat_message: messageText,
-//           user_Sender_ID: currentUserUID,
-//           created_At: firebase.firestore.FieldValue.serverTimestamp(),
-//         });
-//         console.log('chat dokument gefunden, fügt neues dokument in die vorhandenen messages');
-//       } else {
-//         // Kein Chat-Dokument gefunden, neues erstellen
-//         const newChatRef = await addDoc(chatCollection, {
-//           chat_Member_IDs: [currentUserUID, receiverUID],
-//           created_At: firebase.firestore.FieldValue.serverTimestamp(),
-//         });
-              
-//         console.log('kein chat gefunden, erstelle neuen');
-
-//         const newMessagesCollectionRef = collection(newChatRef, 'messages');
-//         await addDoc(newMessagesCollectionRef, {
-//           chat_message: messageText,
-//           user_Sender_ID: currentUserUID,
-//           created_At: firebase.firestore.FieldValue.serverTimestamp(),
-//         });
-              
-//         console.log('neue nachricht in neuen chat hinzugefügt');
-//       }
-  
-//     } else {
-//       console.error('Ungültiger Eingabewert. Es sollte mit # oder @ beginnen.');
-//     }
-// }
-
-
-  // async addOrUpdateChat(messageText: string) {
-  //   const auth = getAuth();
-  //   const currentUserUID = auth.currentUser.uid;
-  //   const receiverUID = this.user_id;
-
-  //   // 1. Überprüfen, ob ein Chat-Dokument mit den beiden User-IDs bereits existiert
-  //   const chatCollection = collection(this.db, 'chats');
-  //   const chatQuery = query(chatCollection, where('chat_Member_IDs', 'array-contains', currentUserUID));
-  //   const chatSnapshot = await getDocs(chatQuery);
-
-  //   let chatDocExists = false;
-  //   let chatDocRef;
-
-  //   chatSnapshot.forEach(doc => {
-  //     const chatData = doc.data();
-  //     if (chatData.chat_Member_IDs.includes(receiverUID)) {
-  //       chatDocExists = true;
-  //       chatDocRef = doc;
-  //     }
-  //   });
-
-  //   // 2. Dokument aktualisieren oder erstellen
-  //   if (chatDocExists && chatDocRef) {
-  //     // Chat-Dokument gefunden, fügen Sie die neue Nachricht hinzu (je nach Ihrer Datenstruktur)
-  //     const messagesCollectionRef = collection(chatDocRef.ref, 'messages');
-  //     await addDoc(messagesCollectionRef, {
-  //       chat_message: messageText,
-  //       user_Sender_ID: currentUserUID,
-  //       created_At: firebase.firestore.FieldValue.serverTimestamp(),
-  //       });
-  //     console.log('chat dokument gefunden, fügt neues dokument in die vorhandenen messages');
-  //   } else {
-  //     // Kein Chat-Dokument gefunden, neues erstellen
-  //     const newChatRef = await addDoc(chatCollection, {
-  //       chat_Member_IDs: [currentUserUID, receiverUID],
-  //       created_At: firebase.firestore.FieldValue.serverTimestamp(),
-  //     });
-            
-  //     console.log('kein chat gefunden, erstelle neuen')
-
-  //     const newMessagesCollectionRef = collection(newChatRef, 'messages');
-  //     await addDoc(newMessagesCollectionRef, {
-  //       chat_message: messageText,
-  //       user_Sender_ID: currentUserUID,
-  //       created_At: firebase.firestore.FieldValue.serverTimestamp(),
-  //     });
-            
-  //     console.log('neue nachricht in neuen chat hinzugefügt')
-  //   }
-  // }
 }
 

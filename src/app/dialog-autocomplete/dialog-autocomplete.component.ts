@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
 import { switchMap } from 'rxjs/operators';
+import { NewMsgService } from 'services/new-msg.service';
 
 @Component({
   selector: 'app-dialog-autocomplete',
@@ -13,7 +14,7 @@ export class DialogAutocompleteComponent implements OnInit  {
   filteredUsers: any[] = [];
 
 
-  constructor(private authService: AuthenticationService, public channelService: ChannelService) { }
+  constructor(private authService: AuthenticationService, public channelService: ChannelService, public newMsgService: NewMsgService) { }
 
   ngOnInit() {
     this.authService.addCertainUserValue
@@ -26,7 +27,6 @@ export class DialogAutocompleteComponent implements OnInit  {
     });
 
   }
-
 
   addUser(uid: string, userName: string) {
     this.getUserId(uid);
