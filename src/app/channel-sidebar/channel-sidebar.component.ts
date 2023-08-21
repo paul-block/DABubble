@@ -7,6 +7,7 @@ import { ChannelService } from 'services/channel.service';
 import { DirectChatService } from 'services/directchat.service';
 import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
+import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -31,7 +32,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     public channelService: ChannelService,
     public directChatService: DirectChatService,
     public msgService: MessagesService,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public fsDataThreadService: FirestoreThreadDataService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -85,6 +87,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     await this.directChatService.searchChat(userReceiverID);
     this.directChatService.textAreaMessageTo();
     this.msgService.getMessages();
+    this.fsDataThreadService.thread_open = false
   }
 
 

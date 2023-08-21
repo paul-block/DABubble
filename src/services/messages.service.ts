@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
@@ -21,6 +21,8 @@ export class MessagesService {
   emoji_data = [];
   messageIndex: number = null;
   private scrollSubject = new Subject<void>();
+  answers_count: any;
+  time: any;
 
   constructor(
     public directChatService: DirectChatService,
@@ -52,6 +54,8 @@ export class MessagesService {
         created_At: firebase.firestore.FieldValue.serverTimestamp(),
         chat_message_edited: false,
         emoji_data: [],
+        answers: 0,
+        last_answer: ''
       })
 
       const newMessageID = messagesCollectionRef.id;
@@ -63,6 +67,24 @@ export class MessagesService {
       });
 
     }
+  }
+
+  async saveNumberOfAnswers(id: string) {
+    await this.getNumberOfAnswers(id)
+    const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
+    const data = {
+      answers: this.answers_count,
+      last_answer: this.time
+    };
+     updateDoc(messageRef, data) 
+  }
+
+
+  async getNumberOfAnswers(id: string) {
+    const docRef = doc(this.db, "threads", id);
+    const docSnap = await getDoc(docRef);
+    this.answers_count = docSnap.data().comments.length
+    this.time = docSnap.data().comments[this.answers_count - 1].time.seconds
   }
 
 
@@ -128,8 +150,20 @@ export class MessagesService {
     } catch (error) {
       console.error('Error editing message:', error);
     }
-
   }
+
+
+  async saveEditedMessageFromThread(chat) {
+    let id = chat.message_ID
+    let message = chat.chat_message
+    let edited = chat.chat_message_edited
+    const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
+    await updateDoc(messageRef, {
+      chat_message: message,
+      chat_message_edited: edited
+    })
+  } 
+  
 
   async deleteMessage(i: number, chatMessage) {
     this.messageIndex = i;

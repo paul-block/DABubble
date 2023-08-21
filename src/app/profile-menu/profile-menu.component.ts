@@ -36,6 +36,7 @@ export class ProfileMenuComponent {
   signOut() {
     this.authService.signOut();
     this.dialog.closeAll();
+    this.fsDataThreadService.thread_open = false
   }
 
 
@@ -111,11 +112,7 @@ export class ProfileMenuComponent {
           this.authService.userData.avatar = downloadURL
         });
       })
-    ).subscribe(
-      error => {
-        this.file_error = true
-      }
-    );
+      )
   }
 
   saveNewAvatar() {
