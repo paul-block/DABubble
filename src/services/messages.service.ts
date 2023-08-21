@@ -70,13 +70,13 @@ export class MessagesService {
   }
 
   async saveNumberOfAnswers(id: string) {
-    await this.getNumberOfAnswers(id)
-    const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
-    const data = {
-      answers: this.answers_count,
-      last_answer: this.time
-    };
-     updateDoc(messageRef, data) 
+    await this.getNumberOfAnswers(id) 
+      const messageRef = doc(this.db, 'chats', this.directChatService.currentChatID, 'messages', id);
+      const data = {
+        answers: this.answers_count,
+        last_answer: this.time
+      };
+      updateDoc(messageRef, data)
   }
 
 
@@ -84,7 +84,8 @@ export class MessagesService {
     const docRef = doc(this.db, "threads", id);
     const docSnap = await getDoc(docRef);
     this.answers_count = docSnap.data().comments.length
-    this.time = docSnap.data().comments[this.answers_count - 1].time.seconds
+    if (this.answers_count > 0) this.time = docSnap.data().comments[this.answers_count - 1].time.seconds
+    else this.time = 0
   }
 
 
@@ -157,8 +158,8 @@ export class MessagesService {
       chat_message: message,
       chat_message_edited: edited
     })
-  } 
-  
+  }
+
 
   async deleteMessage(i: number, chatMessage) {
     this.messageIndex = i;

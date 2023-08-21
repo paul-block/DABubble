@@ -1,18 +1,12 @@
 import { Injectable, } from '@angular/core';
-import { doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
+import { doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DirectChatService } from './directchat.service';
 import { MessagesService } from './messages.service';
-import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, Subscription, finalize } from 'rxjs';
-
-
-
-
+import { Observable, Subscription, catchError, finalize } from 'rxjs';
+import { of } from 'rxjs';
 
 
 
@@ -40,21 +34,25 @@ export class FirestoreThreadDataService {
   current_chat_data: any;
   direct_chat_index: number;
   progress: number;
-  uploadProgress: number;
+  uploadProgress: number = 0
   upload_array = {
     file_name: [],
-    download_link: []
+    download_link: [],
   }
+  file = []
+  download_complete: boolean;
+
 
 
   constructor(public authenticationService: AuthenticationService,
     private storage: AngularFireStorage,
-    private angularFireDatabase: AngularFireDatabase,
-    private firestore: AngularFirestore,
     private dataDirectChatService: DirectChatService,
-    private messageSevice:MessagesService,
-    private http: HttpClient
-  ) {}
+    private messageSevice: MessagesService,
+
+  ) {
+    console.log(this.upload_array);
+
+  }
 
 
   async saveThread(data) {
@@ -63,7 +61,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
-    if(this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
+    if (this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
 
 
@@ -72,7 +70,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
-    if(this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
+    if (this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
 
 
@@ -135,6 +133,7 @@ export class FirestoreThreadDataService {
       if (changedData) {
         this.comments = changedData.comments
         this.fake_array.length = this.comments.length
+        console.log(this.comments);
       } else {
         let thread_data = {
           comments: []
@@ -147,38 +146,80 @@ export class FirestoreThreadDataService {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile.name);
-    this.upload_array.file_name.push(this.selectedFile.name)
-    this.uploadImage()
+    if (this.selectedFile) {
+      this.file.push(this.selectedFile)
+      this.upload_array.file_name.push(this.selectedFile.name)
+    }
   }
 
 
-  uploadImage() {
-    const filePath = this.authenticationService.userData.uid + '/' + this.selectedFile.name;
+  async prepareUploadfiles() {
+    console.log(this.upload_array);
+    
+    for (let i = 0; i < this.upload_array.file_name.length; i++) {
+      const file = this.file[i];
+      await this.uploadFile(file, i)
+    }
+  }
+
+
+  async uploadFile(file: File, i: number) {
+    const filePath = this.authenticationService.userData.uid + '/' + file.name;
     const fileRef = this.storage.ref(filePath);
-    const uploadTask = this.storage.upload(filePath, this.selectedFile);
+    const uploadTask = this.storage.upload(filePath, file);
+  
     uploadTask.percentageChanges().subscribe(progress => {
       this.uploadProgress = progress;
     });
-    uploadTask.snapshotChanges().pipe(
-      finalize(() => {
-        fileRef.getDownloadURL().subscribe(downloadURL => {
-      this.upload_array.download_link.push(downloadURL)
-        });
+  
+    try {
+      const downloadURL = await fileRef.getDownloadURL().toPromise();
+      this.upload_array.download_link[i] = downloadURL;
+      console.log(this.upload_array.download_link);
+  
+      await uploadTask.snapshotChanges().pipe(
+        catchError(error => {
+          console.error("Error uploading file:", error);
+          // Führe hier geeignete Fehlerbehandlung durch
+          return of(null); // Gibt ein Observable mit null zurück, um den Fehler anzuzeigen
+        })
+      ).toPromise()
+      .then(async () => {
+        // Der Code hier wird erst nach erfolgreichem Upload ausgeführt
+        console.log("Upload erfolgreich abgeschlossen");
       })
-    ).subscribe(
-      error => {
-       
-      }
-    );
+      .catch(error => {
+        console.error("Error during upload:", error);
+        this.emptyUploadArray();
+      });
+    } catch (error) {
+      console.error("Error during upload:", error);
+      this.emptyUploadArray();
+    }
+  }
+  
+  
+
+
+  emptyUploadArray() {
+    this.uploadProgress = 0
+    this.upload_array.download_link = []
+    this.upload_array.file_name = []
+    this.file = []
   }
 
 
-  deleteFile(filePath: string): Observable<void> {
+  deleteFile(filePath: string, i:number, k:number): Observable<void> {
+    this.comments[i].uploaded_files.file_name.splice(k, 1)
+    this.comments[i].uploaded_files.download_link.splice(k, 1)
+    this.updateData()
     const fileRef = this.storage.ref(filePath);
     return fileRef.delete();
   }
 }
+
+
+
 
 
 

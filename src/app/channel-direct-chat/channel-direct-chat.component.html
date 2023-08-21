@@ -25,10 +25,7 @@
 </header>
 <section class="chat-messages" #ChatContainerREF>
     <div>
-        <h3>Testnachrichten</h3>
-        <div *ngFor="let message of fsDataThreadService.channel_messages; let i = index">
-            {{fsDataThreadService.channel_messages[i].message}}<button
-                (click)="fsDataThreadService.openThread(i)">Antworten</button></div>
+        
     </div>
     <div class="chat-message-container"
         *ngFor="let chatMessage of dataDirectChatService.directChatMessages; let i = index;">

@@ -108,8 +108,9 @@ export class ThreadComponent implements OnInit {
   };
 
 
-  postComment() {
-    if (this.comment_value.length > 0) {
+  async postComment() {
+    if (this.fsDataThreadService.upload_array.file_name.length > 0) await this.fsDataThreadService.prepareUploadfiles()
+    if (this.comment_value.length > 0 || this.fsDataThreadService.upload_array.file_name.length > 0) {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
@@ -117,13 +118,22 @@ export class ThreadComponent implements OnInit {
         uid: this.authenticationService.getUid(),
         emoji_data: [],
         text_edited: false,
-        uploaded_files: []
+        uploaded_files: this.fsDataThreadService.upload_array
       }
       this.fsDataThreadService.saveThread(comment_data)
       this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
+      this.emptyUploadArray()
     }
+  }
+
+
+  emptyUploadArray() {
+    this.fsDataThreadService.uploadProgress = 0
+    this.fsDataThreadService.upload_array.download_link = []
+    this.fsDataThreadService.upload_array.file_name = []
+    this.fsDataThreadService.file = []
   }
 
 
@@ -166,18 +176,18 @@ export class ThreadComponent implements OnInit {
   }
 
   openEditComment(i: number) {
-      this.edit_comment = false;
-      const dialogRef = this.dialog.open(DialogEditCommentComponent, {
-        data: { comment: this.fsDataThreadService.comments[i].comment },
-        panelClass: 'my-dialog'
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.fsDataThreadService.comments[i].comment = result;
-          this.fsDataThreadService.comments[i].text_edited = true
-          this.fsDataThreadService.updateData()
-        }
-      });
+    this.edit_comment = false;
+    const dialogRef = this.dialog.open(DialogEditCommentComponent, {
+      data: { comment: this.fsDataThreadService.comments[i].comment },
+      panelClass: 'my-dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fsDataThreadService.comments[i].comment = result;
+        this.fsDataThreadService.comments[i].text_edited = true
+        this.fsDataThreadService.updateData()
+      }
+    });
   }
 
   openEditMessage() {
@@ -203,7 +213,7 @@ export class ThreadComponent implements OnInit {
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result || result.length == 0) {
         this.fsDataThreadService.comments.splice(i, 1)
         this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
         this.fsDataThreadService.updateData()
@@ -221,7 +231,7 @@ export class ThreadComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.fsDataThreadService.current_chat_data.chat_message = result;
-        this.msgService.deleteMessage( this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
+        this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
       }
     });
   }
@@ -317,11 +327,20 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  removeFile(i:number) {
-    let filePath = this.authenticationService.userData.uid + '/' + this.fsDataThreadService.upload_array.file_name[i]
-    this.fsDataThreadService.upload_array.file_name.splice(i,1)
-    this.fsDataThreadService.upload_array.download_link.splice(i,1)
-    this.fsDataThreadService.deleteFile(filePath)
+  removeFile(i: number) {
+    this.fsDataThreadService.upload_array.file_name.splice(i, 1)
+    this.fsDataThreadService.upload_array.download_link.splice(i, 1)
+  }
+
+
+  deleteSelectedFile(filename: string, i:number, k:number) {
+    let filePath = this.authenticationService.userData.uid + '/' + filename
+    this.fsDataThreadService.deleteFile(filePath, i, k)
+  }
+
+
+  downloadFile(path: string | URL) {
+    window.open(path, '_blank');
   }
 
 
