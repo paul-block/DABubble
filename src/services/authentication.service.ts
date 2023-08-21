@@ -179,12 +179,6 @@ export class AuthenticationService {
     return users;
   }
 
-
-   async getAllUsers2() {
-   
-  }
-
-
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
@@ -193,6 +187,12 @@ export class AuthenticationService {
     return filteredUser;
   }
 
+  async filterUsersByEmail(email: string): Promise<any> {
+    const users = await this.getAllUsers();
+    const filteredUser = users.filter(user => user.email?.toLowerCase().startsWith(email?.toLowerCase())
+    );
+    return filteredUser;
+  }
 
   updateCertainUserValue(value: string): void {
     this.addCertainUserValue.next(value);

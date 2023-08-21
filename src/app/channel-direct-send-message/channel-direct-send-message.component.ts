@@ -1,8 +1,9 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { DirectChatService } from 'services/directchat.service';
 import { EmojiService } from 'services/emoji.service';
 import { MessagesService } from 'services/messages.service';
+import { NewMsgService } from 'services/new-msg.service';
 
 @Component({
   selector: 'app-channel-direct-send-message',
@@ -11,12 +12,15 @@ import { MessagesService } from 'services/messages.service';
 })
 export class ChannelDirectSendMessageComponent{
 
+  @Input() inputValue: string;
+
+
   constructor(
     public directChatService: DirectChatService,
     public msgService: MessagesService,
-    public emojiService: EmojiService
+    public emojiService: EmojiService,
+    public newMsgService: NewMsgService
   ) { }
-
 
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event)
@@ -28,4 +32,10 @@ export class ChannelDirectSendMessageComponent{
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
   }
 
+  sendMsg(msg: string, channelOrUserInput: string) {
+    msg = this.msgService.messageText;
+    console.log(msg);
+    this.newMsgService.addOrUpdateChat(msg, channelOrUserInput);
+    this.msgService.messageText = '';
+  }
 }

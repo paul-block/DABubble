@@ -99,6 +99,18 @@ export class ChannelService {
     this.authorizedChannelsSubject.next(channels);
   }
 
+
+  async getChannels(uid: string) {
+    const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
+
+    const querySnapshot = await getDocs(allDocuments);
+    const channels: any[] = [];
+    querySnapshot.forEach((doc) => {
+      channels.push(doc.data());
+    });
+    return channels;
+  }
+
   async findUserByName(name: string): Promise<string | null> {
     const usersSnapshot = await getDocs(query(collection(this.db, 'users'), where('user_name', '==', name)));
 

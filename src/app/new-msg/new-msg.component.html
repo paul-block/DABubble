@@ -1,8 +1,37 @@
 <div class="container">
     <header>
-        <span>Neue Nachricht</span>
-        <input [(ngModel)]="inputValue" type="text" placeholder="An: #channel, oder @jemand oder E-Mail-Adresse">
+        <span id="headline">Neue Nachricht</span>
+        <div class="input-container">
+            <span>An: </span>
+            <input [(ngModel)]="inputValue" (ngModelChange)="valueChange(inputValue)" type="text"
+                placeholder="#channel, @jemand oder E-Mail-Adresse">
+        </div>
     </header>
 
-    <app-channel-direct-send-message></app-channel-direct-send-message>
+    <div id="autocomplete" [ngClass]="{'d-none': !inputValue || 
+        (filteredUsersByName.length === 0 && 
+        filteredUsersByEmail.length === 0 && 
+        filteredChannels.length === 0)}">
+
+        <div *ngFor="let user of filteredUsersByName" class="dm-profile pointer sidebar-hover"
+            (click)="selectValue($event, 'userName', user.uid)">
+            <img src="assets/img/icons/account_circle.svg" alt="">
+            <span>{{ user.user_name }}</span>
+        </div>
+
+        <div *ngFor="let user of filteredUsersByEmail" class="dm-profile pointer sidebar-hover"
+            (click)="selectValue($event, 'userEmail', user.uid)">
+            <img src="assets/img/mail.png" alt="">
+            <span>{{ user.email }}</span>
+        </div>
+
+        <div class="channel-container" *ngFor="let channel of filteredChannels" class="dm-profile pointer sidebar-hover"
+            (click)="selectValue($event, 'channel')">
+            <img src=" assets/img/icons/workspaces.svg" alt="">
+            <span class="tag">#</span>
+            <span>{{ channel.channelName }}</span>
+        </div>
+    </div>
+
+    <app-channel-direct-send-message [inputValue]="inputValue"></app-channel-direct-send-message>
 </div>
