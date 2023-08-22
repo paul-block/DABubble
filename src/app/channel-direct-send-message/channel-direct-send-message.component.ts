@@ -14,8 +14,6 @@ export class ChannelDirectSendMessageComponent{
 
   @Input() inputValue: string;
  
-
-
   constructor(
     public directChatService: DirectChatService,
     public msgService: MessagesService,
@@ -25,7 +23,8 @@ export class ChannelDirectSendMessageComponent{
 
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event)
-    this.msgService.messageText = this.emojiService.textMessage;
+    this.msgService.messageText += this.emojiService.textMessage;
+    this.emojiService.textMessage = '';
     this.msgService.checkIfEmpty();
   }
 

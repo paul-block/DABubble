@@ -1,5 +1,4 @@
 <section class="write-new-message">
-
     <textarea name="" id="" cols="10" rows="2" [placeholder]="directChatService.messageToPlaceholder"
         [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()"
         (keyup)="msgService.checkIfEmpty()"></textarea>
@@ -13,13 +12,8 @@
                 </emoji-mart>
                 <mat-icon (click)="toggleEmojiPicker(); emojiService.openEmojiPicker(-2);">mood</mat-icon>
             </div>
-
             <mat-icon>alternate_email</mat-icon>
         </div>
-        <!-- <button [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend"
-            class="send-message" (click)="msgService.newMessage()">
-            <mat-icon>send</mat-icon>
-        </button> -->
         <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.readyToSend }"
             [disabled]="!msgService.readyToSend" class="send-message">
             <mat-icon>send</mat-icon>
