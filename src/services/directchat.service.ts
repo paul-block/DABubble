@@ -89,16 +89,13 @@ export class DirectChatService {
   }
 
 
-  async textAreaMessageTo() {
+  textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
       this.getReceiverName();
       this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
     } else if (this.currentChatSection === 'channels') {
       this.getCurrentChatData();
-      console.log(this.currentChatData);
-      
-      this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
-
+      this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData[0].channelName;
     }
 
   }
@@ -112,8 +109,7 @@ export class DirectChatService {
     }
   }
 
-  async getCurrentChatData() {
-    const authorizedChannels = await this.channelService.getChannels(this.authService.userData.uid);
-    this.currentChatData = authorizedChannels.filter(channel => channel.channel_ID === this.currentChatID);
+  getCurrentChatData() {
+    this.currentChatData = this.channelService.channels.filter(channel => channel.channel_ID === this.currentChatID);
   }
 }
