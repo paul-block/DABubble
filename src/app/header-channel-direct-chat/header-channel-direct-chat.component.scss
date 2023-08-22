@@ -1,0 +1,141 @@
+$hover-background-color: #ECEEFE;
+$hover-text-color: #535AF1;
+$hover-transition: all ease-in-out 125ms;
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 6px 6px -2px rgb(0, 0, 0, 0.08);
+    padding: 25px 50px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    position: sticky;
+    z-index: 1;
+}
+
+.placeholder {
+    box-shadow: none;
+    min-height: 48px;
+}
+
+.chat-receiver {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 20px;
+    padding: 5px 20px;
+    transition: $hover-transition;
+    position: relative;
+    cursor: pointer;
+
+    h1,
+    mat-icon {
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .tag {
+        font-style: italic;
+    }
+
+    &:hover {
+        background-color: $hover-background-color;
+        color: $hover-text-color;
+        transition: $hover-transition;
+    }
+}
+
+.edit-dialog-open {
+    background-color: $hover-background-color;
+    color: $hover-text-color;
+}
+
+.edit-channel {
+    position: absolute;
+    top: 37px;
+    left: 0px;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    z-index: 100;
+}
+
+.gap-10 {
+    display: flex;
+    gap: 10px;
+}
+
+.items-center {
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    margin-block-start: unset;
+    margin-block-end: unset;
+}
+
+.members {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.already-members {
+    padding: 3px 10px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &:hover {
+        background-color: $hover-background-color;
+        color: $hover-text-color;
+        cursor: pointer;
+        transition: $hover-transition;
+    }
+
+    span {
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+
+.already-members-avatars {
+    display: flex;
+    align-items: center;
+
+
+    img {
+        height: 40px;
+        width: 40px;
+        border: 3px solid white;
+        border-radius: 100%;
+        margin-left: -10px;
+        background-color: white;
+        background-color: #434DF2;
+    }
+
+    :first-child {
+        margin-left: unset !important;
+    }
+}
+
+.add-members {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+        padding: 10px;
+        border-radius: 100%;
+        background-color: $hover-background-color;
+        cursor: pointer;
+    }
+
+    &:hover mat-icon {
+        color: $hover-text-color;
+        transition: $hover-transition;
+    }
+}

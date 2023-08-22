@@ -94,8 +94,7 @@ export class DirectChatService {
       this.getReceiverName();
       this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
     } else if (this.currentChatSection === 'channels') {
-      this.getCurrentChatData();
-      this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData[0].channelName;
+      this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
     }
 
   }
@@ -110,6 +109,7 @@ export class DirectChatService {
   }
 
   getCurrentChatData() {
-    this.currentChatData = this.channelService.channels.filter(channel => channel.channel_ID === this.currentChatID);
+    this.currentChatData = this.channelService.channels.find(channel => channel.channel_ID === this.currentChatID);
+    console.log(this.currentChatData);
   }
 }

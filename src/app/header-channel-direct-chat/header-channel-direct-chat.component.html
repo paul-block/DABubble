@@ -1,0 +1,25 @@
+<header [ngClass]="{'placeholder':dataDirectChatService.currentChatSection === 'noChatSectionSelected'}">
+    <div *ngIf="dataDirectChatService.currentChatSection === 'channels'" class="chat-receiver"
+        [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()" #editChannelREF>
+        <mat-icon class="tag">tag</mat-icon>
+        <h1>{{ dataDirectChatService.currentChatData.channelName }}</h1>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+    </div>
+    <div class="members" *ngIf="dataDirectChatService.currentChatSection === 'channels'">
+        <div class="already-members" [ngClass]="{'edit-dialog-open':isEditMembersDialogOpen === true}"
+            (click)="editMembers()" #editMembersREF>
+            <div class="already-members-avatars">
+                <ng-container
+                    *ngFor="let assignedUser of dataDirectChatService.currentChatData.assignedUsers; let i = index;">
+                    <img *ngIf="i < 3" [src]="channelMemberAvatars(assignedUser)">
+                </ng-container>
+            </div>
+            <span>{{ dataDirectChatService.currentChatData.assignedUsers.length }}</span>
+        </div>
+        <div (click)="addMembers()" class="add-members" #addMembersREF>
+            <mat-icon [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
+                person_add_alt
+            </mat-icon>
+        </div>
+    </div>
+</header>

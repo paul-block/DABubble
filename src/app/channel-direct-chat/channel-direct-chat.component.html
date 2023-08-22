@@ -1,27 +1,5 @@
-<header>
-    <div class="chat-receiver" [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()"
-        #editChannelREF>
-        <mat-icon class="tag">tag</mat-icon>
-        <h1>Entwicklerteam</h1>
-        <mat-icon>keyboard_arrow_down</mat-icon>
-    </div>
-    <div class="members">
-        <div class="already-members" [ngClass]="{'edit-dialog-open':isEditMembersDialogOpen === true}"
-            (click)="editMembers()" #editMembersREF>
-            <div class="already-members-avatars">
-                <img src="/assets/img/small_avatar/avatar_1.svg">
-                <img src="/assets/img/small_avatar/avatar_2.svg">
-                <img src="/assets/img/small_avatar/avatar_3.svg">
-            </div>
-            <span>3</span>
-        </div>
-        <div (click)="addMembers()" class="add-members" #addMembersREF>
-            <mat-icon [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
-                person_add_alt
-            </mat-icon>
-        </div>
-    </div>
-</header>
+<app-header-channel-direct-chat></app-header-channel-direct-chat>
+
 <app-chat-messages *ngIf="dataDirectChatService.currentChatID !== 'noChatSelected'"></app-chat-messages>
 <app-chat-placeholder *ngIf="dataDirectChatService.currentChatID === 'noChatSelected'"></app-chat-placeholder>
 
