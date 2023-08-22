@@ -103,7 +103,7 @@ export class UploadService {
           return of(null);
         })
       ).toPromise();
-      console.error('Upload erfolgreich');
+      console.log('Upload erfolgreich');
     } catch (error) {
       console.error("Error during upload:", error);
       this.emptyUploadArray()
