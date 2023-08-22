@@ -123,7 +123,7 @@ export class ChannelService {
     return null;
   }
 
-  async addUserToChannel(channelName: string, uid: string) {
+  async addUserToChannel(channelName: string, uid) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
 
     if (!channelSnapshot.empty) {

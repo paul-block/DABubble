@@ -16,7 +16,14 @@
             <span id="name">{{ authService.userData.user_name }}</span>
             <span id="edit" class="pointer" (click)="toggleEditDetails()">Bearbeiten</span>
         </div>
-        <img id="status" src="assets/img/status/active.png" alt="">
+        <div class="status">
+            <svg [ngClass]="{'offline': authService.userData.status === 'Abwesend'}" width="16" height="17"
+                viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8.5" r="8" fill="#92C83E" />
+            </svg>
+            <span [ngClass]="{'offline': authService.userData.status === 'Abwesend'}"> {{ authService.userData.status
+                }}</span>
+        </div>
     </div>
 
 
@@ -80,7 +87,7 @@
         <input id="file" type="file" (change)="onFileSelected($event)">
         <label class="upload_button" for="file"><img src="/assets/img/icons/arrow_up.png" alt=""></label>
     </div>
-   
+
     <div class="buttons">
         <div class="save_button" (click)="saveNewAvatar()">Speichern</div>
         <div class="abort_button" (click)="onNoClick()">Abbrechen</div>

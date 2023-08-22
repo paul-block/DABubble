@@ -26,7 +26,8 @@
             </div>
         </div>
     </label>
-    <button (click)="createNewChannel()" [disabled]="selectedOption === 'certain' && !certainInput" mat-fab
+    <button (click)="createNewChannel()"
+        [disabled]="selectedOption === 'certain' && !certainInput && selectedUserNames.length === 0" mat-fab
         extended>Erstellen</button>
 
     <app-dialog-autocomplete

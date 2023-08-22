@@ -19,9 +19,9 @@ export class AddPplToChannelComponent implements OnInit {
   description: string;
   public searchControl = new FormControl();
   userId: string;
-  hideAutocomplete = true;
+  // hideAutocomplete = true;
   userSelected = false;
-  DelevoperTeamChannelRef = 'JfMlkcJbW8ICZtQDoUTF';
+  DelevoperTeamChannelRef = 'm3eNJFz61Ixm1cme5qAf';
 
   selectedUserNames: string[] = [];
 
@@ -52,6 +52,10 @@ export class AddPplToChannelComponent implements OnInit {
     this.channelService.userSelected$.subscribe(
       userName => {
         this.selectedUserNames.push(userName);
+        this.searchControl.setValue(''); 
+        this.authService.updateCertainUserValue('');  
+        this.channelService.showSelectedUser(true); 
+        this.channelService.toggleAutocomplete(true);
       }
     );
   }  
@@ -66,27 +70,51 @@ export class AddPplToChannelComponent implements OnInit {
   deleteSelectedUser(userName: string) {
     this.removeUserName(userName);
     this.authService.updateCertainUserValue('');
-    this.channelService.showSelectedUser(false);
-    this.channelService.toggleAutocomplete(true);
+    // this.channelService.showSelectedUser(false);
+    // this.channelService.toggleAutocomplete(true);
   }
 
   closeDialog() {
     this.dialog.closeAll();
   } 
 
+  // async createNewChannel() {
+  //   this.channelService.createNewChannel(this.channelName, this.description);
+
+  //   if (this.selectedOption === 'all') {
+  //     const members = await this.channelService.getAllMembersOfCertainChannel(this.DelevoperTeamChannelRef);
+  //     members.forEach( member => {
+  //       this.channelService.addUserToChannel(this.channelName, member);
+  //     })
+  //   } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
+  //   this.channelService.addUserToChannel(this.channelName, this.userId)
+  //   }
+  //   this.channelService.showSelectedUser(false); 
+  //   this.channelService.toggleAutocomplete(true);
+  //   this.dialog.closeAll();
+  // }
   async createNewChannel() {
     this.channelService.createNewChannel(this.channelName, this.description);
-
+  
     if (this.selectedOption === 'all') {
       const members = await this.channelService.getAllMembersOfCertainChannel(this.DelevoperTeamChannelRef);
-      members.forEach( member => {
+      members.forEach(member => {
         this.channelService.addUserToChannel(this.channelName, member);
-      })
-    } else if (this.selectedOption === 'certain' &&this.certainInput && this.certainInput.length > 0) {
-    this.channelService.addUserToChannel(this.channelName, this.userId)
+      });
+    } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
+      const userIds = await Promise.all(
+        this.selectedUserNames.map(userName => this.channelService.findUserByName(userName))
+      );
+      userIds.forEach(userId => {
+        if (userId) { 
+          this.channelService.addUserToChannel(this.channelName, userId);
+        }
+      });
     }
-    this.channelService.showSelectedUser(false); 
+  
+    this.channelService.showSelectedUser(false);
     this.channelService.toggleAutocomplete(true);
     this.dialog.closeAll();
   }
+  
 }

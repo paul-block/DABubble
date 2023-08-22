@@ -94,8 +94,25 @@
             }
         }
 
-        #status {
+        .status {
+            display: flex;
+            align-items: center;
             align-self: flex-start;
+            gap: 10px;
+
+                span {
+                    color: #92C83E;
+                    font-size: 20px;
+                }
+
+                .offline {
+                        circle {
+                            fill: #686868 !important;
+                        }
+
+                        color: #686868;
+                }
+
         }
     }
 

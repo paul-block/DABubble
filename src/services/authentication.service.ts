@@ -55,7 +55,6 @@ export class AuthenticationService {
     });
   }
 
-
   getUid() {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -153,7 +152,8 @@ export class AuthenticationService {
       uid: user.uid,
       email: user.email,
       user_name: this.userName,
-      avatar: '/assets/img/big_avatar/81. Profile.png'
+      avatar: '/assets/img/big_avatar/81. Profile.png',
+      // status: 'Aktiv'
     };
     await userRef.set(userDataFirestore, {
       merge: true,
@@ -168,7 +168,6 @@ export class AuthenticationService {
     this.router.navigateByUrl('/sign-in');
     this.userData = []
   }
-
 
   async getAllUsers() {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
