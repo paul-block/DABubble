@@ -32,8 +32,9 @@ export class DialogAutocompleteComponent implements OnInit  {
     this.getUserId(uid);
     this.channelService.showSelectedUser(true);
     this.channelService.selectUser(userName);
-    this.channelService.toggleAutocomplete(false);
-    this.authService.updateCertainUserValue(userName);
+    this.authService.updateCertainUserValue(''); 
+    // this.channelService.toggleAutocomplete(false);
+    // this.authService.updateCertainUserValue(userName);
   }
 
   getUserId(uid: string) {

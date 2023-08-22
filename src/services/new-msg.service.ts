@@ -60,13 +60,26 @@ export class NewMsgService {
         }
       });
   
+      // if (channelDocRef) {
+      //   const channelMessagesCollectionRef = collection(channelDocRef, 'messages');
+      //   await addDoc(channelMessagesCollectionRef, {
+      //     message: messageText,
+      //     user_id: currentUserUID,
+      //     user_name: userName,
+      //     created_At: firebase.firestore.FieldValue.serverTimestamp(),
+      //   });
       if (channelDocRef) {
-        const channelMessagesCollectionRef = collection(channelDocRef, 'channel_messages');
+        const channelMessagesCollectionRef = collection(channelDocRef, 'messages');
         await addDoc(channelMessagesCollectionRef, {
-          message: messageText,
-          user_id: currentUserUID,
-          user_name: userName,
+          answers: 0,
+          chat_message: messageText,
+          chat_message_edited: false,
           created_At: firebase.firestore.FieldValue.serverTimestamp(),
+          emojy_data: [],
+          last_answer: '',
+          message_ID: channelMessagesCollectionRef.id,
+          user_Sender_ID: currentUserUID,
+          user_Sender_Name: userName,
         });
         console.log('Nachricht zum Channel hinzugefügt');
       } else {

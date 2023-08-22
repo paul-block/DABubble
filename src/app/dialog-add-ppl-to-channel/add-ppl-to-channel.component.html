@@ -6,8 +6,7 @@
     <label class="checkbox-container">
         <div class="flex">
             <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="all">
-            <span *ngIf="selectedOption === 'all'" class="checkmark">Alle Mitglieder von <span
-                    id="highlight">Test</span> hinzufügen</span>
+            <span class="checkmark">Alle Mitglieder von <span id="highlight">Test</span> hinzufügen</span>
         </div>
     </label>
     <label class="checkbox-container">
@@ -15,8 +14,8 @@
             <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="certain">
             <span class="checkmark">Bestimmte Leute hinzufügen</span>
         </div>
-        <input [formControl]="searchControl" id="certain-input" *ngIf="selectedOption === 'certain'"
-            [(ngModel)]="certainInput" type="text" placeholder="Name eingeben">
+        <input [formControl]="searchControl" id="certain-input" value="certain" [(ngModel)]="certainInput" type="text"
+            placeholder="Name eingeben">
         <div class="absolute" *ngIf="channelService.showSelectedUser$ | async">
             <div class="selected-user" *ngFor="let userName of selectedUserNames">
                 <img src="assets/img/small_avatar/avatar_1.svg" alt="">
@@ -26,9 +25,9 @@
                     aria-hidden="true" data-mat-icon-type="font">close</mat-icon>
             </div>
         </div>
-
     </label>
-    <button (click)="createNewChannel()" [disabled]="selectedOption === 'certain' && !certainInput" mat-fab
+    <button (click)="createNewChannel()"
+        [disabled]="selectedOption === 'certain' && !certainInput && selectedUserNames.length === 0" mat-fab
         extended>Erstellen</button>
 
     <app-dialog-autocomplete

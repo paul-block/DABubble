@@ -59,9 +59,8 @@
                 </svg>
             </div>
             <div class="channel-second-row select-none" *ngIf="channelsVisible">
-                <ng-container *ngFor="let channel of channelService.channels; let isLast = last">
-                    <div *ngIf="!isLast"
-                        [ngClass]="{'active-channel': channel.channel_ID === directChatService.currentChatID}"
+                <ng-container *ngFor="let channel of channelService.channels">
+                    <div [ngClass]="{'active-channel': channel.channel_ID === directChatService.currentChatID}"
                         class="pointer inactive-channel sidebar-hover" (click)="openChannel(channel.channel_ID)">
                         <span class="tag">#</span>
                         <span>{{ channel.channelName }}</span>
@@ -107,8 +106,6 @@
 
         <div class="dm-selection select-none" *ngIf="dmsVisible">
             <div class="dm-profile pointer sidebar-hover" (click)="searchChatAndGetMessages('currentUser')">
-                <!-- <img src="assets/img/avatar_online_status/avatar1.png" alt="">
-                <span>Frederick Beck (Du)</span> -->
                 <img [src]="authService.userData.avatar" alt="">
                 <span> {{ authService.userData.user_name }} (Du)</span>
             </div>
