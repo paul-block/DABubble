@@ -97,9 +97,7 @@ export class HeaderChannelDirectChatComponent {
 
   channelMemberAvatars(assignedUser) {
     const assignedUserData = this.authService.all_users.find(user => user.uid === assignedUser);
-
     return assignedUserData.avatar;
-
   }
 
 }

@@ -91,21 +91,22 @@ export class DirectChatService {
 
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
-      this.getReceiverName();
-      this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
+      this.messageToPlaceholder = 'Nachricht an ' + this.getReceiverName();
     } else if (this.currentChatSection === 'channels') {
       this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
     }
-
   }
 
 
   getReceiverName() {
+    let userData;
     if (this.currentChatData.chat_Member_IDs[0] === this.authService.getUid()) {
-      this.authService.getUserData(this.currentChatData.chat_Member_IDs[1]);
+      userData = this.authService.all_users.find(user => user.uid === this.currentChatData.chat_Member_IDs[1]);
     } else {
       this.authService.getUserData(this.currentChatData.chat_Member_IDs[0]);
+      userData = this.authService.all_users.find(user => user.uid === this.currentChatData.chat_Member_IDs[0]);
     }
+    return userData.user_name;
   }
 
   getCurrentChatData() {
