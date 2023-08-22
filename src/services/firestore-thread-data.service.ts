@@ -26,21 +26,15 @@ export class FirestoreThreadDataService {
   current_message_id: string;
   comments: any[] = []
   detailsVisible: boolean = false;
-  selectedFile: File = null;
+ 
   subscription: Subscription | undefined;
   current_changed_index: number
   fake_array = []
   chat_type: string;
   current_chat_data: any;
   direct_chat_index: number;
-  progress: number;
-  uploadProgress: number = 0
-  upload_array = {
-    file_name: [],
-    download_link: [],
-  }
-  file = []
-  download_complete: boolean;
+ 
+
 
 
 
@@ -49,10 +43,7 @@ export class FirestoreThreadDataService {
     private dataDirectChatService: DirectChatService,
     private messageSevice: MessagesService,
 
-  ) {
-    console.log(this.upload_array);
-
-  }
+  ) {  }
 
 
   async saveThread(data) {
@@ -144,77 +135,10 @@ export class FirestoreThreadDataService {
   }
 
 
-  onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-    if (this.selectedFile) {
-      this.file.push(this.selectedFile)
-      this.upload_array.file_name.push(this.selectedFile.name)
-    }
-  }
-
-
-  async prepareUploadfiles() {
-    console.log(this.upload_array);
-    
-    for (let i = 0; i < this.upload_array.file_name.length; i++) {
-      const file = this.file[i];
-      await this.uploadFile(file, i)
-    }
-  }
-
-
-  async uploadFile(file: File, i: number) {
-    const filePath = this.authenticationService.userData.uid + '/' + file.name;
-    const fileRef = this.storage.ref(filePath);
-    const uploadTask = this.storage.upload(filePath, file);
-  
-    uploadTask.percentageChanges().subscribe(progress => {
-      this.uploadProgress = progress;
-    });
-  
-    try {
-      const downloadURL = await fileRef.getDownloadURL().toPromise();
-      this.upload_array.download_link[i] = downloadURL;
-      console.log(this.upload_array.download_link);
-  
-      await uploadTask.snapshotChanges().pipe(
-        catchError(error => {
-          console.error("Error uploading file:", error);
-          // Führe hier geeignete Fehlerbehandlung durch
-          return of(null); // Gibt ein Observable mit null zurück, um den Fehler anzuzeigen
-        })
-      ).toPromise()
-      .then(async () => {
-        // Der Code hier wird erst nach erfolgreichem Upload ausgeführt
-        console.log("Upload erfolgreich abgeschlossen");
-      })
-      .catch(error => {
-        console.error("Error during upload:", error);
-        this.emptyUploadArray();
-      });
-    } catch (error) {
-      console.error("Error during upload:", error);
-      this.emptyUploadArray();
-    }
-  }
-  
-  
-
-
-  emptyUploadArray() {
-    this.uploadProgress = 0
-    this.upload_array.download_link = []
-    this.upload_array.file_name = []
-    this.file = []
-  }
-
-
-  deleteFile(filePath: string, i:number, k:number): Observable<void> {
+  updateThread( i:number, k:number) {
     this.comments[i].uploaded_files.file_name.splice(k, 1)
     this.comments[i].uploaded_files.download_link.splice(k, 1)
     this.updateData()
-    const fileRef = this.storage.ref(filePath);
-    return fileRef.delete();
   }
 }
 
