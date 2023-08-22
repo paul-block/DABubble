@@ -96,8 +96,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
     if (this.directChatService.currentChatID !== channelID) {
       this.directChatService.currentChatSection = 'channels';
+      this.directChatService.currentChatID = channelID;
       try {
-        this.directChatService.currentChatID = channelID;
         this.directChatService.textAreaMessageTo();
         this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;

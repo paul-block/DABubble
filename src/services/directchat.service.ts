@@ -93,9 +93,9 @@ export class DirectChatService {
     if (this.currentChatSection === 'chats') {
       this.getReceiverName();
       this.messageToPlaceholder = 'Nachricht an ' + this.authService.userData.user_name;
-    } else if(this.currentChatSection === 'channels'){
-        this.getCurrentChatData();
-        this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
+    } else if (this.currentChatSection === 'channels') {
+      this.getCurrentChatData();
+      this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData[0].channelName;
     }
 
   }
