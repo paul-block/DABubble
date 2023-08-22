@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="img-user">
-        <img src="/assets/img/small_avatar/avatar_2.svg">
+        <img [src]="authService.getImageUrl(authService.getUid())">
     </div>
 
 </section>

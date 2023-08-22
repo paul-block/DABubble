@@ -224,4 +224,10 @@ export class AuthenticationService {
     });
     this.getUserData(this.getUid())
   }
+
+
+  getImageUrl(uid: string): string {
+    const user = this.all_users.find(element => element.uid === uid);
+    return user.avatar
+  }
 }
