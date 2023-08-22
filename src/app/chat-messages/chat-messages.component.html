@@ -42,6 +42,7 @@
                         <emoji-mart 
                             [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == i"
                             [class.open-picker-below]="emojiService.openPickerBelow"
+                            [ngClass]="{'emoji_picker_right': !isMessageCreator(chatMessage.user_Sender_ID)}"
                             class="emoji_picker" (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
                     </div>
 
@@ -97,6 +98,7 @@
                     <emoji-mart 
                         [class.d_flex]="emojiService.picker_index == i && emojiService.picker_reaction_bar"
                         [class.open-picker-below]="emojiService.openPickerBelow"
+                        [ngClass]="{'emoji_picker_left': !isMessageCreator(chatMessage.user_Sender_ID)}"
                         class="emoji_picker_reaction-bar"
                         (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
                 </div>

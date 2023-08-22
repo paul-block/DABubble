@@ -213,8 +213,8 @@ h1 {
     background-color: #444DF2;
     border-radius: 30px 30px 30px 0px;
     position: absolute;
-    left: 37px;
-    bottom: 38px;
+    left: 35px;
+    bottom: 35px;
     height: 115px;
     width: 160px;
     color: white;
@@ -397,6 +397,16 @@ h1 {
     z-index: 10;
     position: absolute;
     bottom: 30px;
+    left: 30px;
+}
+
+.emoji_picker_left{
+    left: unset;
+    right: 30px;
+}
+
+.emoji_picker_right{
+    right: unset;
     left: 30px;
 }
 
