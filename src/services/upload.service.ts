@@ -21,21 +21,33 @@ export class UploadService {
     public authenticationService: AuthenticationService,
     private storage: AngularFireStorage,
     public fsDataThreadService: FirestoreThreadDataService,
-  ) { }
+  ) { 
+    this.emptyUploadArray()
+  }
 
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
-    if (this.selectedFile) {
+    
+    if (this.selectedFile && this.checkFileSize(this.selectedFile)) {
       this.file.push(this.selectedFile)
       this.upload_array.file_name.push(this.selectedFile.name)
     }
   }
 
 
+  checkFileSize(file: File) {
+    const maxSizeInBytes = 5 * 1024 * 1024; 
+    if (file.size <= maxSizeInBytes) {
+      return true
+    } else {
+      alert("Die ausgewählte Datei ist zu groß. Maximale Dateigröße: 5 MB.");
+      return false
+    }
+  }
+
+
   async prepareUploadfiles() {
-    console.log(this.upload_array);
-    
     for (let i = 0; i < this.upload_array.file_name.length; i++) {
       const file = this.file[i];
       await this.uploadFile(file, i)
@@ -47,7 +59,6 @@ export class UploadService {
     const filePath = this.authenticationService.userData.uid + '/' + file.name;
     const fileRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, file);
-    
     uploadTask.percentageChanges().subscribe(progress => {
       this.uploadProgressArray[i]  = progress;
     });
@@ -64,13 +75,11 @@ export class UploadService {
           }
         }),
         catchError(error => {
-          console.error("Error uploading file:", error);
-          // Führe hier geeignete Fehlerbehandlung durch
-          return of(null); // Gibt ein Observable mit null zurück, um den Fehler anzuzeigen
+          console.error("Error uploading file:", error); 
+          return of(null); 
         })
       ).toPromise();
-      
-      // Der Code hier wird erst nach erfolgreichem Upload ausgeführt
+      console.error('Upload erfolgreich');
     } catch (error) {
       console.error("Error during upload:", error);
       this.emptyUploadArray()
@@ -89,7 +98,6 @@ export class UploadService {
   deleteFile(filePath: string, i:number, k:number): Observable<void> {
     const fileRef = this.storage.ref(filePath);
     return fileRef.delete();
-    
   }
 
 
