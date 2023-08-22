@@ -44,14 +44,14 @@ export class AuthenticationService {
       } else {
         localStorage.setItem('user', 'null');
       }
-    });  
+    });
     const dbRef = collection(this.db, "users");
     onSnapshot(dbRef, docsSnap => {
-      const users:any[] = []
+      const users: any[] = []
       docsSnap.forEach(doc => {
         users.push(doc.data())
       })
-      this.all_users = users   
+      this.all_users = users
     });
   }
 
@@ -94,11 +94,26 @@ export class AuthenticationService {
       const result = await this.afAuth
         .signInWithEmailAndPassword(email, password)
       this.signIn_successful = true
+      this.setOnlineStatus(email, 'Aktiv')
       setTimeout(() => this.signIn_successful = false, 3000);
     } catch (error) {
       this.signIn_error = true
       setTimeout(() => this.signIn_error = false, 3000);
     }
+  }
+
+
+  async setOnlineStatus(email: string, status:string) {
+    this.all_users.forEach(async element => {
+      if (element.email === email) {
+        const id = element.uid
+        const userRef = doc(this.db, 'users', id);
+        await updateDoc(userRef, {
+           status: status
+        });
+        return
+      }
+    });
   }
 
 
@@ -125,6 +140,7 @@ export class AuthenticationService {
     (await this.getAllUsers()).forEach(element => {
       if (element.email == email) {
         this.googleUser_exist = true
+        this.setOnlineStatus(email, 'Aktiv')
         return
       }
     });
@@ -153,7 +169,7 @@ export class AuthenticationService {
       email: user.email,
       user_name: this.userName,
       avatar: '/assets/img/big_avatar/81. Profile.png',
-      // status: 'Aktiv'
+      status: ''
     };
     await userRef.set(userDataFirestore, {
       merge: true,
@@ -163,6 +179,7 @@ export class AuthenticationService {
 
 
   async signOut() {
+    this.setOnlineStatus(this.userData.email, 'Abwesend')
     await this.afAuth.signOut();
     localStorage.removeItem('user');
     this.router.navigateByUrl('/sign-in');
