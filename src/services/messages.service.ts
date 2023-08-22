@@ -80,7 +80,8 @@ export class MessagesService {
     const docRef = doc(this.db, "threads", id);
     const docSnap = await getDoc(docRef);
     this.answers_count = docSnap.data().comments.length
-    this.time = docSnap.data().comments[this.answers_count - 1].time.seconds
+    if (this.answers_count > 0) this.time = docSnap.data().comments[this.answers_count - 1].time.seconds
+    else this.time = 0
   }
 
 

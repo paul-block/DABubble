@@ -548,21 +548,23 @@ textarea {
 }
 
 .upload_content {
+  background-color: white;
+  position: relative;
+  margin: 5px 0 5px 0;
   margin-left: 15px;
   margin-right: 15px;
-  cursor: pointer;
   transition: 200ms;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border: 1px solid #686868;
-  border-radius: 10px;
+  border: 1px solid #adb0d9;
+  border-radius: 20px;
   width: calc(100% - 30px);
   a {
     text-decoration: none;
-    font-size: 18px;
+    font-size: 10px;
   }
   &:hover {
     border-color: #444df2;
@@ -582,4 +584,14 @@ textarea {
   &:hover {
     background-color: #eceefe;
   }
+}
+
+.progress_load {
+  transition: 200ms;
+  border-radius: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #eceefe;
 }

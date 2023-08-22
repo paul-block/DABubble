@@ -126,11 +126,21 @@
                     (click)="openProfile(fsDataThreadService.comments[i].uid)">{{getUserName(fsDataThreadService.comments[i].uid)}}</span>
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.comments[i].time.seconds)}}</span>
             </div>
-            <div class="message"
+            <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
                 [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name">
                 {{fsDataThreadService.comments[i].comment}}
                 <div *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
             </div>
+            
+            <div class="uploaded_main">
+                <div *ngFor="let file of fsDataThreadService.comments[i].uploaded_files.file_name; let k = index" class="upload_content" (click)="downloadFile(fsDataThreadService.comments[i].uploaded_files.download_link[k])" style="cursor: pointer;">
+                    <div>{{fsDataThreadService.comments[i].uploaded_files.file_name[k]}}</div>
+                    <div class="delete_file">
+                        <img (click)="deleteSelectedFile(fsDataThreadService.comments[i].uploaded_files.file_name[k], i, k)" src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
+                    </div>
+                </div>
+            </div>
+
             <div class="emoji_main">
                 <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" class="emoji_count"  (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)"
                     (click)="addOrRemoveEmojIinThread(i, j)">
@@ -152,9 +162,19 @@
         </div>
     </div>
 
+    <div class="upload_main">
+        <div *ngFor="let file of fsDataThreadService.upload_array.file_name; let i = index" class="upload_content">
+            <div style="z-index: 1;" >{{fsDataThreadService.upload_array.file_name[i]}}</div>
+            <div class="progress_load" [style.width.%]="fsDataThreadService.uploadProgress"></div>
+            <div class="delete_file">
+                <img (click)="removeFile(i)" src="/assets/img/icons/close.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <!-----------------------------------------------------------------Textarea----------------------------------------------------------------------------------------->
 
     <div class="type_message">
-       
         <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
             <input id="fileInput" type="file" (change)="fsDataThreadService.onFileSelected($event)">
             <label class="menu_button" for="fileInput">Datei anhängen</label>
@@ -185,16 +205,8 @@
                         (click)="stopPropagation($event)"></div>
             </div>
         </div>
-        <img [class.inactive]="comment_value.length < 1" class="send_button" src="/assets/img/icons/send (1).png" alt=""
+        <img [class.inactive]="comment_value.length < 1 && fsDataThreadService.upload_array.file_name.length == 0" class="send_button" src="/assets/img/icons/send (1).png" alt=""
             (click)="postComment()">
     </div>
-    <div class="upload_main">
-        <div *ngFor="let file of fsDataThreadService.upload_array.file_name; let i = index" class="upload_content">
-            <a target="_blank" rel="noopener noreferrer" [href]="fsDataThreadService.upload_array.download_link[i]" download>{{fsDataThreadService.upload_array.file_name[i]}}</a>
-            <div class="progress_load"></div>
-            <div class="delete_file">
-                <img (click)="removeFile(i)" src="/assets/img/icons/close.png" alt="">
-            </div>
-        </div>
-    </div>
+
 </div>
