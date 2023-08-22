@@ -127,16 +127,8 @@ export class ThreadComponent implements OnInit {
       this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
-      setTimeout(() => this.emptyUploadArray(), 500);
+      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     }
-  }
-
-
-  emptyUploadArray() {
-    this.uploadService.uploadProgressArray = []
-    this.uploadService.upload_array.download_link = []
-    this.uploadService.upload_array.file_name = []
-    this.uploadService.file = []
   }
 
 
