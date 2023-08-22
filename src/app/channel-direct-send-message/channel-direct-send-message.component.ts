@@ -13,6 +13,7 @@ import { NewMsgService } from 'services/new-msg.service';
 export class ChannelDirectSendMessageComponent{
 
   @Input() inputValue: string;
+ 
 
 
   constructor(
@@ -37,5 +38,13 @@ export class ChannelDirectSendMessageComponent{
     console.log(msg);
     this.newMsgService.addOrUpdateChat(msg, channelOrUserInput);
     this.msgService.messageText = '';
+  }
+
+  public onSendClick(): void {
+    if (this.newMsgService.newMsgComponentOpen) {
+      this.sendMsg(this.msgService.messageText, this.inputValue);
+    } else {
+      this.msgService.newMessage();
+    }
   }
 }

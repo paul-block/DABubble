@@ -16,13 +16,12 @@
 
             <mat-icon>alternate_email</mat-icon>
         </div>
-        <!-- <button [ngClass]="{'ready-to-send': msgService.readyToSend }"
-            [disabled]="!msgService.readyToSend" class="send-message" (click)="msgService.newMessage()">
+        <!-- <button [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend"
+            class="send-message" (click)="msgService.newMessage()">
             <mat-icon>send</mat-icon>
         </button> -->
-        <button (click)="sendMsg(msgService.messageText, inputValue)"
-            [ngClass]="{'ready-to-send': msgService.readyToSend }" [disabled]="!msgService.readyToSend"
-            class="send-message">
+        <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.readyToSend }"
+            [disabled]="!msgService.readyToSend" class="send-message">
             <mat-icon>send</mat-icon>
         </button>
     </div>

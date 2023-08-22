@@ -76,6 +76,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
 
   toggleNewMsgComponent() {
     this.newMsgService.toggleNewMsg();
+    this.newMsgService.newMsgComponentOpen = !this.newMsgService.newMsgComponentOpen;
   }
 
   async searchChatAndGetMessages(userReceiverID) {

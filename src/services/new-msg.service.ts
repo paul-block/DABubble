@@ -18,6 +18,9 @@ export class NewMsgService {
   user_name: string;
   user_id: string;
   directedFromProfileButton:boolean = false;
+  newMsgComponentOpen: boolean = false;
+
+
 
   constructor(private authService: AuthenticationService) { }
 

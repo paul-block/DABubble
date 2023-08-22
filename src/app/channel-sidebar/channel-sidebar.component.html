@@ -62,8 +62,7 @@
                 <ng-container *ngFor="let channel of channelService.channels; let isLast = last">
                     <div *ngIf="!isLast"
                         [ngClass]="{'active-channel': channel.channel_ID === directChatService.currentChatID}"
-                        class="pointer inactive-channel sidebar-hover"
-                        (click)="openChannel(channel.channel_ID)">
+                        class="pointer inactive-channel sidebar-hover" (click)="openChannel(channel.channel_ID)">
                         <span class="tag">#</span>
                         <span>{{ channel.channelName }}</span>
                     </div>
