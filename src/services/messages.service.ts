@@ -6,6 +6,7 @@ import { DirectChatService } from './directchat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
+import { NewMsgService } from './new-msg.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,11 +29,12 @@ export class MessagesService {
     public directChatService: DirectChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
+    public newMsgService: NewMsgService
   ) { }
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.directChatService.currentChatID !== 'noChatSelected') {
+    if (this.messageText.length && this.directChatService.currentChatID !== 'noChatSelected' || this.newMsgService.newMsgComponentOpen) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;

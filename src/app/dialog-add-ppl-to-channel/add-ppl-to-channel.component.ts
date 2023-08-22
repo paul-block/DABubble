@@ -21,7 +21,7 @@ export class AddPplToChannelComponent implements OnInit {
   userId: string;
   hideAutocomplete = true;
   userSelected = false;
-  DelevoperTeamChannelRef = 'wj2711ZpKNhh8ulqBG0p';
+  DelevoperTeamChannelRef = 'JfMlkcJbW8ICZtQDoUTF';
 
   selectedUserNames: string[] = [];
 
