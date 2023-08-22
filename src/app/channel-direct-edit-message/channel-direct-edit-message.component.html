@@ -4,7 +4,12 @@
             (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()"></textarea>
         <div class="extend-send-message">
             <div class="extend-message">
-                <mat-icon>mood</mat-icon>
+                <div class="z_index">
+                    <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2"
+                        class="emoji_picker" (emojiClick)="addEmojitoTextarea($event);">
+                    </emoji-mart>
+                    <mat-icon (click)="toggleEmojiPicker(); emojiService.openEmojiPicker(-2);">mood</mat-icon>
+                </div>
             </div>
             <div class="edit-message-buttons">
                 <button class="cancel-edit-message"
