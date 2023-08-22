@@ -96,8 +96,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
       this.directChatService.currentChatSection = 'channels';
       try {
         this.directChatService.currentChatID = channelID;
-        this.directChatService.textAreaMessageTo();
+        await this.directChatService.textAreaMessageTo();
         this.msgService.getMessages();
+        
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
