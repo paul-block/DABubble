@@ -132,7 +132,7 @@
             <div class="uploaded_main">
                 <div *ngFor="let file of fsDataThreadService.comments[i].uploaded_files.file_name; let k = index" class="upload_content" (click)="uploadService.downloadFile(fsDataThreadService.comments[i].uploaded_files.download_link[k])" style="cursor: pointer;">
                     <img class="file_image" src="/assets/img/File-Types/{{fsDataThreadService.comments[i].uploaded_files.file_extension[k]}}.png" >
-                    <div>{{fsDataThreadService.comments[i].uploaded_files.file_name[k]}}</div>
+                    <div>{{uploadService.checkFileName(fsDataThreadService.comments[i].uploaded_files.file_name[k])}}</div>
                     <div class="delete_file" *ngIf="fsDataThreadService.comments[i].uid == authenticationService.userData.uid">
                        <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.comments[i].uploaded_files.file_name[k], i, k)" src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
                     </div>

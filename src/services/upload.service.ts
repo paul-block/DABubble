@@ -31,12 +31,16 @@ export class UploadService {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile);
+    
     if (this.selectedFile && this.checkFileSize(this.selectedFile)) {
       this.file.push(this.selectedFile)
       this.upload_array.file_type.push(this.selectedFile.type)
-      this.upload_array.file_name.push(this.checkFileName(this.selectedFile.name))
+      this.upload_array.file_name.push(this.selectedFile.name)
       this.upload_array.file_extension.push(this.checkFileExtension(this.selectedFile))
     }
+    
+    
   }
 
 
@@ -121,7 +125,7 @@ export class UploadService {
   }
 
 
-  deleteFile(filePath: string, i: number, k: number): Observable<void> {
+  deleteFile(filePath: string): Observable<void> {
     const fileRef = this.storage.ref(filePath);
     return fileRef.delete();
   }
@@ -132,12 +136,14 @@ export class UploadService {
     this.upload_array.download_link.splice(i, 1)
     this.upload_array.file_type.splice(i, 1)
     this.upload_array.file_extension.splice(i, 1)
+    this.file.splice(i, 1)
+    this.selectedFile = null;
   }
 
 
   deleteSelectedFile(filename: string, i: number, k: number) {
     let filePath = this.authenticationService.userData.uid + '/' + filename
-    this.deleteFile(filePath, i, k)
+    this.deleteFile(filePath)
     this.fsDataThreadService.updateThread(i, k)
   }
 
