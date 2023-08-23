@@ -548,6 +548,7 @@ textarea {
 }
 
 .upload_content {
+  overflow: hidden;
   background-color: white;
   position: relative;
   margin: 5px 0 5px 0;
@@ -568,10 +569,12 @@ textarea {
   }
   &:hover {
     border-color: #444df2;
+    box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
   }
 }
 
 .delete_file {
+  z-index: 1;
   width: 40px;
   height: 40px;
   display: flex;
@@ -594,4 +597,9 @@ textarea {
   top: 0;
   left: 0;
   background-color: #eceefe;
+}
+
+.file_image {
+  width: 40px;
+  z-index: 1;
 }

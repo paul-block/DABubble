@@ -11,10 +11,10 @@
     </div>
 
     <div class="results" *ngIf="filteredChannels.length > 0 && searchValue.length > 0">
-        <div class="result-row" *ngFor="let channel of filteredChannels">
+        <div class="result-row" *ngFor="let channel of filteredChannels" (click)="openChannel(channel.channel_ID)">
             <img src="assets/img/icons/workspaces.svg" alt="">
             <span class="channel-tag">#</span>
-            <span>{{ channel }}</span>
+            <span>{{ channel.channelName }}</span>
         </div>
     </div>
 
@@ -26,7 +26,7 @@
     </div>
 
     <div class="results" *ngIf="filteredChannelMessages.length > 0 && searchValue.length > 0">
-        <div class="result-row" *ngFor="let msg of filteredChannelMessages">
+        <div class="result-row" *ngFor="let msg of filteredChannelMessages" (click)="openMsg(msg.channel_ID)">
             <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="mask0_6244_7880" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24"
                     height="25">
@@ -39,7 +39,7 @@
                 </g>
             </svg>
 
-            <span>{{ msg }}</span>
+            <span>{{ msg.combinedMessage }}</span>
         </div>
     </div>
 </div>
