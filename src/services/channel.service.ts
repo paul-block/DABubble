@@ -5,6 +5,7 @@ import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -134,6 +135,18 @@ export class ChannelService {
     } else {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
     }
+  }
+
+  async updateChannelInfo(currentChatData, changes){
+    const auth = getAuth();
+    const user = auth.currentUser; 
+      try {
+        const channelDocRef = doc(this.db, 'channels', currentChatData.channel_ID);
+        await updateDoc(channelDocRef, changes);
+        this.getAuthorizedChannels(user.uid);
+      } catch (error) {
+        console.error("Error beim Erstellen eines neuen Channels: ", error);
+      }
   }
 
 }

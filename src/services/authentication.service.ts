@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot, DocumentData  } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
