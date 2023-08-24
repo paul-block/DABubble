@@ -26,14 +26,14 @@ export class FirestoreThreadDataService {
   current_message_id: string;
   comments: any[] = []
   detailsVisible: boolean = false;
- 
+
   subscription: Subscription | undefined;
   current_changed_index: number
   fake_array = []
   chat_type: string;
   current_chat_data: any;
   direct_chat_index: number;
- 
+
 
 
 
@@ -43,7 +43,7 @@ export class FirestoreThreadDataService {
     private dataDirectChatService: DirectChatService,
     private messageSevice: MessagesService,
 
-  ) {  }
+  ) { }
 
 
   async saveThread(data) {
@@ -135,21 +135,16 @@ export class FirestoreThreadDataService {
   }
 
 
-  updateThread( i:number, k:number) {
+  updateThread(i: number, k: number) {
     this.comments[i].uploaded_files.file_name.splice(k, 1)
     this.comments[i].uploaded_files.download_link.splice(k, 1)
     this.updateData()
   }
+
+
+  formatNameAndText(name: string): string {
+    const [firstName, lastName] = name.split(' ');
+    const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
+    return `${formattedName} `
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-

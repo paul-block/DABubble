@@ -127,3 +127,10 @@ textarea {
 input[type="file"] {
     display: none;
   }
+
+.highlighted {
+    background-color: yellow;
+    cursor: pointer;
+    color: black;
+    border-radius: 3px;
+}

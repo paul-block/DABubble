@@ -7,6 +7,7 @@ import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { NewMsgService } from './new-msg.service';
+import { UploadService } from './upload.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +25,11 @@ export class MessagesService {
   private scrollSubject = new Subject<void>();
   answers_count: any;
   time: any;
-
   constructor(
     public directChatService: DirectChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
-    public newMsgService: NewMsgService
+    public newMsgService: NewMsgService,
   ) { }
 
 
@@ -53,7 +53,7 @@ export class MessagesService {
       chat_message_edited: false,
       emoji_data: [],
       answers: 0,
-      last_answer: ''
+      last_answer: '',
     })
 
     const newMessageID = messagesCollectionRef.id;
@@ -95,6 +95,7 @@ export class MessagesService {
     this.scrollToBottom();
   }
 
+
   async getChangedMessage() {
     const currentMessage = this.directChatService.directChatMessages[this.messageIndex];
     currentMessage.chat_message = this.messageText;
@@ -116,15 +117,18 @@ export class MessagesService {
     this.scrollToBottom()
   }
 
+
   scrollToBottom() {
     setTimeout(() => {
       this.scrollSubject.next();
     }, 0);
   }
 
+
   get scrollObservable() {
     return this.scrollSubject.asObservable();
   }
+
 
   async editMessage(i: number, chatMessage) {
     this.messageIndex = i;
@@ -133,11 +137,11 @@ export class MessagesService {
     this.messageText = chatMessage.chat_message;
   }
 
+
   async saveEditedMessage() {
     try {
       this.getChangedMessage();
       const messageRef = doc(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages', this.messageID);
-
       await updateDoc(messageRef, {
         chat_message: this.messageText,
         chat_message_edited: true
@@ -176,9 +180,11 @@ export class MessagesService {
     }
   }
 
+
   async spliceMessage() {
     this.directChatService.directChatMessages.splice(this.messageIndex, 1);
   }
+
 
   getTimestampTime(timestamp) {
     const dateObj = timestamp.toDate();
@@ -186,7 +192,6 @@ export class MessagesService {
     const minutes = dateObj.getMinutes();
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`;
   }
-
 
 
   async updateMessagesReactions(chatMessage) {
@@ -211,5 +216,4 @@ export class MessagesService {
       return date.toLocaleDateString('de-DE', options);
     }
   }
-
 }

@@ -320,5 +320,20 @@ export class ThreadComponent implements OnInit {
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
   }
-}
 
+
+  textChanged(text:string) {
+    const words = this.comment_value.split(' ');
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+    
+      if (word === '@') {
+        words[i] = ' '
+        
+        this.open_users = true
+        
+      }
+      this.comment_value = words.join(' ')
+  }
+}
+}

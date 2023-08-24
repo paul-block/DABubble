@@ -14,8 +14,8 @@
         [class.row_reverse]="fsDataThreadService.current_chat_data?.user_Sender_ID == authenticationService.userData.uid">
 
 
-        <div [class.show_edit_comment]="edit_comment && edit_comment_index == -1  "
-            class="edit_comment" (click)="openEditComment(-1)">
+        <div [class.show_edit_comment]="edit_comment && edit_comment_index == -1  " class="edit_comment"
+            (click)="openEditComment(-1)">
             <div class="menu_button" (click)="openEditMessage()" (click)="stopPropagation($event)">
                 <span>Nachricht bearbeiten</span>
             </div>
@@ -25,7 +25,8 @@
         </div>
 
         <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -1" class="emoji_picker"
-        (click)="stopPropagation($event) " (emojiClick)="addEmojiInDirectMessage($event, fsDataThreadService.direct_chat_index)"></emoji-mart>
+            (click)="stopPropagation($event) "
+            (emojiClick)="addEmojiInDirectMessage($event, fsDataThreadService.direct_chat_index)"></emoji-mart>
 
         <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID != authenticationService.userData.uid"
             (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">
@@ -54,7 +55,8 @@
         <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
         <div class="message_sub">
             <div class="user_time">
-                <span (click)="openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)" >{{getUserName(fsDataThreadService.current_chat_data.user_Sender_ID)}}</span>
+                <span
+                    (click)="openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)">{{getUserName(fsDataThreadService.current_chat_data.user_Sender_ID)}}</span>
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.current_chat_data.created_At.seconds)}}</span>
             </div>
             <div class="message"
@@ -68,9 +70,10 @@
             </div>
 
             <div class="emoji_main">
-                <div *ngFor="let emoji of fsDataThreadService.current_chat_data.emoji_data; let j = index" class="emoji_count"  (mouseenter)="showReactUsers(-1, j)" (mouseleave)="closeShowReactUsers(-1, j)"
+                <div *ngFor="let emoji of fsDataThreadService.current_chat_data.emoji_data; let j = index"
+                    class="emoji_count" (mouseenter)="showReactUsers(-1, j)" (mouseleave)="closeShowReactUsers(-1, j)"
                     (click)="addOrRemoveEmojisOnDirectChatMessage(fsDataThreadService.direct_chat_index , j)">
-                    <div class="react_user" 
+                    <div class="react_user"
                         [class.show_react_user]="comment_index == -1 && emoji_index == j && hovered_emoji">
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.current_chat_data.emoji_data[j].emoji"
                             size="24"></ngx-emoji>
@@ -85,7 +88,7 @@
                     <span>{{fsDataThreadService.current_chat_data.emoji_data[j].count}}</span>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
 
 
@@ -126,23 +129,32 @@
             <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
                 [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name">
                 {{fsDataThreadService.comments[i].comment}}
+
                 <div *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
             </div>
-            
+
             <div class="uploaded_main">
-                <div *ngFor="let file of fsDataThreadService.comments[i].uploaded_files.file_name; let k = index" class="upload_content" (click)="uploadService.downloadFile(fsDataThreadService.comments[i].uploaded_files.download_link[k])" style="cursor: pointer;">
-                    <img class="file_image" src="/assets/img/File-Types/{{fsDataThreadService.comments[i].uploaded_files.file_extension[k]}}.png" >
-                    <div>{{uploadService.checkFileName(fsDataThreadService.comments[i].uploaded_files.file_name[k])}}</div>
-                    <div class="delete_file" *ngIf="fsDataThreadService.comments[i].uid == authenticationService.userData.uid">
-                       <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.comments[i].uploaded_files.file_name[k], i, k)" src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
+                <div *ngFor="let file of fsDataThreadService.comments[i].uploaded_files.file_name; let k = index"
+                    class="upload_content"
+                    (click)="uploadService.downloadFile(fsDataThreadService.comments[i].uploaded_files.download_link[k])"
+                    style="cursor: pointer;">
+                    <img class="file_image"
+                        src="/assets/img/File-Types/{{fsDataThreadService.comments[i].uploaded_files.file_extension[k]}}.png">
+                    <div>{{uploadService.checkFileName(fsDataThreadService.comments[i].uploaded_files.file_name[k])}}
+                    </div>
+                    <div class="delete_file"
+                        *ngIf="fsDataThreadService.comments[i].uid == authenticationService.userData.uid">
+                        <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.comments[i].uploaded_files.file_name[k], i, k)"
+                            src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
                     </div>
                 </div>
             </div>
 
             <div class="emoji_main">
-                <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" class="emoji_count"  (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)"
+                <div *ngFor="let emoji of fsDataThreadService.comments[i].emoji_data; let j = index" class="emoji_count"
+                    (mouseenter)="showReactUsers(i, j)" (mouseleave)="closeShowReactUsers(i, j)"
                     (click)="addOrRemoveEmojIinThread(i, j)">
-                    <div class="react_user" 
+                    <div class="react_user"
                         [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
                             size="24"></ngx-emoji>
@@ -162,8 +174,8 @@
 
     <div class="upload_main">
         <div *ngFor="let file of uploadService.upload_array.file_name; let i = index" class="upload_content">
-            <img class="file_image" src="/assets/img/File-Types/{{uploadService.upload_array.file_extension[i]}}.png" >
-            <div style="z-index: 1;" >{{uploadService.upload_array.file_name[i]}}</div>
+            <img class="file_image" src="/assets/img/File-Types/{{uploadService.upload_array.file_extension[i]}}.png">
+            <div style="z-index: 1;">{{uploadService.upload_array.file_name[i]}}</div>
             <div class="progress_load" [style.width.%]="uploadService.uploadProgressArray[i]"></div>
             <div class="delete_file">
                 <img (click)="uploadService.removeFile(i)" src="/assets/img/icons/close.png" alt="">
@@ -192,7 +204,7 @@
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
                 (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
         </div>
-        <textarea #messageTextarea type="text" [(ngModel)]="comment_value" placeholder="Antworten..."></textarea>
+        <textarea #messageTextarea type="text" [(ngModel)]="comment_value" (ngModelChange)="textChanged($event)">placeholder="Antworten..."></textarea>
         <div class="icons_main">
             <div class="icons">
                 <div class="plus" (click)="openAttachmentMenu()" (click)="stopPropagation($event)">
@@ -204,8 +216,8 @@
                         (click)="stopPropagation($event)"></div>
             </div>
         </div>
-        <img [class.inactive]="comment_value.length < 1 && uploadService.upload_array.file_name.length == 0" class="send_button" src="/assets/img/icons/send (1).png" alt=""
-            (click)="postComment()">
+        <img [class.inactive]="comment_value.length < 1 && uploadService.upload_array.file_name.length == 0"
+            class="send_button" src="/assets/img/icons/send (1).png" alt="" (click)="postComment()">
     </div>
 
 </div>
