@@ -23,7 +23,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
-  private sub: Subscription;
+  private subChannels: Subscription;
+  private subChats: Subscription;
 
   constructor(
     public dialog: MatDialog,
@@ -39,13 +40,19 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    this.sub = this.channelService.authorizedChannels.subscribe(channels => {
+    this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;
+    });
+
+    this.directChatService.loadChats();
+    this.subChats = this.directChatService.getUsersChatsObservable().subscribe(chat => {
+      this.directChatService.chats.push(chat);
     });
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subChannels.unsubscribe();
+    this.subChats.unsubscribe();
   }
 
   toggleChannels() {
@@ -91,6 +98,35 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     return this.directChatService.currentChatID !== userReceiverID;
   }
 
+  async openChat(chat) {
+    // if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
+    if (this.directChatService.currentChatID !== chat.chat_ID) {
+      this.directChatService.currentChatSection = 'chats';
+      this.directChatService.currentChatID = chat.chat_ID;
+      try {
+        this.directChatService.currentChatData = chat;
+        this.directChatService.textAreaMessageTo();
+        this.msgService.getMessages();
+        this.fsDataThreadService.thread_open = false;
+      } catch (error) {
+        console.error("Fehler bei öffnen des Chats: ", error);
+      }
+    }
+  }
+
+  getChatReceiverUser(chat){
+    let chatReveiverID;
+    if (chat.chat_Member_IDs[0] !== this.authService.getUid()) {
+      chatReveiverID = chat.chat_Member_IDs[0];
+    }else{
+      chatReveiverID = chat.chat_Member_IDs[1];
+    }
+    const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
+    // console.log(user);
+    
+    return user;
+  }
+
 
   async openChannel(channelID) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
@@ -108,7 +144,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  
+
 }
 
 

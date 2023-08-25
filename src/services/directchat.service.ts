@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, CollectionReference } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ChannelService } from './channel.service';
 
@@ -16,12 +16,28 @@ export class DirectChatService {
   directChatMessages = [];
   currentChatData;
   messageToPlaceholder: string = 'Nachricht an ...';
-
-
+  chats: any[] = [];
+  private chatsSubject = new BehaviorSubject<any[]>([]);
+  
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
   ) { }
+
+  async loadChats() {
+    const querySnapshot = await getDocs(collection(this.db, 'chats'));
+    const chats = querySnapshot.docs.map(doc => doc.data());
+    this.chatsSubject.next(chats);
+  }
+
+  getUsersChatsObservable() {
+    return this.chatsSubject.asObservable().pipe(
+      switchMap(chats => {
+        const usersChats = chats.filter(chat => chat.chat_Member_IDs.includes(this.authService.getUid()));
+        return usersChats;
+      })
+    );
+  }
 
   async searchChat(userReceiverID) {
     const auth = getAuth();
@@ -103,14 +119,18 @@ export class DirectChatService {
     if (this.currentChatData.chat_Member_IDs[0] === this.authService.getUid()) {
       userData = this.authService.all_users.find(user => user.uid === this.currentChatData.chat_Member_IDs[1]);
     } else {
-      this.authService.getUserData(this.currentChatData.chat_Member_IDs[0]);
       userData = this.authService.all_users.find(user => user.uid === this.currentChatData.chat_Member_IDs[0]);
     }
     return userData.user_name;
   }
 
   getCurrentChatData() {
-    this.currentChatData = this.channelService.channels.find(channel => channel.channel_ID === this.currentChatID);
+    if (this.currentChatSection === 'channels') {
+      this.currentChatData = this.channelService.channels.find(channel => channel.channel_ID === this.currentChatID);
+    }else if (this.currentChatSection === 'chats') {
+      this.currentChatData = this.chats.find(chat => chat.chat_ID === this.currentChatID);
+    }
+    
     console.log(this.currentChatData);
   }
 }
