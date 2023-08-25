@@ -99,7 +99,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async openChat(chat) {
-    // if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
+    if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
     if (this.directChatService.currentChatID !== chat.chat_ID) {
       this.directChatService.currentChatSection = 'chats';
       this.directChatService.currentChatID = chat.chat_ID;
@@ -114,17 +114,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  getChatReceiverUser(chat){
-    let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.authService.getUid()) {
-      chatReveiverID = chat.chat_Member_IDs[0];
-    }else{
-      chatReveiverID = chat.chat_Member_IDs[1];
-    }
-    const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
-    // console.log(user);
-    
-    return user;
+  isCurrentUserChat(chat):boolean{
+    return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
 
 

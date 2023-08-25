@@ -105,37 +105,11 @@
         </div>
 
         <div class="dm-selection select-none" *ngIf="dmsVisible">
-            <div  class="dm-profile pointer sidebar-hover" (click)="searchChatAndGetMessages(authService.getUid())">
-                <img [src]="authService.userData.avatar" alt="">
-                <span> {{ authService.userData.user_name }} (Du)</span>
-            </div>
-
             <div *ngFor="let chat of directChatService.chats" class="dm-profile pointer sidebar-hover"
                 (click)="openChat(chat)">
-                <img [src]="getChatReceiverUser(chat)?.avatar" alt="user avatar">
-                <span>{{getChatReceiverUser(chat)?.user_name}}</span>
+                <img [src]="directChatService.getChatReceiverUser(chat)?.avatar" alt="user avatar">
+                <span>{{directChatService.getChatReceiverUser(chat)?.user_name}}{{ isCurrentUserChat(chat) ? ' (Du)' : '' }}</span>
             </div>
-
-            <!-- <div class="dm-profile pointer sidebar-hover"
-                (click)="searchChatAndGetMessages('WtB5HUACinNItOcU0GzFlZiRJtd2')">
-                <img src="assets/img/avatar_online_status/avatar3.png" alt="">
-                <span>Noah Braun (Philipp R)</span>
-            </div>
-
-            <div class="dm-profile pointer sidebar-hover">
-                <img src="assets/img/avatar_online_status/avatar4.png" alt="">
-                <span>Elise Roth</span>
-            </div>
-
-            <div class="dm-profile pointer sidebar-hover">
-                <img src="assets/img/avatar_online_status/avatar5.png" alt="">
-                <span>Elias Neumann</span>
-            </div>
-
-            <div class="dm-profile pointer sidebar-hover">
-                <img src="assets/img/avatar_online_status/avatar6.png" alt="">
-                <span>Steffen Hoffmann</span>
-            </div> -->
         </div>
     </div>
 </div>

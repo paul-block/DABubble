@@ -18,7 +18,7 @@ export class DirectChatService {
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
   private chatsSubject = new BehaviorSubject<any[]>([]);
-  
+
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
@@ -33,11 +33,17 @@ export class DirectChatService {
   getUsersChatsObservable() {
     return this.chatsSubject.asObservable().pipe(
       switchMap(chats => {
-        const usersChats = chats.filter(chat => chat.chat_Member_IDs.includes(this.authService.getUid()));
+        const usersChats = this.filterChats(chats);
         return usersChats;
       })
     );
   }
+
+
+  filterChats(chats){
+    return chats.filter(chat => chat.chat_Member_IDs.includes(this.authService.getUid()));
+  }
+
 
   async searchChat(userReceiverID) {
     const auth = getAuth();
@@ -107,30 +113,30 @@ export class DirectChatService {
 
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
-      this.messageToPlaceholder = 'Nachricht an ' + this.getReceiverName();
+      this.messageToPlaceholder = 'Nachricht an ' + this.getChatReceiverUser(this.currentChatData).user_name;
     } else if (this.currentChatSection === 'channels') {
       this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
     }
   }
 
-
-  getReceiverName() {
-    let userData;
-    if (this.currentChatData.chat_Member_IDs[0] === this.authService.getUid()) {
-      userData = this.authService.all_users.find(user => user.uid === this.currentChatData.chat_Member_IDs[1]);
+  getChatReceiverUser(chat) {
+    let chatReveiverID;
+    if (chat.chat_Member_IDs[0] !== this.authService.getUid()) {
+      chatReveiverID = chat.chat_Member_IDs[0];
     } else {
-      userData = this.authService.all_users.find(user => user.uid === this.currentChatData.chat_Member_IDs[0]);
+      chatReveiverID = chat.chat_Member_IDs[1];
     }
-    return userData.user_name;
+    const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
+    return user;
   }
 
   getCurrentChatData() {
     if (this.currentChatSection === 'channels') {
       this.currentChatData = this.channelService.channels.find(channel => channel.channel_ID === this.currentChatID);
-    }else if (this.currentChatSection === 'chats') {
+    } else if (this.currentChatSection === 'chats') {
       this.currentChatData = this.chats.find(chat => chat.chat_ID === this.currentChatID);
     }
-    
+
     console.log(this.currentChatData);
   }
 }
