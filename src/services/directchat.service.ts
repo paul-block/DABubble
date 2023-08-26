@@ -18,6 +18,7 @@ export class DirectChatService {
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
   private chatsSubject = new BehaviorSubject<any[]>([]);
+  currentUser_id;
 
   constructor(
     public authService: AuthenticationService,
@@ -40,76 +41,77 @@ export class DirectChatService {
   }
 
 
-  filterChats(chats){
+  filterChats(chats) {
     return chats.filter(chat => chat.chat_Member_IDs.includes(this.authService.getUid()));
   }
 
 
-   // async initOwnChat() {
-    
-  //   const userID = this.authService.getUid();
-  //   let chatExists = false;
+  async initOwnChat() {
+    const userID = this.currentUser_id;
+    let chatExists = false;
 
-  //   if (this.chats.length != 0) {
-  //     this.chats.forEach((chat) => {
-  //       if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
-  //         chatExists = true;
+    if (this.chats.length != 0) {
+      this.chats.forEach((chat) => {
+        if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
+          chatExists = true;
+        }
+      });
+    } else if (!chatExists) {
+      await this.newChat(userID);
+      console.log('in');
+    }
+    console.log(chatExists);
+    
+  }
+
+
+  // async searchChat(userReceiverID) {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+
+  //   if ('currentUser' === userReceiverID) {
+  //     userReceiverID = user.uid;
+  //   }
+
+  //   if (user !== null) {
+  //     try {
+  //       this.currentChatID = null;
+  //       if (userReceiverID !== null) {
+  //         const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
+  //         let chatExists = false;
+  //         docChatsSnapshot.forEach((chat) => {
+  //           const chatData = chat.data();
+  //           const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
+  //           if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
+  //             chatExists = true;
+  //             this.currentChatID = chatData.chat_ID;
+  //             this.currentChatData = chatData;
+  //           }
+  //         });
+
+  //         if (!chatExists) {
+  //           await this.newChat(userReceiverID);
+  //         }
+  //       } else {
+  //         console.error("Benutzer nicht gefunden");
   //       }
-  //     });
-  //   } else if (!chatExists) {
-  //     await this.newChat(await userID);
+  //     } catch (error) {
+  //       console.error("Fehler bei der Suche nach einem Chat: ", error);
+  //     }
+  //   } else {
+  //     console.error("Kein Benutzer ist eingeloggt");
   //   }
   // }
 
 
-  async searchChat(userReceiverID) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if ('currentUser' === userReceiverID) {
-      userReceiverID = user.uid;
-    }
-
-    if (user !== null) {
-      try {
-        this.currentChatID = null;
-        if (userReceiverID !== null) {
-          const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
-          let chatExists = false;
-          docChatsSnapshot.forEach((chat) => {
-            const chatData = chat.data();
-            const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
-            if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
-              chatExists = true;
-              this.currentChatID = chatData.chat_ID;
-              this.currentChatData = chatData;
-            }
-          });
-
-          if (!chatExists) {
-            await this.newChat(userReceiverID);
-          }
-        } else {
-          console.error("Benutzer nicht gefunden");
-        }
-      } catch (error) {
-        console.error("Fehler bei der Suche nach einem Chat: ", error);
-      }
-    } else {
-      console.error("Kein Benutzer ist eingeloggt");
-    }
-  }
-
-
   async newChat(userReceiverID: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const userID = this.currentUser_id;
     this.directChatMessages = [];
 
-    if (user !== null) {
+    if (userID !== undefined) {
       try {
         const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
-          chat_Member_IDs: [user.uid, userReceiverID],
+          chat_Member_IDs: [userID, userReceiverID],
           created_At: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
@@ -117,8 +119,9 @@ export class DirectChatService {
         const chatDocRef = doc(this.db, 'chats', newChatID);
         await updateDoc(chatDocRef, {
           chat_ID: newChatID
+        }).then(()=>{
+          this.loadChats();
         });
-        this.currentChatID = newChatID;
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
       }

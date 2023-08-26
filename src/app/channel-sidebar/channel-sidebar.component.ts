@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { FirestoreThreadDataService } from 'services/firestore-thread-data.servi
   templateUrl: './channel-sidebar.component.html',
   styleUrls: ['./channel-sidebar.component.scss'],
 })
-export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ChannelSidebarComponent implements OnInit, OnDestroy {
   channelsVisible: boolean = true;
   authorizedChannels: any[] = [];
   dmsVisible: boolean = true;
@@ -36,36 +36,27 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     public directChatService: DirectChatService,
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
-  ) { 
- 
-    
-  
-  }
+  ) { }
 
-  ngAfterViewInit(): void {
-    // console.log('getUid() ngAfterViewInit channel-sidebar: ' + this.authService.getUid());
-  }
 
   async ngOnInit() {
     this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;
     });
 
-    this.directChatService.loadChats();
+    await this.directChatService.loadChats();
     this.subChats = this.directChatService.getUsersChatsObservable().subscribe(chat => {
       this.directChatService.chats.push(chat);
     });
+
     await this.authService.waitUntilAuthInitialized();
     this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
-      this.currentUser_id = user.uid;
-      console.log(this.currentUser_id);
-      
+      this.directChatService.currentUser_id = user.uid;
+      this.directChatService.initOwnChat();
     });
 
-    // setTimeout(() => {
-    //   // console.log('getUid() ngOnInit channel-sidebar: ' + this.authService.getUid());
-    //   this.directChatService.initOwnChat();
-    // }, 2000);
+    
+
   }
 
   ngOnDestroy() {
@@ -104,13 +95,13 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     this.newMsgService.newMsgComponentOpen = !this.newMsgService.newMsgComponentOpen;
   }
 
-  async searchChatAndGetMessages(userReceiverID) {
-    this.directChatService.currentChatSection = 'chats';
-    await this.directChatService.searchChat(userReceiverID);
-    this.directChatService.textAreaMessageTo();
-    this.msgService.getMessages();
-    this.fsDataThreadService.thread_open = false;
-  }
+  // async searchChatAndGetMessages(userReceiverID) {
+  //   this.directChatService.currentChatSection = 'chats';
+  //   await this.directChatService.searchChat(userReceiverID);
+  //   this.directChatService.textAreaMessageTo();
+  //   this.msgService.getMessages();
+  //   this.fsDataThreadService.thread_open = false;
+  // }
 
   checkIfSameChatID(userReceiverID) {
     return this.directChatService.currentChatID !== userReceiverID;
