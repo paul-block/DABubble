@@ -34,7 +34,10 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     public msgService: MessagesService,
     public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
-  ) { }
+  ) { 
+    console.log();
+    
+  }
 
   ngAfterViewInit(): void {
     // console.log('getUid() ngAfterViewInit channel-sidebar: ' + this.authService.getUid());
