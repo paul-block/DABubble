@@ -216,4 +216,8 @@ export class MessagesService {
       return date.toLocaleDateString('de-DE', options);
     }
   }
+
+  emptyMessageText(){
+    this.messageText = '';
+  }
 }

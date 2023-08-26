@@ -103,6 +103,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.directChatService.currentChatID !== chat.chat_ID) {
       this.directChatService.currentChatSection = 'chats';
       this.directChatService.currentChatID = chat.chat_ID;
+      this.msgService.emptyMessageText();
       try {
         this.directChatService.currentChatData = chat;
         this.directChatService.textAreaMessageTo();
@@ -124,6 +125,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.directChatService.currentChatID !== channelID) {
       this.directChatService.currentChatSection = 'channels';
       this.directChatService.currentChatID = channelID;
+      this.msgService.emptyMessageText();
       try {
         this.directChatService.getCurrentChatData();
         this.directChatService.textAreaMessageTo();
