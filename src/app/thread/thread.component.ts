@@ -325,17 +325,27 @@ export class ThreadComponent implements OnInit {
 
 
   textChanged(text:string) {
+    this.searchUserByLetter()
     const words = this.comment_value.split(' ');
+    
     for (let i = 0; i < words.length; i++) {
+     
       const word = words[i];
     
       if (word === '@') {
+        
+       
         words[i] = ' '
-        
         this.open_users = true
-        
       }
       this.comment_value = words.join(' ')
   }
+}
+
+ searchUserByLetter() {
+   const filterValue = this.comment_value.toLowerCase();
+   const filtereUsers = this.authenticationService.all_users.filter(name => name.toLowerCase().startsWith(filterValue));
+   console.log(filtereUsers, filterValue);
+   
 }
 }

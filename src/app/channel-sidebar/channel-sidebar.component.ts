@@ -25,22 +25,28 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   addChannelOpen: boolean = false;
   private subChannels: Subscription;
   private subChats: Subscription;
+  currentUserSubscription: Subscription;
+  currentUser_id: any;
 
   constructor(
+    public authService: AuthenticationService,
     public dialog: MatDialog,
     private newMsgService: NewMsgService,
     public channelService: ChannelService,
     public directChatService: DirectChatService,
     public msgService: MessagesService,
-    public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
-  ) { }
+  ) { 
+ 
+    
+  
+  }
 
   ngAfterViewInit(): void {
     // console.log('getUid() ngAfterViewInit channel-sidebar: ' + this.authService.getUid());
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;
     });
@@ -48,6 +54,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     this.directChatService.loadChats();
     this.subChats = this.directChatService.getUsersChatsObservable().subscribe(chat => {
       this.directChatService.chats.push(chat);
+    });
+    await this.authService.waitUntilAuthInitialized();
+    this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
+      this.currentUser_id = user.uid;
+      console.log(this.currentUser_id);
+      
     });
 
     // setTimeout(() => {
