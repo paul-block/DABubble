@@ -3,12 +3,13 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot, DocumentData  } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot, DocumentData } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from './channel.service';
 import { getStorage } from "firebase/storage";
+import { User, onAuthStateChanged } from '@angular/fire/auth';
 
 
 
@@ -17,6 +18,10 @@ import { getStorage } from "firebase/storage";
 })
 export class AuthenticationService {
 
+  private authInitializedPromise: Promise<void>;
+  private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
+  private auth = getAuth();
   db = getFirestore();
   userData: any = [];
   signIn_successful: boolean
@@ -53,7 +58,20 @@ export class AuthenticationService {
       })
       this.all_users = users
     });
+
+    this.authInitializedPromise = new Promise<void>((resolve) => {
+      onAuthStateChanged(this.auth, (user) => {
+        this.currentUserSubject.next(user);
+        resolve(); // Das Promise auflösen, wenn die Authentifizierung abgeschlossen ist
+      });
+    });
   }
+
+
+  async waitUntilAuthInitialized(): Promise<void> {
+    return this.authInitializedPromise;
+  }
+  
 
   getUid() {
     const auth = getAuth();
@@ -103,13 +121,13 @@ export class AuthenticationService {
   }
 
 
-  async setOnlineStatus(email: string, status:string) {
+  async setOnlineStatus(email: string, status: string) {
     this.all_users.forEach(async element => {
       if (element.email === email) {
         const id = element.uid
         const userRef = doc(this.db, 'users', id);
         await updateDoc(userRef, {
-           status: status
+          status: status
         });
         return
       }
@@ -195,7 +213,7 @@ export class AuthenticationService {
     return users;
   }
 
-  getUserInfo(uid){
+  getUserInfo(uid) {
     const user = this.all_users.find(user => user.uid === uid);
     return user;
   }
