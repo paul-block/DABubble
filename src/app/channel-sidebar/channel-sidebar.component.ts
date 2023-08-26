@@ -50,7 +50,10 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
       this.directChatService.chats.push(chat);
     });
 
-    // console.log('getUid() ngOnInit channel-sidebar: ' + this.authService.getUid());
+    // setTimeout(() => {
+    //   // console.log('getUid() ngOnInit channel-sidebar: ' + this.authService.getUid());
+    //   this.directChatService.initOwnChat();
+    // }, 2000);
   }
 
   ngOnDestroy() {
@@ -118,7 +121,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  isCurrentUserChat(chat):boolean{
+  isCurrentUserChat(chat): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
 

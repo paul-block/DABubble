@@ -45,6 +45,23 @@ export class DirectChatService {
   }
 
 
+   // async initOwnChat() {
+    
+  //   const userID = this.authService.getUid();
+  //   let chatExists = false;
+
+  //   if (this.chats.length != 0) {
+  //     this.chats.forEach((chat) => {
+  //       if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
+  //         chatExists = true;
+  //       }
+  //     });
+  //   } else if (!chatExists) {
+  //     await this.newChat(await userID);
+  //   }
+  // }
+
+
   async searchChat(userReceiverID) {
     const auth = getAuth();
     const user = auth.currentUser;
