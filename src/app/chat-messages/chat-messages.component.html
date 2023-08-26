@@ -1,13 +1,15 @@
 <section class="chat-messages" #ChatContainerREF>
     <div class="chat-message-container"
         *ngFor="let chatMessage of dataDirectChatService.directChatMessages; let i = index;">
-        <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== dataDirectChatService.directChatMessages[i - 1].created_At.toDate().toDateString()" class="chat-messages-date">
+        <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== dataDirectChatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
+            class="chat-messages-date">
             <div class="parting-line"></div>
             <div class="messages-date">{{ msgService.formatDate(chatMessage.created_At) }}</div>
         </div>
         <div [ngStyle]="{'justify-content':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'flex-start' : 'flex-end' }"
             class="chat-message" (mouseleave)="resetToggledAreas()">
-            <img class="avatar_img" [ngStyle]="{'order':isMessageCreator(chatMessage.user_Sender_ID) === false ? '0' : '1' }"
+            <img class="avatar_img"
+                [ngStyle]="{'order':isMessageCreator(chatMessage.user_Sender_ID) === false ? '0' : '1' }"
                 [src]="authService.getImageUrl(chatMessage.user_Sender_ID)">
             <div class="chat-message-details">
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
@@ -26,8 +28,9 @@
                 <!-- Emoji reaction direct right from emoji reactions -->
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="chat-message-details-reactions">
-                    <div class="z_index" >
-                        <svg #emojiMessagePopupREF (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojis'); emojiService.openEmojiPicker(i); " 
+                    <div class="z_index">
+                        <svg #emojiMessagePopupREF
+                            (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojis'); emojiService.openEmojiPicker(i); "
                             width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
                                 width="25" height="24">
@@ -39,11 +42,11 @@
                                     fill="black" />
                             </g>
                         </svg>
-                        <emoji-mart 
-                            [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == i"
+                        <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == i"
                             [class.open-picker-below]="emojiService.openPickerBelow"
                             [ngClass]="{'emoji_picker_right': !isMessageCreator(chatMessage.user_Sender_ID)}"
-                            class="emoji_picker" (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
+                            class="emoji_picker"
+                            (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
                     </div>
 
                     <div class="emoji_main">
@@ -51,18 +54,30 @@
                             (click)="addOrRemoveEmojiClickEmojis(i, j, chatMessage)">
                             <div class="reaction-emojis">
                                 <div class="reaction-emojis-bubble">
-                                    <ngx-emoji class="center" [emoji]="chatMessage.emoji_data[j].emoji"
-                                        size="24"></ngx-emoji>
-                                    <span>{{chatMessage.emoji_data[j]?.react_users?.join(' und ')}}</span>
-                                    <span *ngIf="chatMessage.emoji_data[j]?.react_users?.length < 2">hat
+                                    <ngx-emoji class="center" [emoji]="emoji.emoji" size="24"></ngx-emoji>
+                                    <span
+                                        *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
+                                        false)?.join('
+                                        und ')}}</span>
+                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users === authService.getUid()">hat
                                         reagiert</span>
-                                    <span *ngIf="chatMessage.emoji_data[j]?.react_users?.length > 1">
+                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users !== authService.getUid()">hast
+                                        reagiert</span>
+                                    <span *ngIf="emoji?.react_users?.length === 2">
                                         haben
                                         reagiert</span>
+                                    <span
+                                        *ngIf="emoji?.react_users?.length > 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
+                                        true)?.join(', ')}}</span>
+                                    <span *ngIf="emoji?.react_users?.length === 3"> und {{
+                                        emoji?.react_users?.length - 2 }} weiterer hat
+                                        reagiert</span>
+                                    <span *ngIf="emoji?.react_users?.length > 3"> und {{
+                                        emoji?.react_users?.length - 2 }} weitere haben
+                                        reagiert</span>
                                 </div>
-                                <ngx-emoji class="center" [emoji]="chatMessage.emoji_data[j].emoji"
-                                    size="24"></ngx-emoji>
-                                <span>{{chatMessage.emoji_data[j].count}}</span>
+                                <ngx-emoji class="center" [emoji]="emoji.emoji" size="24"></ngx-emoji>
+                                <span>{{emoji.count}}</span>
                             </div>
                         </div>
                     </div>
@@ -71,19 +86,26 @@
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
                     <div class="answers">
-                        <div *ngIf="chatMessage.answers > 0" >{{chatMessage.answers}}</div>
-                        <span  *ngIf="chatMessage.answers == 0 || chatMessage.answers > 1" class="chat-message-answers-amount" (click)="fsDataThreadService.openDirectChatThread(i)">Antworten</span>
-                        <span *ngIf="chatMessage.answers == 1" class="chat-message-answers-amount" (click)="fsDataThreadService.openDirectChatThread(i)">Antwort</span>
+                        <div *ngIf="chatMessage.answers > 0">{{chatMessage.answers}}</div>
+                        <span *ngIf="chatMessage.answers == 0 || chatMessage.answers > 1"
+                            class="chat-message-answers-amount"
+                            (click)="fsDataThreadService.openDirectChatThread(i)">Antworten</span>
+                        <span *ngIf="chatMessage.answers == 1" class="chat-message-answers-amount"
+                            (click)="fsDataThreadService.openDirectChatThread(i)">Antwort</span>
                     </div>
-                    <span *ngIf="chatMessage.answers > 0" class="last-message-time">Letze Antwort {{fsDataThreadService.getTimeSince(chatMessage.last_answer)}}</span>
+                    <span *ngIf="chatMessage.answers > 0" class="last-message-time">Letze Antwort
+                        {{fsDataThreadService.getTimeSince(chatMessage.last_answer)}}</span>
                 </div>
             </div>
             <div [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                 class="reaction-bar">
-                <img src="/assets/img/icons/check_mark_emoji.svg" (click)="addEmojiInMessage(emojiService.checkMarkManualEvent, i, chatMessage);">
-                <img src="/assets/img/icons/hands_up_emoji.svg" (click)="addEmojiInMessage(emojiService.raisedHandsManualEvent, i, chatMessage);">
+                <img src="/assets/img/icons/check_mark_emoji.svg"
+                    (click)="addEmojiInMessage(emojiService.checkMarkManualEvent, i, chatMessage);">
+                <img src="/assets/img/icons/hands_up_emoji.svg"
+                    (click)="addEmojiInMessage(emojiService.raisedHandsManualEvent, i, chatMessage);">
                 <div class="reaction-bar-emoji">
-                    <svg #emojiPopupReactionBarREF (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojiReactionBar'); emojiService.openEmojiPicker(i);"
+                    <svg #emojiPopupReactionBarREF
+                        (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojiReactionBar'); emojiService.openEmojiPicker(i);"
                         width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
                             width="25" height="24">
@@ -95,15 +117,15 @@
                                 fill="black" />
                         </g>
                     </svg>
-                    <emoji-mart 
-                        [class.d_flex]="emojiService.picker_index == i && emojiService.picker_reaction_bar"
+                    <emoji-mart [class.d_flex]="emojiService.picker_index == i && emojiService.picker_reaction_bar"
                         [class.open-picker-below]="emojiService.openPickerBelow"
                         [ngClass]="{'emoji_picker_left': !isMessageCreator(chatMessage.user_Sender_ID)}"
                         class="emoji_picker_reaction-bar"
                         (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
                 </div>
 
-                <svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg" (click)="fsDataThreadService.openDirectChatThread(i)">
+                <svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    (click)="fsDataThreadService.openDirectChatThread(i)">
                     <mask id="mask0_3922_2019" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8" width="25"
                         height="24">
                         <rect x="8.93652" y="8" width="24" height="24" fill="#D9D9D9" />

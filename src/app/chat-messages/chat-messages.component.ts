@@ -6,6 +6,7 @@ import { DirectChatService } from 'services/directchat.service';
 import { EmojiService } from 'services/emoji.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { MessagesService } from 'services/messages.service';
+import { ReactionBubbleService } from 'services/reaction-bubble.service';
 
 @Component({
   selector: 'app-chat-messages',
@@ -31,6 +32,7 @@ export class ChatMessagesComponent {
     public dataDirectChatService: DirectChatService,
     public msgService: MessagesService,
     public emojiService: EmojiService,
+    public reactionBubbleService: ReactionBubbleService
   ) { }
 
 
@@ -95,7 +97,7 @@ export class ChatMessagesComponent {
 
   addEmojiInMessage($event: any, i: number, chatMessage) {
     let chatMessages = this.dataDirectChatService.directChatMessages;
-    let user = this.authService.userData.user_name;
+    let user = this.authService.userData.uid;
     this.emojiService.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);
@@ -104,7 +106,7 @@ export class ChatMessagesComponent {
 
   addOrRemoveEmojiClickEmojis(i: number, j: number, chatMessage) {
     let chatMessages = this.dataDirectChatService.directChatMessages;
-    let user = this.authService.userData.user_name;
+    let user = this.authService.userData.uid;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);
   }
@@ -120,7 +122,7 @@ export class ChatMessagesComponent {
     if (this.hovered_emoji == true) this.hovered_emoji = false
   }
 
-
+  
   public openThread(value: boolean) {
     this.threadOpen.emit(value)
   }
