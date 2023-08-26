@@ -59,9 +59,9 @@
                                         *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
                                         false)?.join('
                                         und ')}}</span>
-                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users === authService.getUid()">hat
+                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.getUid()">hat
                                         reagiert</span>
-                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users !== authService.getUid()">hast
+                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.getUid()">hast
                                         reagiert</span>
                                     <span *ngIf="emoji?.react_users?.length === 2">
                                         haben

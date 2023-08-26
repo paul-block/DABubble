@@ -11,17 +11,12 @@ export class ReactionBubbleService {
   ) { }
 
   replaceNameWithDu(react_userIDs, moreThen3Reactions) {
-    console.log('input ' + react_userIDs);
 
     const names_react_user = this.switchIDsWithNames(react_userIDs);
     const sortedNames = this.sortNamesWithDuFirst(names_react_user);
     if (moreThen3Reactions) {
-      console.log('output ' + sortedNames);
-
       return sortedNames.slice(0, 2);
     } else {
-      console.log(sortedNames);
-
       return sortedNames;
     }
 

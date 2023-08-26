@@ -77,22 +77,15 @@
                         [class.show_react_user]="comment_index == -1 && emoji_index == j && hovered_emoji">
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.current_chat_data.emoji_data[j].emoji"
                             size="24"></ngx-emoji>
-                        <!-- <span>{{fsDataThreadService.current_chat_data.emoji_data[j]?.react_users?.join(' und ')}}</span>
-                        <div *ngIf="fsDataThreadService.current_chat_data.emoji_data[j]?.react_users?.length < 2">hat
-                            reagiert</div>
-                        <div *ngIf="fsDataThreadService.current_chat_data.emoji_data[j]?.react_users?.length > 1">haben
-                            reagiert</div> -->
-
-
                         <span
                             *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
                             false)?.join('
                             und ')}}</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users === authenticationService.getUid()">hat
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authenticationService.getUid()">hat
                             reagiert</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users !== authenticationService.getUid()">hast
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authenticationService.getUid()">hast
                             reagiert</span>
                         <span *ngIf="emoji?.react_users?.length === 2">
                             haben
@@ -107,7 +100,6 @@
                             emoji?.react_users?.length - 2 }} weitere haben
                             reagiert</span>
                     </div>
-
                     <ngx-emoji class="center" [emoji]="fsDataThreadService.current_chat_data.emoji_data[j].emoji"
                         size="24"></ngx-emoji>
                     <span>{{fsDataThreadService.current_chat_data.emoji_data[j].count}}</span>
@@ -183,22 +175,15 @@
                         [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
                         <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
                             size="24"></ngx-emoji>
-                        <!-- <span>{{fsDataThreadService.comments[i].emoji_data[j]?.react_users?.join(' und ')}}</span>
-                        <div *ngIf="fsDataThreadService.comments[i].emoji_data[j]?.react_users?.length < 2">hat
-                            reagiert</div>
-                        <div *ngIf="fsDataThreadService.comments[i].emoji_data[j]?.react_users?.length > 1">haben
-                            reagiert</div> -->
-
-
                         <span
                             *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
                             false)?.join('
                             und ')}}</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users === authenticationService.getUid()">hat
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authenticationService.getUid()">hat
                             reagiert</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users !== authenticationService.getUid()">hast
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authenticationService.getUid()">hast
                             reagiert</span>
                         <span *ngIf="emoji?.react_users?.length === 2">
                             haben
@@ -212,8 +197,6 @@
                         <span *ngIf="emoji?.react_users?.length > 3"> und {{
                             emoji?.react_users?.length - 2 }} weitere haben
                             reagiert</span>
-
-
                     </div>
                     <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
                         size="24"></ngx-emoji>

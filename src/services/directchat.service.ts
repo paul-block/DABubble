@@ -18,7 +18,7 @@ export class DirectChatService {
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
   private chatsSubject = new BehaviorSubject<any[]>([]);
-  currentUser_id;
+  currentUser_id: any;
 
   constructor(
     public authService: AuthenticationService,
@@ -58,10 +58,7 @@ export class DirectChatService {
       });
     } else if (!chatExists) {
       await this.newChat(userID);
-      console.log('in');
-    }
-    console.log(chatExists);
-    
+    }    
   }
 
 

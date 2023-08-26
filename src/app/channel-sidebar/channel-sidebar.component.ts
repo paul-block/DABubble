@@ -26,7 +26,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   private subChannels: Subscription;
   private subChats: Subscription;
   currentUserSubscription: Subscription;
-  currentUser_id: any;
 
   constructor(
     public authService: AuthenticationService,
@@ -54,9 +53,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       this.directChatService.currentUser_id = user.uid;
       this.directChatService.initOwnChat();
     });
-
-    
-
   }
 
   ngOnDestroy() {
