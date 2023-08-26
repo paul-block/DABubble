@@ -67,7 +67,6 @@ export class AuthenticationService {
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
     console.log(this.userData);
-    
   }
 
 
@@ -195,6 +194,13 @@ export class AuthenticationService {
       users.push(doc.data());
     });
     return users;
+  }
+
+  getUserInfo(uid){
+    const user = this.all_users.find(user => user.uid === uid);
+    console.log(user);
+    
+    return user;
   }
 
   async filterUsers(name: string): Promise<any[]> {
