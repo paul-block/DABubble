@@ -10,6 +10,7 @@ import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { MessagesService } from 'services/messages.service';
 import { DirectChatService } from 'services/directchat.service';
 import { UploadService } from 'services/upload.service';
+import { ReactionBubbleService } from 'services/reaction-bubble.service';
 
 
 
@@ -52,7 +53,8 @@ export class ThreadComponent implements OnInit {
     public dialog: MatDialog,
     public msgService: MessagesService,
     public dataDirectChatService: DirectChatService,
-    public uploadService: UploadService
+    public uploadService: UploadService,
+    public reactionBubbleService: ReactionBubbleService
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
@@ -80,7 +82,7 @@ export class ThreadComponent implements OnInit {
 
   addEmojiInThread($event: any, i: number) {
     let array = this.fsDataThreadService.comments
-    let user = this.authenticationService.userData.user_name
+    let user = this.authenticationService.userData.uid
     this.emojiPicker_open = false
     this.fsDataThreadService.comments = this.emojiService.addEmoji($event, i, array, user)
     this.fsDataThreadService.updateData()
@@ -90,7 +92,7 @@ export class ThreadComponent implements OnInit {
   addOrRemoveEmojIinThread(i: number, j: number) {
     this.fsDataThreadService.current_changed_index = i
     let array = this.fsDataThreadService.comments
-    let user = this.authenticationService.userData.user_name
+    let user = this.authenticationService.userData.uid
     this.hovered_emoji = false
     this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i, j, array, user)
     this.fsDataThreadService.updateData()
@@ -315,7 +317,7 @@ export class ThreadComponent implements OnInit {
 
   addEmojiInDirectMessage($event: any, i: number) {
     let chatMessages = this.dataDirectChatService.directChatMessages;
-    let user = this.authenticationService.userData.user_name;
+    let user = this.authenticationService.userData.uid;
     this.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);

@@ -217,7 +217,7 @@ export class MessagesService {
     }
   }
 
-  emptyMessageText(){
+  emptyMessageText() {
     this.messageText = '';
   }
 }

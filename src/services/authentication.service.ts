@@ -66,7 +66,6 @@ export class AuthenticationService {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
-    console.log(this.userData);
   }
 
 
@@ -198,8 +197,6 @@ export class AuthenticationService {
 
   getUserInfo(uid){
     const user = this.all_users.find(user => user.uid === uid);
-    console.log(user);
-    
     return user;
   }
 

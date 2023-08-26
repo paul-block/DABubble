@@ -37,6 +37,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
   ) { }
 
   ngAfterViewInit(): void {
+    // console.log('getUid() ngAfterViewInit channel-sidebar: ' + this.authService.getUid());
   }
 
   ngOnInit() {
@@ -48,6 +49,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     this.subChats = this.directChatService.getUsersChatsObservable().subscribe(chat => {
       this.directChatService.chats.push(chat);
     });
+
+    // console.log('getUid() ngOnInit channel-sidebar: ' + this.authService.getUid());
   }
 
   ngOnDestroy() {
