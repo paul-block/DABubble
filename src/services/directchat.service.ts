@@ -62,7 +62,7 @@ export class DirectChatService {
       console.log('in');
     }
     console.log(chatExists);
-
+    
   }
 
 
