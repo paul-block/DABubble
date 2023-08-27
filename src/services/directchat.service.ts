@@ -18,7 +18,8 @@ export class DirectChatService {
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
   private chatsSubject = new BehaviorSubject<any[]>([]);
-  currentUser_id;
+  currentUser_id
+  modified_message: string
 
   constructor(
     public authService: AuthenticationService,
@@ -61,7 +62,7 @@ export class DirectChatService {
       console.log('in');
     }
     console.log(chatExists);
-    
+
   }
 
 
@@ -119,7 +120,7 @@ export class DirectChatService {
         const chatDocRef = doc(this.db, 'chats', newChatID);
         await updateDoc(chatDocRef, {
           chat_ID: newChatID
-        }).then(()=>{
+        }).then(() => {
           this.loadChats();
         });
       } catch (error) {
@@ -156,7 +157,34 @@ export class DirectChatService {
     } else if (this.currentChatSection === 'chats') {
       this.currentChatData = this.chats.find(chat => chat.chat_ID === this.currentChatID);
     }
-
-    console.log(this.currentChatData);
   }
+
+
+  modifyMessageValue(message: string) {
+    const words = message.split(' ')
+    for (let i = 0; i < words.length; i++) {
+      let word1 = words[i];
+      let word2 = words[i + 1]
+      if (word1.startsWith('@')) {
+        let word_without_at = word1.substring(1);
+        for (let j = 0; j < this.authService.all_users.length; j++) {
+          const [firstName, lastName] = this.authService.all_users[j].user_name.split(' ');
+          if (lastName && lastName == word2) {
+            const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
+            words[i] = formattedName
+            words.splice(i + 1, 1)
+            this.modified_message = words.join(' ')
+          }
+          if (firstName == word_without_at && !lastName) {
+            const formattedName = `<span class="highlighted">@${firstName}</span>`;
+            words[i] = formattedName
+            this.modified_message = words.join(' ')
+          }
+        }
+      }
+    }
+  }
+
+  // const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
+
 }

@@ -27,6 +27,7 @@ export class ThreadComponent implements OnInit {
   @ViewChild('picker', { static: false }) picker: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
+  at_users = []
   comment_value: string = ''
   picker_index: number
   response: string = 'Antwort'
@@ -44,15 +45,13 @@ export class ThreadComponent implements OnInit {
   uploadProgress: number = 0;
 
 
-
-
   constructor(
     public authenticationService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public emojiService: EmojiService,
     public dialog: MatDialog,
     public msgService: MessagesService,
-    public dataDirectChatService: DirectChatService,
+    public directChatService: DirectChatService,
     public uploadService: UploadService,
     public reactionBubbleService: ReactionBubbleService
   ) { }
@@ -65,6 +64,7 @@ export class ThreadComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
+    this.getAllUsers()
   }
 
 
@@ -102,7 +102,10 @@ export class ThreadComponent implements OnInit {
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
-    if (this.open_users == true) this.open_users = false;
+    if (this.open_users == true) {
+      this.open_users = false;
+      this.getAllUsers()
+    }
     if (this.open_attachment_menu == true) this.open_attachment_menu = false
   };
 
@@ -115,9 +118,10 @@ export class ThreadComponent implements OnInit {
   async postComment() {
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
     if (this.comment_value.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
+      this.directChatService.modifyMessageValue(this.comment_value)
       let time_stamp = new Date()
       let comment_data = {
-        comment: this.comment_value,
+        comment: this.directChatService.modified_message,
         time: time_stamp,
         uid: this.authenticationService.getUid(),
         emoji_data: [],
@@ -125,7 +129,6 @@ export class ThreadComponent implements OnInit {
         uploaded_files: this.uploadService.upload_array
       }
       setTimeout(() => this.fsDataThreadService.saveThread(comment_data), 500);
-     
       this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
@@ -248,13 +251,9 @@ export class ThreadComponent implements OnInit {
 
 
   openUsers() {
+    this.getAllUsers()
     this.open_users = true
-  }
 
-
-  addUserToTextarea(i: number) {
-    this.comment_value += '@' + this.authenticationService.all_users[i].user_name
-    this.messageTextarea.nativeElement.focus();
   }
 
 
@@ -308,7 +307,7 @@ export class ThreadComponent implements OnInit {
 
   addOrRemoveEmojisOnDirectChatMessage(i: number, j: number) {
     this.hovered_emoji = false
-    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let chatMessages = this.directChatService.directChatMessages;
     let user = this.authenticationService.userData.user_name;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
@@ -316,7 +315,7 @@ export class ThreadComponent implements OnInit {
 
 
   addEmojiInDirectMessage($event: any, i: number) {
-    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let chatMessages = this.directChatService.directChatMessages;
     let user = this.authenticationService.userData.uid;
     this.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
@@ -324,28 +323,50 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  textChanged(text:string) {
-    this.searchUserByLetter()
-    const words = this.comment_value.split(' ');
-    
+  textChanged(text: string) {
+    const words = text.split(' ');
     for (let i = 0; i < words.length; i++) {
-     
       const word = words[i];
-    
-      if (word === '@') {
-        
-       
-        words[i] = ' '
-        this.open_users = true
+      if (word.startsWith('@')) {
+        if (i === words.length - 1) {
+          this.searchUserByLetter(word);
+        }
       }
+      if (word.length == 0) this.open_users = false;
       this.comment_value = words.join(' ')
+    }
   }
-}
 
- searchUserByLetter() {
-   const filterValue = this.comment_value.toLowerCase();
-   const filtereUsers = this.authenticationService.all_users.filter(name => name.toLowerCase().startsWith(filterValue));
-   console.log(filtereUsers, filterValue);
-   
-}
+
+  async searchUserByLetter(word: string) {
+    this.open_users = true;
+    const word_without_at = word.substring(1);
+    const filterValue = word_without_at.toLowerCase();
+    const filteredUsers = this.authenticationService.all_users.filter(element =>
+      element.user_name.toLowerCase().startsWith(filterValue)
+    );
+    const filteredAndProcessedUsers = filteredUsers.map(user => {
+      return {
+        ...user,
+        word: word
+      };
+    });
+    this.at_users = filteredAndProcessedUsers;
+  }
+
+
+  addUserToTextarea(i: number) {
+    const search_word = this.at_users[i].word
+    const words = this.comment_value.split(' ');
+    let index = words.indexOf(search_word)
+    words[index] = ''
+    this.comment_value = words.join(' ')
+    this.comment_value += '@' + this.at_users[i].user_name
+    this.messageTextarea.nativeElement.focus();
+  }
+
+
+  async getAllUsers() {
+    this.at_users = await this.authenticationService.getAllUsers();
+  }
 }
