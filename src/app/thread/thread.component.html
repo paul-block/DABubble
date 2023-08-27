@@ -52,7 +52,7 @@
 
             <div class="line"></div>
         </div>
-        <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
+        <img class="avatar_img" (click)="openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)" [src]="getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
         <div class="message_sub">
             <div class="user_time">
                 <span
