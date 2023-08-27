@@ -27,7 +27,6 @@ export class ThreadComponent implements OnInit {
   @ViewChild('picker', { static: false }) picker: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
-  at_users = []
   comment_value: string = ''
   picker_index: number
   response: string = 'Antwort'
@@ -40,7 +39,6 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: number;
-  open_users: boolean;
   open_attachment_menu: boolean;
   uploadProgress: number = 0;
 
@@ -64,7 +62,7 @@ export class ThreadComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
-    this.getAllUsers()
+    await this.getAllUsers()
   }
 
 
@@ -102,8 +100,8 @@ export class ThreadComponent implements OnInit {
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
-    if (this.open_users == true) {
-      this.open_users = false;
+    if (this.directChatService.open_users == true) {
+      this.directChatService.open_users = false;
       this.getAllUsers()
     }
     if (this.open_attachment_menu == true) this.open_attachment_menu = false
@@ -254,7 +252,7 @@ export class ThreadComponent implements OnInit {
 
   openUsers() {
     this.getAllUsers()
-    this.open_users = true
+    this.directChatService.open_users = true
   }
 
 
@@ -327,49 +325,19 @@ export class ThreadComponent implements OnInit {
 
 
   textChanged(text: string) {
-    const words = text.split(' ');
-    for (let i = 0; i < words.length; i++) {
-      const word = words[i];
-      if (word.startsWith('@')) {
-        if (i === words.length - 1) {
-          this.searchUserByLetter(word);
-        }
-      }
-      if (word.length == 0) this.open_users = false;
-      this.comment_value = words.join(' ')
+    this.comment_value = this.directChatService.textChanged(text)
     }
-  }
-
-
-  async searchUserByLetter(word: string) {
-    this.open_users = true;
-    const word_without_at = word.substring(1);
-    const filterValue = word_without_at.toLowerCase();
-    const filteredUsers = this.authenticationService.all_users.filter(element =>
-      element.user_name.toLowerCase().startsWith(filterValue)
-    );
-    const filteredAndProcessedUsers = filteredUsers.map(user => {
-      return {
-        ...user,
-        word: word
-      };
-    });
-    this.at_users = filteredAndProcessedUsers;
-  }
-
+  
 
   addUserToTextarea(i: number) {
-    const search_word = this.at_users[i].word
-    const words = this.comment_value.split(' ');
-    let index = words.indexOf(search_word)
-    words[index] = ''
-    this.comment_value = words.join(' ')
-    this.comment_value += '@' + this.at_users[i].user_name
     this.messageTextarea.nativeElement.focus();
+    this.comment_value = this.directChatService.addUserToTextarea(i, this.comment_value)
   }
 
 
   async getAllUsers() {
-    this.at_users = await this.authenticationService.getAllUsers();
+    this.directChatService.at_users = await this.authenticationService.getAllUsers();
+    console.log(this.directChatService.at_users);
+    
   }
 }

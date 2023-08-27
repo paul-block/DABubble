@@ -191,7 +191,7 @@
                     (click)="addOrRemoveEmojIinThread(i, j)">
                     <div class="react_user"
                         [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
-                        <ngx-emoji class="center" [emoji]="emoji"
+                        <ngx-emoji class="center" [emoji]="emoji.emoji"
                             size="24"></ngx-emoji>
                         <span
                             *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
@@ -242,11 +242,11 @@
             <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
             <label class="menu_button" for="fileInput">Datei anhängen</label>
         </div>
-        <div class="at_user_div" *ngIf="open_users">
+        <div class="at_user_div" *ngIf="directChatService.open_users">
             <div>
-                <div class="user" *ngFor="let user of at_users; let i = index" (click)="addUserToTextarea(i)">
-                    <img class="user_img" [src]="at_users[i].avatar">
-                    <div>{{at_users[i].user_name}}</div>
+                <div class="user" *ngFor="let user of directChatService.at_users; let i = index" (click)="addUserToTextarea(i)">
+                    <img class="user_img" [src]="directChatService.at_users[i].avatar">
+                    <div>{{directChatService.at_users[i].user_name}}</div>
                 </div>
             </div>
 

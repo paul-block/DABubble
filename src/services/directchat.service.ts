@@ -1,4 +1,4 @@
-import { Injectable, Query } from '@angular/core';
+import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
 import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, CollectionReference } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
@@ -9,8 +9,10 @@ import { ChannelService } from './channel.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DirectChatService {
+export class DirectChatService  {
+
   db = getFirestore();
+  at_users:any
   currentChatSection = 'noChatSectionSelected';
   currentChatID: string = 'noChatSelected';
   directChatMessages = [];
@@ -18,11 +20,17 @@ export class DirectChatService {
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
   private chatsSubject = new BehaviorSubject<any[]>([]);
-  currentUser_id
+  currentUser_id: string
+  open_users: boolean = false;
+
+
+
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
   ) { }
+
+
 
   async loadChats() {
     const querySnapshot = await getDocs(collection(this.db, 'chats'));
@@ -59,8 +67,6 @@ export class DirectChatService {
       await this.newChat(userID);
       console.log('in');
     }
-    console.log(chatExists);
-
   }
 
 
@@ -158,6 +164,9 @@ export class DirectChatService {
   }
 
 
+  //-----------------------------------------------------------------@user Funktionen
+
+
   modifyMessageValue(message: string) {
     const words = message.split(' ')
     for (let i = 0; i < words.length; i++) {
@@ -183,11 +192,56 @@ export class DirectChatService {
   }
 
 
+  textChanged(text: string) {
+    const words = text.split(' ');
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      if (word.startsWith('@')) {
+        if (i === words.length - 1) {
+          this.searchUserByLetter(word);
+        }
+      }
+      if (word.length == 0) this.open_users = false;
+    }
+    return words.join(' ')
+  }
+
+
+  async searchUserByLetter(word: string) {
+    this.open_users = true;
+    const word_without_at = word.substring(1);
+    const filterValue = word_without_at.toLowerCase();
+    const filteredUsers = this.authService.all_users.filter(element =>
+      element.user_name.toLowerCase().startsWith(filterValue)
+    );
+    const filteredAndProcessedUsers = filteredUsers.map(user => {
+      return {
+        ...user,
+        word: word
+      };
+    });
+    this.at_users = filteredAndProcessedUsers;
+  }
+
+
+  addUserToTextarea(i: number, text: string) {
+    const search_word = this.at_users[i].word
+    const words = text.split(' ');
+    let index = words.indexOf(search_word)
+    words[index] = ''
+    text = words.join(' ')
+    text += '@' + this.at_users[i].user_name
+    return text
+  }
+
+
+
   checkIfWordIsAnId(word: string) {
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return true
     else return false
   }
+
 
   renameUid(word: string) {
     const user = this.authService.all_users.find(element => element.uid === word);
