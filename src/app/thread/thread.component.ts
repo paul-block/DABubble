@@ -118,10 +118,9 @@ export class ThreadComponent implements OnInit {
   async postComment() {
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
     if (this.comment_value.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
-      this.directChatService.modifyMessageValue(this.comment_value)
       let time_stamp = new Date()
       let comment_data = {
-        comment: this.directChatService.modified_message,
+        comment: this.comment_value,
         time: time_stamp,
         uid: this.authenticationService.getUid(),
         emoji_data: [],
@@ -175,6 +174,7 @@ export class ThreadComponent implements OnInit {
     this.edit_comment_index = i
   }
 
+
   openEditComment(i: number) {
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
@@ -189,6 +189,7 @@ export class ThreadComponent implements OnInit {
       }
     });
   }
+
 
   openEditMessage() {
     this.edit_comment = false;
@@ -237,7 +238,6 @@ export class ThreadComponent implements OnInit {
   }
 
 
-
   showReactUsers(i: number, j: number) {
     if (this.hovered_emoji == false) this.hovered_emoji = true
     this.comment_index = i
@@ -253,7 +253,6 @@ export class ThreadComponent implements OnInit {
   openUsers() {
     this.getAllUsers()
     this.open_users = true
-
   }
 
 
@@ -262,10 +261,12 @@ export class ThreadComponent implements OnInit {
     return user.avatar
   }
 
+
   getUserName(uid: string) {
     const user = this.authenticationService.all_users.find(element => element.uid === uid);
     return user.user_name
   }
+
 
   getUserEmail(uid: string) {
     const user = this.authenticationService.all_users.find(element => element.uid === uid);
@@ -352,6 +353,8 @@ export class ThreadComponent implements OnInit {
       };
     });
     this.at_users = filteredAndProcessedUsers;
+    console.log(this.at_users);
+    
   }
 
 

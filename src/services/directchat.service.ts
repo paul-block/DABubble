@@ -19,8 +19,6 @@ export class DirectChatService {
   chats: any[] = [];
   private chatsSubject = new BehaviorSubject<any[]>([]);
   currentUser_id
-  modified_message: string
-
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
@@ -62,7 +60,7 @@ export class DirectChatService {
       console.log('in');
     }
     console.log(chatExists);
-    
+
   }
 
 
@@ -173,18 +171,14 @@ export class DirectChatService {
             const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
             words[i] = formattedName
             words.splice(i + 1, 1)
-            this.modified_message = words.join(' ')
           }
           if (firstName == word_without_at && !lastName) {
             const formattedName = `<span class="highlighted">@${firstName}</span>`;
             words[i] = formattedName
-            this.modified_message = words.join(' ')
           }
         }
       }
     }
+    return words
   }
-
-  // const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
-
 }

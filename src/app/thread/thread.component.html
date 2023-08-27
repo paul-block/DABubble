@@ -144,8 +144,8 @@
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.comments[i].time.seconds)}}</span>
             </div>
             <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
-                [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name">
-                {{fsDataThreadService.comments[i].comment}}
+                [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name" 
+                [innerHTML]="directChatService.modifyMessageValue(fsDataThreadService.comments[i].comment)">
 
                 <div *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
             </div>
@@ -226,10 +226,10 @@
         </div>
         <div class="at_user_div" *ngIf="open_users">
             <div>
-                <div class="user" *ngFor="let user of authenticationService.all_users; let i = index"
+                <div class="user" *ngFor="let user of at_users; let i = index"
                     (click)="addUserToTextarea(i)">
-                    <img class="user_img" [src]="authenticationService.all_users[i].avatar">
-                    <div>{{authenticationService.all_users[i].user_name}}</div>
+                    <img class="user_img" [src]="at_users[i].avatar">
+                    <div>{{at_users[i].user_name}}</div>
                 </div>
             </div>
 
