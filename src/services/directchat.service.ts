@@ -179,6 +179,7 @@ export class DirectChatService {
         }
       }
     }
-    return words
+
+    return words.join(' ')
   }
 }
