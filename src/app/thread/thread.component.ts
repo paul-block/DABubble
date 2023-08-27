@@ -275,7 +275,7 @@ export class ThreadComponent implements OnInit {
 
 
   openProfile(uid: string) {
-    if (this.getUserName(uid) == this.authenticationService.userData.user_name) this.openCurrentUserDetails()
+    if (this.getUserName(uid) == this.authenticationService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
     else {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.panelClass = 'add-channel-dialog';
@@ -284,6 +284,12 @@ export class ThreadComponent implements OnInit {
     }
   }
 
+
+  checkIfStringIsAnId(uid: string) {
+    const user = this.authenticationService.all_users.find(element => element.uid === uid);
+    if(user) return true
+    else return false
+  }
 
 
   openCurrentUserDetails() {

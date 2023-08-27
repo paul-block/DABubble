@@ -79,21 +79,16 @@ export class ProfileMenuComponent {
 
 
   onFileSelected($event: any) {
-   
     this.file_error = false;
     this.selectedFile = $event.target.files[0];
-    if (this.selectedFile && this.selectedFile.type.startsWith('image/')) {
-      this.uploadImage();
-    } else {
-      this.file_error = true;
-    }
+    if (this.selectedFile && this.selectedFile.type.startsWith('image/')) this.uploadImage();
+    else this.file_error = true;
   }
 
 
   setAvatar(image: string) {
     this.file_error = false
     this.authService.setAvatarImage(image)
-   
   }
 
 
@@ -112,9 +107,10 @@ export class ProfileMenuComponent {
           this.authService.userData.avatar = downloadURL
         });
       })
-      )
+    ).subscribe();
   }
 
+  
   saveNewAvatar() {
     this.setAvatar(this.authService.userData.avatar)
     this.onNoClick()
@@ -123,6 +119,6 @@ export class ProfileMenuComponent {
 
   onNoClick(): void {
     this.dialogRef.close();
-    this.authService.userData.avatar = this.current_imageUrl
+    if (this.current_imageUrl) this.authService.userData.avatar = this.current_imageUrl
   }
 }
