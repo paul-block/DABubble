@@ -124,7 +124,6 @@ export class FirestoreThreadDataService {
       if (changedData) {
         this.comments = changedData.comments
         this.fake_array.length = this.comments.length
-        console.log(this.comments);
       } else {
         let thread_data = {
           comments: []
