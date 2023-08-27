@@ -112,6 +112,7 @@
     <div class="comment_div"
         [class.row_reverse]="getUserName(fsDataThreadService.comments[i]?.uid) == authenticationService.userData.user_name"
         *ngFor="let comment of fsDataThreadService.fake_array; let i = index">
+
         <div [class.show_edit_comment]="edit_comment && getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name && edit_comment_index == i"
             class="edit_comment" (click)="openEditComment(i)">
             <div class="menu_button" (click)="openEditComment(i)" (click)="stopPropagation($event)">
@@ -121,12 +122,14 @@
                 <span>Nachricht löschen</span>
             </div>
         </div>
+
         <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker"
             (click)="stopPropagation($event) " (emojiClick)="addEmojiInThread($event, i)"></emoji-mart>
         <div *ngIf="getUserName(fsDataThreadService.comments[i].uid) != authenticationService.userData.user_name"
             (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
+
         <div *ngIf="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name"
             (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy_user">
             <div class="emojy">
@@ -136,6 +139,7 @@
                 <img src="/assets/img/icons/more_vert.png">
             </div>
         </div>
+
         <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.comments[i].uid)">
         <div class="message_sub">
             <div class="user_time">
@@ -143,12 +147,26 @@
                     (click)="openProfile(fsDataThreadService.comments[i].uid)">{{getUserName(fsDataThreadService.comments[i].uid)}}</span>
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.comments[i].time.seconds)}}</span>
             </div>
-            <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
-                [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name" 
-                [innerHTML]="directChatService.modifyMessageValue(fsDataThreadService.comments[i].comment)">
 
-                <div *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
+            <!----------------------------------------------------------------------comment-------------------------------------------------------------------------------------------->
+
+
+            <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
+                [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name">
+
+
+
+                <span  *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
+                    [class.highlighted]="directChatService.checkIfWordIsAnId(word)">
+                    {{directChatService.renameUid(word)}}&nbsp;
+                </span>
+
+
+
+                <div style="font-size: 10px;" *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
             </div>
+
+            <!----------------------------------------------------------------------comment-------------------------------------------------------------------------------------------->
 
             <div class="uploaded_main">
                 <div *ngFor="let file of fsDataThreadService.comments[i].uploaded_files.file_name; let k = index"
@@ -173,7 +191,7 @@
                     (click)="addOrRemoveEmojIinThread(i, j)">
                     <div class="react_user"
                         [class.show_react_user]="comment_index == i && emoji_index == j && hovered_emoji">
-                        <ngx-emoji class="center" [emoji]="fsDataThreadService.comments[i].emoji_data[j].emoji"
+                        <ngx-emoji class="center" [emoji]="emoji"
                             size="24"></ngx-emoji>
                         <span
                             *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
@@ -226,8 +244,7 @@
         </div>
         <div class="at_user_div" *ngIf="open_users">
             <div>
-                <div class="user" *ngFor="let user of at_users; let i = index"
-                    (click)="addUserToTextarea(i)">
+                <div class="user" *ngFor="let user of at_users; let i = index" (click)="addUserToTextarea(i)">
                     <img class="user_img" [src]="at_users[i].avatar">
                     <div>{{at_users[i].user_name}}</div>
                 </div>

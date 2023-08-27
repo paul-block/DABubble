@@ -131,7 +131,6 @@ export class FirestoreThreadDataService {
         await setDoc(docRef, thread_data);
       }
     });
-    console.log(this.comments);
     
   }
 

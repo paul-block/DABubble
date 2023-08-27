@@ -168,18 +168,30 @@ export class DirectChatService {
         for (let j = 0; j < this.authService.all_users.length; j++) {
           const [firstName, lastName] = this.authService.all_users[j].user_name.split(' ');
           if (lastName && lastName == word2) {
-            const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
+            const formattedName = this.authService.all_users[j].uid
             words[i] = formattedName
             words.splice(i + 1, 1)
           }
           if (firstName == word_without_at && !lastName) {
-            const formattedName = `<span class="highlighted">@${firstName}</span>`;
+            const formattedName = this.authService.all_users[j].uid
             words[i] = formattedName
           }
         }
       }
     }
+    return words
+  }
 
-    return words.join(' ')
+
+  checkIfWordIsAnId(word: string) {
+    const user = this.authService.all_users.find(element => element.uid === word);
+    if (user) return true
+    else return false
+  }
+
+  renameUid(word: string) {
+    const user = this.authService.all_users.find(element => element.uid === word);
+    if (user) return '@' + user.user_name
+    else return word
   }
 }

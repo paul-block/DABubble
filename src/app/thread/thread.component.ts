@@ -121,6 +121,7 @@ export class ThreadComponent implements OnInit {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
+        modified_comment: this.directChatService.modifyMessageValue(this.comment_value),
         time: time_stamp,
         uid: this.authenticationService.getUid(),
         emoji_data: [],
@@ -184,6 +185,7 @@ export class ThreadComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.fsDataThreadService.comments[i].comment = result;
+        this.fsDataThreadService.comments[i].modified_comment = this.fsDataThreadService.comments[i].comment.split(' ')
         this.fsDataThreadService.comments[i].text_edited = true
         this.fsDataThreadService.updateData()
       }
@@ -353,8 +355,6 @@ export class ThreadComponent implements OnInit {
       };
     });
     this.at_users = filteredAndProcessedUsers;
-    console.log(this.at_users);
-    
   }
 
 
