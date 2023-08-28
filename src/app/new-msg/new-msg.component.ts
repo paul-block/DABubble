@@ -50,7 +50,10 @@ export class NewMsgComponent {
     if (uid) this.newMsgService.user_id = uid;
     if (category == 'userName') this.inputValue = '@' + clickedValue;
     if (category == 'userEmail') this.inputValue = clickedValue;
-    if (category == 'channel') this.inputValue = '#' + clickedValue;
+    if (category == 'channel') {
+      this.newMsgService.selectedChannelID = (this.filteredChannels.find(channel => channel.channelName === clickedValue)).channel_ID;
+      this.inputValue = '#' + clickedValue;
+    } 
 
     this.selectedValue = clickedValue;
 

@@ -103,7 +103,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     return this.chatService.currentChatID !== userReceiverID;
   }
 
-  async openChat(chat) {
+ async openChat(chat) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
@@ -127,7 +127,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   async openChannel(channelID) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
-    if (this.chatService.currentChatID !== channelID) {
+        if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
       this.msgService.emptyMessageText();

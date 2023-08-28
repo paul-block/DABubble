@@ -60,9 +60,12 @@ export class ChannelDirectSendMessageComponent{
     }
   }
 
+  
+
   public async onSendClick() {
     if (this.newMsgService.newMsgComponentOpen) {
       this.sendMsg(this.msgService.messageText, this.inputValue);
+      this.openChannel(this.newMsgService.selectedChannelID)
     } else {
       this.msgService.newMessage();
     }

@@ -19,7 +19,8 @@ export class NewMsgService {
   user_id: string;
   directedFromProfileButton:boolean = false;
   newMsgComponentOpen: boolean = false;
-  open_id: string;
+  selectedChannelID: string;
+
 
 
 
