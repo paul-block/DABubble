@@ -71,7 +71,7 @@ export class AuthenticationService {
   async waitUntilAuthInitialized(): Promise<void> {
     return this.authInitializedPromise;
   }
-  
+
 
   getUid() {
     const auth = getAuth();
@@ -213,7 +213,7 @@ export class AuthenticationService {
     return users;
   }
 
-  getUserInfo(uid) {
+  getUserInfo(uid: string) {
     const user = this.all_users.find(user => user.uid === uid);
     return user;
   }

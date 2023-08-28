@@ -11,7 +11,7 @@
 
 <div *ngIf="fsDataThreadService.thread_open" class="thread_content">
     <div class="message_div "
-        [class.row_reverse]="fsDataThreadService.current_chat_data?.user_Sender_ID == authenticationService.userData.uid">
+        [class.row_reverse]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
 
 
         <div [class.show_edit_comment]="edit_comment && edit_comment_index == -1  " class="edit_comment"
@@ -28,12 +28,12 @@
             (click)="stopPropagation($event) "
             (emojiClick)="addEmojiInDirectMessage($event, fsDataThreadService.direct_chat_index)"></emoji-mart>
 
-        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID != authenticationService.userData.uid"
+        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID != authService.userData.uid"
             (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
 
-        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authenticationService.userData.uid"
+        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authService.userData.uid"
             (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy_user">
             <div class="emojy">
                 <img src="/assets/img/icons/add_reaction.png" alt="">
@@ -52,15 +52,15 @@
 
             <div class="line"></div>
         </div>
-        <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
+        <img class="avatar_img" [src]="authService.getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
         <div class="message_sub">
             <div class="user_time">
                 <span
-                    (click)="openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)">{{getUserName(fsDataThreadService.current_chat_data.user_Sender_ID)}}</span>
+                    (click)="profileService.openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)">{{authService.getUserInfo(fsDataThreadService.current_chat_data.user_Sender_ID).user_name}}</span>
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.current_chat_data.created_At.seconds)}}</span>
             </div>
             <div class="message"
-                [class.message_user]="fsDataThreadService.current_chat_data?.user_Sender_ID == authenticationService.userData.uid">
+                [class.message_user]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
                 {{fsDataThreadService.current_message}}</div>
             <div class="emoji_main">
                 <div *ngFor="let item of 0" class="emoji_count" matTooltip="{{react_user}} hat reagiert">
@@ -82,10 +82,10 @@
                             false)?.join('
                             und ')}}</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authenticationService.getUid()">hat
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.getUid()">hat
                             reagiert</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authenticationService.getUid()">hast
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.getUid()">hast
                             reagiert</span>
                         <span *ngIf="emoji?.react_users?.length === 2">
                             haben
@@ -110,9 +110,9 @@
 
 
     <div class="comment_div"
-        [class.row_reverse]="getUserName(fsDataThreadService.comments[i]?.uid) == authenticationService.userData.user_name"
+        [class.row_reverse]="authService.getUserInfo(fsDataThreadService.comments[i]?.uid).user_name == authService.userData.user_name"
         *ngFor="let comment of fsDataThreadService.fake_array; let i = index">
-        <div [class.show_edit_comment]="edit_comment && getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name && edit_comment_index == i"
+        <div [class.show_edit_comment]="edit_comment && authService.getUserInfo(fsDataThreadService.comments[i].uid).user_name == authService.userData.user_name && edit_comment_index == i"
             class="edit_comment" (click)="openEditComment(i)">
             <div class="menu_button" (click)="openEditComment(i)" (click)="stopPropagation($event)">
                 <span>Nachricht bearbeiten</span>
@@ -123,11 +123,11 @@
         </div>
         <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker"
             (click)="stopPropagation($event) " (emojiClick)="addEmojiInThread($event, i)"></emoji-mart>
-        <div *ngIf="getUserName(fsDataThreadService.comments[i].uid) != authenticationService.userData.user_name"
+        <div *ngIf="authService.getUserInfo(fsDataThreadService.comments[i].uid).user_name != authService.userData.user_name"
             (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
-        <div *ngIf="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name"
+        <div *ngIf="authService.getUserInfo(fsDataThreadService.comments[i].uid).user_name == authService.userData.user_name"
             (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy_user">
             <div class="emojy">
                 <img src="/assets/img/icons/add_reaction.png" alt="">
@@ -136,15 +136,15 @@
                 <img src="/assets/img/icons/more_vert.png">
             </div>
         </div>
-        <img class="avatar_img" [src]="getImageUrl(fsDataThreadService.comments[i].uid)">
+        <img class="avatar_img" [src]="authService.getImageUrl(fsDataThreadService.comments[i].uid)">
         <div class="message_sub">
             <div class="user_time">
                 <span
-                    (click)="openProfile(fsDataThreadService.comments[i].uid)">{{getUserName(fsDataThreadService.comments[i].uid)}}</span>
+                    (click)="profileService.openProfile(fsDataThreadService.comments[i].uid)">{{authService.getUserInfo(fsDataThreadService.comments[i].uid).user_name}}</span>
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.comments[i].time.seconds)}}</span>
             </div>
             <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
-                [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authenticationService.userData.user_name">
+                [class.message_user]="authService.getUserInfo(fsDataThreadService.comments[i].uid).user_name== authService.userData.user_name">
                 {{fsDataThreadService.comments[i].comment}}
 
                 <div *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
@@ -160,7 +160,7 @@
                     <div>{{uploadService.checkFileName(fsDataThreadService.comments[i].uploaded_files.file_name[k])}}
                     </div>
                     <div class="delete_file"
-                        *ngIf="fsDataThreadService.comments[i].uid == authenticationService.userData.uid">
+                        *ngIf="fsDataThreadService.comments[i].uid == authService.userData.uid">
                         <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.comments[i].uploaded_files.file_name[k], i, k)"
                             src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
                     </div>
@@ -180,10 +180,10 @@
                             false)?.join('
                             und ')}}</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authenticationService.getUid()">hat
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.getUid()">hat
                             reagiert</span>
                         <span
-                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authenticationService.getUid()">hast
+                            *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.getUid()">hast
                             reagiert</span>
                         <span *ngIf="emoji?.react_users?.length === 2">
                             haben
@@ -226,10 +226,10 @@
         </div>
         <div class="at_user_div" *ngIf="open_users">
             <div>
-                <div class="user" *ngFor="let user of authenticationService.all_users; let i = index"
+                <div class="user" *ngFor="let user of authService.all_users; let i = index"
                     (click)="addUserToTextarea(i)">
-                    <img class="user_img" [src]="authenticationService.all_users[i].avatar">
-                    <div>{{authenticationService.all_users[i].user_name}}</div>
+                    <img class="user_img" [src]="authService.all_users[i].avatar">
+                    <div>{{authService.all_users[i].user_name}}</div>
                 </div>
             </div>
 

@@ -1,16 +1,15 @@
-import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { EmojiService } from '../../services/emoji.service';
-import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
-import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { MessagesService } from 'services/messages.service';
 import { DirectChatService } from 'services/directchat.service';
 import { UploadService } from 'services/upload.service';
 import { ReactionBubbleService } from 'services/reaction-bubble.service';
+import { ProfileService } from 'services/profile.service';
 
 
 
@@ -22,7 +21,7 @@ import { ReactionBubbleService } from 'services/reaction-bubble.service';
 export class ThreadComponent implements OnInit {
 
 
-  profileMenuRef: MatDialogRef<ProfileMenuComponent>;
+
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
   @ViewChild('picker', { static: false }) picker: ElementRef;
   emoji_exist: boolean;
@@ -47,14 +46,15 @@ export class ThreadComponent implements OnInit {
 
 
   constructor(
-    public authenticationService: AuthenticationService,
+    public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public emojiService: EmojiService,
     public dialog: MatDialog,
     public msgService: MessagesService,
     public dataDirectChatService: DirectChatService,
     public uploadService: UploadService,
-    public reactionBubbleService: ReactionBubbleService
+    public reactionBubbleService: ReactionBubbleService,
+    public profileService: ProfileService,
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
@@ -82,7 +82,7 @@ export class ThreadComponent implements OnInit {
 
   addEmojiInThread($event: any, i: number) {
     let array = this.fsDataThreadService.comments
-    let user = this.authenticationService.userData.uid
+    let user = this.authService.userData.uid
     this.emojiPicker_open = false
     this.fsDataThreadService.comments = this.emojiService.addEmoji($event, i, array, user)
     this.fsDataThreadService.updateData()
@@ -92,7 +92,7 @@ export class ThreadComponent implements OnInit {
   addOrRemoveEmojIinThread(i: number, j: number) {
     this.fsDataThreadService.current_changed_index = i
     let array = this.fsDataThreadService.comments
-    let user = this.authenticationService.userData.uid
+    let user = this.authService.userData.uid
     this.hovered_emoji = false
     this.fsDataThreadService.comments = this.emojiService.addOrRemoveEmoji(i, j, array, user)
     this.fsDataThreadService.updateData()
@@ -119,13 +119,13 @@ export class ThreadComponent implements OnInit {
       let comment_data = {
         comment: this.comment_value,
         time: time_stamp,
-        uid: this.authenticationService.getUid(),
+        uid: this.authService.getUid(),
         emoji_data: [],
         text_edited: false,
         uploaded_files: this.uploadService.upload_array
       }
       setTimeout(() => this.fsDataThreadService.saveThread(comment_data), 500);
-     
+
       this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
@@ -160,7 +160,7 @@ export class ThreadComponent implements OnInit {
       let emoji_data = {
         emoji: $event.emoji.colons,
         count: 1,
-        react_users: [this.authenticationService.userData.user_name]
+        react_users: [this.authService.userData.user_name]
       }
       this.channel_message.emoji_data.push(emoji_data)
     }
@@ -234,7 +234,6 @@ export class ThreadComponent implements OnInit {
   }
 
 
-
   showReactUsers(i: number, j: number) {
     if (this.hovered_emoji == false) this.hovered_emoji = true
     this.comment_index = i
@@ -253,51 +252,8 @@ export class ThreadComponent implements OnInit {
 
 
   addUserToTextarea(i: number) {
-    this.comment_value += '@' + this.authenticationService.all_users[i].user_name
+    this.comment_value += '@' + this.authService.all_users[i].user_name
     this.messageTextarea.nativeElement.focus();
-  }
-
-
-  getImageUrl(uid: string): string {
-    const user = this.authenticationService.all_users.find(element => element.uid === uid);
-    return user.avatar
-  }
-
-  getUserName(uid: string) {
-    const user = this.authenticationService.all_users.find(element => element.uid === uid);
-    return user.user_name
-  }
-
-  getUserEmail(uid: string) {
-    const user = this.authenticationService.all_users.find(element => element.uid === uid);
-    return user.email
-  }
-
-
-  openProfile(uid: string) {
-    if (this.getUserName(uid) == this.authenticationService.userData.user_name) this.openCurrentUserDetails()
-    else {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.panelClass = 'add-channel-dialog';
-      dialogConfig.data = { user_name: this.getUserName(uid), user_email: this.getUserEmail(uid), user_id: uid };
-      this.dialog.open(DialogProfileComponent, dialogConfig);
-    }
-  }
-
-
-
-  openCurrentUserDetails() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = {
-      top: '80',
-      right: '25'
-    };
-    dialogConfig.panelClass = 'custom-edit-channel-dialog';
-    this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
-    this.fsDataThreadService.detailsVisible = true
-    this.profileMenuRef.afterClosed().subscribe(() => {
-      this.fsDataThreadService.detailsVisible = false
-    });
   }
 
 
@@ -309,7 +265,7 @@ export class ThreadComponent implements OnInit {
   addOrRemoveEmojisOnDirectChatMessage(i: number, j: number) {
     this.hovered_emoji = false
     let chatMessages = this.dataDirectChatService.directChatMessages;
-    let user = this.authenticationService.userData.user_name;
+    let user = this.authService.userData.user_name;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
   }
@@ -317,35 +273,35 @@ export class ThreadComponent implements OnInit {
 
   addEmojiInDirectMessage($event: any, i: number) {
     let chatMessages = this.dataDirectChatService.directChatMessages;
-    let user = this.authenticationService.userData.uid;
+    let user = this.authService.userData.uid;
     this.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
   }
 
 
-  textChanged(text:string) {
+  textChanged(text: string) {
     this.searchUserByLetter()
     const words = this.comment_value.split(' ');
-    
+
     for (let i = 0; i < words.length; i++) {
-     
+
       const word = words[i];
-    
+
       if (word === '@') {
-        
-       
+
+
         words[i] = ' '
         this.open_users = true
       }
       this.comment_value = words.join(' ')
+    }
   }
-}
 
- searchUserByLetter() {
-   const filterValue = this.comment_value.toLowerCase();
-   const filtereUsers = this.authenticationService.all_users.filter(name => name.toLowerCase().startsWith(filterValue));
-   console.log(filtereUsers, filterValue);
-   
-}
+
+  searchUserByLetter() {
+    const filterValue = this.comment_value.toLowerCase();
+    const filtereUsers = this.authService.all_users.filter(name => name.toLowerCase().startsWith(filterValue));
+    console.log(filtereUsers, filterValue);
+  }
 }

@@ -5,6 +5,10 @@
         <h1>{{ dataDirectChatService.currentChatData.channelName }}</h1>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
+    <div *ngIf="dataDirectChatService.currentChatSection === 'chats'" class="chat-receiver"
+        [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()" #editChannelREF>
+        <h1>{{ dataDirectChatService.currentChatData.channelName }}</h1>
+    </div>
     <div class="members" *ngIf="dataDirectChatService.currentChatSection === 'channels'">
         <div class="already-members" [ngClass]="{'edit-dialog-open':isEditMembersDialogOpen === true}"
             (click)="editMembers()" #editMembersREF>
