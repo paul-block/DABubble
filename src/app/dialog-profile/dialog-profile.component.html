@@ -1,7 +1,9 @@
 <div id="profileDetails">
     <div class="header-container">
         <span>Profil</span>
-        <img class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="" (click)="close()">
+        <div class="close-profile-menu">
+            <mat-icon (click)="close()" mat-button mat-dialog-close>close</mat-icon>
+        </div>
     </div>
 
     <img class="profileImg" [src]="getImageUrl(user_id)" alt="">
@@ -15,7 +17,7 @@
                 fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="8" cy="8.5" r="8" fill="#92C83E" />
             </svg>
-            <span [ngClass]="{'offline': user_status === 'Abwesend'}"> {{ user_status }}</span>
+            <span [ngClass]="{'offline': user_status === 'Abwesend'}"> {{ user_status }} </span>
         </div>
     </div>
 
@@ -25,10 +27,10 @@
             <span id="email-headline">E-Mail-Adresse</span>
         </div>
 
-        <span id="email-address">{{ user_email }}</span>
+        <a id="email-address" href="mailto:{{ user_email }}">{{ user_email }}</a>
     </div>
 
-    <div id="msg-btn" (click)="sendMsg(user_id,user_name)">
+    <div id="msg-btn" (click)="sendMsg(user_id, user_name)">
         <img src="assets/img/icons/msg_icon.svg" alt="">
         <span>Nachricht</span>
     </div>

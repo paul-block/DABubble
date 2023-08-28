@@ -1,3 +1,6 @@
+$hover-background-color: #ECEEFE;
+$hover-text-color: #535AF1;
+$hover-transition: all ease-in-out 125ms;
 
 #profileDetails {
     display: flex;
@@ -75,30 +78,6 @@
         }
     }
 
-        // .email-container {
-        //     display: flex;
-        //     align-self: flex-start;
-        //     align-items: center;
-        //     gap: 10px;
-        //     position: relative;
-        //     height: 100px;
-
-        //     #email-headline {
-        //         font-size: 22px;
-        //         font-weight: 700;
-        //     }
-
-        //     #email-address {
-        //         display: flex;
-        //         align-self: flex-start;
-        //         position: absolute;
-        //         bottom: 0;
-        //         left: 30px;
-        //         font-size: 18px;
-        //         color: #535AF1
-        //     }
-        // }
-
         .email-container {
             display: flex;
             align-self: flex-start;
@@ -129,6 +108,7 @@
                     left: 46px;
                     font-size: 18px;
                     color: #535AF1;
+                    text-decoration: none;
             }
         }
 }
@@ -260,4 +240,22 @@
     width: 130px;
     height: 30px;    
     cursor: pointer;
+}
+
+.close-profile-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: $hover-transition;
+    font-weight: 400;
+
+    &:hover {
+        transition: $hover-transition;
+        background-color: $hover-background-color;
+        color: $hover-text-color;
+        font-weight: 800;
+    }
 }

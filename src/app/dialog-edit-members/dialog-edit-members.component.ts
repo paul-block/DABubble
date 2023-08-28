@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
+import { ProfileService } from 'services/profile.service';
 
 @Component({
   selector: 'app-dialog-edit-members',
@@ -13,7 +14,8 @@ export class DialogEditMembersComponent {
   constructor(
     public chatService: ChatService,
     public authService: AuthenticationService,
-    private dialogRef: MatDialogRef<DialogEditMembersComponent>
+    private dialogRef: MatDialogRef<DialogEditMembersComponent>,
+    public profileService: ProfileService,
     ) {
   }
 
