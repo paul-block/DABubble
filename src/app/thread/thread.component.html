@@ -52,7 +52,7 @@
 
             <div class="line"></div>
         </div>
-        <img class="avatar_img" (click)="openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)" [src]="getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
+        <img class="avatar_img" (click)="profileService.openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)" [src]="getImageUrl(fsDataThreadService.current_chat_data?.user_Sender_ID)">
         <div class="message_sub">
             <div class="user_time">
                 <span
@@ -151,7 +151,7 @@
 
  <!-----------------------------------------------------------------avatar img user and time----------------------------------------------------------------------------------------->
 
-        <img (click)="openProfile(fsDataThreadService.comments[i].uid)" class="avatar_img" [src]="getImageUrl(fsDataThreadService.comments[i].uid)">
+        <img (click)="profileService.openProfile(fsDataThreadService.comments[i].uid)" class="avatar_img" [src]="getImageUrl(fsDataThreadService.comments[i].uid)">
         <div class="message_sub">
             <div class="user_time">
                 <span
@@ -164,7 +164,7 @@
 
             <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
                 [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authService.userData.user_name">
-                <span  (click)="openProfile(word)" *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
+                <span  (click)="profileService.openProfile(word)" *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
                     [class.highlighted]="chatService.checkIfWordIsAnId(word)">
                     {{chatService.renameUid(word)}}&nbsp;
                 </span>

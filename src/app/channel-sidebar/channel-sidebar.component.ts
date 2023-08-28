@@ -43,21 +43,25 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       this.channelService.channels = channels;
     });
 
+    
     await this.chatService.loadChats();
     this.subChats = this.chatService.getUsersChatsObservable().subscribe(chat => {
       this.chatService.chats.push(chat);
     });
 
+
     await this.authService.waitUntilAuthInitialized();
     this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
-      this.chatService.currentUser_id = user.uid;
-      this.chatService.initOwnChat();
+      if (user) {
+        this.chatService.currentUser_id = user.uid;
+        this.chatService.initOwnChat();
+      }
     });
   }
 
   ngOnDestroy() {
-    this.subChannels.unsubscribe();
-    this.subChats.unsubscribe();
+    if(this.subChannels) this.subChannels.unsubscribe();
+    if(this.subChats) this.subChats.unsubscribe();
   }
 
   toggleChannels() {
@@ -103,7 +107,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     return this.chatService.currentChatID !== userReceiverID;
   }
 
- async openChat(chat) {
+  async openChat(chat) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
@@ -127,7 +131,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   async openChannel(channelID) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
-        if (this.chatService.currentChatID !== channelID) {
+    if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
       this.msgService.emptyMessageText();

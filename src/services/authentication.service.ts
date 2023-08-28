@@ -63,7 +63,7 @@ export class AuthenticationService {
     this.authInitializedPromise = new Promise<void>((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
         this.currentUserSubject.next(user);
-        resolve(); 
+        resolve();
       });
     });
   }
@@ -123,15 +123,12 @@ export class AuthenticationService {
 
 
   async setOnlineStatus(email: string, status: string) {
-    this.all_users.forEach(async element => {
-      if (element.email === email) {
-        const id = element.uid
-        const userRef = doc(this.db, 'users', id);
-        await updateDoc(userRef, {
-          status: status
-        });
-        return
-      }
+    const user = this.all_users.find(element => element.email === email);
+    console.log(user.uid);
+    
+    const userRef = doc(this.db, 'users', user.uid);
+    await updateDoc(userRef, {
+      status: status
     });
   }
 

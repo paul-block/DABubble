@@ -310,7 +310,5 @@ export class ThreadComponent implements OnInit {
 
   async getAllUsers() {
     this.chatService.at_users = await this.authService.getAllUsers();
-    console.log(this.chatService.at_users);
-    
   }
 }
