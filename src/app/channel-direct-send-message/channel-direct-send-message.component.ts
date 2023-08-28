@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
-import { AuthenticationService } from 'services/authentication.service';
-import { DirectChatService } from 'services/directchat.service';
+import { Component, Input } from '@angular/core';
+import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { MessagesService } from 'services/messages.service';
 import { NewMsgService } from 'services/new-msg.service';
@@ -15,7 +14,7 @@ export class ChannelDirectSendMessageComponent{
   @Input() inputValue: string;
  
   constructor(
-    public directChatService: DirectChatService,
+    public chatService: ChatService,
     public msgService: MessagesService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService

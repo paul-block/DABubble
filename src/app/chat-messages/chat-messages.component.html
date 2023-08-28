@@ -1,7 +1,7 @@
 <section class="chat-messages" #ChatContainerREF>
     <div class="chat-message-container"
-        *ngFor="let chatMessage of dataDirectChatService.directChatMessages; let i = index;">
-        <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== dataDirectChatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
+        *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
+        <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
             class="chat-messages-date">
             <div class="parting-line"></div>
             <div class="messages-date">{{ msgService.formatDate(chatMessage.created_At) }}</div>

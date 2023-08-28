@@ -2,7 +2,7 @@ import { ElementRef, Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
 import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
-import { DirectChatService } from './directchat.service';
+import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
@@ -26,7 +26,7 @@ export class MessagesService {
   answers_count: any;
   time: any;
   constructor(
-    public directChatService: DirectChatService,
+    public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService,
@@ -34,7 +34,7 @@ export class MessagesService {
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.directChatService.currentChatID !== 'noChatSelected' || this.newMsgService.newMsgComponentOpen) {
+    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.newMsgService.newMsgComponentOpen) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;
@@ -45,7 +45,7 @@ export class MessagesService {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    const messagesCollectionRef = await addDoc(collection(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages'), {
+    const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
       chat_message: this.messageText,
       user_Sender_ID: user.uid,
       user_Sender_Name: await this.authService.userData.user_name,
@@ -69,7 +69,7 @@ export class MessagesService {
 
   async saveNumberOfAnswers(id: string) {
     await this.getNumberOfAnswers(id)
-    const messageRef = doc(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages', id);
+    const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
     const data = {
       answers: this.answers_count,
       last_answer: this.time
@@ -88,16 +88,16 @@ export class MessagesService {
 
 
   async getNewMessage() {
-    const chatMessagesRef = collection(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages');
+    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
     const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
-    this.directChatService.directChatMessages.push(latestDocument);
+    this.chatService.directChatMessages.push(latestDocument);
     this.scrollToBottom();
   }
 
 
   async getChangedMessage() {
-    const currentMessage = this.directChatService.directChatMessages[this.messageIndex];
+    const currentMessage = this.chatService.directChatMessages[this.messageIndex];
     currentMessage.chat_message = this.messageText;
     currentMessage.chat_message_edited = true;
   }
@@ -105,14 +105,14 @@ export class MessagesService {
 
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
-    this.directChatService.directChatMessages = [];
+    this.chatService.directChatMessages = [];
     this.previousMessageDate === null
-    const chatMessagesRef = collection(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages');
+    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
 
     docDirectChatMessagesSnapshot.forEach((doc) => {
       const userData = doc.data();
-      this.directChatService.directChatMessages.push(userData);
+      this.chatService.directChatMessages.push(userData);
     });
     this.scrollToBottom()
   }
@@ -141,7 +141,7 @@ export class MessagesService {
   async saveEditedMessage() {
     try {
       this.getChangedMessage();
-      const messageRef = doc(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages', this.messageID);
+      const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await updateDoc(messageRef, {
         chat_message: this.messageText,
         chat_message_edited: true
@@ -160,7 +160,7 @@ export class MessagesService {
     let id = chat.message_ID
     let message = chat.chat_message
     let edited = chat.chat_message_edited
-    const messageRef = doc(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages', id);
+    const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
     await updateDoc(messageRef, {
       chat_message: message,
       chat_message_edited: edited
@@ -173,7 +173,7 @@ export class MessagesService {
     this.messageID = chatMessage.message_ID;
     try {
       this.spliceMessage();
-      const messageRef = doc(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages', this.messageID);
+      const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await deleteDoc(messageRef)
     } catch (error) {
       console.error('Error deleting message:', error);
@@ -182,7 +182,7 @@ export class MessagesService {
 
 
   async spliceMessage() {
-    this.directChatService.directChatMessages.splice(this.messageIndex, 1);
+    this.chatService.directChatMessages.splice(this.messageIndex, 1);
   }
 
 
@@ -195,7 +195,7 @@ export class MessagesService {
 
 
   async updateMessagesReactions(chatMessage) {
-    const docRef = doc(this.db, this.directChatService.currentChatSection, this.directChatService.currentChatID, 'messages', chatMessage.message_ID);
+    const docRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
     await updateDoc(docRef, {
       emoji_data: this.emoji_data,
     }).then(() => {

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 
 @Component({
   selector: 'app-dialog-edit-channel',
@@ -20,20 +20,20 @@ export class DialogEditChannelComponent implements OnInit {
 
   constructor(
     public authService: AuthenticationService,
-    public dataDirectChatService: DirectChatService,
+    public chatService: ChatService,
     public channelService: ChannelService,
   ) { }
 
   async ngOnInit() {
-    this.channelName = this.dataDirectChatService.currentChatData.channelName;
-    this.channelDescription = this.dataDirectChatService.currentChatData.description;
-    this.assignedUsers = this.dataDirectChatService.currentChatData.assignedUsers;
+    this.channelName = this.chatService.currentChatData.channelName;
+    this.channelDescription = this.chatService.currentChatData.description;
+    this.assignedUsers = this.chatService.currentChatData.assignedUsers;
     this.getCreatorName();
   }
 
 
   getCreatorName(){
-    const userData = this.authService.all_users.find(user => user.uid === this.dataDirectChatService.currentChatData.createdBy);
+    const userData = this.authService.all_users.find(user => user.uid === this.chatService.currentChatData.createdBy);
     this.creatorName = userData.user_name;
   }
 
@@ -72,11 +72,11 @@ export class DialogEditChannelComponent implements OnInit {
         assignedUsers: this.assignedUsers
       }
 
-      this.dataDirectChatService.currentChatData.channelName = changes.channelName;
-      this.dataDirectChatService.currentChatData.description = changes.description;
-      this.dataDirectChatService.currentChatData.assignedUsers = changes.assignedUsers;
+      this.chatService.currentChatData.channelName = changes.channelName;
+      this.chatService.currentChatData.description = changes.description;
+      this.chatService.currentChatData.assignedUsers = changes.assignedUsers;
       
-      this.channelService.updateChannelInfo(this.dataDirectChatService.currentChatData, changes);
+      this.channelService.updateChannelInfo(this.chatService.currentChatData, changes);
     }
     
   }

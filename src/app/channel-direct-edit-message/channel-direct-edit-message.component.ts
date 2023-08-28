@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { MessagesService } from 'services/messages.service';
 
@@ -12,7 +12,7 @@ import { MessagesService } from 'services/messages.service';
 export class ChannelDirectEditMessageComponent {
 constructor(
   public authService: AuthenticationService,
-  public directChatService: DirectChatService,
+  public chatService: ChatService,
   public msgService: MessagesService,
   public emojiService: EmojiService,
 ){}

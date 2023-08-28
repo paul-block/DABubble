@@ -9,7 +9,7 @@ import { ChannelService } from './channel.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DirectChatService  {
+export class ChatService  {
 
   db = getFirestore();
   at_users:any

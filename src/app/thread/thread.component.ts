@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { EmojiService } from '../../services/emoji.service';
 import { MessagesService } from 'services/messages.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 import { UploadService } from 'services/upload.service';
 import { ReactionBubbleService } from 'services/reaction-bubble.service';
 import { ProfileService } from 'services/profile.service';
@@ -48,7 +48,7 @@ export class ThreadComponent implements OnInit {
     public emojiService: EmojiService,
     public dialog: MatDialog,
     public msgService: MessagesService,
-    public directChatService: DirectChatService,
+    public chatService: ChatService,
     public uploadService: UploadService,
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
@@ -100,8 +100,8 @@ export class ThreadComponent implements OnInit {
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
-    if (this.directChatService.open_users == true) {
-      this.directChatService.open_users = false;
+    if (this.chatService.open_users == true) {
+      this.chatService.open_users = false;
       this.getAllUsers()
     }
     if (this.open_attachment_menu == true) this.open_attachment_menu = false
@@ -119,7 +119,7 @@ export class ThreadComponent implements OnInit {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
-        modified_comment: this.directChatService.modifyMessageValue(this.comment_value),
+        modified_comment: this.chatService.modifyMessageValue(this.comment_value),
         time: time_stamp,
         uid: this.authService.getUid(),
         emoji_data: [],
@@ -252,7 +252,7 @@ export class ThreadComponent implements OnInit {
 
   openUsers() {
     this.getAllUsers()
-    this.directChatService.open_users = true
+    this.chatService.open_users = true
   }
 
 
@@ -281,7 +281,7 @@ export class ThreadComponent implements OnInit {
 
   addOrRemoveEmojisOnDirectChatMessage(i: number, j: number) {
     this.hovered_emoji = false
-    let chatMessages = this.directChatService.directChatMessages;
+    let chatMessages = this.chatService.directChatMessages;
     let user = this.authService.userData.user_name;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
@@ -289,7 +289,7 @@ export class ThreadComponent implements OnInit {
 
 
   addEmojiInDirectMessage($event: any, i: number) {
-    let chatMessages = this.directChatService.directChatMessages;
+    let chatMessages = this.chatService.directChatMessages;
     let user = this.authService.userData.uid;
     this.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
@@ -298,19 +298,19 @@ export class ThreadComponent implements OnInit {
 
 
   textChanged(text: string) {
-    this.comment_value = this.directChatService.textChanged(text)
+    this.comment_value = this.chatService.textChanged(text)
     }
   
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();
-    this.comment_value = this.directChatService.addUserToTextarea(i, this.comment_value)
+    this.comment_value = this.chatService.addUserToTextarea(i, this.comment_value)
   }
 
 
   async getAllUsers() {
-    this.directChatService.at_users = await this.authService.getAllUsers();
-    console.log(this.directChatService.at_users);
+    this.chatService.at_users = await this.authService.getAllUsers();
+    console.log(this.chatService.at_users);
     
   }
 }

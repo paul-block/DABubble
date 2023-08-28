@@ -4,7 +4,7 @@ import { AddChannelComponent } from '../dialog-add-channel/add-channel.component
 import { Subscription } from 'rxjs';
 import { NewMsgService } from 'services/new-msg.service';
 import { ChannelService } from 'services/channel.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
@@ -32,7 +32,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private newMsgService: NewMsgService,
     public channelService: ChannelService,
-    public directChatService: DirectChatService,
+    public chatService: ChatService,
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
   ) { }
@@ -43,15 +43,15 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       this.channelService.channels = channels;
     });
 
-    await this.directChatService.loadChats();
-    this.subChats = this.directChatService.getUsersChatsObservable().subscribe(chat => {
-      this.directChatService.chats.push(chat);
+    await this.chatService.loadChats();
+    this.subChats = this.chatService.getUsersChatsObservable().subscribe(chat => {
+      this.chatService.chats.push(chat);
     });
 
     await this.authService.waitUntilAuthInitialized();
     this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
-      this.directChatService.currentUser_id = user.uid;
-      this.directChatService.initOwnChat();
+      this.chatService.currentUser_id = user.uid;
+      this.chatService.initOwnChat();
     });
   }
 
@@ -92,26 +92,26 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
   // async searchChatAndGetMessages(userReceiverID) {
-  //   this.directChatService.currentChatSection = 'chats';
-  //   await this.directChatService.searchChat(userReceiverID);
-  //   this.directChatService.textAreaMessageTo();
+  //   this.chatService.currentChatSection = 'chats';
+  //   await this.chatService.searchChat(userReceiverID);
+  //   this.chatService.textAreaMessageTo();
   //   this.msgService.getMessages();
   //   this.fsDataThreadService.thread_open = false;
   // }
 
   checkIfSameChatID(userReceiverID) {
-    return this.directChatService.currentChatID !== userReceiverID;
+    return this.chatService.currentChatID !== userReceiverID;
   }
 
   async openChat(chat) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
-    if (this.directChatService.currentChatID !== chat.chat_ID) {
-      this.directChatService.currentChatSection = 'chats';
-      this.directChatService.currentChatID = chat.chat_ID;
+    if (this.chatService.currentChatID !== chat.chat_ID) {
+      this.chatService.currentChatSection = 'chats';
+      this.chatService.currentChatID = chat.chat_ID;
       this.msgService.emptyMessageText();
       try {
-        this.directChatService.currentChatData = chat;
-        this.directChatService.textAreaMessageTo();
+        this.chatService.currentChatData = chat;
+        this.chatService.textAreaMessageTo();
         this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
@@ -127,13 +127,13 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   async openChannel(channelID) {
     if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
-    if (this.directChatService.currentChatID !== channelID) {
-      this.directChatService.currentChatSection = 'channels';
-      this.directChatService.currentChatID = channelID;
+    if (this.chatService.currentChatID !== channelID) {
+      this.chatService.currentChatSection = 'channels';
+      this.chatService.currentChatID = channelID;
       this.msgService.emptyMessageText();
       try {
-        this.directChatService.getCurrentChatData();
-        this.directChatService.textAreaMessageTo();
+        this.chatService.getCurrentChatData();
+        this.chatService.textAreaMessageTo();
         this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {

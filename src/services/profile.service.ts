@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogProfileComponent } from 'app/dialog-profile/dialog-profile.component';
 import { AuthenticationService } from './authentication.service';
-import { DirectChatService } from './directchat.service';
+import { ChatService } from './chat.service';
 import { EmojiService } from './emoji.service';
 import { FirestoreThreadDataService } from './firestore-thread-data.service';
 import { MessagesService } from './messages.service';
@@ -22,7 +22,7 @@ export class ProfileService {
     public fsDataThreadService: FirestoreThreadDataService,
     public dialog: MatDialog,
     public msgService: MessagesService,
-    public dataDirectChatService: DirectChatService,
+    public chatService: ChatService,
     public uploadService: UploadService,
     public reactionBubbleService: ReactionBubbleService
   ) { }

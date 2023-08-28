@@ -4,7 +4,7 @@
         <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
     </div>
     <div class="channel-members">
-        <div *ngFor="let assignedUser of dataDirectChatService.currentChatData.assignedUsers;">
+        <div *ngFor="let assignedUser of chatService.currentChatData.assignedUsers;">
             <img [src]="authService.getImageUrl(assignedUser)">
             <span>{{authService.getUserInfo(assignedUser)?.user_name}}{{ isCurrentUser(assignedUser) ? ' (Du)' : '' }}</span>
         </div>

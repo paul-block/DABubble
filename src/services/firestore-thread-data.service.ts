@@ -3,7 +3,7 @@ import { doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/fires
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { DirectChatService } from './directchat.service';
+import { ChatService } from './chat.service';
 import { MessagesService } from './messages.service';
 import { Observable, Subscription, catchError, finalize } from 'rxjs';
 import { of } from 'rxjs';
@@ -40,7 +40,7 @@ export class FirestoreThreadDataService {
 
   constructor(public authenticationService: AuthenticationService,
     private storage: AngularFireStorage,
-    private dataDirectChatService: DirectChatService,
+    private chatService: ChatService,
     private messageSevice: MessagesService,
 
   ) { }
@@ -84,11 +84,11 @@ export class FirestoreThreadDataService {
 
 
   openDirectChatThread(i: number) {
-    this.current_chat_data = this.dataDirectChatService.directChatMessages[i]
+    this.current_chat_data = this.chatService.directChatMessages[i]
     this.direct_chat_index = i
     this.thread_open = true
-    this.current_message = this.dataDirectChatService.directChatMessages[i].chat_message
-    this.current_message_id = this.dataDirectChatService.directChatMessages[i].message_ID
+    this.current_message = this.chatService.directChatMessages[i].chat_message
+    this.current_message_id = this.chatService.directChatMessages[i].message_ID
     this.loadThread(this.current_message_id)
     this.chat_type = 'direct'
   }

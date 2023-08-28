@@ -165,8 +165,8 @@
             <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
                 [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authService.userData.user_name">
                 <span  (click)="openProfile(word)" *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
-                    [class.highlighted]="directChatService.checkIfWordIsAnId(word)">
-                    {{directChatService.renameUid(word)}}&nbsp;
+                    [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                    {{chatService.renameUid(word)}}&nbsp;
                 </span>
                 <div style="font-size: 10px;" *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
             </div>
@@ -252,18 +252,11 @@
             <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
             <label class="menu_button" for="fileInput">Datei anhängen</label>
         </div>
-        <div class="at_user_div" *ngIf="directChatService.open_users">
+        <div class="at_user_div" *ngIf="chatService.open_users">
             <div>
-<<<<<<< HEAD
-                <div class="user" *ngFor="let user of authService.all_users; let i = index"
-                    (click)="addUserToTextarea(i)">
-                    <img class="user_img" [src]="authService.all_users[i].avatar">
-                    <div>{{authService.all_users[i].user_name}}</div>
-=======
-                <div class="user" *ngFor="let user of directChatService.at_users; let i = index" (click)="addUserToTextarea(i)">
-                    <img class="user_img" [src]="directChatService.at_users[i].avatar">
-                    <div>{{directChatService.at_users[i].user_name}}</div>
->>>>>>> cacf738d8e8678fd62de9f714e3831f325bcdec8
+                <div class="user" *ngFor="let user of chatService.at_users; let i = index" (click)="addUserToTextarea(i)">
+                    <img class="user_img" [src]="chatService.at_users[i].avatar">
+                    <div>{{chatService.at_users[i].user_name}}</div>
                 </div>
             </div>
 

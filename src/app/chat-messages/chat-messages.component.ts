@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChild, View
 import { getFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'services/authentication.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { MessagesService } from 'services/messages.service';
@@ -29,7 +29,7 @@ export class ChatMessagesComponent {
   constructor(
     public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
-    public dataDirectChatService: DirectChatService,
+    public chatService: ChatService,
     public msgService: MessagesService,
     public emojiService: EmojiService,
     public reactionBubbleService: ReactionBubbleService
@@ -97,7 +97,7 @@ export class ChatMessagesComponent {
 
 
   addEmojiInMessage($event: any, i: number, chatMessage) {
-    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let chatMessages = this.chatService.directChatMessages;
     let user = this.authService.userData.uid;
     this.emojiService.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
@@ -106,7 +106,7 @@ export class ChatMessagesComponent {
 
 
   addOrRemoveEmojiClickEmojis(i: number, j: number, chatMessage) {
-    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let chatMessages = this.chatService.directChatMessages;
     let user = this.authService.userData.uid;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);

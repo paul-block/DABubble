@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { AuthenticationService } from "services/authentication.service";
-import { DirectChatService } from "services/directchat.service";
+import { ChatService } from "services/chat.service";
 import { MessagesService } from "services/messages.service";
 
 
@@ -13,7 +13,7 @@ import { MessagesService } from "services/messages.service";
 
 export class ChannelDirectChatComponent {
   constructor(
-    public dataDirectChatService: DirectChatService,
+    public chatService: ChatService,
     public msgService: MessagesService,
   ) {}
 }

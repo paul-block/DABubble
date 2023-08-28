@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChannelDirectchatService } from './directchat.service';
+import { ChatService } from './chat.service';
 
 describe('ChannelDirectchatService', () => {
-  let service: ChannelDirectchatService;
+  let service: ChatService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ChannelDirectchatService);
+    service = TestBed.inject(ChatService);
   });
 
   it('should be created', () => {

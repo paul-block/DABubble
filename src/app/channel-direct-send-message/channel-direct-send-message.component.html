@@ -1,5 +1,5 @@
 <section class="write-new-message">
-    <textarea name="" id="" cols="10" rows="2" [placeholder]="directChatService.messageToPlaceholder"
+    <textarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder"
         [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()"
         (keyup)="msgService.checkIfEmpty()"></textarea>
     <div class="extend-send-message">

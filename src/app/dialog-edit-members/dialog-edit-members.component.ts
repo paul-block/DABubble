@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from 'services/authentication.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 
 @Component({
   selector: 'app-dialog-edit-members',
@@ -11,7 +11,7 @@ import { DirectChatService } from 'services/directchat.service';
 export class DialogEditMembersComponent {
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   constructor(
-    public dataDirectChatService: DirectChatService,
+    public chatService: ChatService,
     public authService: AuthenticationService,
     private dialogRef: MatDialogRef<DialogEditMembersComponent>
     ) {

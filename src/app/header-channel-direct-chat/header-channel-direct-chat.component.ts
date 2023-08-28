@@ -4,7 +4,7 @@ import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-c
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
 import { AuthenticationService } from 'services/authentication.service';
-import { DirectChatService } from 'services/directchat.service';
+import { ChatService } from 'services/chat.service';
 
 @Component({
   selector: 'app-header-channel-direct-chat',
@@ -26,7 +26,7 @@ export class HeaderChannelDirectChatComponent {
   constructor(
     private dialog: MatDialog,
     public authService: AuthenticationService,
-    public dataDirectChatService: DirectChatService,
+    public chatService: ChatService,
   ) {
 
   }
