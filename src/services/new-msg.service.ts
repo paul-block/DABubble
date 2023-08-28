@@ -19,6 +19,7 @@ export class NewMsgService {
   user_id: string;
   directedFromProfileButton:boolean = false;
   newMsgComponentOpen: boolean = false;
+  open_id: string;
 
 
 
@@ -59,29 +60,22 @@ export class NewMsgService {
           channelDocRef = doc.ref;
         }
       });
-  
-      // if (channelDocRef) {
-      //   const channelMessagesCollectionRef = collection(channelDocRef, 'messages');
-      //   await addDoc(channelMessagesCollectionRef, {
-      //     message: messageText,
-      //     user_id: currentUserUID,
-      //     user_name: userName,
-      //     created_At: firebase.firestore.FieldValue.serverTimestamp(),
-      //   });
       if (channelDocRef) {
         const channelMessagesCollectionRef = collection(channelDocRef, 'messages');
-        await addDoc(channelMessagesCollectionRef, {
+        const newMessageDocRef = await addDoc(channelMessagesCollectionRef, {
           answers: 0,
           chat_message: messageText,
           chat_message_edited: false,
           created_At: firebase.firestore.FieldValue.serverTimestamp(),
-          emojy_data: [],
+          emoji_data: [],
           last_answer: '',
-          message_ID: channelMessagesCollectionRef.id,
           user_Sender_ID: currentUserUID,
           user_Sender_Name: userName,
         });
-        console.log('Nachricht zum Channel hinzugefügt');
+        const newMessageId = newMessageDocRef.id;
+        await updateDoc(newMessageDocRef, { message_ID: newMessageId });
+    
+        console.log('Nachricht zum Channel hinzugefügt mit ID:', newMessageId);
       } else {
         console.error('Benutzer nicht für den Channel autorisiert oder Channel nicht gefunden');
       }

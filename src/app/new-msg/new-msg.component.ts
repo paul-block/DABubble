@@ -23,7 +23,6 @@ export class NewMsgComponent {
 
     this.uid = this.authService.getUid();
 
-
     if (this.newMsgService.directedFromProfileButton) {
       this.inputValue = '@' + this.newMsgService.user_name;
     }
