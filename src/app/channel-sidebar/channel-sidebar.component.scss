@@ -11,6 +11,10 @@
     margin-left: 25px;
     border-radius: 30px;
 
+    .rotate270 {
+        transform: rotate(270deg);
+    }
+
     header {
         display: flex;
         align-items: center;
