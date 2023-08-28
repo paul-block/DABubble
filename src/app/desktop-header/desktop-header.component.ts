@@ -29,7 +29,7 @@ export class DesktopHeaderComponent {
       top: `${rect.bottom + 5}px`,
       right: `25px`,
     };
-    dialogConfig.panelClass = 'custom-edit-channel-dialog';
+    dialogConfig.panelClass = 'custom-open-profile-menu-dialog';
 
     this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
     this.profileMenuOpen = true;

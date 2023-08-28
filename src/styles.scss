@@ -9,7 +9,7 @@
     display: block !important;
 }
 
-.d_flex{
+.d_flex {
     display: flex !important;
 }
 
@@ -76,7 +76,7 @@ textarea {
 
 .custom-edit-members-dialog {
     .mat-mdc-dialog-container .mdc-dialog__surface {
-        border-radius: 30px 0px 30px 30px !important; 
+        border-radius: 30px 0px 30px 30px !important;
         box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
     }
 }
@@ -84,6 +84,13 @@ textarea {
 .add-channel-dialog {
     .mat-mdc-dialog-container .mdc-dialog__surface {
         border-radius: 30px 30px 30px 30px !important;
+        box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
+    }
+}
+
+.custom-open-profile-menu-dialog {
+    .mat-mdc-dialog-container .mdc-dialog__surface {
+        border-radius: 30px 0px 30px 30px !important;
         box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
     }
 }
@@ -96,11 +103,14 @@ textarea {
     cursor: default;
 }
 
+
+// muss das hier sein?
 .sidebar-hover:hover {
     background-color: #ECEEFE;
     border-radius: 20px;
 }
 
+// muss das hier sein?
 .sidebar-icon-hover:hover {
     display: flex;
     align-items: center;
@@ -120,13 +130,13 @@ textarea {
 
     .mdc-dialog__surface {
         border-radius: 20px !important;
-       overflow: hidden;
+        overflow: hidden;
     }
 }
 
 input[type="file"] {
     display: none;
-  }
+}
 
 .highlighted {
     background-color: yellow;

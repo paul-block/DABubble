@@ -39,8 +39,6 @@ export class UploadService {
       this.upload_array.file_name.push(this.selectedFile.name)
       this.upload_array.file_extension.push(this.checkFileExtension(this.selectedFile))
     }
-    
-    
   }
 
 

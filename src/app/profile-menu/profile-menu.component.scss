@@ -1,3 +1,7 @@
+$hover-background-color: #ECEEFE;
+$hover-text-color: #535AF1;
+$hover-transition: all ease-in-out 125ms;
+
 #menu-container {
     width: 180px;
     border-top-left-radius: 30px;
@@ -12,22 +16,22 @@
     justify-content: center;
     gap: 15px;
 
-        span {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 700;
-            width: 90%;
-            padding: 5px;
-            border-radius: 30px;
-            cursor: pointer;
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+        width: 90%;
+        padding: 5px;
+        border-radius: 30px;
+        cursor: pointer;
 
-            &:hover {
-                background-color: #ECEEFE;
-                color: #535AF1;
-            }
+        &:hover {
+            background-color: #ECEEFE;
+            color: #535AF1;
         }
+    }
 
 }
 
@@ -46,31 +50,31 @@
     background-color: white;
     gap: 50px;
 
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
 
-            span {
-                font-size: 22px;
-                font-weight: 700;
-            }
+        span {
+            font-size: 22px;
+            font-weight: 700;
         }
+    }
 
-        .profileImg {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-        }
+    .profileImg {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+    }
 
 
-        .middle-part {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            gap: 10px;
-      
+    .middle-part {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+
         .edit-container {
             display: flex;
             justify-content: space-between;
@@ -88,8 +92,9 @@
                 font-weight: 500;
                 font-size: 18px;
                 transition: all ease-in-out 125ms;
+
                 &:hover {
-                transform: scale(1.05);
+                    transform: scale(1.05);
                 }
             }
         }
@@ -100,45 +105,46 @@
             align-self: flex-start;
             gap: 10px;
 
-                span {
-                    color: #92C83E;
-                    font-size: 20px;
+            span {
+                color: #92C83E;
+                font-size: 20px;
+            }
+
+            .offline {
+                circle {
+                    fill: #686868 !important;
                 }
 
-                .offline {
-                        circle {
-                            fill: #686868 !important;
-                        }
-
-                        color: #686868;
-                }
+                color: #686868;
+            }
 
         }
     }
 
-        .email-container {
+    .email-container {
+        display: flex;
+        align-self: flex-start;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        height: 100px;
+
+        #email-headline {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        #email-address {
             display: flex;
             align-self: flex-start;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            height: 100px;
-
-            #email-headline {
-                font-size: 22px;
-                font-weight: 700;
-            }
-
-            #email-address {
-                display: flex;
-                align-self: flex-start;
-                position: absolute;
-                bottom: 0;
-                left: 30px;
-                font-size: 18px;
-                color: #535AF1
-            }
+            position: absolute;
+            bottom: 0;
+            left: 30px;
+            font-size: 18px;
+            color: #535AF1;
+            text-decoration: none;
         }
+    }
 
 }
 
@@ -175,8 +181,9 @@
         height: 200px;
         border-radius: 50%;
         cursor: pointer;
+
         &:hover {
-            box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+            box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
         }
     }
 
@@ -186,34 +193,34 @@
         width: 100%;
         gap: 20px;
 
-          #edit-name {
+        #edit-name {
             display: flex;
             flex-direction: column;
             width: 100%;
             gap: 15px;
 
-                #edit-name-headline {
-                    display: flex;
-                    align-items: center;
-                    gap: 20px;
-                        
-                        span {
-                            font-size: 22px;
-                            font-weight: 700;
-                        }
-                } 
+            #edit-name-headline {
+                display: flex;
+                align-items: center;
+                gap: 20px;
 
-                input {
+                span {
+                    font-size: 22px;
+                    font-weight: 700;
+                }
+            }
+
+            input {
                 width: 100%;
                 border-radius: 40px;
                 border: 1px solid #ADB0D9;
                 padding: 10px 25px;
                 font-size: 18px;
                 box-sizing: border-box;
-                }
-          }
+            }
+        }
 
-          #edit-email {
+        #edit-email {
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -223,22 +230,22 @@
                 display: flex;
                 align-items: center;
                 gap: 20px;
-                    
-                    span {
-                        font-size: 22px;
-                        font-weight: 700;
-                    }
-            } 
+
+                span {
+                    font-size: 22px;
+                    font-weight: 700;
+                }
+            }
 
             input {
-            width: 100%;
-            border-radius: 40px;
-            border: 1px solid #ADB0D9;
-            padding: 10px 25px;
-            font-size: 18px;
-            box-sizing: border-box;
+                width: 100%;
+                border-radius: 40px;
+                border: 1px solid #ADB0D9;
+                padding: 10px 25px;
+                font-size: 18px;
+                box-sizing: border-box;
             }
-          }
+        }
     }
 
     .btn-container {
@@ -246,18 +253,18 @@
         justify-content: space-between;
         width: 80%;
 
-            #cancel-btn {
-                background-color: transparent;
-                border: 1px solid #535AF1;
-                color: #535AF1;
-                font-weight: 700;
-            }
+        #cancel-btn {
+            background-color: transparent;
+            border: 1px solid #535AF1;
+            color: #535AF1;
+            font-weight: 700;
+        }
 
-            #save-btn { 
-                background-color: #535AF1;
-                color: white;
-                font-weight: 700;
-            }
+        #save-btn {
+            background-color: #535AF1;
+            color: white;
+            font-weight: 700;
+        }
     }
 }
 
@@ -275,6 +282,7 @@
     border-bottom-right-radius: 30px;
     background-color: white;
     gap: 40px;
+
     .header-container {
         display: flex;
         justify-content: space-between;
@@ -286,13 +294,15 @@
             font-weight: 700;
         }
     }
+
     .profileImg {
-        box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
         width: 200px;
         height: 200px;
         border-radius: 50%;
-       
+
     }
+
     span {
         font-size: 20px;
     }
@@ -317,6 +327,7 @@
         background-color: #444DF2;
         cursor: pointer;
         color: white;
+
         img {
             filter: invert(99%) sepia(2%) saturate(393%) hue-rotate(45deg) brightness(120%) contrast(100%);
         }
@@ -324,13 +335,15 @@
 }
 
 .avatar_images {
-    
+
     display: flex;
+
     img {
         width: 72px;
         height: 72px;
         cursor: pointer;
         transition: 200ms;
+
         &:hover {
             transform: scale(1.1);
         }
@@ -342,15 +355,16 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+
     span {
         font-weight: 400;
-       font-size: 20px; 
+        font-size: 20px;
     }
 }
 
 input[type="file"] {
     display: none;
-  }
+}
 
 .error {
     color: red;
@@ -375,7 +389,8 @@ input[type="file"] {
     border-radius: 25px;
     width: 137px;
     height: 49px;
-    box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+
     &:hover {
         background-color: #797EF3;
         cursor: pointer;
@@ -401,10 +416,29 @@ input[type="file"] {
     border-radius: 25px;
     height: 49px;
     padding: 0 10px 0 10px;
-    box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+
     &:hover {
         background-color: #444DF2;
         cursor: pointer;
         color: white;
+    }
+}
+
+.close-profile-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: $hover-transition;
+    font-weight: 400;
+
+    &:hover {
+        transition: $hover-transition;
+        background-color: $hover-background-color;
+        color: $hover-text-color;
+        font-weight: 800;
     }
 }

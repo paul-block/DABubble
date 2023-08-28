@@ -6,7 +6,10 @@
 <div id="profileDetails" *ngIf="detailsVisible || fsDataThreadService.detailsVisible">
     <div class="header-container">
         <span>Profil</span>
-        <img class="sidebar-icon-hover" (click)="toggleDetails()" src="assets/img/icons/close.png" alt="">
+        <div class="close-profile-menu">
+            <mat-icon (click)="toggleDetails()" mat-button mat-dialog-close>close</mat-icon>
+        </div>
+
     </div>
 
     <img class="profileImg" [src]="authService.userData.avatar" alt="">
@@ -30,14 +33,16 @@
     <div class="email-container">
         <img src="assets/img/mail.png" alt="">
         <span id="email-headline">E-Mail-Adresse</span>
-        <span id="email-address">{{ authService.userData.email}}</span>
+        <a id="email-address" href="mailto:{{ authService.userData.email }}">{{ authService.userData.email }}</a>
     </div>
 </div>
 
 <div id="editProfile" *ngIf="editDetailsVisible">
     <div class="header-container">
         <span>Dein Profil bearbeiten</span>
-        <img (click)="toggleEditDetails()" class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="">
+        <div class="close-profile-menu">
+            <mat-icon (click)="toggleEditDetails()" mat-button mat-dialog-close>close</mat-icon>
+        </div>
     </div>
 
     <img class="profileImg" [src]="authService.userData.avatar" (click)="editAvatarImage()">

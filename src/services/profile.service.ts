@@ -27,6 +27,7 @@ export class ProfileService {
     public reactionBubbleService: ReactionBubbleService
   ) { }
 
+
   openProfile(uid: string) {
     if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
     else {
@@ -36,6 +37,7 @@ export class ProfileService {
       this.dialog.open(DialogProfileComponent, dialogConfig);
     }
   }
+
 
   checkIfStringIsAnId(uid: string) {
     const user = this.authService.all_users.find(element => element.uid === uid);
@@ -57,6 +59,7 @@ export class ProfileService {
       this.fsDataThreadService.detailsVisible = false
     });
   }
+  
 
   getUserEmail(uid: string) {
     const user = this.authService.all_users.find(element => element.uid === uid);
