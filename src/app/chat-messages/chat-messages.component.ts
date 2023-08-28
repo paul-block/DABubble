@@ -104,6 +104,8 @@ export class ChatMessagesComponent {
     this.emojiService.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);
+    console.log(this.msgService.emoji_data);
+    
   }
 
 

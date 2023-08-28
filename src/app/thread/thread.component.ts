@@ -161,7 +161,7 @@ export class ThreadComponent implements OnInit {
       let emoji_data = {
         emoji: $event.emoji.colons,
         count: 1,
-        react_users: [this.authService.userData.user_name]
+        react_users: [this.authService.userData.uid]
       }
       this.channel_message.emoji_data.push(emoji_data)
     }
@@ -282,7 +282,7 @@ export class ThreadComponent implements OnInit {
   addOrRemoveEmojisOnDirectChatMessage(i: number, j: number) {
     this.hovered_emoji = false
     let chatMessages = this.chatService.directChatMessages;
-    let user = this.authService.userData.user_name;
+    let user = this.authService.userData.uid;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
   }
