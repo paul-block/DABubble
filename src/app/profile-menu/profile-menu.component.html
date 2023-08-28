@@ -80,10 +80,10 @@
         <span>Dein Profilbild bearbeiten</span>
         <img (click)="closeEditAvatar()" class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="">
     </div>
-    <img class="profileImg" [src]="authService.userData.avatar">
+    <img class="profileImg" [src]="current_imageUrl">
     <span>Wähle einen Standard Avatar...</span>
     <div class="avatar_images">
-        <div (click)="setAvatar(images[i])" *ngFor="let img of images; let i = index">
+        <div (click)="showPreviewAvatar(images[i])" *ngFor="let img of images; let i = index">
             <img src="{{images[i]}}" alt="">
         </div>
     </div>

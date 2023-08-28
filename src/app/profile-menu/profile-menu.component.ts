@@ -87,8 +87,7 @@ export class ProfileMenuComponent {
 
 
   setAvatar(image: string) {
-    this.file_error = false
-    this.authService.setAvatarImage(image)
+   
   }
 
 
@@ -104,21 +103,27 @@ export class ProfileMenuComponent {
       finalize(() => {
         fileRef.getDownloadURL().subscribe(downloadURL => {
           this.imageUrl = downloadURL
-          this.authService.userData.avatar = downloadURL
+          this.current_imageUrl = downloadURL
         });
       })
     ).subscribe();
   }
 
+
+  showPreviewAvatar(imgUrl: string) {
+    this.current_imageUrl = imgUrl;
+  }
+
   
   saveNewAvatar() {
-    this.setAvatar(this.authService.userData.avatar)
-    this.onNoClick()
+    this.file_error = false
+    this.authService.setAvatarImage(this.current_imageUrl)
+    this.dialogRef.close();
   }
 
 
   onNoClick(): void {
     this.dialogRef.close();
-    if (this.current_imageUrl) this.authService.userData.avatar = this.current_imageUrl
+   // if (this.current_imageUrl) this.authService.userData.avatar = this.current_imageUrl
   }
 }
