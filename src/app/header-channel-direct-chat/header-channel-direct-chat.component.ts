@@ -5,6 +5,7 @@ import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-m
 import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-members.component';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
+import { ProfileService } from 'services/profile.service';
 
 @Component({
   selector: 'app-header-channel-direct-chat',
@@ -27,11 +28,10 @@ export class HeaderChannelDirectChatComponent {
     private dialog: MatDialog,
     public authService: AuthenticationService,
     public chatService: ChatService,
+    public profileService: ProfileService
   ) {
 
   }
-
-
 
   editChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
