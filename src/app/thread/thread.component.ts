@@ -38,11 +38,8 @@ export class ThreadComponent implements OnInit {
   hovered_emoji: boolean = false
   edit_comment: boolean = false;
   edit_comment_index: number;
-  open_users: boolean;
   open_attachment_menu: boolean;
   uploadProgress: number = 0;
-
-
 
 
   constructor(
@@ -51,7 +48,7 @@ export class ThreadComponent implements OnInit {
     public emojiService: EmojiService,
     public dialog: MatDialog,
     public msgService: MessagesService,
-    public dataDirectChatService: DirectChatService,
+    public directChatService: DirectChatService,
     public uploadService: UploadService,
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
@@ -65,6 +62,7 @@ export class ThreadComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
+    await this.getAllUsers()
   }
 
 
@@ -102,7 +100,10 @@ export class ThreadComponent implements OnInit {
   bodyClicked = () => {
     if (this.emojiPicker_open == true) this.emojiPicker_open = false;
     if (this.edit_comment == true) this.edit_comment = false;
-    if (this.open_users == true) this.open_users = false;
+    if (this.directChatService.open_users == true) {
+      this.directChatService.open_users = false;
+      this.getAllUsers()
+    }
     if (this.open_attachment_menu == true) this.open_attachment_menu = false
   };
 
@@ -118,6 +119,7 @@ export class ThreadComponent implements OnInit {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
+        modified_comment: this.directChatService.modifyMessageValue(this.comment_value),
         time: time_stamp,
         uid: this.authService.getUid(),
         emoji_data: [],
@@ -125,7 +127,6 @@ export class ThreadComponent implements OnInit {
         uploaded_files: this.uploadService.upload_array
       }
       setTimeout(() => this.fsDataThreadService.saveThread(comment_data), 500);
-
       this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
@@ -172,6 +173,7 @@ export class ThreadComponent implements OnInit {
     this.edit_comment_index = i
   }
 
+
   openEditComment(i: number) {
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
@@ -181,11 +183,13 @@ export class ThreadComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.fsDataThreadService.comments[i].comment = result;
+        this.fsDataThreadService.comments[i].modified_comment = this.fsDataThreadService.comments[i].comment.split(' ')
         this.fsDataThreadService.comments[i].text_edited = true
         this.fsDataThreadService.updateData()
       }
     });
   }
+
 
   openEditMessage() {
     this.edit_comment = false;
@@ -247,15 +251,28 @@ export class ThreadComponent implements OnInit {
 
 
   openUsers() {
-    this.open_users = true
+    this.getAllUsers()
+    this.directChatService.open_users = true
   }
 
 
-  addUserToTextarea(i: number) {
-    this.comment_value += '@' + this.authService.all_users[i].user_name
-    this.messageTextarea.nativeElement.focus();
+  getImageUrl(uid: string): string {
+    const user = this.authService.all_users.find(element => element.uid === uid);
+    return user.avatar
   }
 
+
+  getUserName(uid: string) {
+    const user = this.authService.all_users.find(element => element.uid === uid);
+    return user.user_name
+  }
+
+
+  getUserEmail(uid: string) {
+    const user = this.authService.all_users.find(element => element.uid === uid);
+    return user.email
+  }
+  
 
   openAttachmentMenu() {
     this.open_attachment_menu = true
@@ -264,7 +281,7 @@ export class ThreadComponent implements OnInit {
 
   addOrRemoveEmojisOnDirectChatMessage(i: number, j: number) {
     this.hovered_emoji = false
-    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let chatMessages = this.directChatService.directChatMessages;
     let user = this.authService.userData.user_name;
     this.msgService.emoji_data = this.emojiService.addOrRemoveEmoji(i, j, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(this.fsDataThreadService.current_chat_data);
@@ -272,7 +289,7 @@ export class ThreadComponent implements OnInit {
 
 
   addEmojiInDirectMessage($event: any, i: number) {
-    let chatMessages = this.dataDirectChatService.directChatMessages;
+    let chatMessages = this.directChatService.directChatMessages;
     let user = this.authService.userData.uid;
     this.emojiPicker_open = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
@@ -281,27 +298,19 @@ export class ThreadComponent implements OnInit {
 
 
   textChanged(text: string) {
-    this.searchUserByLetter()
-    const words = this.comment_value.split(' ');
-
-    for (let i = 0; i < words.length; i++) {
-
-      const word = words[i];
-
-      if (word === '@') {
-
-
-        words[i] = ' '
-        this.open_users = true
-      }
-      this.comment_value = words.join(' ')
+    this.comment_value = this.directChatService.textChanged(text)
     }
+  
+
+  addUserToTextarea(i: number) {
+    this.messageTextarea.nativeElement.focus();
+    this.comment_value = this.directChatService.addUserToTextarea(i, this.comment_value)
   }
 
 
-  searchUserByLetter() {
-    const filterValue = this.comment_value.toLowerCase();
-    const filtereUsers = this.authService.all_users.filter(name => name.toLowerCase().startsWith(filterValue));
-    console.log(filtereUsers, filterValue);
+  async getAllUsers() {
+    this.directChatService.at_users = await this.authService.getAllUsers();
+    console.log(this.directChatService.at_users);
+    
   }
 }

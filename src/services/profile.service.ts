@@ -28,13 +28,19 @@ export class ProfileService {
   ) { }
 
   openProfile(uid: string) {
-    if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name) this.openCurrentUserDetails()
+    if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
     else {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.panelClass = 'add-channel-dialog';
       dialogConfig.data = { user_name: this.authService.getUserInfo(uid).user_name, user_email: this.authService.getUserInfo(uid).email, user_id: uid };
       this.dialog.open(DialogProfileComponent, dialogConfig);
     }
+  }
+
+  checkIfStringIsAnId(uid: string) {
+    const user = this.authService.all_users.find(element => element.uid === uid);
+    if(user) return true
+    else return false
   }
 
 

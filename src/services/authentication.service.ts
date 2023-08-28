@@ -50,6 +50,7 @@ export class AuthenticationService {
         localStorage.setItem('user', 'null');
       }
     });
+
     const dbRef = collection(this.db, "users");
     onSnapshot(dbRef, docsSnap => {
       const users: any[] = []
@@ -62,7 +63,7 @@ export class AuthenticationService {
     this.authInitializedPromise = new Promise<void>((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
         this.currentUserSubject.next(user);
-        resolve(); // Das Promise auflösen, wenn die Authentifizierung abgeschlossen ist
+        resolve(); 
       });
     });
   }

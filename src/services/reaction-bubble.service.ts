@@ -19,7 +19,6 @@ export class ReactionBubbleService {
     } else {
       return sortedNames;
     }
-
   }
 
 
