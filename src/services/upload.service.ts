@@ -3,6 +3,7 @@ import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, catchError, finalize, of } from 'rxjs';
 import { FirestoreThreadDataService } from './firestore-thread-data.service';
+import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class UploadService {
     public authenticationService: AuthenticationService,
     private storage: AngularFireStorage,
     public fsDataThreadService: FirestoreThreadDataService,
+    public msgService: MessagesService,
   ) {
     this.emptyUploadArray()
   }
@@ -149,4 +151,11 @@ export class UploadService {
   downloadFile(path: string | URL) {    
     window.open(path, '_blank');
   }
+
+  async checkForUpload(){
+    if (this.upload_array.file_name.length > 0) await this.prepareUploadfiles();
+    this.msgService.upload_array = this.upload_array;
+    console.log('uploadArray ' + this.upload_array);
+  }
+ 
 }

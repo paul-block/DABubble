@@ -73,11 +73,7 @@ export class ChannelDirectSendMessageComponent {
       this.sendMsg(this.msgService.messageText, this.inputValue);
       this.openChannel(this.newMsgService.selectedChannelID)
     } else {
-      
-      if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles();
-      this.msgService.upload_array = this.uploadService.upload_array;
-      console.log('uploadArray ' + this.uploadService.upload_array);
-      debugger
+      this.uploadService.checkForUpload();
       this.msgService.newMessage();
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     }
