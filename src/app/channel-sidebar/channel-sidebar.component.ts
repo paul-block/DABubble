@@ -30,7 +30,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthenticationService,
     public dialog: MatDialog,
-    private newMsgService: NewMsgService,
+    public newMsgService: NewMsgService,
     public channelService: ChannelService,
     public chatService: ChatService,
     public msgService: MessagesService,
@@ -91,9 +91,20 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
+  sendNewMsg() {
+    this.chatService.currentChatSection = 'noChatSectionSelected';
+    this.chatService.currentChatID = 'noChatSelected';
+    this.chatService.currentChatData = undefined;
+    console.log(this.chatService.currentChatSection);
+    console.log(this.chatService.currentChatID);
+    console.log(this.chatService.currentChatData);
+    this.chatService.textAreaMessageTo();
+    this.msgService.emptyMessageText();
+    this.toggleNewMsgComponent();
+  }
+
   toggleNewMsgComponent() {
-    this.newMsgService.toggleNewMsg();
-    this.newMsgService.newMsgComponentOpen = !this.newMsgService.newMsgComponentOpen;
+    this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
   }
 
   // async searchChatAndGetMessages(userReceiverID) {
@@ -109,7 +120,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
   async openChat(chat) {
-    if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
+    if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
       this.chatService.currentChatID = chat.chat_ID;
@@ -131,7 +142,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChannel(channelID) {
-    if (this.newMsgService.newMsgComponentOpen) this.toggleNewMsgComponent();
+    if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;

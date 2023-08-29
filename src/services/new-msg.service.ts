@@ -11,9 +11,8 @@ import firebase from 'firebase/compat/app';
 })
 
 export class NewMsgService {
-  private _openNewMsg = new BehaviorSubject<boolean>(false);
-  public readonly openNewMsg$ = this._openNewMsg.asObservable();
 
+  openNewMsg: boolean = false;
   db = this.authService.db;
   user_name: string;
   user_id: string;
@@ -25,14 +24,6 @@ export class NewMsgService {
 
 
   constructor(private authService: AuthenticationService) { }
-
-  toggleNewMsg() {
-    this._openNewMsg.next(!this._openNewMsg.getValue());
-  }
-
-  openNewMsgComponent() {
-   // funktion die immer öffnet, nicht toggled 
-  }
 
   async addOrUpdateChat(messageText: string, channelOrUserInput: string) {
     const auth = getAuth();

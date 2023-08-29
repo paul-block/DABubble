@@ -10,12 +10,8 @@ import { NewMsgService } from 'services/new-msg.service';
 })
 export class MainComponent {
   open_thread: boolean
-  openNewMsg: boolean;
-  private _subscription: Subscription;
 
-
-  constructor(private NewMsgService: NewMsgService,  public fsDataThreadService: FirestoreThreadDataService) {
-    this._subscription = this.NewMsgService.openNewMsg$.subscribe(open => this.openNewMsg = open);
+  constructor(public newMsgService: NewMsgService,  public fsDataThreadService: FirestoreThreadDataService) {
   }
 
   setVariable(value: boolean) {

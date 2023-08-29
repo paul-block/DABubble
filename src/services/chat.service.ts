@@ -22,15 +22,12 @@ export class ChatService {
   private chatsSubject = new BehaviorSubject<any[]>([]);
   currentUser_id: string
   open_users: boolean = false;
-
-
+  userReceiverID: string;
 
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
   ) { }
-
-
 
   async loadChats() {
     const querySnapshot = await getDocs(collection(this.db, 'chats'));
@@ -70,6 +67,44 @@ export class ChatService {
     }
   }
 
+  async searchChat(userReceiverID): Promise<string | null> {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    let foundChatId = null;
+  
+    if ('currentUser' === userReceiverID) {
+      userReceiverID = user.uid;
+    }
+  
+    if (user !== null) {
+      try {
+        const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
+        
+        docChatsSnapshot.forEach((chat) => {
+          const chatData = chat.data();
+          const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
+          
+          if (
+            (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) ||
+            (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)
+          ) {
+            foundChatId = chatData.chat_ID;
+          }
+        });
+  
+        return foundChatId; 
+  
+      } catch (error) {
+        console.error("Fehler bei der Suche nach einem Chat: ", error);
+        return null;
+      }
+    } else {
+      console.error("Kein Benutzer ist eingeloggt");
+      return null;
+    }
+  }
+  
+
 
   // async searchChat(userReceiverID) {
   //   const auth = getAuth();
@@ -90,23 +125,23 @@ export class ChatService {
   //           const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
   //           if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
   //             chatExists = true;
-  //             this.currentChatID = chatData.chat_ID;
-  //             this.currentChatData = chatData;
+  //            return this.currentChatID = chatData.chat_ID; // BIS HIER HER UND DAS DANN ALS RETURN IN DIE VARIABLE IN CHANNEL DIRECT GEBEN
+  //             // this.currentChatData = chatData;
   //           }
   //         });
 
-  //         if (!chatExists) {
-  //           await this.newChat(userReceiverID);
-  //         }
-  //       } else {
-  //         console.error("Benutzer nicht gefunden");
-  //       }
-  //     } catch (error) {
-  //       console.error("Fehler bei der Suche nach einem Chat: ", error);
-  //     }
-  //   } else {
-  //     console.error("Kein Benutzer ist eingeloggt");
-  //   }
+    //       if (!chatExists) {
+    //         await this.newChat(userReceiverID);
+    //       }
+    //     } else {
+    //       console.error("Benutzer nicht gefunden");
+    //     }
+    //   } catch (error) {
+    //     console.error("Fehler bei der Suche nach einem Chat: ", error);
+    //   }
+    // } else {
+    //   console.error("Kein Benutzer ist eingeloggt");
+    // }
   // }
 
 

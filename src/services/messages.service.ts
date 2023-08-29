@@ -37,7 +37,7 @@ export class MessagesService {
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.newMsgService.newMsgComponentOpen) {
+    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.newMsgService.openNewMsg) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;

@@ -14,19 +14,19 @@
         filteredChannels.length === 0)}">
 
         <div *ngFor="let user of filteredUsersByName" class="dm-profile pointer sidebar-hover"
-            (click)="selectValue($event, 'userName', user.uid)">
+            (click)="selectValue($event, 'userName', user)">
             <img src="assets/img/icons/account_circle.svg" alt="">
             <span>{{ user.user_name }}</span>
         </div>
 
         <div *ngFor="let user of filteredUsersByEmail" class="dm-profile pointer sidebar-hover"
-            (click)="selectValue($event, 'userEmail', user.uid)">
+            (click)="selectValue($event, 'userEmail', user)">
             <img src="assets/img/mail.png" alt="">
             <span>{{ user.email }}</span>
         </div>
 
         <div class="channel-container" *ngFor="let channel of filteredChannels" class="dm-profile pointer sidebar-hover"
-            (click)="selectValue($event, 'channel')">
+            (click)="selectValue($event, 'channel', channel.channel_ID)">
             <img src=" assets/img/icons/workspaces.svg" alt="">
             <span class="tag">#</span>
             <span>{{ channel.channelName }}</span>

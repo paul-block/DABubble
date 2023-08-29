@@ -31,7 +31,7 @@ export class DialogProfileComponent {
   offline = true;
 
   sendMsg(user_id: string, user_name:string) {
-    this.newMsgService.toggleNewMsg();
+    this.newMsgService.openNewMsg = true;
     this.newMsgService.directedFromProfileButton = true;
     this.newMsgService.user_id = user_id;
     this.newMsgService.user_name = user_name;

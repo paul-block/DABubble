@@ -39,39 +39,49 @@ export class ChannelDirectSendMessageComponent {
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
   }
 
-  sendMsg(msg: string, channelOrUserInput: string) {
-    msg = this.msgService.messageText;
-    console.log(msg);
-    this.newMsgService.addOrUpdateChat(msg, channelOrUserInput);
-    this.msgService.messageText = '';
-  }
+  // sendMsg(msg: string, channelOrUserInput: string) {
+  //   msg = this.msgService.messageText;
+  //   console.log(msg);
+  //   this.newMsgService.addOrUpdateChat(msg, channelOrUserInput);
+  //   this.msgService.messageText = '';
+  // }
 
-  async openChannel(channelID) {
-    if (this.newMsgService.newMsgComponentOpen) {
-      this.newMsgService.toggleNewMsg();
-      this.newMsgService.newMsgComponentOpen = !this.newMsgService.newMsgComponentOpen;
-    }
-    if (this.chatService.currentChatID !== channelID) {
-      this.chatService.currentChatSection = 'channels';
-      this.chatService.currentChatID = channelID;
-      this.msgService.emptyMessageText();
-      try {
-        this.chatService.getCurrentChatData();
-        this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
-      } catch (error) {
-        console.error("Fehler bei öffnen des Channels: ", error);
-      }
-    }
-  }
+  // async openChannel(channelID) {
+  //   if (this.newMsgService.newMsgComponentOpen) {
+  //     this.newMsgService.toggleNewMsg();
+  //     this.newMsgService.newMsgComponentOpen = !this.newMsgService.newMsgComponentOpen;
+  //   }
+  //   if (this.chatService.currentChatID !== channelID) {
+  //     this.chatService.currentChatSection = 'channels';
+  //     this.chatService.currentChatID = channelID;
+  //     this.msgService.emptyMessageText();
+  //     try {
+  //       this.chatService.getCurrentChatData();
+  //       this.chatService.textAreaMessageTo();
+  //       this.msgService.getMessages();
+  //       this.fsDataThreadService.thread_open = false;
+  //     } catch (error) {
+  //       console.error("Fehler bei öffnen des Channels: ", error);
+  //     }
+  //   }
+  // }
 
 
 
   public async onSendClick() {
-    if (this.newMsgService.newMsgComponentOpen) {
-      this.sendMsg(this.msgService.messageText, this.inputValue);
-      this.openChannel(this.newMsgService.selectedChannelID)
+    if (this.newMsgService.openNewMsg) {
+      // await this.chatService.newChat(this.chatService.userReceiverID)
+      await this.chatService.newChat(this.chatService.currentChatData.uid);
+      this.chatService.currentChatSection = 'chats';
+      this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
+      // this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
+      // this.chatService.currentChatID = this.chatService.currentChatData.uid;
+      console.log(this.chatService.currentChatID);
+      this.uploadService.checkForUpload();
+      await this.msgService.newMessage();
+      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+      this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
+      console.log(this.chatService.currentChatData);
     } else {
       this.uploadService.checkForUpload();
       this.msgService.newMessage();
@@ -101,5 +111,23 @@ export class ChannelDirectSendMessageComponent {
 
   async getAllUsers() {
     this.chatService.at_users = await this.authService.getAllUsers();
+  }
+
+  
+  async openChat(chat) {
+    if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
+    if (this.chatService.currentChatID !== chat.chat_ID) {
+      this.chatService.currentChatSection = 'chats';
+      this.chatService.currentChatID = chat.chat_ID;
+      this.msgService.emptyMessageText();
+      try {
+        this.chatService.currentChatData = chat;
+        this.chatService.textAreaMessageTo();
+        this.msgService.getMessages();
+        this.fsDataThreadService.thread_open = false;
+      } catch (error) {
+        console.error("Fehler bei öffnen des Chats: ", error);
+      }
+    }
   }
 }
