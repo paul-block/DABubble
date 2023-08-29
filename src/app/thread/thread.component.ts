@@ -183,7 +183,7 @@ export class ThreadComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.fsDataThreadService.comments[i].comment = result;
-        this.fsDataThreadService.comments[i].modified_comment = this.fsDataThreadService.comments[i].comment.split(' ')
+        this.fsDataThreadService.comments[i].modified_comment = this.chatService.modifyMessageValue(result)
         this.fsDataThreadService.comments[i].text_edited = true
         this.fsDataThreadService.updateData()
       }

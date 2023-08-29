@@ -34,7 +34,6 @@ export class UploadService {
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile);
-    
     if (this.selectedFile && this.checkFileSize(this.selectedFile)) {
       this.file.push(this.selectedFile)
       this.upload_array.file_type.push(this.selectedFile.type)

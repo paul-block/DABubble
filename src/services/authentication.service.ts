@@ -19,8 +19,7 @@ import { User, onAuthStateChanged } from '@angular/fire/auth';
 export class AuthenticationService {
 
 
-  private activitySubject = new Subject<void>();
-  private inactivityTimer: number;
+  
   private authInitializedPromise: Promise<void>;
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
@@ -71,9 +70,6 @@ export class AuthenticationService {
         resolve();
       });
     });
-
-
-    this.initializeTimer();
   }
 
 
@@ -133,7 +129,6 @@ export class AuthenticationService {
   async setOnlineStatus(email: string, status: string) {
     const user = this.all_users.find(element => element.email === email);
     console.log(user.uid);
-    
     const userRef = doc(this.db, 'users', user.uid);
     await updateDoc(userRef, {
       status: status
@@ -203,7 +198,7 @@ export class AuthenticationService {
 
 
   async signOut() {
-    this.setOnlineStatus(this.userData.email, 'Abwesend')
+    await this.setOnlineStatus(this.userData.email, 'Abwesend')
     await this.afAuth.signOut();
     localStorage.removeItem('user');
     this.router.navigateByUrl('/sign-in');
@@ -275,26 +270,5 @@ export class AuthenticationService {
   getImageUrl(uid: string): string {
     const user = this.all_users.find(element => element.uid === uid);
     return user.avatar
-  }
-
-
-  private initializeTimer(): void {
-    const inactivityDuration = 15 * 60 * 1000; // 15 Minuten in Millisekunden
-    document.addEventListener('mousemove', () => this.resetTimer());
-    document.addEventListener('keydown', () => this.resetTimer());
-    this.inactivityTimer = window.setTimeout(() => {
-      this.activitySubject.next();
-    }, inactivityDuration);
-  }
-  
-
-  private resetTimer(): void {
-    clearTimeout(this.inactivityTimer);
-    this.initializeTimer();
-  }
-  
-
-  get inactivityObservable(): Observable<void> {
-    return this.activitySubject.asObservable();
   }
 }

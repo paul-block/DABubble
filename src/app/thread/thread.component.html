@@ -61,15 +61,25 @@
                     (click)="profileService.openProfile(fsDataThreadService.current_chat_data.user_Sender_ID)">{{authService.getUserInfo(fsDataThreadService.current_chat_data.user_Sender_ID).user_name}}</span>
                 <span>{{fsDataThreadService.getTimeSince(fsDataThreadService.current_chat_data.created_At.seconds)}}</span>
             </div>
+
+            <!--------------------------------------------Message---------------------------------------------------------------------------------->
+
             <div class="message"
                 [class.message_user]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
-                {{fsDataThreadService.current_message}}</div>
+                <span (click)="profileService.openProfile(word)"
+                    *ngFor="let word of fsDataThreadService.current_message; let k = index"
+                    [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                    {{chatService.renameUid(word)}}&nbsp;
+                </span>
+            </div>
             <div class="emoji_main">
                 <div *ngFor="let item of 0" class="emoji_count" matTooltip="{{react_user}} hat reagiert">
                     <ngx-emoji class="center" [emoji]="" size="24"></ngx-emoji>
                     <span></span>
                 </div>
             </div>
+
+            <!--------------------------------------------Emoji-------------------------------------------------------------------------------->
 
             <div class="emoji_main">
                 <div *ngFor="let emoji of fsDataThreadService.current_chat_data.emoji_data; let j = index"
