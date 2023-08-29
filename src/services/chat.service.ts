@@ -272,7 +272,6 @@ export class ChatService {
   }
 
 
-
   checkIfWordIsAnId(word: string) {
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return true

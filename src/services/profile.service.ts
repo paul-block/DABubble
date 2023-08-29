@@ -33,7 +33,7 @@ export class ProfileService {
     else {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.panelClass = 'add-channel-dialog';
-      dialogConfig.data = { user_name: this.authService.getUserInfo(uid).user_name, user_email: this.authService.getUserInfo(uid).email, user_id: uid };
+      dialogConfig.data = { user: this.authService.getUserInfo(uid)};
       this.dialog.open(DialogProfileComponent, dialogConfig);
     }
   }

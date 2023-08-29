@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.inactivityService.startMonitoring();
     this.inactivityService.inactivityObservable.subscribe(() => {
     this.authService.signOut()
     });

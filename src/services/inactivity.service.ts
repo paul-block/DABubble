@@ -9,10 +9,6 @@ export class InactivityService {
 
   private activitySubject = new Subject<void>();
   private inactivityTimer: number;
-  constructor() {
-    
-    this.startMonitoring();
-  }
 
 
   private resetTimer(): void {
@@ -23,7 +19,7 @@ export class InactivityService {
   }
 
   private getInactivityDuration(): number {
-    return 1 * 60 * 1000; // 15 Minuten in Millisekunden
+    return 15* 60 * 1000; 
   }
 
   startMonitoring(): void {
