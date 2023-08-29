@@ -70,6 +70,7 @@ $hover-transition: all ease-in-out 125ms;
     display: flex;
     align-items: center;
     color: #686868;
+    position: relative;
 
     &:hover mat-icon {
         color: black;
@@ -111,3 +112,85 @@ $hover-transition: all ease-in-out 125ms;
     background-color: #ADB0D9;
     margin: 8px;
 }
+
+.edit_comment {
+    z-index: 11;
+    background-color: white;
+    position: absolute;
+    top: 5px;
+    left: 50px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px 5px 10px;
+    border-radius: 0px 30px 30px 30px;
+    box-shadow: 0px 6px 14px 0px #00000033;
+    font-size: 20px;
+    font-weight: 500;
+    flex-direction: column;
+
+    span {
+        cursor: pointer;
+    }
+}
+
+.show_edit_comment {
+    display: flex;
+    animation: none;
+  }
+
+.menu_button {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 250px;
+    height: 50px;
+    transition: 200ms;
+    border-radius: 35px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #eceefe;
+    }
+}
+
+.at_user_div {
+    position: absolute;
+    bottom: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 300px;
+    max-height: 200px;
+    border: 1px solid #686868;
+    background-color: white;
+    z-index: 15;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    :nth-child(1) {
+      overflow-y: auto;
+    }
+  }
+  
+  .user {
+    gap: 5px;
+    box-sizing: border-box;
+    transition: 200ms;
+    font-size: 18px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: #eceefe;
+    }
+  }
+  
+  .user_img {
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+  }

@@ -21,10 +21,43 @@
                 <div [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                     class="chat-message-text-container">
                     <div class="chat-message-text">
-                        <span>{{ chatMessage.chat_message }}</span>
+                        <!-- <span>{{ chatMessage.chat_message }}</span> -->
+                        <span (click)="profileService.openProfile(word)"
+                        *ngFor="let word of chatMessage.modified_message; let k = index"
+                        [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                        {{chatService.renameUid(word)}}&nbsp;
+                    </span>
                         <span class="message-edited" *ngIf="chatMessage.chat_message_edited">(bearbeitet)</span>
                     </div>
                 </div>
+
+                <!-- <div *ngIf="fsDataThreadService.comments[i].comment.length > 0" class="message"
+                    [class.message_user]="getUserName(fsDataThreadService.comments[i].uid) == authService.userData.user_name">
+                    <span (click)="profileService.openProfile(word)"
+                        *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
+                        [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                        {{chatService.renameUid(word)}}&nbsp;
+                    </span>
+                    <div style="font-size: 10px;" *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
+                </div> -->
+
+                <div class="uploaded_main">
+                    <div *ngFor="let file of chatMessage.uploaded_files.file_name; let k = index"
+                        class="upload_content"
+                        (click)="uploadService.downloadFile(chatMessage.uploaded_files.download_link[k])"
+                        style="cursor: pointer;">
+                        <img class="file_image"
+                            src="/assets/img/File-Types/{{chatMessage.uploaded_files.file_extension[k]}}.png">
+                        <div>{{uploadService.checkFileName(chatMessage.uploaded_files.file_name[k])}}
+                        </div>
+                        <div class="delete_file" *ngIf="chatMessage.uid == authService.userData.user_Sender_ID">
+                            <img (click)="uploadService.deleteSelectedFile(chatMessage.uploaded_files.file_name[k], i, k)"
+                                src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- Emoji reaction direct right from emoji reactions -->
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="chat-message-details-reactions">

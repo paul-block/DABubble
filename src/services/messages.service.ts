@@ -25,6 +25,9 @@ export class MessagesService {
   private scrollSubject = new Subject<void>();
   answers_count: any;
   time: any;
+  upload_array;
+
+  
   constructor(
     public chatService: ChatService,
     public authService: AuthenticationService,
@@ -45,6 +48,7 @@ export class MessagesService {
     const auth = getAuth();
     const user = auth.currentUser;
 
+
     const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
       chat_message: this.messageText,
       user_Sender_ID: user.uid,
@@ -52,8 +56,10 @@ export class MessagesService {
       created_At: firebase.firestore.FieldValue.serverTimestamp(),
       chat_message_edited: false,
       emoji_data: [],
+      modified_message: this.chatService.modifyMessageValue(this.messageText),
       answers: 0,
       last_answer: '',
+      uploaded_files: this.upload_array,
     })
 
     const newMessageID = messagesCollectionRef.id;

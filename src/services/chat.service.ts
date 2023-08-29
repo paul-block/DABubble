@@ -246,6 +246,8 @@ export class ChatService {
 
 
   renameUid(word: string) {
+    console.log(word);
+    
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return '@' + user.user_name
     else return word

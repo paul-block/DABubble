@@ -1,10 +1,29 @@
 <section class="write-new-message">
-    <textarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder"
+    <textarea #messageTextarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder"
         [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()"
         (keyup)="msgService.checkIfEmpty()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
-            <mat-icon>add</mat-icon>
+
+            <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
+                <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
+                <label class="menu_button" for="fileInput">Datei anhängen</label>
+            </div>
+            <div class="at_user_div" *ngIf="chatService.open_users">
+                <div>
+                    <div class="user" *ngFor="let user of chatService.at_users; let i = index"
+                        (click)="addUserToTextarea(i)">
+                        <img class="user_img" [src]="user.avatar">
+                        <div>{{user.user_name}}</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="plus" (click)="openAttachmentMenu()" (click)="stopPropagation($event)">
+                <div class="hover"><mat-icon>add</mat-icon></div>
+            </div>
+
             <div class="parting-line"></div>
             <div class="z_index">
                 <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2"
@@ -12,7 +31,7 @@
                 </emoji-mart>
                 <mat-icon (click)="toggleEmojiPicker(); emojiService.openEmojiPicker(-2);">mood</mat-icon>
             </div>
-            <mat-icon>alternate_email</mat-icon>
+            <mat-icon (click)="openUsers(); stopPropagation($event);">alternate_email</mat-icon>
         </div>
         <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.readyToSend }"
             [disabled]="!msgService.readyToSend" class="send-message">

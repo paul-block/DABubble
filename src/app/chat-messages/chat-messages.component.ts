@@ -8,6 +8,7 @@ import { FirestoreThreadDataService } from 'services/firestore-thread-data.servi
 import { MessagesService } from 'services/messages.service';
 import { ProfileService } from 'services/profile.service';
 import { ReactionBubbleService } from 'services/reaction-bubble.service';
+import { UploadService } from 'services/upload.service';
 
 @Component({
   selector: 'app-chat-messages',
@@ -35,6 +36,7 @@ export class ChatMessagesComponent {
     public emojiService: EmojiService,
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
+    public uploadService: UploadService,
   ) { }
 
 

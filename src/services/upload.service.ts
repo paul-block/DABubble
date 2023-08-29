@@ -94,7 +94,7 @@ export class UploadService {
         finalize(async () => {
           try {
             const downloadURL = await fileRef.getDownloadURL().toPromise();
-            this.upload_array.download_link[i] = downloadURL
+            this.upload_array.download_link[i] = downloadURL;
             console.log(this.upload_array.download_link);
           } catch (error) {
             console.error("Error getting download URL:", error);
@@ -146,7 +146,7 @@ export class UploadService {
   }
 
 
-  downloadFile(path: string | URL) {
+  downloadFile(path: string | URL) {    
     window.open(path, '_blank');
   }
 }
