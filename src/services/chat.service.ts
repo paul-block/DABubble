@@ -9,10 +9,10 @@ import { ChannelService } from './channel.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService  {
+export class ChatService {
 
   db = getFirestore();
-  at_users:any
+  at_users: any
   currentChatSection = 'noChatSectionSelected';
   currentChatID: string = 'noChatSelected';
   directChatMessages = [];
@@ -49,14 +49,15 @@ export class ChatService  {
 
 
   filterChats(chats) {
-    return chats.filter(chat => chat.chat_Member_IDs.includes(this.authService.getUid()));
+    console.log(this.currentUser_id);
+    
+    return chats.filter(chat => chat.chat_Member_IDs.includes(this.currentUser_id));
   }
 
 
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
-
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
@@ -108,7 +109,7 @@ export class ChatService  {
   //   }
   // }
 
-  
+
 
   async newChat(userReceiverID: string) {
     const userID = this.currentUser_id;
@@ -147,7 +148,7 @@ export class ChatService  {
 
   getChatReceiverUser(chat) {
     let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.authService.getUid()) {
+    if (chat.chat_Member_IDs[0] !== this.authService.userData.uid) {
       chatReveiverID = chat.chat_Member_IDs[0];
     } else {
       chatReveiverID = chat.chat_Member_IDs[1];

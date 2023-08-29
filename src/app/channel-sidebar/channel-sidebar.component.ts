@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { Subscription } from 'rxjs';
@@ -39,29 +39,30 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async ngOnInit() {
+    await this.authService.waitUntilAuthInitialized();
+    this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.chatService.currentUser_id = user.uid;
+      }
+    });
+
     this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;
     });
 
-    
     await this.chatService.loadChats();
     this.subChats = this.chatService.getUsersChatsObservable().subscribe(chat => {
       this.chatService.chats.push(chat);
     });
 
-
-    await this.authService.waitUntilAuthInitialized();
-    this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        this.chatService.currentUser_id = user.uid;
-        this.chatService.initOwnChat();
-      }
-    });
+    this.chatService.initOwnChat();
   }
 
+
   ngOnDestroy() {
-    if(this.subChannels) this.subChannels.unsubscribe();
-    if(this.subChats) this.subChats.unsubscribe();
+    if (this.subChannels) this.subChannels.unsubscribe();
+    if (this.subChats) this.subChats.unsubscribe();
+    if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
   }
 
   toggleChannels() {
