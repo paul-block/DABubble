@@ -53,6 +53,7 @@ export class ChatService {
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
+    
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
@@ -69,10 +70,6 @@ export class ChatService {
     const auth = getAuth();
     const user = auth.currentUser;
     let foundChatId = null;
-  
-    if ('currentUser' === userReceiverID) {
-      userReceiverID = user.uid;
-    }
   
     if (user !== null) {
       try {

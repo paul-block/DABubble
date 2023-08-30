@@ -69,26 +69,26 @@ export class ChannelDirectSendMessageComponent {
 
 
   public async onSendClick() {
-    // if (this.newMsgService.openNewMsg) {
-    //   // await this.chatService.newChat(this.chatService.userReceiverID)
-    //   await this.chatService.newChat(this.chatService.currentChatData.uid);
-    //   this.chatService.currentChatSection = 'chats';
-    //   this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
-    //   // this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
-    //   // this.chatService.currentChatID = this.chatService.currentChatData.uid;
-    //   console.log(this.chatService.currentChatID);
-    //   await this.uploadService.checkForUpload();
-    //   await this.msgService.newMessage();
-    //   setTimeout(() => this.uploadService.emptyUploadArray(), 500);
-    //   this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
-    //   console.log(this.chatService.currentChatData);
-    // } else {
+    if (this.newMsgService.openNewMsg) {
+      // await this.chatService.newChat(this.chatService.userReceiverID)
+      await this.chatService.newChat(this.chatService.currentChatData.uid);
+      this.chatService.currentChatSection = 'chats';
+      this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
+      // this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
+      // this.chatService.currentChatID = this.chatService.currentChatData.uid;
+      console.log(this.chatService.currentChatID);
+      await this.uploadService.checkForUpload();
+      await this.msgService.newMessage();
+      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+      this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
+      console.log(this.chatService.currentChatData);
+    } else {
       await this.uploadService.checkForUpload();
       setTimeout(() => {
         this.msgService.newMessage();
       }, 400);
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
-    // }
+    }
   }
 
 
