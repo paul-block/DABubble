@@ -84,4 +84,9 @@ export class DialogEditChannelComponent implements OnInit {
       this.channelService.updateChannelInfo(this.chatService.currentChatData, changes);
     }
   }
+
+
+  async deleteChannel() {
+  this.channelService.deleteChannel(this.chatService.currentChatData.channel_ID);
+  }
 }

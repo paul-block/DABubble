@@ -105,9 +105,10 @@ export class AddPplToChannelComponent implements OnInit {
     this.channelService.createNewChannel(this.channelName, this.description);
 
     if (this.selectedOption === 'all') {
-      const members = await this.channelService.getAllMembersOfCertainChannel(this.DelevoperTeamChannelRef);
+      const members = this.authService.all_users
       members.forEach(member => {
-        this.channelService.addUserToChannel(this.channelName, member);
+        let id = member.uid
+        this.channelService.addUserToChannel(this.channelName, id);  
       });
     } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
       const userIds = await Promise.all(

@@ -37,6 +37,7 @@
     <span class="channel-creator">{{ creatorName }}</span>
   </div>
   <div class="leave-channel">
+    <button *ngIf="this.chatService.currentChatData.createdBy == authService.userData.uid" style="background-color: red;" (click)="deleteChannel()" mat-dialog-close>Channel löschen</button>
     <button (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
   </div>
 </section>

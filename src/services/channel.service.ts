@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc } from '@angular/fire/firestore';
+import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 
@@ -30,7 +30,19 @@ export class ChannelService {
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
-  ) { }
+  ) { 
+
+
+    const dbRef = collection(this.db, "channels");
+    onSnapshot(dbRef, docsSnap => {
+      const channels: any[] = []
+      docsSnap.forEach(doc => {
+        channels.push(doc.data())
+      })
+      this.channels = channels
+      console.log(this.channels);
+    });
+  }
   
 
   showSelectedUser(value: boolean) {
@@ -109,7 +121,6 @@ export class ChannelService {
 
   async getChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
-
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {
@@ -130,13 +141,12 @@ export class ChannelService {
     return null;
   }
 
-  async addUserToChannel(channelName: string, uid) {
+  async addUserToChannel(channelName: string, id:string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
-
     if (!channelSnapshot.empty) {
       const channelDoc = channelSnapshot.docs[0];
       await updateDoc(channelDoc.ref, {
-        assignedUsers: arrayUnion(uid)
+        assignedUsers: arrayUnion(id)
       });
     } else {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
@@ -153,6 +163,12 @@ export class ChannelService {
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
       }
+  }
+
+
+  deleteChannel(id:string) {
+    const documentRef = doc(this.db, 'channels', id);
+    deleteDoc(documentRef)
   }
 
 }
