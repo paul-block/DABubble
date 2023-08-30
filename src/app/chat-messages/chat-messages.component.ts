@@ -66,13 +66,13 @@ export class ChatMessagesComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.emojiService.emojiPicker_open = false;
       this.toggleEditMessage = false;
       this.emojiService.picker_reaction_bar = false;
+      if (this.emojiService.picker_index === -2) {
+        this.emojiPicker_open = false;
+      }
+      
     }
-    console.log('close emojiPicker_open ' + this.emojiPicker_open);
-    console.log('close picker_reaction_bar ' + this.picker_reaction_bar);
-    console.log('close toggleEditMessage ' + this.toggleEditMessage);
   }
 
   togglePopup(popupVariable: string) {
@@ -82,10 +82,6 @@ export class ChatMessagesComponent {
     }
     this.emojiService.emojiPicker_open = this.emojiPicker_open;
     this.emojiService.picker_reaction_bar = this.picker_reaction_bar;
-    console.log('togglePopup emojiPicker_open ' + this.emojiPicker_open);
-    console.log('togglePopup picker_reaction_bar ' + this.picker_reaction_bar);
-    console.log('togglePopup toggleEditMessage ' + this.toggleEditMessage);
-    
   }
 
 

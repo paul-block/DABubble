@@ -38,7 +38,9 @@ export class ChannelDirectSendMessageComponent {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.open_attachment_menu = false;
       this.open_users = false;
-      this.emojiService.emojiPicker_open = false;
+      if (this.emojiService.picker_index === 0) {
+        this.emojiPicker_open = false;
+      }
     }
   }
 

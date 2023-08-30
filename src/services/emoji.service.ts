@@ -196,10 +196,6 @@ export class EmojiService {
 
   openEmojiPicker(i: number) {
     this.picker_index = i;
-    console.log('emojiService:' +  this.emojiPicker_open);
-    console.log('emojiService index:' +  this.picker_index);
-    
-    
   }
 
 
