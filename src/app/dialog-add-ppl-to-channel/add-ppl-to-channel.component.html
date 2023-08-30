@@ -5,7 +5,7 @@
     </div>
     <label class="checkbox-container">
         <div class="flex">
-            <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="all">
+            <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption"  (ngModelChange)="onSelectedOptionChange()" value="all">
             <span class="checkmark">Alle Mitglieder von <span id="highlight">DA-Bubble</span> hinzufügen</span>
         </div>
     </label>

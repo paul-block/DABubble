@@ -63,10 +63,9 @@ export class AddPplToChannelComponent implements OnInit {
       avatar => {
         this.selectedUserAvatar.push(avatar);
         console.log(avatar);
-        
+
       }
     );
-
   }
 
   removeUserName(name: string) {
@@ -126,4 +125,9 @@ export class AddPplToChannelComponent implements OnInit {
     this.dialog.closeAll();
   }
 
+
+  onSelectedOptionChange() {
+    this.selectedUserAvatar = []
+    this.selectedUserNames = []
+  }
 }
