@@ -148,7 +148,8 @@ export class SearchbarComponent {
       user: {
         user_name: user.user_name, 
         email: user.email,  
-        status: user.status 
+        status: user.status,
+        uid: user.uid
       }
     };
 
