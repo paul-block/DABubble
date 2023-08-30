@@ -44,45 +44,9 @@ export class ChannelDirectSendMessageComponent implements OnInit {
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
   }
 
-  // sendMsg(msg: string, channelOrUserInput: string) {
-  //   msg = this.msgService.messageText;
-  //   console.log(msg);
-  //   this.newMsgService.addOrUpdateChat(msg, channelOrUserInput);
-  //   this.msgService.messageText = '';
-  // }
-
-  // async openChannel(channelID) {
-  //   if (this.newMsgService.newMsgComponentOpen) {
-  //     this.newMsgService.toggleNewMsg();
-  //     this.newMsgService.newMsgComponentOpen = !this.newMsgService.newMsgComponentOpen;
-  //   }
-  //   if (this.chatService.currentChatID !== channelID) {
-  //     this.chatService.currentChatSection = 'channels';
-  //     this.chatService.currentChatID = channelID;
-  //     this.msgService.emptyMessageText();
-  //     try {
-  //       this.chatService.getCurrentChatData();
-  //       this.chatService.textAreaMessageTo();
-  //       this.msgService.getMessages();
-  //       this.fsDataThreadService.thread_open = false;
-  //     } catch (error) {
-  //       console.error("Fehler bei öffnen des Channels: ", error);
-  //     }
-  //   }
-  // }
-
-
-
   public async onSendClick() {
     if (this.newMsgService.openNewMsg) {
-      // await this.chatService.newChat(this.chatService.userReceiverID)
-      await this.chatService.newChat(this.chatService.currentChatData.uid);
-      this.chatService.currentChatSection = 'chats';
-      this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
-      // this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.currentChatData.uid);
-      // this.chatService.currentChatID = this.chatService.currentChatData.uid;
-      console.log(this.chatService.currentChatID);
-      await this.uploadService.checkForUpload();
+      this.uploadService.checkForUpload();
       await this.msgService.newMessage();
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
       this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
@@ -95,7 +59,6 @@ export class ChannelDirectSendMessageComponent implements OnInit {
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     }
   }
-
 
   stopPropagation(event: Event) {
     event.stopPropagation();
