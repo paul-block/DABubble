@@ -44,6 +44,8 @@ export class DialogEditChannelComponent implements OnInit {
       this.editChannelUsers = !this.editChannelUsers;
       this.assignedUsers = this.arrayRemoveItem(this.assignedUsers, this.authService.userData.uid);
       this.saveEditChannelInfo()
+      this.chatService.currentChatSection = 'noChatSectionSelected';
+      this.chatService.currentChatID = 'noChatSelected';
     }
   }
 
