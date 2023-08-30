@@ -205,6 +205,7 @@ export class AuthenticationService {
     this.userData = []
   }
 
+
   async getAllUsers() {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
     let users = [];
@@ -213,19 +214,21 @@ export class AuthenticationService {
     });
     return users;
   }
+  
 
   getUserInfo(uid: string) {
     const user = this.all_users.find(user => user.uid === uid);
     return user;
   }
 
+
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
     );
-    console.log(filteredUser);
     return filteredUser;
   }
+
 
   async filterUsersByEmail(email: string): Promise<any> {
     const users = await this.getAllUsers();
@@ -233,6 +236,7 @@ export class AuthenticationService {
     );
     return filteredUser;
   }
+
 
   updateCertainUserValue(value: string): void {
     this.addCertainUserValue.next(value);

@@ -16,6 +16,8 @@ export class ChannelService {
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
   userIdSubject = new BehaviorSubject<string | undefined>(undefined);
   currentUserId = this.userIdSubject.asObservable();
+  private avatarSelectedSource = new Subject<string>();
+  userAvatar$ = this.avatarSelectedSource.asObservable();
   private userSelectedSource = new Subject<string>();
   userSelected$ = this.userSelectedSource.asObservable();
   private showSelectedUserDiv = new BehaviorSubject<boolean>(false);
@@ -41,6 +43,10 @@ export class ChannelService {
 
   selectUser(userName: string) {
     this.userSelectedSource.next(userName);
+  }
+
+  selectAvatar(avatarUrl: string) {
+    this.avatarSelectedSource.next(avatarUrl);
   }
 
   toggleAutocomplete(value: boolean) {

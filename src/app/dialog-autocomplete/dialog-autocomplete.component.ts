@@ -10,7 +10,7 @@ import { NewMsgService } from 'services/new-msg.service';
   templateUrl: './dialog-autocomplete.component.html',
   styleUrls: ['./dialog-autocomplete.component.scss']
 })
-export class DialogAutocompleteComponent implements OnInit  {
+export class DialogAutocompleteComponent implements OnInit {
   filteredUsers: any[] = [];
 
 
@@ -18,28 +18,30 @@ export class DialogAutocompleteComponent implements OnInit  {
 
   ngOnInit() {
     this.authService.addCertainUserValue
-    .pipe(
-      switchMap(value => this.authService.filterUsers(value))
-    )
-    .subscribe(users => {
-      this.filteredUsers = users;
-      console.log(this.filteredUsers);
-    });
-
+      .pipe(
+        switchMap(value => this.authService.filterUsers(value))
+      )
+      .subscribe(users => {
+        this.filteredUsers = users;
+      });
   }
 
   addUser(uid: string, userName: string) {
     this.getUserId(uid);
     this.channelService.showSelectedUser(true);
     this.channelService.selectUser(userName);
-    this.authService.updateCertainUserValue(''); 
+    this.channelService.selectAvatar(this.getAvatarImg(uid))
+    this.authService.updateCertainUserValue('');
     // this.channelService.toggleAutocomplete(false);
     // this.authService.updateCertainUserValue(userName);
   }
 
   getUserId(uid: string) {
     this.channelService.getUserId(uid);
-    console.log(uid)
   }
 
+  getAvatarImg(uid: string) {
+    let user = this.authService.all_users.find(user => user.uid === uid);
+    return user.avatar
+  }
 }

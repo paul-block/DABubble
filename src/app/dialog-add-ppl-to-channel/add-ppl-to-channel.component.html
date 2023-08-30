@@ -6,7 +6,7 @@
     <label class="checkbox-container">
         <div class="flex">
             <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="all">
-            <span class="checkmark">Alle Mitglieder von <span id="highlight">Test</span> hinzufügen</span>
+            <span class="checkmark">Alle Mitglieder von <span id="highlight">DA-Bubble</span> hinzufügen</span>
         </div>
     </label>
     <label class="checkbox-container">
@@ -14,11 +14,11 @@
             <input type="radio" class="round-checkbox" name="option" [(ngModel)]="selectedOption" value="certain">
             <span class="checkmark">Bestimmte Leute hinzufügen</span>
         </div>
-        <input [formControl]="searchControl" id="certain-input" value="certain" [(ngModel)]="certainInput" type="text"
+        <input *ngIf="selectedOption === 'certain'" [formControl]="searchControl" id="certain-input" value="certain" [(ngModel)]="certainInput" type="text"
             placeholder="Name eingeben">
         <div class="absolute" *ngIf="channelService.showSelectedUser$ | async">
-            <div class="selected-user" *ngFor="let userName of selectedUserNames">
-                <img src="assets/img/small_avatar/avatar_1.svg" alt="">
+            <div class="selected-user" *ngFor="let userName of selectedUserNames; let i = index">
+                <img [src]="selectedUserAvatar[i]" alt="">
                 <span> {{ userName }}</span>
                 <mat-icon _ngcontent-ng-c2102270042="" (click)="deleteSelectedUser(userName)" role="img"
                     class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color pointer"

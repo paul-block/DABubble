@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
 })
 export class AddPplToChannelComponent implements OnInit {
   checkboxValue = false;
-  selectedOption: string;
+  selectedOption: string = 'all'
   certainInput: string;
   channelName: string;
   description: string;
@@ -24,27 +24,27 @@ export class AddPplToChannelComponent implements OnInit {
   DelevoperTeamChannelRef = 'm3eNJFz61Ixm1cme5qAf';
 
   selectedUserNames: string[] = [];
+  selectedUserAvatar: string[] = [];
 
 
 
   constructor(
-    public dialog: MatDialog,  
-    public authService: AuthenticationService,   
+    public dialog: MatDialog,
+    public authService: AuthenticationService,
     public dialogRef: MatDialogRef<AddPplToChannelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public channelService: ChannelService,   
+    public channelService: ChannelService,
   ) {
-    this.channelName = data.channelName; 
+    this.channelName = data.channelName;
     this.description = data.description;
   }
 
   ngOnInit(): void {
     this.authService.addCertainUserValue.subscribe(value => {
-      this.searchControl.setValue(value, { emitEvent: false }); 
-  });
+      this.searchControl.setValue(value, { emitEvent: false });
+    });
     this.searchControl.valueChanges.subscribe(inputValue => {
       this.authService.updateCertainUserValue(inputValue);
-      console.log(inputValue)
     });
     this.channelService.currentUserId.subscribe(userId => {
       this.userId = userId;
@@ -52,18 +52,27 @@ export class AddPplToChannelComponent implements OnInit {
     this.channelService.userSelected$.subscribe(
       userName => {
         this.selectedUserNames.push(userName);
-        this.searchControl.setValue(''); 
-        this.authService.updateCertainUserValue('');  
-        this.channelService.showSelectedUser(true); 
+        this.searchControl.setValue('');
+        this.authService.updateCertainUserValue('');
+        this.channelService.showSelectedUser(true);
         this.channelService.toggleAutocomplete(true);
       }
     );
-  }  
+
+    this.channelService.userAvatar$.subscribe(
+      avatar => {
+        this.selectedUserAvatar.push(avatar);
+        console.log(avatar);
+        
+      }
+    );
+
+  }
 
   removeUserName(name: string) {
     const index = this.selectedUserNames.indexOf(name);
     if (index > -1) {
-        this.selectedUserNames.splice(index, 1);
+      this.selectedUserNames.splice(index, 1);
     }
   }
 
@@ -76,7 +85,7 @@ export class AddPplToChannelComponent implements OnInit {
 
   closeDialog() {
     this.dialog.closeAll();
-  } 
+  }
 
   // async createNewChannel() {
   //   this.channelService.createNewChannel(this.channelName, this.description);
@@ -95,7 +104,7 @@ export class AddPplToChannelComponent implements OnInit {
   // }
   async createNewChannel() {
     this.channelService.createNewChannel(this.channelName, this.description);
-  
+
     if (this.selectedOption === 'all') {
       const members = await this.channelService.getAllMembersOfCertainChannel(this.DelevoperTeamChannelRef);
       members.forEach(member => {
@@ -106,15 +115,15 @@ export class AddPplToChannelComponent implements OnInit {
         this.selectedUserNames.map(userName => this.channelService.findUserByName(userName))
       );
       userIds.forEach(userId => {
-        if (userId) { 
+        if (userId) {
           this.channelService.addUserToChannel(this.channelName, userId);
         }
       });
     }
-  
+
     this.channelService.showSelectedUser(false);
     this.channelService.toggleAutocomplete(true);
     this.dialog.closeAll();
   }
-  
+
 }
