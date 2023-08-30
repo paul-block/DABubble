@@ -1,6 +1,6 @@
 import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, CollectionReference } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, CollectionReference } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
@@ -100,6 +100,24 @@ export class ChatService {
       }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
+      return null;
+    }
+  }
+
+  async getChatDocument() {
+    if (this.currentChatID) {
+      const docRef = doc(this.db, 'chats', this.currentChatID);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        return docSnap.data(); 
+      } else {
+        console.log("No such document!");
+        return null;
+      }
+    } else {
+      console.log("currentChatID is not set!");
       return null;
     }
   }

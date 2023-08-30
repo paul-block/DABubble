@@ -51,8 +51,6 @@ export class NewMsgComponent {
     );
   }
 
-  // ERWEITERTE FUNKTION MIT SUCHFUNKTION OB CHAT ODER CHANNEL BEREITS EXISITIEREN, FALLS JA ÖFFNEN
-
   selectValue(event: Event, category: string, id:string) {
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
 
@@ -68,7 +66,7 @@ export class NewMsgComponent {
     this.filteredChannels = [];
   }
 
-  checkExistingChat(selectedUser, clickedValue?: string){
+  async checkExistingChat(selectedUser, clickedValue?: string){
     const currentUserUID = this.chatService.currentUser_id; 
     let userFound = false; 
   
@@ -76,9 +74,9 @@ export class NewMsgComponent {
       if (chat.chat_Member_IDs) {
         if (
           chat.chat_Member_IDs.includes(currentUserUID) && 
-          chat.chat_Member_IDs.includes(selectedUser.uid)
+          chat.chat_Member_IDs.includes(selectedUser)
         ) {
-          console.log("Nutzer gefunden");
+          console.log("chat gefunden");
           this.openChat(chat);
           userFound = true;
           return;
@@ -87,10 +85,14 @@ export class NewMsgComponent {
     });
   
     if (!userFound) {
-      console.log("Nutzer nicht gefunden");
-      this.chatService.currentChatData = selectedUser;
-      console.log(this.chatService.currentChatData);
+      console.log("Neuer chat");
       this.inputValue = '@' + clickedValue;
+      this.chatService.userReceiverID = selectedUser.uid;
+      this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
+      await this.chatService.newChat(this.chatService.userReceiverID);
+      this.chatService.currentChatSection = 'chats';
+      this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
+      this.chatService.currentChatData = await this.chatService.getChatDocument();
     }
   }
 
