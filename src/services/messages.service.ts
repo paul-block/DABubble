@@ -27,7 +27,7 @@ export class MessagesService {
   time: any;
   upload_array;
 
-  
+
   constructor(
     public chatService: ChatService,
     public authService: AuthenticationService,
@@ -45,14 +45,12 @@ export class MessagesService {
   }
 
   async newMessage() {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-
+    console.log('newMessage');
+    
     const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
       chat_message: this.messageText,
-      user_Sender_ID: user.uid,
-      user_Sender_Name: await this.authService.userData.user_name,
+      user_Sender_ID: this.authService.userData.uid,
+      user_Sender_Name: this.authService.userData.user_name,
       created_At: firebase.firestore.FieldValue.serverTimestamp(),
       chat_message_edited: false,
       emoji_data: [],
@@ -69,8 +67,6 @@ export class MessagesService {
       this.getNewMessage();
       this.messageText = '';
     });
-
-
   }
 
   async saveNumberOfAnswers(id: string) {

@@ -34,6 +34,7 @@ export class UploadService {
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile);
+
     if (this.selectedFile && this.checkFileSize(this.selectedFile)) {
       this.file.push(this.selectedFile)
       this.upload_array.file_type.push(this.selectedFile.type)
@@ -57,10 +58,10 @@ export class UploadService {
   checkFileName(fileName: string) {
     const fileExtension = fileName.split('.').pop();
     if (this.file_images.includes(fileExtension)) {
-      const parts = fileName.split('.');   
-      parts.pop();                         
+      const parts = fileName.split('.');
+      parts.pop();
       const nameWithoutExtension = parts.join('.');
-      return nameWithoutExtension 
+      return nameWithoutExtension
     }
     else return fileName
   }
@@ -73,6 +74,13 @@ export class UploadService {
     else return fileExtension
   }
 
+
+  async checkForUpload() {
+    if (this.upload_array.file_name.length > 0) await this.prepareUploadfiles();
+    this.msgService.upload_array = this.upload_array;
+    console.log('uploadArray ' + this.upload_array);
+  }
+  
 
   async prepareUploadfiles() {
     for (let i = 0; i < this.upload_array.file_name.length; i++) {
@@ -147,14 +155,10 @@ export class UploadService {
   }
 
 
-  downloadFile(path: string | URL) {    
+  downloadFile(path: string | URL) {
     window.open(path, '_blank');
   }
 
-  async checkForUpload(){
-    if (this.upload_array.file_name.length > 0) await this.prepareUploadfiles();
-    this.msgService.upload_array = this.upload_array;
-    console.log('uploadArray ' + this.upload_array);
-  }
- 
+
+
 }

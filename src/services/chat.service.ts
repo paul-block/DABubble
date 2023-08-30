@@ -46,8 +46,6 @@ export class ChatService {
 
 
   filterChats(chats) {
-    console.log(this.currentUser_id);
-    
     return chats.filter(chat => chat.chat_Member_IDs.includes(this.currentUser_id));
   }
 
