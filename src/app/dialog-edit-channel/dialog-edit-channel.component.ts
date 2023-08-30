@@ -11,6 +11,7 @@ import { ChatService } from 'services/chat.service';
 export class DialogEditChannelComponent implements OnInit {
   editChannelName: string = 'Bearbeiten';
   editChannelDescription: string = 'Bearbeiten';
+  editChannelUsers: boolean = false;
   editName: boolean = false;
   editDescription: boolean = false;
   channelName: string = 'Entwicklerteam';
@@ -32,19 +33,25 @@ export class DialogEditChannelComponent implements OnInit {
   }
 
 
-  getCreatorName(){
+  getCreatorName() {
     const userData = this.authService.all_users.find(user => user.uid === this.chatService.currentChatData.createdBy);
     this.creatorName = userData.user_name;
   }
 
+
   leaveChannel() {
-    this.assignedUsers = this.arrayRemoveItem(this.assignedUsers, this.authService.getUid())
-    this.saveEditChannelInfo()
+    if (this.assignedUsers.includes(this.authService.userData.uid)) {
+      this.editChannelUsers = !this.editChannelUsers;
+      this.assignedUsers = this.arrayRemoveItem(this.assignedUsers, this.authService.userData.uid);
+      this.saveEditChannelInfo()
+    }
   }
 
-  arrayRemoveItem(array, value){
+
+  arrayRemoveItem(array, value) {
     return array.filter(item => item !== value);
   }
+
 
   changeEditText(section) {
     this.editChannelName = 'Bearbeiten';
@@ -63,21 +70,18 @@ export class DialogEditChannelComponent implements OnInit {
     }
   }
 
-  saveEditChannelInfo(){
-    if (this.editName || this.editDescription) {
 
+  saveEditChannelInfo() {
+    if (this.editName || this.editDescription || this.editChannelUsers) {
       const changes = {
         channelName: this.channelName,
         description: this.channelDescription,
         assignedUsers: this.assignedUsers
       }
-
       this.chatService.currentChatData.channelName = changes.channelName;
       this.chatService.currentChatData.description = changes.description;
       this.chatService.currentChatData.assignedUsers = changes.assignedUsers;
-      
       this.channelService.updateChannelInfo(this.chatService.currentChatData, changes);
     }
-    
   }
 }
