@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { MessagesService } from 'services/messages.service';
@@ -6,17 +6,19 @@ import { NewMsgService } from 'services/new-msg.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { UploadService } from 'services/upload.service';
 import { AuthenticationService } from 'services/authentication.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
 
 @Component({
   selector: 'app-channel-direct-send-message',
   templateUrl: './channel-direct-send-message.component.html',
   styleUrls: ['./channel-direct-send-message.component.scss']
 })
-export class ChannelDirectSendMessageComponent implements OnInit {
+export class ChannelDirectSendMessageComponent {
 
   @Input() inputValue: string;
   open_attachment_menu: boolean = false;
   open_users: boolean = false;
+  emojiPicker_open: boolean = false;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
 
   constructor(
@@ -27,11 +29,41 @@ export class ChannelDirectSendMessageComponent implements OnInit {
     public newMsgService: NewMsgService,
     public fsDataThreadService: FirestoreThreadDataService,
     public uploadService: UploadService,
+    public genFService: GeneralFunctionsService,
+    private elementRef: ElementRef
   ) { }
 
-  ngOnInit(): void {
-    document.body.addEventListener('click', this.bodyClicked);
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.open_attachment_menu = false;
+      this.open_users = false;
+      this.emojiService.emojiPicker_open = false;
+    }
   }
+
+
+  togglePopup(popupVariable: string) {
+    this[popupVariable] = !this[popupVariable];
+    if (this[popupVariable]) {
+      this.closeOtherPopups(popupVariable);
+    }
+    if (popupVariable === 'open_users') {
+      this.getAllUsers()
+    }
+    this.emojiService.emojiPicker_open = this.emojiPicker_open;
+  }
+  
+
+  closeOtherPopups(currentPopup: string) {
+    const popupVariables = ['open_attachment_menu', 'open_users', 'emojiPicker_open'];
+    popupVariables.forEach(popup => {
+      if (popup !== currentPopup) {
+        this[popup] = false;
+      }
+    });
+  }
+
 
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event)
@@ -40,8 +72,12 @@ export class ChannelDirectSendMessageComponent implements OnInit {
     this.msgService.checkIfEmpty();
   }
 
+
   toggleEmojiPicker() {
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
+    if (this.emojiService.emojiPicker_open) {
+      this.closeOtherPopups('emojiPicker_open');
+    }
   }
 
   public async onSendClick() {
@@ -64,28 +100,10 @@ export class ChannelDirectSendMessageComponent implements OnInit {
     event.stopPropagation();
   };
 
-  openAttachmentMenu() {
-    this.open_attachment_menu = !this.open_attachment_menu;
-  }
-
-  bodyClicked = () => {
-    // if (this.emojiPicker_open == true) this.emojiPicker_open = false;
-    // if (this.edit_comment == true) this.edit_comment = false;
-    // if (this.chatService.open_users == true) {
-    //   this.chatService.open_users = false;
-    //   this.getAllUsers()
-    // }
-    // if (this.open_attachment_menu == true) this.open_attachment_menu = false
-  };
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();
     this.msgService.messageText = this.chatService.addUserToTextarea(i, this.msgService.messageText)
-  }
-
-  openUsers() {
-    this.getAllUsers()
-    this.open_users = !this.open_users;
   }
 
 
@@ -93,7 +111,7 @@ export class ChannelDirectSendMessageComponent implements OnInit {
     this.chatService.at_users = await this.authService.getAllUsers();
   }
 
-  
+
   async openChat(chat) {
     if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
