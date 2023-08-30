@@ -63,7 +63,6 @@ h1 {
     gap: 25px;
     padding: 10px 60px;
     width: calc(100% - 120px);
-    cursor: pointer;
     transition: $hover-transition;
     position: relative;
 
@@ -113,7 +112,7 @@ h1 {
 .chat-message-name {
     font-size: 18px;
     font-weight: 700;
-
+    cursor: pointer;
     &:hover {
         color: $hover-text-color;
     }
@@ -175,6 +174,7 @@ h1 {
     gap: 10px;
     position: relative;
     transition: $hover-transition;
+    cursor: pointer;
 
     span {
         font-weight: 400;
@@ -230,7 +230,7 @@ h1 {
     font-weight: 600;
     color: $hover-text-color;
     transition: $hover-transition;
-
+    cursor: pointer;
     &:hover {
         font-weight: 700;
     }
@@ -259,7 +259,7 @@ h1 {
         width: 40px;
         height: 40px;
         transition: $hover-transition;
-
+        cursor: pointer;
         &:hover {
             border-radius: 100%;
             background-color: $hover-background-color;
@@ -437,4 +437,5 @@ h1 {
     width: 50px;
     height: 50px;
     border-radius: 100%;
+    cursor: pointer;
 }
