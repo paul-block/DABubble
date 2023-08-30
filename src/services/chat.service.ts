@@ -30,6 +30,7 @@ export class ChatService {
   ) { }
 
   async loadChats() {
+    this.chats = []; 
     const querySnapshot = await getDocs(collection(this.db, 'chats'));
     const chats = querySnapshot.docs.map(doc => doc.data());
     this.chatsSubject.next(chats);

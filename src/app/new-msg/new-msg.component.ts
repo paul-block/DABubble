@@ -53,7 +53,6 @@ export class NewMsgComponent {
 
   selectValue(event: Event, category: string, id:string) {
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
-
     if (category == 'userName' || category == 'userEmail') {
       this.checkExistingChat(id, clickedValue);
     } 
@@ -66,37 +65,62 @@ export class NewMsgComponent {
     this.filteredChannels = [];
   }
 
-  async checkExistingChat(selectedUser, clickedValue?: string){
-    const currentUserUID = this.chatService.currentUser_id; 
-    let userFound = false; 
+  async checkExistingChat(selectedUser, clickedValue?: string) {
+    const currentUserUID = this.chatService.currentUser_id;
+    
+    if (currentUserUID === selectedUser.uid) {
+      if (await this.findSelfChat(currentUserUID)) return;
+    }
+
+    if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
   
-    this.chatService.chats.forEach(chat => {
+    await this.createNewChat(selectedUser, clickedValue);
+  }
+  
+  async findSelfChat(currentUserUID: string) {
+    for (const chat of this.chatService.chats) {
       if (chat.chat_Member_IDs) {
         if (
-          chat.chat_Member_IDs.includes(currentUserUID) && 
-          chat.chat_Member_IDs.includes(selectedUser.uid)
+          chat.chat_Member_IDs.length === 2 &&
+          chat.chat_Member_IDs[0] === currentUserUID &&
+          chat.chat_Member_IDs[1] === currentUserUID
         ) {
-          console.log("chat gefunden");
+          console.log("Chat mit sich selbst gefunden");
           this.openChat(chat);
-          userFound = true;
-          return;
+          return true;
         }
       }
-    });
-  
-    if (!userFound) {
-      console.log("Neuer chat");
-      this.inputValue = '@' + clickedValue;
-      this.chatService.userReceiverID = selectedUser.uid;
-      this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
-      await this.chatService.newChat(this.chatService.userReceiverID);
-      this.chatService.currentChatSection = 'chats';
-      this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
-      this.chatService.currentChatData = await this.chatService.getChatDocument();
-      console.log(this.chatService.currentChatData)
     }
+    return false;
   }
-
+  
+  async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
+    for (const chat of this.chatService.chats) {
+      if (chat.chat_Member_IDs) {
+        if (
+          chat.chat_Member_IDs.includes(currentUserUID) &&
+          chat.chat_Member_IDs.includes(selectedUserUID)
+        ) {
+          console.log("Chat gefunden");
+          this.openChat(chat);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  
+  async createNewChat(selectedUser, clickedValue: string) {
+    console.log("Neuer chat");
+    this.inputValue = '@' + clickedValue;
+    this.chatService.userReceiverID = selectedUser.uid;
+    this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
+    await this.chatService.newChat(this.chatService.userReceiverID);
+    this.chatService.currentChatSection = 'chats';
+    this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
+    this.chatService.currentChatData = await this.chatService.getChatDocument();
+  }
+  
   async openChat(chat) {
     if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
@@ -130,50 +154,6 @@ export class NewMsgComponent {
       }
     }
   }
-
-    // ZUR SICHERHEIT FUNKTIONIERENDE VARIANTE 
-
-  // checkExistingChat(selectedUserUID: string) {
-  //   const currentUserUID = this.chatService.currentUser_id; // Ihre eigene UID
-  
-  //   for (const chat of this.chatService.chats) { // Durchlaufen aller Chats im Array
-  //     if (chat.chat_Member_IDs) {
-  //       if (
-  //         chat.chat_Member_IDs.includes(currentUserUID) && 
-  //         chat.chat_Member_IDs.includes(selectedUserUID)
-  //       ) {
-  //         // Chat zwischen den beiden Benutzern gefunden
-  //         console.log("Nutzer gefunden");
-  //         return;
-  //       }
-  //     }
-  //   }
-    
-  //   console.log("Nutzer nicht gefunden");
-  // }
-
-
-  // USPRÜNGLICHE FUNKTION 
-
-  // selectValue(event: Event, category: string, uid?) {
-  //   const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
-
-  //   if (uid) this.newMsgService.user_id = uid;
-  //   if (category == 'userName') this.inputValue = '@' + clickedValue;
-  //   if (category == 'userEmail') this.inputValue = clickedValue;
-  //   if (category == 'channel') {
-  //     this.newMsgService.selectedChannelID = (this.filteredChannels.find(channel => channel.channelName === clickedValue)).channel_ID;
-  //     this.inputValue = '#' + clickedValue;
-  //   } 
-
-  //   this.selectedValue = clickedValue;
-
-  //   this.filteredUsersByName = [];
-  //   this.filteredUsersByEmail = [];
-  //   this.filteredChannels = [];
-  // }
-
-
 }
 
 
