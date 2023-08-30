@@ -154,7 +154,6 @@ export class NewMsgComponent {
       }
     }
   }
-  
 }
 
 
