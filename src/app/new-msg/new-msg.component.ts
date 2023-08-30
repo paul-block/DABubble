@@ -74,7 +74,7 @@ export class NewMsgComponent {
       if (chat.chat_Member_IDs) {
         if (
           chat.chat_Member_IDs.includes(currentUserUID) && 
-          chat.chat_Member_IDs.includes(selectedUser)
+          chat.chat_Member_IDs.includes(selectedUser.uid)
         ) {
           console.log("chat gefunden");
           this.openChat(chat);
@@ -93,6 +93,7 @@ export class NewMsgComponent {
       this.chatService.currentChatSection = 'chats';
       this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
       this.chatService.currentChatData = await this.chatService.getChatDocument();
+      console.log(this.chatService.currentChatData)
     }
   }
 
