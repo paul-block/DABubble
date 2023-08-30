@@ -25,7 +25,7 @@
                 <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
                 <label class="menu_button" for="fileInput">Datei anhängen</label>
             </div>
-            <div class="at_user_div" *ngIf="chatService.open_users">
+            <div class="at_user_div" *ngIf="open_users">
                 <div>
                     <div class="user" *ngFor="let user of chatService.at_users; let i = index"
                         (click)="addUserToTextarea(i)">
@@ -36,7 +36,7 @@
 
             </div>
 
-            <div class="plus" (click)="openAttachmentMenu()" (click)="stopPropagation($event)">
+            <div class="plus" (click)="togglePopup('open_attachment_menu');">
                 <div class="hover"><mat-icon>add</mat-icon></div>
             </div>
 
@@ -45,9 +45,9 @@
                 <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2"
                     class="emoji_picker" (emojiClick)="addEmojitoTextarea($event);">
                 </emoji-mart>
-                <mat-icon (click)="toggleEmojiPicker(); emojiService.openEmojiPicker(-2);">mood</mat-icon>
+                <mat-icon (click)="togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(-2);">mood</mat-icon>
             </div>
-            <mat-icon (click)="openUsers(); stopPropagation($event);">alternate_email</mat-icon>
+            <mat-icon (click)="togglePopup('open_users')">alternate_email</mat-icon>
         </div>
         <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.readyToSend }"
             [disabled]="!msgService.readyToSend" class="send-message">

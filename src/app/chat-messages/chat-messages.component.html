@@ -1,20 +1,20 @@
 <section class="chat-messages" #ChatContainerREF>
-    <div class="chat-message-container"
-        *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
+    <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
             class="chat-messages-date">
             <div class="parting-line"></div>
             <div class="messages-date">{{ msgService.formatDate(chatMessage.created_At) }}</div>
         </div>
         <div [ngStyle]="{'justify-content':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'flex-start' : 'flex-end' }"
-            class="chat-message" (mouseleave)="resetToggledAreas()">
+            class="chat-message">
             <img class="avatar_img" (click)="profileService.openProfile(chatMessage.user_Sender_ID)"
                 [ngStyle]="{'order':isMessageCreator(chatMessage.user_Sender_ID) === false ? '0' : '1' }"
                 [src]="authService.getImageUrl(chatMessage.user_Sender_ID)">
             <div class="chat-message-details">
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
-                    <span (click)="profileService.openProfile(chatMessage.user_Sender_ID)" class="chat-message-name">{{ chatMessage.user_Sender_Name }}</span>
+                    <span (click)="profileService.openProfile(chatMessage.user_Sender_ID)" class="chat-message-name">{{
+                        chatMessage.user_Sender_Name }}</span>
                     <span class="last-message-time">{{ msgService.getTimestampTime(chatMessage.created_At)
                         }}</span>
                 </div>
@@ -22,17 +22,16 @@
                     class="chat-message-text-container">
                     <div class="chat-message-text">
                         <span (click)="profileService.openProfile(word)"
-                        *ngFor="let word of chatMessage.modified_message; let k = index"
-                        [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                        {{chatService.renameUid(word)}}&nbsp;
-                    </span>
+                            *ngFor="let word of chatMessage.modified_message; let k = index"
+                            [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                            {{chatService.renameUid(word)}}&nbsp;
+                        </span>
                         <span class="message-edited" *ngIf="chatMessage.chat_message_edited">(bearbeitet)</span>
                     </div>
                 </div>
 
                 <div class="uploaded_main">
-                    <div *ngFor="let file of chatMessage.uploaded_files.file_name; let k = index"
-                        class="upload_content"
+                    <div *ngFor="let file of chatMessage.uploaded_files.file_name; let k = index" class="upload_content"
                         (click)="uploadService.downloadFile(chatMessage.uploaded_files.download_link[k])"
                         style="cursor: pointer;">
                         <img class="file_image"
@@ -52,7 +51,7 @@
                     class="chat-message-details-reactions">
                     <div class="z_index">
                         <svg #emojiMessagePopupREF
-                            (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojis'); emojiService.openEmojiPicker(i); "
+                            (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(i); "
                             width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
                                 width="25" height="24">
@@ -68,7 +67,7 @@
                             [class.open-picker-below]="emojiService.openPickerBelow"
                             [ngClass]="{'emoji_picker_right': !isMessageCreator(chatMessage.user_Sender_ID)}"
                             class="emoji_picker"
-                            (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
+                            (emojiClick)="addEmojiInMessage($event, i, chatMessage)"></emoji-mart>
                     </div>
 
                     <div class="emoji_main">
@@ -81,9 +80,11 @@
                                         *ngIf="emoji?.react_users?.length <= 2">{{reactionBubbleService.replaceNameWithDu(emoji?.react_users,
                                         false)?.join('
                                         und ')}}</span>
-                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.getUid()">hat
+                                    <span
+                                        *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.getUid()">hat
                                         reagiert</span>
-                                    <span *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.getUid()">hast
+                                    <span
+                                        *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.getUid()">hast
                                         reagiert</span>
                                     <span *ngIf="emoji?.react_users?.length === 2">
                                         haben
@@ -127,7 +128,7 @@
                     (click)="addEmojiInMessage(emojiService.raisedHandsManualEvent, i, chatMessage);">
                 <div class="reaction-bar-emoji">
                     <svg #emojiPopupReactionBarREF
-                        (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); toggleArea('emojiReactionBar'); emojiService.openEmojiPicker(i);"
+                        (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('picker_reaction_bar'); emojiService.openEmojiPicker(i);"
                         width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
                             width="25" height="24">
@@ -143,7 +144,7 @@
                         [class.open-picker-below]="emojiService.openPickerBelow"
                         [ngClass]="{'emoji_picker_left': !isMessageCreator(chatMessage.user_Sender_ID)}"
                         class="emoji_picker_reaction-bar"
-                        (emojiClick)="addEmojiInMessage($event, i, chatMessage); resetToggledAreas()"></emoji-mart>
+                        (emojiClick)="addEmojiInMessage($event, i, chatMessage)"></emoji-mart>
                 </div>
 
                 <svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +159,7 @@
                             fill="black" />
                     </g>
                 </svg>
-                <div (click)="toggleArea('more')" class="reaction-bar-more">
+                <div (click)="togglePopup('toggleEditMessage')" class="reaction-bar-more">
                     <mat-icon>more_vert</mat-icon>
                     <div class="edit-message" *ngIf="toggleEditMessage">
                         <span (click)="msgService.editMessage(i, chatMessage)">Nachricht

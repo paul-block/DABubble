@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { getFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'services/authentication.service';
@@ -21,6 +21,8 @@ export class ChatMessagesComponent {
   @Output() threadOpen = new EventEmitter<boolean>();
   messageCreator: boolean = false;
   toggleEditMessage: boolean = false;
+  emojiPicker_open: boolean = false;
+  picker_reaction_bar: boolean = false;
   @ViewChild('ChatContainerREF') public ElementChatContainerRef: ElementRef;
   @ViewChildren('emojiMessagePopupREF') ElementEmojiMessagePopupsRef: QueryList<ElementRef>;
   @ViewChildren('emojiPopupReactionBarREF') ElementEmojiPopupReactionBarRef: QueryList<ElementRef>;
@@ -37,6 +39,7 @@ export class ChatMessagesComponent {
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
     public uploadService: UploadService,
+    private elementRef: ElementRef,
   ) { }
 
 
@@ -45,7 +48,7 @@ export class ChatMessagesComponent {
     this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
       this.scrollToBottom();
     });
-  
+
   }
 
   ngOnDestroy(): void {
@@ -60,34 +63,66 @@ export class ChatMessagesComponent {
     }
   }
 
-  resetToggledAreas() {
-    this.emojiService.emojiPicker_open = false;
-    this.toggleEditMessage = false;
-    this.emojiService.picker_reaction_bar = false;
-  }
-
-
-  toggleArea(toggleArea) {
-    switch (toggleArea) {
-      case 'more':
-        this.emojiService.emojiPicker_open = false;
-        this.emojiService.picker_reaction_bar = false;
-        this.toggleEditMessage = !this.toggleEditMessage;
-        break;
-      case 'emojis':
-        this.toggleEditMessage = false;
-        this.emojiService.picker_reaction_bar = false;
-        this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
-        break;
-      case 'emojiReactionBar':
-        this.toggleEditMessage = false;
-        this.emojiService.emojiPicker_open = false;
-        this.emojiService.picker_reaction_bar = !this.emojiService.picker_reaction_bar;
-        break;
-      default:
-        break;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.toggleEditMessage = false;
+      this.emojiService.picker_reaction_bar = false;
+      if (this.emojiService.picker_index === -2) {
+        this.emojiPicker_open = false;
+      }
+      
     }
   }
+
+  togglePopup(popupVariable: string) {
+    this[popupVariable] = !this[popupVariable];
+    if (this[popupVariable]) {
+      this.closeOtherPopups(popupVariable);
+    }
+    this.emojiService.emojiPicker_open = this.emojiPicker_open;
+    this.emojiService.picker_reaction_bar = this.picker_reaction_bar;
+  }
+
+
+  closeOtherPopups(currentPopup: string) {
+    const popupVariables = ['picker_reaction_bar', 'toggleEditMessage', 'emojiPicker_open'];
+    popupVariables.forEach(popup => {
+      if (popup !== currentPopup) {
+        this[popup] = false;
+      }
+    });
+  }
+
+
+  // resetToggledAreas() {
+  //   this.emojiService.emojiPicker_open = false;
+  //   this.toggleEditMessage = false;
+  //   this.emojiService.picker_reaction_bar = false;
+  // }
+
+
+  // toggleArea(toggleArea) {
+  //   switch (toggleArea) {
+  //     case 'more':
+  //       this.emojiService.emojiPicker_open = false;
+  //       this.emojiService.picker_reaction_bar = false;
+  //       this.toggleEditMessage = !this.toggleEditMessage;
+  //       break;
+  //     case 'emojis':
+  //       this.toggleEditMessage = false;
+  //       this.emojiService.picker_reaction_bar = false;
+  //       this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
+  //       break;
+  //     case 'emojiReactionBar':
+  //       this.toggleEditMessage = false;
+  //       this.emojiService.emojiPicker_open = false;
+  //       this.emojiService.picker_reaction_bar = !this.emojiService.picker_reaction_bar;
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
 
   isMessageCreator(user_Sender_ID) {
@@ -107,7 +142,7 @@ export class ChatMessagesComponent {
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);
     console.log(this.msgService.emoji_data);
-    
+
   }
 
 
@@ -129,7 +164,7 @@ export class ChatMessagesComponent {
     if (this.hovered_emoji == true) this.hovered_emoji = false
   }
 
-  
+
   public openThread(value: boolean) {
     this.threadOpen.emit(value)
   }
