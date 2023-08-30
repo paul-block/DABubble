@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { MessagesService } from 'services/messages.service';
@@ -12,10 +12,11 @@ import { AuthenticationService } from 'services/authentication.service';
   templateUrl: './channel-direct-send-message.component.html',
   styleUrls: ['./channel-direct-send-message.component.scss']
 })
-export class ChannelDirectSendMessageComponent {
+export class ChannelDirectSendMessageComponent implements OnInit {
 
   @Input() inputValue: string;
   open_attachment_menu: boolean = false;
+  open_users: boolean = false;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
 
   constructor(
@@ -27,6 +28,10 @@ export class ChannelDirectSendMessageComponent {
     public fsDataThreadService: FirestoreThreadDataService,
     public uploadService: UploadService,
   ) { }
+
+  ngOnInit(): void {
+    document.body.addEventListener('click', this.bodyClicked);
+  }
 
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event)
@@ -98,8 +103,17 @@ export class ChannelDirectSendMessageComponent {
 
   openAttachmentMenu() {
     this.open_attachment_menu = !this.open_attachment_menu;
-    console.log(this.open_attachment_menu);
   }
+
+  bodyClicked = () => {
+    // if (this.emojiPicker_open == true) this.emojiPicker_open = false;
+    // if (this.edit_comment == true) this.edit_comment = false;
+    // if (this.chatService.open_users == true) {
+    //   this.chatService.open_users = false;
+    //   this.getAllUsers()
+    // }
+    // if (this.open_attachment_menu == true) this.open_attachment_menu = false
+  };
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();
@@ -108,8 +122,9 @@ export class ChannelDirectSendMessageComponent {
 
   openUsers() {
     this.getAllUsers()
-    this.chatService.open_users = true
+    this.open_users = !this.open_users;
   }
+
 
   async getAllUsers() {
     this.chatService.at_users = await this.authService.getAllUsers();
