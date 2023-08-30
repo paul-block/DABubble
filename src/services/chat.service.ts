@@ -23,7 +23,7 @@ export class ChatService {
   currentUser_id: string
   open_users: boolean = false;
   userReceiverID: string;
-
+  
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,

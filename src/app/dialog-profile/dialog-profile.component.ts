@@ -18,9 +18,6 @@ export class DialogProfileComponent {
     public newMsgService: NewMsgService
   ) {}
 
- 
-  
-
   sendMsg(user_id: string, user_name:string) {
     this.newMsgService.openNewMsg = true;
     this.newMsgService.directedFromProfileButton = true;
