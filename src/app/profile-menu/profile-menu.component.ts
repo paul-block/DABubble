@@ -14,7 +14,7 @@ import { FirestoreThreadDataService } from 'services/firestore-thread-data.servi
 })
 export class ProfileMenuComponent {
 
-  images = ['/assets/img/big_avatar/80. avatar interaction.png', '/assets/img/big_avatar/80. avatar interaction (1).png', '/assets/img/big_avatar/80. avatar interaction (2).png', '/assets/img/big_avatar/80. avatar interaction (3).png', '/assets/img/big_avatar/80. avatar interaction (4).png', '/assets/img/big_avatar/80. avatar interaction (5).png']
+  images = [ '/assets/img/small_avatar/avatar (1).png', '/assets/img/small_avatar/avatar (2).png', '/assets/img/small_avatar/avatar (3).png', '/assets/img/small_avatar/avatar (4).png', '/assets/img/small_avatar/avatar (5).png', '/assets/img/small_avatar/avatar (6).png' ]
   detailsVisible: boolean = false;
   editDetailsVisible: boolean = false;
   editAvatarVisible: boolean = false

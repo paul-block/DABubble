@@ -1,226 +1,246 @@
-$hover-background-color: #ECEEFE;
-$hover-text-color: #535AF1;
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
 $hover-transition: all ease-in-out 125ms;
 
 h1 {
-    margin-block-start: unset;
-    margin-block-end: unset;
-    font-weight: 700;
-    font-size: 24px;
+  margin-block-start: unset;
+  margin-block-end: unset;
+  font-weight: 700;
+  font-size: 24px;
 }
 
 h2 {
-    font-weight: 700;
-    font-size: 18px;
+  font-weight: 700;
+  font-size: 18px;
 }
-
 
 h1,
 h2 {
-    margin-block-start: unset;
-    margin-block-end: unset;
+  margin-block-start: unset;
+  margin-block-end: unset;
 }
 
 section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 900px;
-    width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  width: 800px;
 }
 
 .p-20 {
-    padding: 40px;
+  padding: 40px;
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0px;
+
+  div {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin: 20px 0px;
+    gap: 10px;
 
-    div {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        mat-icon {
-            font-style: italic;
-        }
+    mat-icon {
+      font-style: italic;
     }
+  }
 }
 
 .close-dialog {
-    cursor: pointer;
-    border-radius: 100%;
-    padding: 5px;
-    transition: $hover-transition;
+  cursor: pointer;
+  border-radius: 100%;
+  padding: 5px;
+  transition: $hover-transition;
 
-    &:hover {
-        background-color: $hover-background-color;
-        color: $hover-text-color;
-        transition: $hover-transition;
-        font-weight: 600;
-    }
+  &:hover {
+    background-color: $hover-background-color;
+    color: $hover-text-color;
+    transition: $hover-transition;
+    font-weight: 600;
+  }
 }
 
 .container-channel-name-description {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #9747ff;
+  border-radius: 20px;
+  padding: 20px;
+  gap: 10px;
+  transition: $hover-transition;
+
+  div {
     display: flex;
-    flex-direction: column;
-    border: 1px solid #9747FF;
-    border-radius: 20px;
-    padding: 20px;
-    gap: 10px;
-    transition: $hover-transition;
-
-
-    div {
-        display: flex;
-        align-items: center;
-    }
+    align-items: center;
+  }
 }
 
 .min-height-name {
-    min-height: 68px;
+  min-height: 68px;
 }
 
 .min-height-description {
-    min-height: 252px;
+  min-height: 252px;
 }
 
 .edit-container-channel-name-description {
-    display: flex;
-    flex-direction: column;
-    border: none;
-    padding: unset;
-    gap: 10px;
-    transition: $hover-transition;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  padding: unset;
+  gap: 10px;
+  transition: $hover-transition;
 }
 
 .edit-channel-name {
-    position: relative;
+  position: relative;
 
-    mat-icon {
-        padding-bottom: 2px;
-        position: absolute;
-        left: 15px;
-        font-weight: 600;
-        font-size: 18px;
-        font-style: italic;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+  mat-icon {
+    padding-bottom: 2px;
+    position: absolute;
+    left: 15px;
+    font-weight: 600;
+    font-size: 18px;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    input {
-        padding: 18px 20px;
-        padding-left: 60px;
-        border-radius: 40px;
-        border: 1px solid #ADB0D9;
-        font-size: 18px;
-        transition: $hover-transition;
-        width: 100%;
-
-        &::placeholder {
-            color: #686868;
-        }
-
-        &:focus {
-            outline: 1px solid #444DF2;
-            transition: $hover-transition;
-        }
-
-        &:hover {
-            border: 1px solid #444DF2;
-            transition: $hover-transition;
-        }
-    }
-}
-
-.edit-channel-description {
-    padding: 20px;
-    border-radius: 30px;
-    border: 1px solid #ADB0D9;
+  input {
+    padding: 18px 20px;
+    padding-left: 60px;
+    border-radius: 40px;
+    border: 1px solid #adb0d9;
     font-size: 18px;
     transition: $hover-transition;
-    width: calc(100% - 40px);
+    width: 100%;
 
     &::placeholder {
-        color: #686868;
+      color: #686868;
     }
 
     &:focus {
-        outline: 1px solid #444DF2;
-        transition: $hover-transition;
+      outline: 1px solid #444df2;
+      transition: $hover-transition;
     }
 
     &:hover {
-        border: 1px solid #444DF2;
-        transition: $hover-transition;
+      border: 1px solid #444df2;
+      transition: $hover-transition;
     }
+  }
+}
+
+.edit-channel-description {
+  padding: 20px;
+  border-radius: 30px;
+  border: 1px solid #adb0d9;
+  font-size: 18px;
+  transition: $hover-transition;
+  width: calc(100% - 40px);
+
+  &::placeholder {
+    color: #686868;
+  }
+
+  &:focus {
+    outline: 1px solid #444df2;
+    transition: $hover-transition;
+  }
+
+  &:hover {
+    border: 1px solid #444df2;
+    transition: $hover-transition;
+  }
 }
 
 .channel-name {
-    font-size: 18px;
-    font-weight: 400;
+  font-size: 18px;
+  font-weight: 400;
 }
 
 .edit-text {
-    cursor: pointer;
-    color: $hover-text-color;
-    font-weight: 500;
-    font-size: 18px;
-    transition: $hover-transition;
+  cursor: pointer;
+  color: $hover-text-color;
+  font-weight: 500;
+  font-size: 18px;
+  transition: $hover-transition;
 
-    &:hover {
-        font-weight: 700;
-        transition: $hover-transition;
-    }
+  &:hover {
+    font-weight: 700;
+    transition: $hover-transition;
+  }
 }
 
 .space-between {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .channel-description {
-    font-weight: 400;
-    font-size: 18px;
+  font-weight: 400;
+  font-size: 18px;
 }
 
 .parting-line {
-    margin: 20px 0px;
-    border: 1px solid #ADB0D9;
-    width: 100%;
+  margin: 20px 0px;
+  border: 1px solid #adb0d9;
+  width: 100%;
 }
 
 .channel-creator {
-    font-weight: 400;
-    font-size: 24px;
-    color: $hover-text-color;
+  font-weight: 400;
+  font-size: 24px;
+  color: $hover-text-color;
 }
-
-
 
 .leave-channel {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 
-    button {
-        background-color: #535AF1;
-        color: white;
-        font-weight: 700;
-        font-size: 18px;
-        padding: 12px 25px;
-        border: unset;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: $hover-transition;
+  button {
+    background-color: #535af1;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 12px 25px;
+    border: unset;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: $hover-transition;
 
-        &:hover {
-            background-color: #797EF3;
-            transition: $hover-transition;
-        }
+    &:hover {
+      background-color: #797ef3;
+      transition: $hover-transition;
     }
-
+  }
 }
+
+.delete_button {
+  transition: 200ms;
+  background-color: red !important;
+  &:hover {
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.realy_delete {
+    gap: 70px;
+    justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+  :nth-child(1) {
+    font-weight: 700;
+    font-size: 24px;
+  }
+  :nth-child(2) {
+    font-size: 18px;
+  }
+}
+
+

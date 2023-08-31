@@ -15,6 +15,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthenticationService } from 'services/authentication.service';
 // Components
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { StartScreenComponent } from './start-screen/start-screen.component';
@@ -119,7 +120,8 @@ import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/h
     MatAutocompleteModule
   ],
   providers: [
-    { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
+    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

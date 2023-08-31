@@ -3,8 +3,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc } from '@angular/fire/firestore';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({
@@ -27,10 +27,29 @@ export class ChannelService {
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
   
+  private createtChannelId  = new BehaviorSubject<string>(undefined);
+  createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
+  
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
-  ) { }
+  ) { 
+
+
+    const dbRef = collection(this.db, "channels");
+    onSnapshot(dbRef, docsSnap => {
+      const channels: any[] = []
+      docsSnap.forEach(doc => {
+        channels.push(doc.data())
+      })
+      this.channels = channels
+    });
+  }
+
+
+  setCreatetChannelId(newValue: string) {
+    this.createtChannelId.next(newValue);
+  }
   
 
   showSelectedUser(value: boolean) {
@@ -80,13 +99,12 @@ export class ChannelService {
           assignedUsers: [user.uid,],
           description: description
         });
-
         const newChannelID = channelCollectionRef.id;
         await updateDoc(channelCollectionRef, {
-          channel_ID: newChannelID,
+          channel_ID: newChannelID
         });
-
         this.getAuthorizedChannels(user.uid);
+        this.setCreatetChannelId(channelCollectionRef.id)
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
       }
@@ -95,9 +113,9 @@ export class ChannelService {
     }
   }
 
+
   async getAuthorizedChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
-
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {
@@ -109,7 +127,6 @@ export class ChannelService {
 
   async getChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
-
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {
@@ -130,13 +147,12 @@ export class ChannelService {
     return null;
   }
 
-  async addUserToChannel(channelName: string, uid) {
+  async addUserToChannel(channelName: string, id:string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
-
     if (!channelSnapshot.empty) {
       const channelDoc = channelSnapshot.docs[0];
       await updateDoc(channelDoc.ref, {
-        assignedUsers: arrayUnion(uid)
+        assignedUsers: arrayUnion(id)
       });
     } else {
       console.error(`Kein Channel gefunden mit dem Namen: ${channelName}`);
@@ -153,6 +169,12 @@ export class ChannelService {
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
       }
+  }
+
+
+  deleteChannel(id:string) {
+    const documentRef = doc(this.db, 'channels', id);
+    deleteDoc(documentRef)
   }
 
 }
