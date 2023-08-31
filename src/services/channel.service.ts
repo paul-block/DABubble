@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { AuthenticationService } from './authentication.service';
+import { GeneralFunctionsService } from './general-functions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,13 +26,16 @@ export class ChannelService {
   showAutoComplete$ = this.showAutoComplete.asObservable();
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
+  currentChannelData:any[]
    auth = getAuth();
   private createtChannelId  = new BehaviorSubject<string>(undefined);
   createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
   
+  
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
+    public generalFuncttions: GeneralFunctionsService
   ) { 
 
 
@@ -44,7 +47,7 @@ export class ChannelService {
       })
       this.channels = channels
       console.log(channels);
-      this.getAuthorizedChannels(this.auth.currentUser.uid);
+      this.loadCurrentChannel()
     });
   }
 
@@ -181,5 +184,13 @@ export class ChannelService {
 
   loadStandardChannel() {
     this.setCreatetChannelId('RRraQrPndWV95cqAWCZR')
+  }
+
+
+  loadCurrentChannel() {
+    let channel = this.channels.find(element => element.channel_ID === this.currentChannelID)
+    if(channel) this.currentChannelData = channel
+    console.log(this.currentChannelData);
+    
   }
 }

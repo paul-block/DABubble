@@ -153,10 +153,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
+      this.channelService.currentChannelID = channelID
       this.msgService.emptyMessageText();
       try {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
+        this.channelService.loadCurrentChannel()
       await  this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {

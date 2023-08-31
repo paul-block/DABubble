@@ -129,7 +129,6 @@ export class AuthenticationService {
 
   async setOnlineStatus(email: string, status: string) {
     const user = this.all_users.find(element => element.email === email);
-    console.log(user.uid);
     const userRef = doc(this.db, 'users', user.uid);
     await updateDoc(userRef, {
       status: status
