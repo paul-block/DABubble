@@ -157,7 +157,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       try {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
+      await  this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);

@@ -33,7 +33,8 @@ export class MessagesService {
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService,
-  ) { }
+  ) { 
+  }
 
 
   checkIfEmpty() {
@@ -109,9 +110,8 @@ export class MessagesService {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
     this.previousMessageDate === null
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+    const chatMessagesRef =  collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-
     docDirectChatMessagesSnapshot.forEach((doc) => {
       const userData = doc.data();
       this.chatService.directChatMessages.push(userData);

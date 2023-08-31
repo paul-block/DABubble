@@ -43,6 +43,8 @@ export class ChannelService {
         channels.push(doc.data())
       })
       this.channels = channels
+      console.log(channels);
+      this.getAuthorizedChannels(this.auth.currentUser.uid);
     });
   }
 
@@ -87,9 +89,7 @@ export class ChannelService {
   }
 
   async createNewChannel(channel: string, description?: string) {
-    
     const user = this.auth.currentUser;
-
     if (user !== null) {
       try {
         const channelCollectionRef = await addDoc(collection(this.db, 'channels'),{
@@ -177,7 +177,7 @@ export class ChannelService {
     await deleteDoc(documentRef)
     this.loadStandardChannel()
   }
-  
+
 
   loadStandardChannel() {
     this.setCreatetChannelId('RRraQrPndWV95cqAWCZR')
