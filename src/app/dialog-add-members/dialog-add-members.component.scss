@@ -94,6 +94,7 @@ section {
     img {
         width: 34px;
         height: 34px;
+        border-radius: 50%;
     }
 
     mat-icon {
@@ -169,6 +170,12 @@ section {
         span {
             font-weight: 400;
             font-size: 18px;
+        }
+
+        img {
+            height: 34px;
+            width: 34px;
+            border-radius: 50%;
         }
     }
 }
