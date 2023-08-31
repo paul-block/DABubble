@@ -13,13 +13,14 @@
     <form [formGroup]="form">
         <div id="channel-input">
             <img src="assets/img/icons/tag.svg" alt="">
-            <input type="text" formControlName="channel-name" placeholder="z.B Kooperationsprojekte" required>
+            <input type="text" formControlName="channel-name" placeholder="z.B Kooperationsprojekte" required (focus)="error = false">
+            <span *ngIf="error" class="error">Channel-Name exestiert bereits</span>
         </div>
 
         <span>Beschreibung (optional)</span>
 
         <input id="optional-input" type="text" formControlName="description" placeholder="Dein Text hier">
 
-        <button [disabled]="!form.valid" mat-fab extended (click)="openAddPplToChannel()" #create>Erstellen</button>
+        <button [disabled]="!form.valid" mat-fab extended (click)="checkIfChannelNameExist()" #create>Erstellen</button>
     </form>
 </div>

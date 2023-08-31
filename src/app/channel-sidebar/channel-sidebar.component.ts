@@ -40,7 +40,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   ) {
     this.subscription = this.channelService.createtChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
-      console.log(this.currentValue);
       if (this.currentValue) this.openChannel(this.currentValue); 
     });
    }

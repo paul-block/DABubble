@@ -43,7 +43,6 @@ export class ChannelService {
         channels.push(doc.data())
       })
       this.channels = channels
-      console.log(this.channels);
     });
   }
 
@@ -101,7 +100,6 @@ export class ChannelService {
           description: description
         });
         const newChannelID = channelCollectionRef.id;
-       
         await updateDoc(channelCollectionRef, {
           channel_ID: newChannelID
         });
@@ -118,7 +116,6 @@ export class ChannelService {
 
   async getAuthorizedChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
-
     const querySnapshot = await getDocs(allDocuments);
     const channels: any[] = [];
     querySnapshot.forEach((doc) => {

@@ -107,7 +107,7 @@ export class AddPplToChannelComponent implements OnInit {
       const members = this.authService.all_users
       members.forEach(member => {
         let id = member.uid
-        this.channelService.addUserToChannel(this.channelName, id);  
+        this.channelService.addUserToChannel(this.channelName, id);
       });
     } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
       const userIds = await Promise.all(
@@ -119,7 +119,6 @@ export class AddPplToChannelComponent implements OnInit {
         }
       });
     }
-
     this.channelService.showSelectedUser(false);
     this.channelService.toggleAutocomplete(true);
     this.dialog.closeAll();
