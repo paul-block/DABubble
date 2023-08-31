@@ -37,12 +37,9 @@ export class AddChannelComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'add-channel-dialog';
     dialogConfig.data = { channelName: channelName, description: description };
-
     this.dialog.closeAll();
-  
     this.addPPlRef = this.dialog.open(AddPplToChannelComponent, dialogConfig);
     this.addPplOpen = true;
-  
     this.addPPlRef.afterClosed().subscribe(() => {
       this.addPplOpen = false;
     });
@@ -51,7 +48,7 @@ export class AddChannelComponent {
   checkIfChannelNameExist() {
     let channelName = this.form.controls['channel-name'].value;
     let name = this.channelService.channels.find(name => name.channelName === channelName)
-    if (!name) this.openAddPplToChannel
+    if (!name) this.openAddPplToChannel()
     else this.error = !this.error
   }
 }
