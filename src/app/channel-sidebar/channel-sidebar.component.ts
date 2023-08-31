@@ -26,6 +26,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   private subChannels: Subscription;
   private subChats: Subscription;
   currentUserSubscription: Subscription;
+  private subscription: Subscription;
+  currentValue: string;
 
   constructor(
     public authService: AuthenticationService,
@@ -35,7 +37,13 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public chatService: ChatService,
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
-  ) { }
+  ) {
+    this.subscription = this.channelService.createtChannelId$.subscribe((newValue) => {
+      this.currentValue = newValue;
+      console.log(this.currentValue);
+      if (this.currentValue) this.openChannel(this.currentValue); 
+    });
+   }
 
 
   async ngOnInit() {
@@ -155,6 +163,10 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  OnDestroy() {
+    this.subscription.unsubscribe(); // Unsubscribe, um Speicherlecks zu vermeiden
+  }
 
 }
 

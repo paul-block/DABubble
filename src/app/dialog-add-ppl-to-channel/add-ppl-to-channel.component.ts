@@ -103,7 +103,6 @@ export class AddPplToChannelComponent implements OnInit {
   // }
   async createNewChannel() {
     this.channelService.createNewChannel(this.channelName, this.description);
-
     if (this.selectedOption === 'all') {
       const members = this.authService.all_users
       members.forEach(member => {

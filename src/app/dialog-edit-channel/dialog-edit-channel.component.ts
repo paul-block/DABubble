@@ -18,6 +18,7 @@ export class DialogEditChannelComponent implements OnInit {
   channelDescription: string = 'Dieser Channel ist für alles rund um #Entwicklerteam-Thema vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.';
   creatorName: string = '';
   assignedUsers = [];
+  delete_Channel:boolean = false
 
   constructor(
     public authService: AuthenticationService,
@@ -88,5 +89,16 @@ export class DialogEditChannelComponent implements OnInit {
 
   async deleteChannel() {
   this.channelService.deleteChannel(this.chatService.currentChatData.channel_ID);
+  this.chatService.currentChatSection = 'noChatSectionSelected'
+  }
+
+
+  openDeleteText() { 
+    this.delete_Channel = !this.delete_Channel
+  }
+  
+
+  abortDelete() {
+    this.delete_Channel = !this.delete_Channel
   }
 }

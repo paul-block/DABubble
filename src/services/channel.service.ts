@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({
@@ -27,6 +27,9 @@ export class ChannelService {
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
   
+  private createtChannelId  = new BehaviorSubject<string>(undefined);
+  createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
+  
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
@@ -42,6 +45,11 @@ export class ChannelService {
       this.channels = channels
       console.log(this.channels);
     });
+  }
+
+
+  setCreatetChannelId(newValue: string) {
+    this.createtChannelId.next(newValue);
   }
   
 
@@ -92,13 +100,13 @@ export class ChannelService {
           assignedUsers: [user.uid,],
           description: description
         });
-
         const newChannelID = channelCollectionRef.id;
+       
         await updateDoc(channelCollectionRef, {
-          channel_ID: newChannelID,
+          channel_ID: newChannelID
         });
-
         this.getAuthorizedChannels(user.uid);
+        this.setCreatetChannelId(channelCollectionRef.id)
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
       }
@@ -106,6 +114,7 @@ export class ChannelService {
       console.error("Kein Benutzer ist eingeloggt");
     }
   }
+
 
   async getAuthorizedChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
