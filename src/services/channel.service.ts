@@ -175,6 +175,11 @@ export class ChannelService {
   async deleteChannel(id:string) {
     const documentRef = doc(this.db, 'channels', id);
     await deleteDoc(documentRef)
+    this.loadStandardChannel()
+  }
+  
+
+  loadStandardChannel() {
     this.setCreatetChannelId('RRraQrPndWV95cqAWCZR')
   }
 }

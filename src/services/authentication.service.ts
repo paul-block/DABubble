@@ -119,6 +119,7 @@ export class AuthenticationService {
       this.signIn_successful = true
       this.setOnlineStatus(email, 'Aktiv')
       setTimeout(() => this.signIn_successful = false, 3000);
+      this.channelService.loadStandardChannel()
     } catch (error) {
       this.signIn_error = true
       setTimeout(() => this.signIn_error = false, 3000);
@@ -160,6 +161,7 @@ export class AuthenticationService {
       if (element.email == email) {
         this.googleUser_exist = true
         this.setOnlineStatus(email, 'Aktiv')
+        this.channelService.loadStandardChannel()
         return
       }
     });
@@ -194,6 +196,8 @@ export class AuthenticationService {
       merge: true,
     });
     this.getUserData(user.uid)
+    this.channelService.addUserToChannel('allgemein', user.uid)
+    this.channelService.loadStandardChannel()
   }
 
 
