@@ -1,3 +1,7 @@
+<section *ngIf=" this.chatService.currentChatSection == 'channels'" class="channel_description">
+    <span>Du siehst dir den Channel #{{ chatService.currentChatData.channelName }} an</span>
+    <span>{{chatService.currentChatData.description}}</span>
+</section>
 <section class="chat-messages" #ChatContainerREF>
     <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
@@ -66,8 +70,7 @@
                         <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == i"
                             [class.open-picker-below]="emojiService.openPickerBelow"
                             [ngClass]="{'emoji_picker_right': !isMessageCreator(chatMessage.user_Sender_ID)}"
-                            class="emoji_picker"
-                            (emojiClick)="addEmojiInMessage($event, i, chatMessage)"></emoji-mart>
+                            class="emoji_picker" (emojiClick)="addEmojiInMessage($event, i, chatMessage)"></emoji-mart>
                     </div>
 
                     <div class="emoji_main">

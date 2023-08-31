@@ -40,7 +40,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   ) {
     this.subscription = this.channelService.createtChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
-      if (this.currentValue) this.openChannel(this.currentValue); 
+      if (this.currentValue)  this.openChannel(this.currentValue); 
     });
    }
 
@@ -145,7 +145,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 
-  async openChannel(channelID) {
+  async openChannel(channelID:string) {
     if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';

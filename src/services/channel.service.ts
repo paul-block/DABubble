@@ -26,7 +26,7 @@ export class ChannelService {
   showAutoComplete$ = this.showAutoComplete.asObservable();
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
-  
+   auth = getAuth();
   private createtChannelId  = new BehaviorSubject<string>(undefined);
   createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
   
@@ -87,8 +87,8 @@ export class ChannelService {
   }
 
   async createNewChannel(channel: string, description?: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
+    
+    const user = this.auth.currentUser;
 
     if (user !== null) {
       try {
@@ -172,9 +172,9 @@ export class ChannelService {
   }
 
 
-  deleteChannel(id:string) {
+  async deleteChannel(id:string) {
     const documentRef = doc(this.db, 'channels', id);
-    deleteDoc(documentRef)
+    await deleteDoc(documentRef)
+    this.setCreatetChannelId('RRraQrPndWV95cqAWCZR')
   }
-
 }
