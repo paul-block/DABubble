@@ -10,21 +10,21 @@ import { MessagesService } from 'services/messages.service';
   styleUrls: ['./channel-direct-edit-message.component.scss']
 })
 export class ChannelDirectEditMessageComponent {
-constructor(
-  public authService: AuthenticationService,
-  public chatService: ChatService,
-  public msgService: MessagesService,
-  public emojiService: EmojiService,
-){}
+  constructor(
+    public authService: AuthenticationService,
+    public chatService: ChatService,
+    public msgService: MessagesService,
+    public emojiService: EmojiService,
+  ) { }
 
-addEmojitoTextarea($event: any) {
-  this.emojiService.addEmojitoTextarea($event)
-  this.msgService.messageText += this.emojiService.textMessage;
-  this.emojiService.textMessage = '';
-  this.msgService.checkIfEmpty();
-}
+  addEmojitoTextarea($event: any) {
+    this.emojiService.addEmojitoTextarea($event);
+    this.msgService.messageText += this.emojiService.textMessage;
+    this.emojiService.textMessage = '';
+    this.msgService.checkIfEmpty();
+  }
 
-toggleEmojiPicker() {    
-  this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
-}
+  toggleEmojiPicker() {
+    this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
+  }
 }

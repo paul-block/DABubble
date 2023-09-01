@@ -113,6 +113,7 @@ h1 {
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
+
     &:hover {
         color: $hover-text-color;
     }
@@ -135,7 +136,12 @@ h1 {
     font-weight: 400;
     background-color: $hover-background-color;
     display: flex;
+    flex-direction: column;
     width: fit-content;
+
+    div {
+        display: flex;
+    }
 }
 
 .message-edited {
@@ -231,6 +237,7 @@ h1 {
     color: $hover-text-color;
     transition: $hover-transition;
     cursor: pointer;
+
     &:hover {
         font-weight: 700;
     }
@@ -260,6 +267,7 @@ h1 {
         height: 40px;
         transition: $hover-transition;
         cursor: pointer;
+
         &:hover {
             border-radius: 100%;
             background-color: $hover-background-color;

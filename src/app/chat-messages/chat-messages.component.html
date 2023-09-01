@@ -21,11 +21,13 @@
                 <div [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                     class="chat-message-text-container">
                     <div class="chat-message-text">
-                        <span (click)="profileService.openProfile(word)"
-                            *ngFor="let word of chatMessage.modified_message; let k = index"
-                            [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                            {{chatService.renameUid(word)}}&nbsp;
-                        </span>
+                        <div>
+                            <span (click)="profileService.openProfile(word)"
+                                *ngFor="let word of chatMessage.modified_message; let k = index"
+                                [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                                {{chatService.renameUid(word)}}&nbsp;
+                            </span>
+                        </div>
                         <span class="message-edited" *ngIf="chatMessage.chat_message_edited">(bearbeitet)</span>
                     </div>
                 </div>
@@ -66,8 +68,7 @@
                         <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == i"
                             [class.open-picker-below]="emojiService.openPickerBelow"
                             [ngClass]="{'emoji_picker_right': !isMessageCreator(chatMessage.user_Sender_ID)}"
-                            class="emoji_picker"
-                            (emojiClick)="addEmojiInMessage($event, i, chatMessage)"></emoji-mart>
+                            class="emoji_picker" (emojiClick)="addEmojiInMessage($event, i, chatMessage)"></emoji-mart>
                     </div>
 
                     <div class="emoji_main">

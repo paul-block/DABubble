@@ -101,6 +101,7 @@ export class MessagesService {
   async getChangedMessage() {
     const currentMessage = this.chatService.directChatMessages[this.messageIndex];
     currentMessage.chat_message = this.messageText;
+    currentMessage.modified_message = this.chatService.modifyMessageValue(this.messageText),
     currentMessage.chat_message_edited = true;
   }
 
@@ -146,7 +147,8 @@ export class MessagesService {
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await updateDoc(messageRef, {
         chat_message: this.messageText,
-        chat_message_edited: true
+        chat_message_edited: true,
+        modified_message: this.chatService.modifyMessageValue(this.messageText),
       }).then(() => {
         this.messageText = '';
         this.editMessageText = false;

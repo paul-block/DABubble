@@ -55,7 +55,7 @@ export class ChannelDirectSendMessageComponent {
     }
     this.emojiService.emojiPicker_open = this.emojiPicker_open;
   }
-  
+
 
   closeOtherPopups(currentPopup: string) {
     const popupVariables = ['open_attachment_menu', 'open_users', 'emojiPicker_open'];
@@ -91,9 +91,7 @@ export class ChannelDirectSendMessageComponent {
       console.log(this.chatService.currentChatData);
     } else {
       await this.uploadService.checkForUpload();
-      setTimeout(() => {
-        this.msgService.newMessage();
-      }, 400);
+      setTimeout(() => { this.msgService.newMessage(); }, 400);
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     }
   }
