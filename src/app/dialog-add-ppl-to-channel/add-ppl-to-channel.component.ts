@@ -21,7 +21,6 @@ export class AddPplToChannelComponent implements OnInit {
   description: string;
   public searchControl = new FormControl();
   userId: string;
-  // hideAutocomplete = true;
   userSelected = false;
   DelevoperTeamChannelRef = 'm3eNJFz61Ixm1cme5qAf';
   counter: number = 0

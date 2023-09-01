@@ -77,6 +77,7 @@ export class ChannelService {
     this.showAutoComplete.next(value);
   }
 
+
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
     const channelRef = doc(this.db, 'channels', channelName);
     const channelSnapshot = await getDoc(channelRef);

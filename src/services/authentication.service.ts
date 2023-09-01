@@ -240,6 +240,14 @@ export class AuthenticationService {
   }
 
 
+  async usersWithoutCurrentuser() {
+    const users = await this.getAllUsers();
+    const userIndex = users.findIndex(user => user.user_name === this.userData.user_name);
+    if (userIndex !== -1) users.splice(userIndex, 1);
+    return users
+  }
+
+
   updateCertainUserValue(value: string): void {
     this.addCertainUserValue.next(value);
   }
@@ -248,10 +256,8 @@ export class AuthenticationService {
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-
     if (user !== null) {
       const userRef = doc(this.db, 'users', user.uid);
-
       await updateDoc(userRef, {
         user_name: userName,
         email: email

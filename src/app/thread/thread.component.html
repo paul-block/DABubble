@@ -259,14 +259,17 @@
         </div>
     </div>
 
-    <!-----------------------------------------------------------------Textarea----------------------------------------------------------------------------------------->
+<!-----------------------------------------------------------------Textarea----------------------------------------------------------------------------------------->
 
     <div class="type_message">
         <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
             <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
             <label class="menu_button" for="fileInput">Datei anhängen</label>
         </div>
-        <div class="at_user_div" *ngIf="chatService.open_users">
+
+    <!------------------------------------------------------------------@User-->
+
+        <div class="at_user_div" *ngIf="chatService.open_users && chatService.at_users.length > 0">
             <div>
                 <div class="user" *ngFor="let user of chatService.at_users; let i = index"
                     (click)="addUserToTextarea(i)">
@@ -276,10 +279,15 @@
             </div>
 
         </div>
+
+    <!------------------------------------------------------------------Emoji-->
         <div class="z_index">
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
                 (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
         </div>
+
+    <!------------------------------------------------------------------TextField-->
+    
         <textarea #messageTextarea type="text" [(ngModel)]="comment_value"
             (ngModelChange)="textChanged($event)">placeholder="Antworten..."></textarea>
         <div class="icons_main">

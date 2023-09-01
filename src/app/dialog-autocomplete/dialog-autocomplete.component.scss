@@ -5,40 +5,46 @@
 .container {
     display: none;
     flex-direction: column;
-    align-items: center;
     background-color: white;
     position: relative;
     bottom: 137px;
     left: 20px;
-    padding: 15px 20px;
-    width: 320px;
-    max-height: 100px;
+    padding: 10px;
+    width: max-content;
     border: 1px solid #ADB0D9;
     border-radius: 0 30px 30px 30px;
     overflow-y: scroll;
     overflow-x: hidden;
     gap: 10px;
+    max-height: 132px;
+    
+   
 
         .dm-profile {
+            padding: 5px;
+            border-radius: 20px;
+            transition: 200ms;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            height: 50px;
             gap: 15px;
-            width: 80%;
-            padding: 0 45px 0 25px;
-
-
-                img {
-                    width: 50px;
-                }
 
                 span {
                     font-size: 18px;
                 }
+            &:hover {
+                background-color: #ECEEFE;
+            }    
         }
 }
 
 .flex {
   display: flex !important;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: 2px solid white;
 }

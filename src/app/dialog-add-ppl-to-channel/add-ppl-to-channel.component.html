@@ -18,7 +18,7 @@
             placeholder="Name eingeben">
         <div class="absolute" *ngIf="channelService.showSelectedUser$ | async">
             <div class="selected-user" *ngFor="let userName of selectedUserNames; let i = index">
-                <img [src]="selectedUserAvatar[i]" alt="">
+                <img class="avatar" [src]="selectedUserAvatar[i]" alt="">
                 <span> {{ userName }}</span>
                 <mat-icon _ngcontent-ng-c2102270042="" (click)="deleteSelectedUser(userName)" role="img"
                     class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color pointer"
@@ -30,6 +30,6 @@
         [disabled]="selectedOption === 'certain' && !certainInput && selectedUserNames.length === 0" mat-fab
         extended>Erstellen</button>
 
-    <app-dialog-autocomplete
+    <app-dialog-autocomplete 
         [ngClass]="{'d-none': !certainInput || certainInput.length === 0}"></app-dialog-autocomplete>
 </div>
