@@ -182,7 +182,7 @@
                 <span (click)="profileService.openProfile(word)"
                     *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
                     [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                    {{chatService.renameUid(word)}}&nbsp;
+                    {{chatService.renameUid(word)}}
                 </span>
                 <div style="font-size: 10px;" *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
             </div>
