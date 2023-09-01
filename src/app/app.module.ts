@@ -54,6 +54,8 @@ import { MatInputModule } from '@angular/material/input';
 import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
 import { ChatPlaceholderComponent } from './chat-placeholder/chat-placeholder.component';
 import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/header-channel-direct-chat.component';
+import { ImprintComponent } from './imprint/imprint.component';
+import { DataProtectionComponent } from './data-protection/data-protection.component';
 
 
 
@@ -95,6 +97,8 @@ import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/h
     ChatMessagesComponent,
     ChatPlaceholderComponent,
     HeaderChannelDirectChatComponent,
+    ImprintComponent,
+    DataProtectionComponent,
   ],
   imports: [
     HttpClientModule,

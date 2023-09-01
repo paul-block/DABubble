@@ -7,6 +7,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { NewPasswordComponent } from './new-password/new-password.component';
 import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
+import { ImprintComponent } from './imprint/imprint.component';
+import { DataProtectionComponent } from './data-protection/data-protection.component';
 
 const routes: Routes = [
   
@@ -14,7 +16,9 @@ const routes: Routes = [
     {path: 'sign-in', component: SignInComponent},
     {path: 'sign-up', component: SignUpComponent},
     {path: 'forgot-pw', component: ForgotPasswordComponent},
-    {path: 'choose-avatar', component: ChooseAvatarComponent}
+    {path: 'choose-avatar', component: ChooseAvatarComponent},
+    {path: 'imprint', component: ImprintComponent},
+    {path: 'data', component: DataProtectionComponent}
     
   ]},
   {path: 'new-pw', component: NewPasswordComponent},

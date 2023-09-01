@@ -1,5 +1,4 @@
 .signin_div {
-    z-index: 1;
     box-sizing: border-box;
     width: 606px;
     height: 818px;
@@ -259,6 +258,34 @@ input {
     &:hover {
         background-color: #686868;
         cursor: not-allowed;
+    }
+}
+
+.imprint {
+   
+    margin-top: 20px;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    span {
+        z-index: 1;
+        padding: 10px;
+        border-radius: 15px;
+        border: 1px solid transparent;
+        transition: 200ms;
+        box-sizing: border-box;
+        color: #797EF3;
+        font-size: 18px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    
+        &:hover {
+            cursor: pointer;
+            border: 1px solid #686868;
+    
+        }
     }
 }
 
