@@ -52,19 +52,17 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
         this.chatService.currentUser_id = user.uid;
       }
     });
-
     this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;  
     });
-
     await this.chatService.loadChats();
     this.subChats = this.chatService.getUsersChatsObservable().subscribe(chat => {
       this.chatService.chats.push(chat);
-      console.log('chats aktualisiert');
-      
+      console.log('chats aktualisiert'); 
     });
-
     this.chatService.initOwnChat();
+    ;
+    
   }
 
 
@@ -161,7 +159,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }
-    }
+    } 
   }
 
 

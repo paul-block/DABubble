@@ -7,6 +7,7 @@ import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GeneralFunctionsService } from './general-functions.service';
 import { AuthenticationService } from './authentication.service';
+import { FirestoreThreadDataService } from './firestore-thread-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -175,10 +176,15 @@ export class ChannelService {
   }
 
 
-  async deleteChannel(id:string) {
-    const documentRef = doc(this.db, 'channels', id);
-    await deleteDoc(documentRef)
-    this.loadStandardChannel()
+  async deleteChannel(channelId: string) {
+    const subcollectionRef = collection(this.db, 'channels', channelId, 'messages'); 
+    const subcollectionQuery = query(subcollectionRef);
+    const subcollectionDocs = await getDocs(subcollectionQuery);
+    const deleteSubcollectionPromises = subcollectionDocs.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deleteSubcollectionPromises);
+    const documentRef = doc(this.db, 'channels', channelId);
+    await deleteDoc(documentRef);
+    this.loadStandardChannel();
   }
 
 

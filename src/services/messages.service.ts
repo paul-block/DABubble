@@ -137,14 +137,10 @@ export class MessagesService {
         if (change.type === 'added') {
           const userData = change.doc.data();
           this.chatService.directChatMessages.push(userData);
-          console.log('change ' + userData);
           this.scrollToBottom();
-        }
-        
+        }  
       });
     });
-    
-
   }
 
 
