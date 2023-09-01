@@ -1,8 +1,8 @@
-<section *ngIf=" this.chatService.currentChatSection == 'channels'" class="channel_description">
-    <span>Du siehst dir den Channel #{{ chatService.currentChatData.channelName }} an</span>
-    <span>{{chatService.currentChatData.description}}</span>
-</section>
 <section class="chat-messages" #ChatContainerREF>
+    <section *ngIf=" this.chatService.currentChatSection == 'channels'" class="channel_description">
+        <span>Du siehst dir den Channel #{{ chatService.currentChatData.channelName }} an</span>
+        <span>{{chatService.currentChatData.description}}</span>
+    </section>
     <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
             class="chat-messages-date">

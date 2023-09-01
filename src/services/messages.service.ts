@@ -112,20 +112,6 @@ export class MessagesService {
     currentMessage.chat_message_edited = true;
   }
 
-
-  // async getMessages() {
-  //   this.emojiService.resetInitializedEmojiRef();
-  //   this.chatService.directChatMessages = [];
-  //   this.previousMessageDate === null
-  //   const chatMessagesRef =  collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-  //   const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-  //   docDirectChatMessagesSnapshot.forEach((doc) => {
-  //     const userData = doc.data();
-  //     this.chatService.directChatMessages.push(userData);
-  //   });
-  //   this.scrollToBottom()
-  // }
-
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
@@ -140,6 +126,7 @@ export class MessagesService {
           console.log('change ' + userData);
           this.scrollToBottom();
         }
+        console.log(change.type);
         
       });
     });
