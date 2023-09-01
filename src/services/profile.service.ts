@@ -29,19 +29,21 @@ export class ProfileService {
 
 
   openProfile(uid: string) {
-    if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
-    else {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.panelClass = 'add-channel-dialog';
-      dialogConfig.data = { user: this.authService.getUserInfo(uid)};
-      this.dialog.open(DialogProfileComponent, dialogConfig);
+    if (this.checkIfStringIsAnId(uid)) {
+      if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
+      else {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.panelClass = 'add-channel-dialog';
+        dialogConfig.data = { user: this.authService.getUserInfo(uid) };
+        this.dialog.open(DialogProfileComponent, dialogConfig);
+      }
     }
   }
 
 
   checkIfStringIsAnId(uid: string) {
     const user = this.authService.all_users.find(element => element.uid === uid);
-    if(user) return true
+    if (user) return true
     else return false
   }
 
@@ -59,7 +61,7 @@ export class ProfileService {
       this.fsDataThreadService.detailsVisible = false
     });
   }
-  
+
 
   getUserEmail(uid: string) {
     const user = this.authService.all_users.find(element => element.uid === uid);

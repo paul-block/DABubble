@@ -21,7 +21,7 @@
             </div>
             <span>{{ channelService.currentChannelData.assignedUsers.length }}</span>
         </div>
-        <div (click)="addMembers()" class="add-members" #addMembersREF>
+        <div *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="addMembers()" class="add-members" #addMembersREF>
             <mat-icon [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
                 person_add_alt
             </mat-icon>

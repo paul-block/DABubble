@@ -20,6 +20,7 @@ export class UploadService {
   }
   file = []
   file_images = ['exe', 'xls', 'csv', 'txt', 'ppt', 'zip', 'avi', 'css', 'doc', 'html', 'js', 'jpg', 'json', 'mp3', 'pdf', 'png', 'xml', 'svg', 'file']
+  chat_section:string
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -32,6 +33,8 @@ export class UploadService {
 
 
   onFileSelected(event: any): void {
+    console.log(this.chat_section);
+    
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile);
 

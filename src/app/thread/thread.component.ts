@@ -10,6 +10,7 @@ import { ChatService } from 'services/chat.service';
 import { UploadService } from 'services/upload.service';
 import { ReactionBubbleService } from 'services/reaction-bubble.service';
 import { ProfileService } from 'services/profile.service';
+import { ChannelService } from 'services/channel.service';
 
 
 
@@ -52,6 +53,7 @@ export class ThreadComponent implements OnInit {
     public uploadService: UploadService,
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
+    public channelService: ChannelService
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
@@ -275,7 +277,8 @@ export class ThreadComponent implements OnInit {
   
 
   openAttachmentMenu() {
-    this.open_attachment_menu = true
+     this.open_attachment_menu = true
+    this.uploadService.chat_section = 'thread'
   }
 
 

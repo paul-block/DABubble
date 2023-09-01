@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
+import { MessagesService } from 'services/messages.service';
+import { UploadService } from 'services/upload.service';
 
 @Component({
   selector: 'app-dialog-edit-channel',
@@ -24,6 +26,8 @@ export class DialogEditChannelComponent implements OnInit {
     public authService: AuthenticationService,
     public chatService: ChatService,
     public channelService: ChannelService,
+    public uploadService:UploadService,
+    public messageService: MessagesService,
   ) { }
 
   async ngOnInit() {
@@ -40,8 +44,9 @@ export class DialogEditChannelComponent implements OnInit {
   }
 
 
-  leaveChannel() {
+  async leaveChannel() {
     if (this.assignedUsers.includes(this.authService.userData.uid)) {
+      await this.sendLeaveMessage()
       this.editChannelUsers = !this.editChannelUsers;
       this.assignedUsers = this.arrayRemoveItem(this.assignedUsers, this.authService.userData.uid);
       this.saveEditChannelInfo()
@@ -102,5 +107,11 @@ export class DialogEditChannelComponent implements OnInit {
 
   abortDelete() {
     this.delete_Channel = !this.delete_Channel
+  }
+
+  async sendLeaveMessage() {
+      this.uploadService.checkForUpload()
+      this.messageService.messageText = this.authService.userData.user_name + ' hat #' + this.channelService.currentChannelData.channelName + ' verlassen.'
+      await this.messageService.newMessage()
   }
 }

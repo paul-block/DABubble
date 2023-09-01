@@ -1,6 +1,6 @@
 <!--------------------------------------------------- upload -------------------------------------------------------->
 
-<div class="upload_main">
+<div class="upload_main" *ngIf="uploadService.chat_section != 'thread'">
     <div *ngFor="let file of uploadService.upload_array.file_name; let i = index" class="upload_content">
         <img class="file_image" src="/assets/img/File-Types/{{uploadService.upload_array.file_extension[i]}}.png">
         <div style="z-index: 1;">{{file}}</div>
