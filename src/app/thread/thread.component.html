@@ -1,7 +1,9 @@
 <header>
     <div class="header_content">
-        <span>Thread</span>
-        <span># Entwicklerteam</span>
+        <div class="channel">
+            <span>Thread</span>
+            <span># {{fsDataThreadService.current_channelname}}</span>
+        </div>
         <div>
             <img (click)="closeThread(false)" src="/assets/img/icons/close.png" alt="">
         </div>
@@ -246,7 +248,7 @@
 
     <!-----------------------------------------------------------------Upload----------------------------------------------------------------------------------------->
 
-    <div class="upload_main">
+    <div class="upload_main" *ngIf="uploadService.chat_section != 'channel'">
         <div *ngFor="let file of uploadService.upload_array.file_name; let i = index" class="upload_content">
             <img class="file_image" src="/assets/img/File-Types/{{uploadService.upload_array.file_extension[i]}}.png">
             <div style="z-index: 1;">{{uploadService.upload_array.file_name[i]}}</div>

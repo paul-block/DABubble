@@ -49,6 +49,7 @@ export class ChannelDirectSendMessageComponent {
     this[popupVariable] = !this[popupVariable];
     if (this[popupVariable]) {
       this.closeOtherPopups(popupVariable);
+      this.uploadService.chat_section = 'channel'
     }
     if (popupVariable === 'open_users') {
       this.getAllUsers()

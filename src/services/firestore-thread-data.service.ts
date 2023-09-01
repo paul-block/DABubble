@@ -33,6 +33,7 @@ export class FirestoreThreadDataService {
   chat_type: string;
   current_chat_data: any;
   direct_chat_index: number;
+  current_channelname: any;
 
 
 
@@ -84,6 +85,7 @@ export class FirestoreThreadDataService {
 
 
   openDirectChatThread(i: number) {
+    this.current_channelname = this.chatService.currentChatData.channelName
     this.current_chat_data = this.chatService.directChatMessages[i]
     this.direct_chat_index = i
     this.thread_open = true

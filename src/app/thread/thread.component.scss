@@ -70,7 +70,8 @@ header {
 
   :nth-child(2) {
     color: #797ef3;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 400;
   }
 
   :nth-child(3) {
@@ -606,4 +607,10 @@ textarea {
 .file_image {
   width: 40px;
   z-index: 1;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
