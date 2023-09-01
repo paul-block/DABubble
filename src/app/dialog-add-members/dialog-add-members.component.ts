@@ -29,6 +29,8 @@ import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ChatService } from 'services/chat.service';
+import { MessagesService } from 'services/messages.service';
+import { UploadService } from 'services/upload.service';
 
 
 @Component({
@@ -49,6 +51,8 @@ export class DialogAddMembersComponent implements OnInit {
     public channelService: ChannelService,
     public dialogRef: MatDialogRef<DialogAddMembersComponent>,
     public chatService: ChatService,
+    public messageService: MessagesService,
+    public uploadService: UploadService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -75,11 +79,14 @@ export class DialogAddMembersComponent implements OnInit {
   addNewMember() {
     this.selectedUsers.forEach(user => {
       this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, user.uid);
+      this.sendAddMemberMessage(user.user_name)
     });
     this.selectedUsers = [];
     this.choosedUser = null;
     this.inputSearchUser = '';
     this.dialogRef.close();
+   
+   
   }
 
   clearInputName(userToRemove) {
@@ -92,15 +99,18 @@ export class DialogAddMembersComponent implements OnInit {
 
   async filterUserAllreadyAssigned(): Promise<any> {
     let users = await this.authService.getAllUsers();
-    this.chatService.currentChatData.assignedUsers.forEach((assignedUser: any) => {
+    this.channelService.currentChannelData.assignedUsers.forEach((assignedUser: any) => {
       let user = users.find(element => element.uid === assignedUser)
       let index = users.indexOf(user)
       users.splice(index, 1)
-
-
-
     });
     return users
   }
 
+
+  sendAddMemberMessage(user:string) {
+    this.uploadService.checkForUpload()
+    this.messageService.messageText = user + ' ist #' + this.channelService.currentChannelData.channelName + ' beigetreten.'
+    this.messageService.newMessage()
+  }
 }

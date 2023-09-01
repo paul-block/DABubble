@@ -6,6 +6,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GeneralFunctionsService } from './general-functions.service';
+import { AuthenticationService } from './authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class ChannelService {
   showAutoComplete$ = this.showAutoComplete.asObservable();
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
-  currentChannelData:any[]
+  currentChannelData:any
    auth = getAuth();
   private createtChannelId  = new BehaviorSubject<string>(undefined);
   createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
@@ -35,7 +36,7 @@ export class ChannelService {
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
-    public generalFuncttions: GeneralFunctionsService
+    public generalFuncttions: GeneralFunctionsService,
   ) { 
 
 
@@ -46,7 +47,6 @@ export class ChannelService {
         channels.push(doc.data())
       })
       this.channels = channels
-      console.log(channels);
       this.loadCurrentChannel()
     });
   }
@@ -106,7 +106,6 @@ export class ChannelService {
         await updateDoc(channelCollectionRef, {
           channel_ID: newChannelID
         });
-        this.getAuthorizedChannels(user.uid);
         this.setCreatetChannelId(channelCollectionRef.id)
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
@@ -190,7 +189,5 @@ export class ChannelService {
   loadCurrentChannel() {
     let channel = this.channels.find(element => element.channel_ID === this.currentChannelID)
     if(channel) this.currentChannelData = channel
-    console.log(this.currentChannelData);
-    
   }
 }

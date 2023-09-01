@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from 'services/authentication.service';
+import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
 import { ProfileService } from 'services/profile.service';
 
@@ -16,6 +17,7 @@ export class DialogEditMembersComponent {
     public authService: AuthenticationService,
     private dialogRef: MatDialogRef<DialogEditMembersComponent>,
     public profileService: ProfileService,
+    public channelService: ChannelService
     ) {
   }
 

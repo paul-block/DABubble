@@ -4,6 +4,8 @@ import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
 import { debounceTime } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { UploadService } from 'services/upload.service';
+import { MessagesService } from 'services/messages.service';
 
 
 @Component({
@@ -22,7 +24,7 @@ export class AddPplToChannelComponent implements OnInit {
   // hideAutocomplete = true;
   userSelected = false;
   DelevoperTeamChannelRef = 'm3eNJFz61Ixm1cme5qAf';
-
+  counter: number = 0
   selectedUserNames: string[] = [];
   selectedUserAvatar: string[] = [];
 
@@ -34,6 +36,8 @@ export class AddPplToChannelComponent implements OnInit {
     public dialogRef: MatDialogRef<AddPplToChannelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public channelService: ChannelService,
+    public uploadService: UploadService,
+    public messageService: MessagesService
   ) {
     this.channelName = data.channelName;
     this.description = data.description;
@@ -62,8 +66,6 @@ export class AddPplToChannelComponent implements OnInit {
     this.channelService.userAvatar$.subscribe(
       avatar => {
         this.selectedUserAvatar.push(avatar);
-        console.log(avatar);
-
       }
     );
   }
@@ -86,29 +88,16 @@ export class AddPplToChannelComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  // async createNewChannel() {
-  //   this.channelService.createNewChannel(this.channelName, this.description);
 
-  //   if (this.selectedOption === 'all') {
-  //     const members = await this.channelService.getAllMembersOfCertainChannel(this.DelevoperTeamChannelRef);
-  //     members.forEach( member => {
-  //       this.channelService.addUserToChannel(this.channelName, member);
-  //     })
-  //   } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
-  //   this.channelService.addUserToChannel(this.channelName, this.userId)
-  //   }
-  //   this.channelService.showSelectedUser(false); 
-  //   this.channelService.toggleAutocomplete(true);
-  //   this.dialog.closeAll();
-  // }
   async createNewChannel() {
-    this.channelService.createNewChannel(this.channelName, this.description);
+    await this.channelService.createNewChannel(this.channelName, this.description);
     if (this.selectedOption === 'all') {
       const members = this.authService.all_users
       members.forEach(member => {
         let id = member.uid
         this.channelService.addUserToChannel(this.channelName, id);
       });
+      setTimeout(() => this.sendAddAllMemberMessage() , 300);
     } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
       const userIds = await Promise.all(
         this.selectedUserNames.map(userName => this.channelService.findUserByName(userName))
@@ -118,6 +107,7 @@ export class AddPplToChannelComponent implements OnInit {
           this.channelService.addUserToChannel(this.channelName, userId);
         }
       });
+      setTimeout(() => this.sendAddAMemberMessage(this.selectedUserNames) , 300);
     }
     this.channelService.showSelectedUser(false);
     this.channelService.toggleAutocomplete(true);
@@ -128,5 +118,26 @@ export class AddPplToChannelComponent implements OnInit {
   onSelectedOptionChange() {
     this.selectedUserAvatar = []
     this.selectedUserNames = []
+  }
+
+
+  sendAddAllMemberMessage() {
+    let users = []
+    this.authService.all_users.forEach(element => {
+      if (element.uid != this.authService.userData.uid) users.push(element.user_name)
+    });
+    let rest = users.length - 1
+    this.uploadService.checkForUpload()
+    this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + users[0] + ' und ' + rest + ' weitere beigetreten'
+    this.messageService.newMessage()
+  }
+
+  sendAddAMemberMessage(array: string[]) {
+    let rest = array.length -1
+    this.uploadService.checkForUpload()
+    if(array.length > 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + array[0] + ' und ' + rest + ' weitere beigetreten.'
+    if (array.length == 2)  this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + array[0] + ' und ' + rest + ' weitere(r) beigetreten.'
+    if (array.length == 1) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem ist ' + array[0] + ' beigetreten.'
+    this.messageService.newMessage()
   }
 }
