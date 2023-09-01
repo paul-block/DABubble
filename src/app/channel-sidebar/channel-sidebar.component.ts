@@ -60,6 +60,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.chatService.loadChats();
     this.subChats = this.chatService.getUsersChatsObservable().subscribe(chat => {
       this.chatService.chats.push(chat);
+      console.log('chats aktualisiert');
+      
     });
 
     this.chatService.initOwnChat();
@@ -114,17 +116,11 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
   }
 
-  // async searchChatAndGetMessages(userReceiverID) {
-  //   this.chatService.currentChatSection = 'chats';
-  //   await this.chatService.searchChat(userReceiverID);
-  //   this.chatService.textAreaMessageTo();
-  //   this.msgService.getMessages();
-  //   this.fsDataThreadService.thread_open = false;
-  // }
 
   checkIfSameChatID(userReceiverID: string) {
     return this.chatService.currentChatID !== userReceiverID;
   }
+
 
   async openChat(chat: { chat_ID: string; }) {
     if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
@@ -142,6 +138,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       }
     }
   }
+
 
   isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;

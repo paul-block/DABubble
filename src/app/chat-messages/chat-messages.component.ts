@@ -46,10 +46,10 @@ export class ChatMessagesComponent {
 
   ngOnInit(): void {
     this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
-      this.scrollToBottom();   
+      this.scrollToBottom();
     });
-
   }
+
 
   ngOnDestroy(): void {
     if (this.scrollSubscription) {
@@ -57,11 +57,13 @@ export class ChatMessagesComponent {
     }
   }
 
+
   scrollToBottom() {
     if (this.ElementChatContainerRef) {
       this.ElementChatContainerRef.nativeElement.scrollTop = this.ElementChatContainerRef.nativeElement.scrollHeight;
     }
   }
+
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -71,9 +73,10 @@ export class ChatMessagesComponent {
       if (this.emojiService.picker_index === -2) {
         this.emojiPicker_open = false;
       }
-      
+
     }
   }
+
 
   togglePopup(popupVariable: string) {
     this[popupVariable] = !this[popupVariable];
@@ -93,36 +96,6 @@ export class ChatMessagesComponent {
       }
     });
   }
-
-
-  // resetToggledAreas() {
-  //   this.emojiService.emojiPicker_open = false;
-  //   this.toggleEditMessage = false;
-  //   this.emojiService.picker_reaction_bar = false;
-  // }
-
-
-  // toggleArea(toggleArea) {
-  //   switch (toggleArea) {
-  //     case 'more':
-  //       this.emojiService.emojiPicker_open = false;
-  //       this.emojiService.picker_reaction_bar = false;
-  //       this.toggleEditMessage = !this.toggleEditMessage;
-  //       break;
-  //     case 'emojis':
-  //       this.toggleEditMessage = false;
-  //       this.emojiService.picker_reaction_bar = false;
-  //       this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
-  //       break;
-  //     case 'emojiReactionBar':
-  //       this.toggleEditMessage = false;
-  //       this.emojiService.emojiPicker_open = false;
-  //       this.emojiService.picker_reaction_bar = !this.emojiService.picker_reaction_bar;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
 
 
   isMessageCreator(user_Sender_ID) {
