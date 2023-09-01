@@ -48,11 +48,12 @@ export class MessagesService {
   }
 
   async newMessage() {
+    let time_stamp = new Date();
     const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
       chat_message: this.messageText,
       user_Sender_ID: this.authService.userData.uid,
       user_Sender_Name: this.authService.userData.user_name,
-      created_At: firebase.firestore.FieldValue.serverTimestamp(),
+      created_At: time_stamp,
       chat_message_edited: false,
       emoji_data: [],
       modified_message: this.chatService.modifyMessageValue(this.messageText),
@@ -69,13 +70,11 @@ export class MessagesService {
     await updateDoc(messagesCollectionRef, {
       message_ID: newMessageID,
     }).then(() => {
-      this.getNewMessage();
+      // this.getNewMessage();
       this.messageText = '';
     });
   }
 
-
-  
 
   async saveNumberOfAnswers(id: string) {
     await this.getNumberOfAnswers(id)
@@ -114,17 +113,38 @@ export class MessagesService {
   }
 
 
+  // async getMessages() {
+  //   this.emojiService.resetInitializedEmojiRef();
+  //   this.chatService.directChatMessages = [];
+  //   this.previousMessageDate === null
+  //   const chatMessagesRef =  collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+  //   const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
+  //   docDirectChatMessagesSnapshot.forEach((doc) => {
+  //     const userData = doc.data();
+  //     this.chatService.directChatMessages.push(userData);
+  //   });
+  //   this.scrollToBottom()
+  // }
+
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
-    this.previousMessageDate === null
-    const chatMessagesRef =  collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-    docDirectChatMessagesSnapshot.forEach((doc) => {
-      const userData = doc.data();
-      this.chatService.directChatMessages.push(userData);
+    this.previousMessageDate === null;
+    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+    const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
+    onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          const userData = change.doc.data();
+          this.chatService.directChatMessages.push(userData);
+          console.log('change ' + userData);
+          this.scrollToBottom();
+        }
+        
+      });
     });
-    this.scrollToBottom()
+    
+
   }
 
 

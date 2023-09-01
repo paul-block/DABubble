@@ -1,6 +1,6 @@
 import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, CollectionReference } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
@@ -23,14 +23,14 @@ export class ChatService {
   currentUser_id: string
   open_users: boolean = false;
   userReceiverID: string;
-  
+
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
   ) { }
 
   async loadChats() {
-    this.chats = []; 
+    this.chats = [];
     const querySnapshot = await getDocs(collection(this.db, 'chats'));
     const chats = querySnapshot.docs.map(doc => doc.data());
     this.chatsSubject.next(chats);
@@ -54,7 +54,7 @@ export class ChatService {
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
-    
+
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
@@ -71,15 +71,15 @@ export class ChatService {
     const auth = getAuth();
     const user = auth.currentUser;
     let foundChatId = null;
-  
+
     if (user !== null) {
       try {
         const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
-        
+
         docChatsSnapshot.forEach((chat) => {
           const chatData = chat.data();
           const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
-          
+
           if (
             (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) ||
             (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)
@@ -87,9 +87,9 @@ export class ChatService {
             foundChatId = chatData.chat_ID;
           }
         });
-  
-        return foundChatId; 
-  
+
+        return foundChatId;
+
       } catch (error) {
         console.error("Fehler bei der Suche nach einem Chat: ", error);
         return null;
@@ -107,7 +107,7 @@ export class ChatService {
 
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        return docSnap.data(); 
+        return docSnap.data();
       } else {
         console.log("No such document!");
         return null;
@@ -117,58 +117,17 @@ export class ChatService {
       return null;
     }
   }
-  
-
-
-  // async searchChat(userReceiverID) {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if ('currentUser' === userReceiverID) {
-  //     userReceiverID = user.uid;
-  //   }
-
-  //   if (user !== null) {
-  //     try {
-  //       this.currentChatID = null;
-  //       if (userReceiverID !== null) {
-  //         const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
-  //         let chatExists = false;
-  //         docChatsSnapshot.forEach((chat) => {
-  //           const chatData = chat.data();
-  //           const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
-  //           if ((sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) || (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)) {
-  //             chatExists = true;
-  //            return this.currentChatID = chatData.chat_ID; // BIS HIER HER UND DAS DANN ALS RETURN IN DIE VARIABLE IN CHANNEL DIRECT GEBEN
-  //             // this.currentChatData = chatData;
-  //           }
-  //         });
-
-    //       if (!chatExists) {
-    //         await this.newChat(userReceiverID);
-    //       }
-    //     } else {
-    //       console.error("Benutzer nicht gefunden");
-    //     }
-    //   } catch (error) {
-    //     console.error("Fehler bei der Suche nach einem Chat: ", error);
-    //   }
-    // } else {
-    //   console.error("Kein Benutzer ist eingeloggt");
-    // }
-  // }
-
 
 
   async newChat(userReceiverID: string) {
     const userID = this.currentUser_id;
     this.directChatMessages = [];
-
+    let time_stamp = new Date();
     if (userID !== undefined) {
       try {
         const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
           chat_Member_IDs: [userID, userReceiverID],
-          created_At: firebase.firestore.FieldValue.serverTimestamp(),
+          created_At: time_stamp,
         });
 
         const newChatID = chatsCollectionRef.id;
