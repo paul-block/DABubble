@@ -119,6 +119,7 @@ export class AuthenticationService {
       this.signIn_successful = true
       this.setOnlineStatus(email, 'Aktiv')
       setTimeout(() => this.signIn_successful = false, 3000);
+      this.channelService.loadStandardChannel()
     } catch (error) {
       this.signIn_error = true
       setTimeout(() => this.signIn_error = false, 3000);
@@ -128,7 +129,6 @@ export class AuthenticationService {
 
   async setOnlineStatus(email: string, status: string) {
     const user = this.all_users.find(element => element.email === email);
-    console.log(user.uid);
     const userRef = doc(this.db, 'users', user.uid);
     await updateDoc(userRef, {
       status: status
@@ -160,6 +160,7 @@ export class AuthenticationService {
       if (element.email == email) {
         this.googleUser_exist = true
         this.setOnlineStatus(email, 'Aktiv')
+        this.channelService.loadStandardChannel()
         return
       }
     });
@@ -182,6 +183,7 @@ export class AuthenticationService {
 
 
   async SetUserData(user: any) {
+    this.channelService.addUserToChannel('allgemein', user.uid)
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userDataFirestore = {
       uid: user.uid,

@@ -5,6 +5,7 @@ import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { GeneralFunctionsService } from './general-functions.service';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({
@@ -26,13 +27,16 @@ export class ChannelService {
   showAutoComplete$ = this.showAutoComplete.asObservable();
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
-  
+  currentChannelData:any
+   auth = getAuth();
   private createtChannelId  = new BehaviorSubject<string>(undefined);
   createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
+  
   
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
+    public generalFuncttions: GeneralFunctionsService,
   ) { 
 
 
@@ -43,6 +47,7 @@ export class ChannelService {
         channels.push(doc.data())
       })
       this.channels = channels
+      this.loadCurrentChannel()
     });
   }
 
@@ -87,9 +92,7 @@ export class ChannelService {
   }
 
   async createNewChannel(channel: string, description?: string) {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
+    const user = this.auth.currentUser;
     if (user !== null) {
       try {
         const channelCollectionRef = await addDoc(collection(this.db, 'channels'),{
@@ -103,7 +106,6 @@ export class ChannelService {
         await updateDoc(channelCollectionRef, {
           channel_ID: newChannelID
         });
-        this.getAuthorizedChannels(user.uid);
         this.setCreatetChannelId(channelCollectionRef.id)
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
@@ -172,9 +174,20 @@ export class ChannelService {
   }
 
 
-  deleteChannel(id:string) {
+  async deleteChannel(id:string) {
     const documentRef = doc(this.db, 'channels', id);
-    deleteDoc(documentRef)
+    await deleteDoc(documentRef)
+    this.loadStandardChannel()
   }
 
+
+  loadStandardChannel() {
+    this.setCreatetChannelId('RRraQrPndWV95cqAWCZR')
+  }
+
+
+  loadCurrentChannel() {
+    let channel = this.channels.find(element => element.channel_ID === this.currentChannelID)
+    if(channel) this.currentChannelData = channel
+  }
 }

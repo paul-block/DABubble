@@ -1,4 +1,4 @@
-<section class="p-20">
+<!-- <section class="p-20">
     <div class="title">
         <h1>Leute hinzufügen</h1>
         <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
@@ -35,5 +35,37 @@
 
     <div class="add-member-channel">
         <button (click)="addNewMember()" [disabled]="!choosedUser">Hinzufügen</button>
+    </div>
+</section> -->
+
+<section class="p-20">
+    <div class="title">
+        <h1>Leute hinzufügen</h1>
+        <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
+    </div>
+    <div class="channel-name">
+        <mat-icon class="tag">tag</mat-icon>
+        <span>Entwicklerteam</span>
+    </div>
+    <div class="relative">
+        <input *ngIf="!choosedUser" class="input-name" type="text" placeholder="Name eingeben"
+            [(ngModel)]="inputSearchUser" (input)="filterUsers()">
+
+        <div *ngIf="selectedUsers.length > 0" class="input-name-replace">
+            <div *ngFor="let user of selectedUsers" class="clear-input-name">
+                <img [src]="user.avatar">
+                <span>{{ user.user_name }}</span>
+                <mat-icon (click)="clearInputName(user)">close</mat-icon>
+            </div>
+        </div>
+        <div class="search-user-popup" *ngIf="inputSearchUser.length  && !choosedUser && filteredUsers.length > 0" >
+            <div *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+                <img [src]="user.avatar">
+                <span>{{ user.user_name }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="add-member-channel">
+        <button (click)="addNewMember()" [disabled]="selectedUsers.length === 0">Hinzufügen</button>
     </div>
 </section>

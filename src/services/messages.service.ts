@@ -8,6 +8,7 @@ import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { NewMsgService } from './new-msg.service';
 import { UploadService } from './upload.service';
+import { ChannelService } from './channel.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,9 @@ export class MessagesService {
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService,
-  ) { }
+
+  ) { 
+  }
 
 
   checkIfEmpty() {
@@ -45,8 +48,6 @@ export class MessagesService {
   }
 
   async newMessage() {
-    console.log('newMessage');
-    
     const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
       chat_message: this.messageText,
       user_Sender_ID: this.authService.userData.uid,
@@ -59,7 +60,11 @@ export class MessagesService {
       last_answer: '',
       uploaded_files: this.upload_array,
     })
+    this.saveMessage(messagesCollectionRef)
+  }
 
+
+  async saveMessage(messagesCollectionRef) {
     const newMessageID = messagesCollectionRef.id;
     await updateDoc(messagesCollectionRef, {
       message_ID: newMessageID,
@@ -68,6 +73,9 @@ export class MessagesService {
       this.messageText = '';
     });
   }
+
+
+  
 
   async saveNumberOfAnswers(id: string) {
     await this.getNumberOfAnswers(id)
@@ -110,9 +118,8 @@ export class MessagesService {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
     this.previousMessageDate === null
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+    const chatMessagesRef =  collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-
     docDirectChatMessagesSnapshot.forEach((doc) => {
       const userData = doc.data();
       this.chatService.directChatMessages.push(userData);

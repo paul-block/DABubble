@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogEditChannelComponent } from '../dialog-edit-channel/dialog-edit-channel.component';
 import { DialogEditMembersComponent } from '../dialog-edit-members/dialog-edit-members.component';
@@ -6,6 +6,7 @@ import { DialogAddMembersComponent } from '../dialog-add-members/dialog-add-memb
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
 import { ProfileService } from 'services/profile.service';
+import { ChannelService } from 'services/channel.service';
 
 @Component({
   selector: 'app-header-channel-direct-chat',
@@ -24,15 +25,19 @@ export class HeaderChannelDirectChatComponent {
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;
 
+
+
   constructor(
     private dialog: MatDialog,
     public authService: AuthenticationService,
     public chatService: ChatService,
-    public profileService: ProfileService
+    public profileService: ProfileService,
+    public channelService: ChannelService
   ) {
 
   }
 
+  
   editChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();

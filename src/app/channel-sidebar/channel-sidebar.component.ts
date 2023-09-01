@@ -40,7 +40,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   ) {
     this.subscription = this.channelService.createtChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
-      if (this.currentValue) this.openChannel(this.currentValue); 
+      if (this.currentValue)  this.openChannel(this.currentValue); 
     });
    }
 
@@ -54,7 +54,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
 
     this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
-      this.channelService.channels = channels;
+      this.channelService.channels = channels;  
     });
 
     await this.chatService.loadChats();
@@ -72,31 +72,33 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
   }
 
+
   toggleChannels() {
     this.channelsVisible = !this.channelsVisible;
   }
+
 
   toggleDms() {
     this.dmsVisible = !this.dmsVisible;
   }
 
+
   toggleWorkspace() {
     this.workspaceVisible = !this.workspaceVisible;
   }
 
+
   openAddChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.panelClass = 'add-channel-dialog';
-
     this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
     this.addChannelOpen = true;
-
     this.addChannelRef.afterClosed().subscribe(() => {
       this.addChannelOpen = false;
     });
   }
+
 
   sendNewMsg() {
     this.chatService.currentChatSection = 'noChatSectionSelected';
@@ -106,6 +108,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.msgService.emptyMessageText();
     this.toggleNewMsgComponent();
   }
+  
 
   toggleNewMsgComponent() {
     this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
@@ -119,11 +122,11 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   //   this.fsDataThreadService.thread_open = false;
   // }
 
-  checkIfSameChatID(userReceiverID) {
+  checkIfSameChatID(userReceiverID: string) {
     return this.chatService.currentChatID !== userReceiverID;
   }
 
-  async openChat(chat) {
+  async openChat(chat: { chat_ID: string; }) {
     if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
@@ -140,21 +143,23 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     }
   }
 
-  isCurrentUserChat(chat): boolean {
+  isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
 
 
-  async openChannel(channelID) {
+  async openChannel(channelID:string) {
     if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
+      this.channelService.currentChannelID = channelID
       this.msgService.emptyMessageText();
       try {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
+        this.channelService.loadCurrentChannel()
+      await  this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);

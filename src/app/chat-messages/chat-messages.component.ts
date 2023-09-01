@@ -46,7 +46,7 @@ export class ChatMessagesComponent {
 
   ngOnInit(): void {
     this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
-      this.scrollToBottom();
+      this.scrollToBottom();   
     });
 
   }

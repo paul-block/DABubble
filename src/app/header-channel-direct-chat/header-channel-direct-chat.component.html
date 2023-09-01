@@ -2,7 +2,7 @@
     <div *ngIf="chatService.currentChatSection === 'channels'" class="chat-receiver"
         [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()" #editChannelREF>
         <mat-icon class="tag">tag</mat-icon>
-        <h1>{{ chatService.currentChatData.channelName }}</h1>
+        <h1>{{ channelService.currentChannelData.channelName }}</h1>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
     <div *ngIf="chatService.currentChatSection === 'chats'" class="chat-receiver-directChat"
@@ -15,11 +15,11 @@
         <div class="already-members" [ngClass]="{'edit-dialog-open':isEditMembersDialogOpen === true}"
             (click)="editMembers()" #editMembersREF>
             <div class="already-members-avatars">
-                <ng-container *ngFor="let assignedUser of chatService.currentChatData.assignedUsers; let i = index;">
+                <ng-container *ngFor="let assignedUser of channelService.currentChannelData.assignedUsers; let i = index;">
                     <img *ngIf="i < 3" [src]="channelMemberAvatars(assignedUser)">
                 </ng-container>
             </div>
-            <span>{{ chatService.currentChatData.assignedUsers.length }}</span>
+            <span>{{ channelService.currentChannelData.assignedUsers.length }}</span>
         </div>
         <div (click)="addMembers()" class="add-members" #addMembersREF>
             <mat-icon [ngClass]="{'edit-dialog-open':isAddMembersDialogOpen === true}">
