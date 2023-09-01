@@ -276,6 +276,7 @@ header {
   padding: 15px;
   background-color: #eceefe;
   border-radius: 0px 20px 20px 20px;
+  width: max-content;
 }
 
 .message_user {
@@ -324,6 +325,7 @@ header {
 }
 
 .bottom_line {
+  position: relative;
   box-sizing: border-box;
   padding-right: 15px;
   padding-left: 15px;
@@ -337,15 +339,16 @@ header {
 
   :nth-of-type(1) {
     display: flex;
-    width: 175px;
     font-size: 18px;
     color: #adb0d9;
   }
 }
 
 .line {
+  width: 75%;
+  position: absolute;
+  left: 77px;
   height: 1px;
-  width: 100%;
   background-color: #adb0d9;
 }
 
@@ -481,6 +484,7 @@ textarea {
     border-radius: 20px 0px 20px 20px;
   }
   .message_sub {
+    align-items: flex-end;
     margin-left: 0;
     margin-right: 20px;
   }
@@ -507,7 +511,8 @@ textarea {
   z-index: 15;
   padding: 5px;
   border-radius: 10px;
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
   :nth-child(1) {
     overflow-y: auto;
   }
@@ -543,8 +548,8 @@ textarea {
   border-radius: 100%;
   cursor: pointer;
   &:hover {
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
-   
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -574,7 +579,8 @@ textarea {
   }
   &:hover {
     border-color: #444df2;
-    box-shadow:  0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
   }
 }
 

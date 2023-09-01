@@ -47,9 +47,9 @@
 
 
         <div class="bottom_line" *ngIf="fsDataThreadService.comments?.length > 0">
-            <div>
+            <div style="display: flex; width: max-content;">
                 <span>{{fsDataThreadService.comments.length}} Antwort</span>
-                <div *ngIf="fsDataThreadService.comments?.length > 1">en</div>
+                <div style="width: max-content;" *ngIf="fsDataThreadService.comments?.length > 1">en</div>
             </div>
 
             <div class="line"></div>
