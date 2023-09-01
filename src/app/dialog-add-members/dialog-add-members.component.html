@@ -1,43 +1,3 @@
-<!-- <section class="p-20">
-    <div class="title">
-        <h1>Leute hinzufügen</h1>
-        <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
-    </div>
-    <div class="channel-name">
-        <mat-icon class="tag">tag</mat-icon>
-        <span>Entwicklerteam</span>
-    </div>
-    <div class="relative">
-        <input *ngIf="!choosedUser" class="input-name" type="text" placeholder="Name eingeben" [(ngModel)]="inputSearchUser">
-        <div *ngIf="choosedUser" class="input-name-replace">
-            <div class="clear-input-name">
-                <img src="/assets/img/small_avatar/avatar_3.svg">
-                <span>Elise Roth</span>
-                <mat-icon (click)="clearInputName()" >close</mat-icon>
-            </div>
-            
-        </div>
-        <div class="search-user-popup" *ngIf="inputSearchUser.length && !choosedUser">
-            <div (click)="selectUser()">
-                <img src="/assets/img/small_avatar/avatar_2.svg">
-                <span>Frederik Beck (Du)</span>
-            </div>
-            <div (click)="selectUser()">
-                <img src="/assets/img/small_avatar/avatar_3.svg">
-                <span>Elise Roth</span>
-            </div>
-            <div (click)="selectUser()">
-                <img src="/assets/img/small_avatar/avatar_4.svg">
-                <span>Noah Braun</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="add-member-channel">
-        <button (click)="addNewMember()" [disabled]="!choosedUser">Hinzufügen</button>
-    </div>
-</section> -->
-
 <section class="p-20">
     <div class="title">
         <h1>Leute hinzufügen</h1>
@@ -45,7 +5,7 @@
     </div>
     <div class="channel-name">
         <mat-icon class="tag">tag</mat-icon>
-        <span>Entwicklerteam</span>
+        <span>{{ chatService.currentChatData.channelName }}</span>
     </div>
     <div class="relative">
         <input *ngIf="!choosedUser" class="input-name" type="text" placeholder="Name eingeben"
