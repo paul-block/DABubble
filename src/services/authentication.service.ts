@@ -35,7 +35,7 @@ export class AuthenticationService {
   email_send: boolean = null;
   googleUser_exist: boolean;
   all_users: any[];
-
+  usersPromise: Promise<any>;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -54,13 +54,17 @@ export class AuthenticationService {
     });
 
 
-    const dbRef = collection(this.db, "users");
-    onSnapshot(dbRef, docsSnap => {
-      const users: any[] = []
-      docsSnap.forEach(doc => {
-        users.push(doc.data())
-      })
-      this.all_users = users
+    
+    this.usersPromise = new Promise<void>((resolve) => {
+      const dbRef = collection(this.db, "users");
+      onSnapshot(dbRef, docsSnap => {
+        const users: any[] = []
+        docsSnap.forEach(doc => {
+          users.push(doc.data())
+        })
+        this.all_users = users;
+        resolve(); // Die Promise auflösen, wenn die Daten abgerufen wurden
+      });
     });
 
 

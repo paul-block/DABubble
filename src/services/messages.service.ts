@@ -1,14 +1,10 @@
-import { ElementRef, Injectable } from '@angular/core';
-import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
-import { getAuth } from '@angular/fire/auth';
+import { Injectable } from '@angular/core';
+import { doc, getFirestore, updateDoc, collection, orderBy, query, deleteDoc, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { NewMsgService } from './new-msg.service';
-import { UploadService } from './upload.service';
-import { ChannelService } from './channel.service';
 import { GeneralFunctionsService } from './general-functions.service';
 
 @Injectable({
@@ -27,7 +23,7 @@ export class MessagesService {
   private scrollSubject = new Subject<void>();
   answers_count: any;
   time: any;
-  upload_array;
+  upload_array: any;
 
 
   constructor(
@@ -91,15 +87,6 @@ export class MessagesService {
   }
 
 
-  // async getNewMessage() {
-  //   const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-  //   const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-  //   const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
-  //   this.chatService.directChatMessages.push(latestDocument);
-  //   this.scrollToBottom();
-  // }
-
-
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
@@ -111,13 +98,9 @@ export class MessagesService {
         const changedMessageData = change.doc.data();
         if (change.type === 'added') {
           this.chatService.directChatMessages.push(changedMessageData);
-          console.log('added');
         } else if (change.type === 'modified') {
-          console.log('modified');
           this.getChangedMessage(changedMessageData);
-
         } else if (change.type === 'removed') {
-          console.log('removed');
           this.spliceMessage(changedMessageData);
         }
       });

@@ -24,7 +24,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
   private subChannels: Subscription;
-  private subChats: Subscription;
   currentUserSubscription: Subscription;
   private subscription: Subscription;
   currentValue: string;
@@ -40,36 +39,34 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   ) {
     this.subscription = this.channelService.createtChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
-      if (this.currentValue)  this.openChannel(this.currentValue); 
+      if (this.currentValue) this.openChannel(this.currentValue);
     });
-   }
+  }
 
 
   async ngOnInit() {
     await this.authService.waitUntilAuthInitialized();
+    
     this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
       if (user) {
         this.chatService.currentUser_id = user.uid;
       }
     });
+
     this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
-      this.channelService.channels = channels;  
+      this.channelService.channels = channels;
     });
-    await this.chatService.loadChats();
-    this.subChats = this.chatService.getUsersChatsObservable().subscribe(chat => {
-      this.chatService.chats.push(chat);
-      console.log('chats aktualisiert'); 
-    });
-    this.chatService.initOwnChat();
-    ;
     
+    await this.authService.usersPromise;
+    await this.chatService.loadChats();
+    this.chatService.initOwnChat();
   }
 
 
   ngOnDestroy() {
     if (this.subChannels) this.subChannels.unsubscribe();
-    if (this.subChats) this.subChats.unsubscribe();
     if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 
@@ -108,7 +105,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.msgService.emptyMessageText();
     this.toggleNewMsgComponent();
   }
-  
+
 
   toggleNewMsgComponent() {
     this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
@@ -143,7 +140,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 
-  async openChannel(channelID:string) {
+  async openChannel(channelID: string) {
     if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
@@ -154,17 +151,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
         this.channelService.loadCurrentChannel()
-      await  this.msgService.getMessages();
+        await this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }
-    } 
-  }
-
-
-  OnDestroy() {
-    this.subscription.unsubscribe(); // Unsubscribe, um Speicherlecks zu vermeiden
+    }
   }
 
 }
