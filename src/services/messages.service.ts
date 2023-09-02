@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
@@ -9,6 +9,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { NewMsgService } from './new-msg.service';
 import { UploadService } from './upload.service';
 import { ChannelService } from './channel.service';
+import { GeneralFunctionsService } from './general-functions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,9 @@ export class MessagesService {
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService,
+    public genFunctService: GeneralFunctionsService,
 
-  ) { 
+  ) {
   }
 
 
@@ -49,7 +51,9 @@ export class MessagesService {
 
   async newMessage() {
     let time_stamp = new Date();
-    const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
+    const customMessageID = await this.genFunctService.generateCustomFirestoreID();
+
+    await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
       chat_message: this.messageText,
       user_Sender_ID: this.authService.userData.uid,
       user_Sender_Name: this.authService.userData.user_name,
@@ -60,17 +64,8 @@ export class MessagesService {
       answers: 0,
       last_answer: '',
       uploaded_files: this.upload_array,
-    })
-    this.saveMessage(messagesCollectionRef)
-  }
-
-
-  async saveMessage(messagesCollectionRef) {
-    const newMessageID = messagesCollectionRef.id;
-    await updateDoc(messagesCollectionRef, {
-      message_ID: newMessageID,
+      message_ID: customMessageID
     }).then(() => {
-      // this.getNewMessage();
       this.messageText = '';
     });
   }
@@ -96,35 +91,14 @@ export class MessagesService {
   }
 
 
-  async getNewMessage() {
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-    const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
-    this.chatService.directChatMessages.push(latestDocument);
-    this.scrollToBottom();
-  }
-
-
-  async getChangedMessage() {
-    const currentMessage = this.chatService.directChatMessages[this.messageIndex];
-    currentMessage.chat_message = this.messageText;
-    currentMessage.modified_message = this.chatService.modifyMessageValue(this.messageText),
-    currentMessage.chat_message_edited = true;
-  }
-
-
-  // async getMessages() {
-  //   this.emojiService.resetInitializedEmojiRef();
-  //   this.chatService.directChatMessages = [];
-  //   this.previousMessageDate === null
-  //   const chatMessagesRef =  collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+  // async getNewMessage() {
+  //   const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
   //   const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-  //   docDirectChatMessagesSnapshot.forEach((doc) => {
-  //     const userData = doc.data();
-  //     this.chatService.directChatMessages.push(userData);
-  //   });
-  //   this.scrollToBottom()
+  //   const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
+  //   this.chatService.directChatMessages.push(latestDocument);
+  //   this.scrollToBottom();
   // }
+
 
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
@@ -134,13 +108,41 @@ export class MessagesService {
     const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
     onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
+        const changedMessageData = change.doc.data();
         if (change.type === 'added') {
-          const userData = change.doc.data();
-          this.chatService.directChatMessages.push(userData);
-          this.scrollToBottom();
-        }  
+          this.chatService.directChatMessages.push(changedMessageData);
+          console.log('added');
+        } else if (change.type === 'modified') {
+          console.log('modified');
+          this.getChangedMessage(changedMessageData);
+
+        } else if (change.type === 'removed') {
+          console.log('removed');
+          this.spliceMessage(changedMessageData);
+        }
       });
     });
+    this.scrollToBottom();
+  }
+
+
+  async getChangedMessage(changedMessageData) {
+    const changedchatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
+    changedchatMessage.chat_message = changedMessageData.chat_message;
+    changedchatMessage.modified_message = changedMessageData.modified_message;
+    changedchatMessage.chat_message_edited = changedMessageData.chat_message_edited;
+    changedchatMessage.emoji_data = changedMessageData.emoji_data;
+    changedchatMessage.answers = changedMessageData.answers;
+    changedchatMessage.last_answer = changedMessageData.last_answer;
+    changedchatMessage.uploaded_files = changedMessageData.uploaded_files;
+  }
+
+
+  async spliceMessage(changedMessageData) {
+    const index = this.chatService.directChatMessages.findIndex(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
+    if (index !== -1) {
+      this.chatService.directChatMessages.splice(index, 1);
+    }
   }
 
 
@@ -166,7 +168,6 @@ export class MessagesService {
 
   async saveEditedMessage() {
     try {
-      this.getChangedMessage();
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await updateDoc(messageRef, {
         chat_message: this.messageText,
@@ -199,7 +200,6 @@ export class MessagesService {
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     try {
-      this.spliceMessage();
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await deleteDoc(messageRef)
     } catch (error) {
@@ -208,9 +208,7 @@ export class MessagesService {
   }
 
 
-  async spliceMessage() {
-    this.chatService.directChatMessages.splice(this.messageIndex, 1);
-  }
+
 
 
   getTimestampTime(timestamp) {
