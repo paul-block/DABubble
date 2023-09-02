@@ -1,6 +1,6 @@
 import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
@@ -19,7 +19,6 @@ export class ChatService {
   currentChatData;
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
-  private chatsSubject = new BehaviorSubject<any[]>([]);
   currentUser_id: string
   open_users: boolean = false;
   userReceiverID: string;
@@ -29,20 +28,22 @@ export class ChatService {
     public channelService: ChannelService,
   ) { }
 
-  async loadChats() {
-    this.chats = [];
-    const querySnapshot = await getDocs(collection(this.db, 'chats'));
-    const chats = querySnapshot.docs.map(doc => doc.data());
-    this.chatsSubject.next(chats);
-  }
 
-  getUsersChatsObservable() {
-    return this.chatsSubject.asObservable().pipe(
-      switchMap(chats => {
-        const usersChats = this.filterChats(chats);
-        return usersChats;
-      })
-    );
+  async loadChats(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.chats = [];
+
+      const querySnapshot = collection(this.db, 'chats');
+      onSnapshot(querySnapshot, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const chatData = change.doc.data();
+          if (change.type === 'added') {
+            this.chats.push(chatData);
+          }
+        });
+        resolve();
+      });
+    });
   }
 
 
@@ -54,7 +55,6 @@ export class ChatService {
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
-
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
@@ -62,6 +62,7 @@ export class ChatService {
         }
       });
     } else if (!chatExists) {
+
       await this.newChat(userID);
       console.log('in');
     }
@@ -134,9 +135,7 @@ export class ChatService {
         const chatDocRef = doc(this.db, 'chats', newChatID);
         await updateDoc(chatDocRef, {
           chat_ID: newChatID
-        }).then(() => {
-          this.loadChats();
-        });
+        })
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
       }
@@ -151,12 +150,14 @@ export class ChatService {
       this.messageToPlaceholder = 'Nachricht an ' + this.getChatReceiverUser(this.currentChatData).user_name;
     } else if (this.currentChatSection === 'channels') {
       this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
+    } else {
+      this.messageToPlaceholder = 'Nachricht an ...';
     }
   }
 
   getChatReceiverUser(chat) {
     let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.authService.userData.uid) {
+    if (chat.chat_Member_IDs[0] !== this.userReceiverID) {
       chatReveiverID = chat.chat_Member_IDs[0];
     } else {
       chatReveiverID = chat.chat_Member_IDs[1];
