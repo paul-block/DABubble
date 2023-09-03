@@ -49,17 +49,17 @@
   </div>
   
   <div *ngIf="!delete_Channel && !leave_Channel" class="leave-channel">
-    <button class="delete_button" *ngIf="this.chatService.currentChatData.createdBy == authService.userData.uid && chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="openDeleteText()" >Channel löschen</button>
+    <button class="secondary-button-red" *ngIf="this.chatService.currentChatData.createdBy == authService.userData.uid && chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="openDeleteText()" >Channel löschen</button>
     <button *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="toggleLeaveText()">Channel verlassen</button>
   </div>
 
   <div *ngIf="delete_Channel" class="leave-channel">
-    <button class="delete_button" (click)="deleteChannel()" mat-dialog-close>Channel löschen</button>
+    <button class="secondary-button-red" (click)="deleteChannel()" mat-dialog-close>Channel löschen</button>
     <button (click)="abortDelete()">Abbrechen</button>
   </div>
 
   <div *ngIf="leave_Channel" class="leave-channel">
-    <button class="delete_button" (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
+    <button class="secondary-button-red" (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
     <button (click)="toggleLeaveText()">Abbrechen</button>
   </div>
 </section>

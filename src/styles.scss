@@ -1,6 +1,10 @@
 // @import 'assets/styles/fonts.scss';
 @import '@ctrl/ngx-emoji-mart/picker';
 
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
+$hover-transition: all ease-in-out 125ms;
+
 .d_none {
     display: none !important;
 }
@@ -131,4 +135,98 @@ input[type="file"] {
 .deleted {
     display: flex;
     align-items: center;
+}
+
+// buttons
+
+.primary-button {
+    transition: $hover-transition;
+    background-color: #444DF2 !important;
+    cursor: pointer;
+    color: white;
+
+    &:hover {
+        transition: $hover-transition;
+        background-color: #797EF3;
+    }
+
+    &:active {
+        background-color: #444DF2;
+    }
+
+    &:disabled {
+        background-color: #686868;
+    }
+}
+
+.primary-button-red {
+    transition: $hover-transition;
+    background-color: red !important;
+    cursor: pointer;
+    color: white;
+
+    &:hover {
+        transition: $hover-transition;
+        background-color: rgb(223, 66, 66);
+    }
+
+    &:active {
+        background-color: red;
+    }
+
+    &:disabled {
+        background-color: #686868;
+    }
+}
+
+.secondary-button {
+    transition: $hover-transition;
+    background-color: white !important;
+    border: 1px solid #444DF2;
+    cursor: pointer;
+    color: #444DF2;
+
+    &:hover {
+        transition: $hover-transition;
+        color: white;
+        background-color: $hover-text-color;
+        border: 1px solid transparent;
+    }
+
+    &:active {
+        background-color: #444DF2;
+        color: white;
+    }
+
+    &:disabled {
+        color: #686868;
+        border: 1px solid #686868;
+        background-color: white;
+    }
+}
+
+.secondary-button-red {
+    transition: $hover-transition;
+    background-color: white !important;
+    border: 1px solid black;
+    cursor: pointer;
+    color: red;
+
+    &:hover {
+        transition: $hover-transition;
+        color: white;
+        background-color: rgb(223, 66, 66);
+        border: 1px solid transparent;
+    }
+
+    &:active {
+        background-color: red;
+        color: white;
+    }
+
+    &:disabled {
+        color: #686868;
+        border: 1px solid #686868;
+        background-color: white;
+    }
 }
