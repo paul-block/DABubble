@@ -141,7 +141,7 @@ input[type="file"] {
 
 // buttons
 
-button{
+button {
     font-weight: 700;
     font-size: 18px;
     border: 1px solid transparent;
@@ -165,6 +165,7 @@ button{
 
     &:disabled {
         background-color: #686868;
+        cursor: default;
     }
 }
 
@@ -186,6 +187,7 @@ button{
 
     &:disabled {
         background-color: #686868;
+        cursor: default;
     }
 }
 
@@ -213,13 +215,14 @@ button{
         color: #686868;
         border: 1px solid #686868;
         background-color: white;
+        cursor: default;
     }
 }
 
 .secondary-button-red {
     transition: $hover-transition;
     background-color: white;
-    border: 1px solid black;
+    border: 1px solid red;
     cursor: pointer;
     color: red;
     border-radius: $button-border-radius;
@@ -240,5 +243,20 @@ button{
         color: #686868;
         border: 1px solid #686868;
         background-color: white;
+        cursor: default;
+    }
+}
+
+.close-dialog {
+    cursor: pointer;
+    border-radius: 100%;
+    padding: 5px;
+    transition: $hover-transition;
+
+    &:hover {
+        background-color: $hover-background-color;
+        color: $hover-text-color;
+        transition: $hover-transition;
+        font-weight: 600;
     }
 }

@@ -102,14 +102,7 @@
   }
 
   button {
-    width: 120px;
-    background-color: #444df2;
-    color: white;
     align-self: flex-end;
-
-    &:disabled {
-      background-color: #686868;
-    }
   }
 }
 

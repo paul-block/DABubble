@@ -113,25 +113,6 @@ section {
 .add-member-channel {
     display: flex;
     justify-content: flex-end;
-
-    button {
-        padding: 12px 25px;
-        border-radius: 25px;
-        color: white;
-        font-weight: 700;
-        font-size: 18px;
-        background-color: $hover-text-color;
-        border: transparent;
-        cursor: pointer;
-
-        &:hover {
-            background-color: #797EF3;
-        }
-
-        &:disabled {
-            background-color: #686868;
-        }
-    }
 }
 
 .relative {

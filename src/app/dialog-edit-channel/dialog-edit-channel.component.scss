@@ -45,21 +45,8 @@ section {
 
     mat-icon {
       font-style: italic;
+      font-weight: 600;
     }
-  }
-}
-
-.close-dialog {
-  cursor: pointer;
-  border-radius: 100%;
-  padding: 5px;
-  transition: $hover-transition;
-
-  &:hover {
-    background-color: $hover-background-color;
-    color: $hover-text-color;
-    transition: $hover-transition;
-    font-weight: 600;
   }
 }
 
@@ -102,8 +89,7 @@ section {
     padding-bottom: 2px;
     position: absolute;
     left: 15px;
-    font-weight: 600;
-    font-size: 18px;
+    font-size: 24px;
     font-style: italic;
     display: flex;
     align-items: center;
@@ -161,6 +147,7 @@ section {
 .channel-name {
   font-size: 18px;
   font-weight: 400;
+  margin-left: 5px;
 }
 
 .edit-text {
@@ -201,23 +188,6 @@ section {
   width: 100%;
   display: flex;
   justify-content: space-between;
-
-  // button {
-  //   background-color: #535af1;
-  //   color: white;
-  //   font-weight: 700;
-  //   font-size: 18px;
-  //   padding: 12px 25px;
-  //   border: unset;
-  //   border-radius: 50px;
-  //   cursor: pointer;
-  //   transition: $hover-transition;
-
-  //   &:hover {
-  //     background-color: #797ef3;
-  //     transition: $hover-transition;
-  //   }
-  // }
 }
 
 .realy_delete {
@@ -232,6 +202,10 @@ section {
   :nth-child(2) {
     font-size: 18px;
   }
+}
+
+.italic{
+  font-style: italic;
 }
 
 

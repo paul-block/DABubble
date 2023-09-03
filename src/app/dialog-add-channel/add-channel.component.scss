@@ -14,10 +14,10 @@
         align-items: center;
         width: 100%;
 
-            span {
-                font-size: 26px !important;
-                font-weight: 700;
-            }
+        span {
+            font-size: 26px !important;
+            font-weight: 700;
+        }
     }
 
     p {
@@ -43,7 +43,7 @@
         flex-direction: column;
         gap: 30px;
 
-    
+
         #channel-input {
             position: relative;
 
@@ -54,7 +54,7 @@
                 top: 50%;
                 transform: translateY(-50%);
             }
-            
+
             input {
                 padding: 20px 50px;
             }
@@ -66,14 +66,8 @@
 
         button {
             align-self: flex-end;
-            background-color: #444DF2;
-            color: white;
         }
-
-        button:disabled {
-            background-color: #686868;
-        }
-}
+    }
 }
 
 .error {
@@ -92,9 +86,8 @@
     border-radius: 100%;
     cursor: pointer;
     transition: 200ms;
+
     &:hover {
         background-color: #ECEEFE;
-  }
+    }
 }
-
-
