@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { doc, getFirestore, updateDoc, collection, orderBy, query, deleteDoc, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, orderBy, query, deleteDoc, getDoc, onSnapshot, setDoc, DocumentData } from '@angular/fire/firestore';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { NewMsgService } from './new-msg.service';
 import { GeneralFunctionsService } from './general-functions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
+import { FirestoreThreadDataService } from './firestore-thread-data.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -27,12 +31,12 @@ export class MessagesService {
 
 
   constructor(
+    public dialog: MatDialog,
     public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService,
     public genFunctService: GeneralFunctionsService,
-
   ) {
   }
 
@@ -109,7 +113,7 @@ export class MessagesService {
   }
 
 
-  async getChangedMessage(changedMessageData) {
+  async getChangedMessage(changedMessageData: DocumentData) {
     const changedchatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
     changedchatMessage.chat_message = changedMessageData.chat_message;
     changedchatMessage.modified_message = changedMessageData.modified_message;
@@ -121,7 +125,7 @@ export class MessagesService {
   }
 
 
-  async spliceMessage(changedMessageData) {
+  async spliceMessage(changedMessageData: DocumentData) {
     const index = this.chatService.directChatMessages.findIndex(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
     if (index !== -1) {
       this.chatService.directChatMessages.splice(index, 1);
@@ -141,7 +145,7 @@ export class MessagesService {
   }
 
 
-  async editMessage(i: number, chatMessage) {
+  async editMessage(i: number, chatMessage: { message_ID: string; chat_message: string; }) {
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     this.editMessageText = true;
@@ -167,7 +171,7 @@ export class MessagesService {
   }
 
 
-  async saveEditedMessageFromThread(chat) {
+  async saveEditedMessageFromThread(chat: { message_ID: any; chat_message: any; chat_message_edited: any; }) {
     let id = chat.message_ID
     let message = chat.chat_message
     let edited = chat.chat_message_edited
@@ -180,6 +184,7 @@ export class MessagesService {
 
 
   async deleteMessage(i: number, chatMessage) {
+    console.log(chatMessage);
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     try {
@@ -191,10 +196,32 @@ export class MessagesService {
   }
 
 
+  openDeleteMessage(i: number, chatMessage: { chat_message: any; answers: number; }) {
+    const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
+      data: { comment: chatMessage.chat_message },
+      panelClass: 'my-dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        chatMessage.chat_message = result;
+        if (chatMessage.answers == 0) this.deleteMessage(i, chatMessage)
+        else this.changeMessageToDeleted(chatMessage)
+      }
+    });
+  }
 
 
+  async changeMessageToDeleted(chatMessage) {
+    chatMessage.chat_message = 'Diese Nachricht wurde gelöscht.'
+    const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
+    await updateDoc(messageRef, {
+      chat_message: chatMessage.chat_message,
+      message_deleted: true
+    })
+  }
 
-  getTimestampTime(timestamp) {
+
+  getTimestampTime(timestamp: { toDate: () => any; }) {
     const dateObj = timestamp.toDate();
     const hours = dateObj.getHours();
     const minutes = dateObj.getMinutes();
@@ -202,7 +229,7 @@ export class MessagesService {
   }
 
 
-  async updateMessagesReactions(chatMessage) {
+  async updateMessagesReactions(chatMessage: { message_ID: string; }) {
     const docRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
     await updateDoc(docRef, {
       emoji_data: this.emoji_data,
@@ -213,7 +240,7 @@ export class MessagesService {
   }
 
 
-  formatDate(timestamp): string {
+  formatDate(timestamp: { toDate: () => any; }): string {
     const date = timestamp.toDate();
     const now = new Date();
 

@@ -227,16 +227,7 @@ export class ThreadComponent implements OnInit {
 
   openDeleteMessage() {
     this.edit_comment = false;
-    const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
-      data: { comment: this.fsDataThreadService.current_chat_data.chat_message },
-      panelClass: 'my-dialog'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.fsDataThreadService.current_chat_data.chat_message = result;
-        this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
-      }
-    });
+    this.msgService.openDeleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
   }
 
 
@@ -274,10 +265,10 @@ export class ThreadComponent implements OnInit {
     const user = this.authService.all_users.find(element => element.uid === uid);
     return user.email
   }
-  
+
 
   openAttachmentMenu() {
-     this.open_attachment_menu = true
+    this.open_attachment_menu = true
     this.uploadService.chat_section = 'thread'
   }
 
@@ -302,8 +293,8 @@ export class ThreadComponent implements OnInit {
 
   textChanged(text: string) {
     this.comment_value = this.chatService.textChanged(text)
-    }
-  
+  }
+
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();

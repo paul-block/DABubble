@@ -433,12 +433,12 @@ input[type="file"] {
     padding: 5px;
     border-radius: 100%;
     cursor: pointer;
-    transition: $hover-transition;
+    transition: 200ms
     font-weight: 400;
 
     &:hover {
-        transition: $hover-transition;
-        background-color: $hover-background-color;
+       
+        background-color:#ECEEFE;
         color: $hover-text-color;
         font-weight: 800;
     }
