@@ -58,12 +58,12 @@ export class AuthenticationService {
     this.usersPromise = new Promise<void>((resolve) => {
       const dbRef = collection(this.db, "users");
       onSnapshot(dbRef, docsSnap => {
-        const users: any[] = []
+        const users: any[] = [];
         docsSnap.forEach(doc => {
           users.push(doc.data())
         })
         this.all_users = users;
-        resolve(); // Die Promise auflösen, wenn die Daten abgerufen wurden
+        resolve();
       });
     });
 

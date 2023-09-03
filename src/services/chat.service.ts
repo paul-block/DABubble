@@ -37,15 +37,20 @@ export class ChatService {
       onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
-          if (change.type === 'added') {
+          if (change.type === 'added' && this.isUserChat(chatData)) {
             this.chats.push(chatData);
           }
         });
+        console.log(this.chats);
+        
         resolve();
       });
     });
   }
 
+  isUserChat(chatData){
+    return chatData.chat_Member_IDs.includes(this.currentUser_id)
+  }
 
   async initOwnChat() {
     const userID = this.currentUser_id;
@@ -53,13 +58,14 @@ export class ChatService {
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
+
           chatExists = true;
         }
       });
     } else if (!chatExists) {
 
       await this.newChat(userID);
-      console.log('in');
+      console.log('ownChatGenerated');
     }
   }
 
@@ -116,6 +122,7 @@ export class ChatService {
 
 
   async newChat(userReceiverID: string) {
+    debugger
     const userID = this.currentUser_id;
     this.directChatMessages = [];
     let time_stamp = new Date();
@@ -230,13 +237,13 @@ export class ChatService {
 
 
   addUserToTextarea(i: number, text: string) {
-    const search_word = this.at_users[i].word
+    const search_word = this.at_users[i].word;
     const words = text.split(' ');
-    let index = words.indexOf(search_word)
-    words[index] = ''
-    text = words.join(' ')
-    text += '@' + this.at_users[i].user_name
-    return text
+    let index = words.indexOf(search_word);
+    words[index] = '';
+    text = words.join(' ');
+    text += '@' + this.at_users[i].user_name;
+    return text;
   }
 
 
