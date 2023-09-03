@@ -1,6 +1,4 @@
 <section class="p-20">
-
-
   <div class="title">
     <div>
       <mat-icon>tag</mat-icon>
@@ -9,7 +7,7 @@
     <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
   </div>
 
-  <div *ngIf="!delete_Channel" class="container-channel-name-description min-height-name"
+  <div *ngIf="!delete_Channel && !leave_Channel" class="container-channel-name-description min-height-name"
     [ngClass]="{'edit-container-channel-name-description':editName}">
     <div class="space-between">
       <h2>Channel-Name</h2>
@@ -28,7 +26,7 @@
 
   <div class="container-channel-name-description min-height-description"
     [ngClass]="{'edit-container-channel-name-description':editDescription}">
-    <ng-container *ngIf="!delete_Channel">
+    <ng-container *ngIf="!delete_Channel && !leave_Channel">
       <div class="space-between">
         <h2>Beschreibung</h2>
         <span class="edit-text" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
@@ -44,15 +42,24 @@
       <span>Diesen Channel löschen?</span>
       <span>Wenn du einen Channel löschst, werden alle Nachrichten dieses Channels sofort aus DA-Bubble entfernt. Das kann nicht rückgängig gemacht werden.</span>
     </div>
+    <div *ngIf="leave_Channel" class="realy_delete">
+      <span>Diesen Channel verlassen?</span>
+      <span>Wenn du diesen Channel verlässt, hast du keinen Zugriff mehr auf die Inhalte davon. Das kann nur rückgängig gemacht werden, wenn dich wieder jemand zu diesem Channel hinzufügt.</span>
+    </div>
   </div>
   
-  <div *ngIf="!delete_Channel" class="leave-channel">
+  <div *ngIf="!delete_Channel && !leave_Channel" class="leave-channel">
     <button class="delete_button" *ngIf="this.chatService.currentChatData.createdBy == authService.userData.uid && chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="openDeleteText()" >Channel löschen</button>
-    <button *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
+    <button *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="toggleLeaveText()">Channel verlassen</button>
   </div>
 
   <div *ngIf="delete_Channel" class="leave-channel">
     <button class="delete_button" (click)="deleteChannel()" mat-dialog-close>Channel löschen</button>
     <button (click)="abortDelete()">Abbrechen</button>
+  </div>
+
+  <div *ngIf="leave_Channel" class="leave-channel">
+    <button class="delete_button" (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
+    <button (click)="toggleLeaveText()">Abbrechen</button>
   </div>
 </section>
