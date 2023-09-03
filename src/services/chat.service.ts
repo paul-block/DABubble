@@ -139,7 +139,6 @@ export class ChatService {
     }
   }
 
-
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
       this.messageToPlaceholder = 'Nachricht an ' + this.getChatReceiverUser(this.currentChatData).user_name;
