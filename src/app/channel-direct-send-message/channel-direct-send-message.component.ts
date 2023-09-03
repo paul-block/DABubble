@@ -85,10 +85,10 @@ export class ChannelDirectSendMessageComponent {
 
   public async onSendClick() {
     if (this.newMsgService.openNewMsg) {
-      this.uploadService.checkForUpload();
-      await this.msgService.newMessage();
-      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
       this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
+      await this.uploadService.checkForUpload();
+      setTimeout(() => { this.msgService.newMessage(); }, 400);
+      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     } else {
       await this.uploadService.checkForUpload();
       setTimeout(() => { this.msgService.newMessage(); }, 400);
