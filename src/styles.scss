@@ -4,6 +4,8 @@
 $hover-background-color: #eceefe;
 $hover-text-color: #535af1;
 $hover-transition: all ease-in-out 125ms;
+$button-border-radius: 25px;
+$button-padding: 12px 25px;
 
 .d_none {
     display: none !important;
@@ -139,14 +141,21 @@ input[type="file"] {
 
 // buttons
 
+button{
+    font-weight: 700;
+    font-size: 18px;
+    border: 1px solid transparent;
+}
+
 .primary-button {
     transition: $hover-transition;
-    background-color: #444DF2 !important;
+    background-color: #444DF2;
     cursor: pointer;
     color: white;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
 
     &:hover {
-        transition: $hover-transition;
         background-color: #797EF3;
     }
 
@@ -161,13 +170,14 @@ input[type="file"] {
 
 .primary-button-red {
     transition: $hover-transition;
-    background-color: red !important;
+    background-color: red;
     cursor: pointer;
     color: white;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
 
     &:hover {
-        transition: $hover-transition;
-        background-color: rgb(223, 66, 66);
+        background-color: rgb(255, 79, 79);
     }
 
     &:active {
@@ -181,13 +191,14 @@ input[type="file"] {
 
 .secondary-button {
     transition: $hover-transition;
-    background-color: white !important;
+    background-color: white;
     border: 1px solid #444DF2;
     cursor: pointer;
     color: #444DF2;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
 
     &:hover {
-        transition: $hover-transition;
         color: white;
         background-color: $hover-text-color;
         border: 1px solid transparent;
@@ -207,15 +218,16 @@ input[type="file"] {
 
 .secondary-button-red {
     transition: $hover-transition;
-    background-color: white !important;
+    background-color: white;
     border: 1px solid black;
     cursor: pointer;
     color: red;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
 
     &:hover {
-        transition: $hover-transition;
         color: white;
-        background-color: rgb(223, 66, 66);
+        background-color: rgb(255, 79, 79);
         border: 1px solid transparent;
     }
 

@@ -1,3 +1,7 @@
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
+$hover-transition: all ease-in-out 125ms;
+
 h1 {
   margin-block-start: unset;
   margin-block-end: unset;
@@ -198,22 +202,22 @@ section {
   display: flex;
   justify-content: space-between;
 
-  button {
-    background-color: #535af1;
-    color: white;
-    font-weight: 700;
-    font-size: 18px;
-    padding: 12px 25px;
-    border: unset;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: $hover-transition;
+  // button {
+  //   background-color: #535af1;
+  //   color: white;
+  //   font-weight: 700;
+  //   font-size: 18px;
+  //   padding: 12px 25px;
+  //   border: unset;
+  //   border-radius: 50px;
+  //   cursor: pointer;
+  //   transition: $hover-transition;
 
-    &:hover {
-      background-color: #797ef3;
-      transition: $hover-transition;
-    }
-  }
+  //   &:hover {
+  //     background-color: #797ef3;
+  //     transition: $hover-transition;
+  //   }
+  // }
 }
 
 .realy_delete {
