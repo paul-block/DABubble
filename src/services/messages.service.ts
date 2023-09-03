@@ -171,14 +171,15 @@ export class MessagesService {
   }
 
 
-  async saveEditedMessageFromThread(chat: { message_ID: any; chat_message: any; chat_message_edited: any; }) {
+  async saveEditedMessageFromThread(chat: { message_ID: any; chat_message: any; chat_message_edited: any; modified_message: any; }) {
     let id = chat.message_ID
     let message = chat.chat_message
     let edited = chat.chat_message_edited
     const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
     await updateDoc(messageRef, {
       chat_message: message,
-      chat_message_edited: edited
+      chat_message_edited: edited,
+      modified_message: chat.modified_message
     })
   }
 

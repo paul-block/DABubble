@@ -183,7 +183,7 @@ export class ThreadComponent implements OnInit {
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result) {       
         this.fsDataThreadService.comments[i].comment = result;
         this.fsDataThreadService.comments[i].modified_comment = this.chatService.modifyMessageValue(result)
         this.fsDataThreadService.comments[i].text_edited = true
@@ -201,9 +201,16 @@ export class ThreadComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        console.log(result);
+        
         this.fsDataThreadService.current_chat_data.chat_message = result;
+        this.fsDataThreadService.current_chat_data.modified_message = this.chatService.modifyMessageValue(result)
+        console.log(this.fsDataThreadService.current_chat_data.modified_message);
+        
         this.fsDataThreadService.current_chat_data.chat_message_edited = true
         this.msgService.saveEditedMessageFromThread(this.fsDataThreadService.current_chat_data)
+        
+
       }
     });
   }

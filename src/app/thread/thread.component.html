@@ -65,17 +65,21 @@
             </div>
 
             <!--------------------------------------------Message---------------------------------------------------------------------------------->
+
+
             <div class="deleted" *ngIf="fsDataThreadService.current_chat_data?.message_deleted">
                 <mat-icon>delete_outline</mat-icon>
                 {{fsDataThreadService.current_chat_data.chat_message}}
             </div>
+
             <div class="message" *ngIf="!fsDataThreadService.current_chat_data?.message_deleted"
                 [class.message_user]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
                 <span (click)="profileService.openProfile(word)"
-                    *ngFor="let word of fsDataThreadService.current_message; let k = index"
+                    *ngFor="let word of fsDataThreadService.current_chat_data.modified_message; let k = index"
                     [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                    {{chatService.renameUid(word)}}&nbsp;
+                    {{chatService.renameUid(word)}}
                 </span>
+                <div style="font-size: 10px;" *ngIf="fsDataThreadService.current_chat_data.chat_message_edited">(bearbeitet)</div>
             </div>
             <div class="emoji_main">
                 <div *ngFor="let item of 0" class="emoji_count" matTooltip="{{react_user}} hat reagiert">
