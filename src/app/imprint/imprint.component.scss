@@ -44,3 +44,28 @@
     font-weight: 700;
     color: #444DF2;
 }
+
+@media screen and (max-width: 750px) {
+
+    .imprint_main {
+        width: 100%;
+    }
+
+    .arrow_back {
+        top: 15px;
+        right: 19px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+
+   
+
+    .headline {
+        font-size: 32px;
+    }
+
+    .imprint_main {
+        padding: 30px;
+    }
+}

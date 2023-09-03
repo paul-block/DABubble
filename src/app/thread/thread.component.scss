@@ -1,3 +1,6 @@
+$hover-background-color: #ECEEFE;
+$hover-text-color: #535AF1;
+
 header {
   box-sizing: border-box;
   display: flex;
@@ -11,6 +14,21 @@ header {
   padding: 15px;
   z-index: 10;
   top: 0;
+}
+
+.close-profile-menu {
+  font-weight: 300 !important;
+  color: black !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: 200ms;
+  &:hover {
+      background-color: $hover-background-color;
+  }
 }
 
 .z_index {
@@ -347,7 +365,7 @@ header {
 .line {
   width: 75%;
   position: absolute;
-  left: 77px;
+  left: 133px;
   height: 1px;
   background-color: #adb0d9;
 }

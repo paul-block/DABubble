@@ -1,7 +1,9 @@
 <div class="dialog-container">
     <div class="head-container">
         <span>Channel erstellen</span>
-        <img (click)="closeDialog()" src="assets/img/icons/close.png" class="sidebar-icon-hover" alt="">
+        <div class="close-menu">
+            <mat-icon style="font-weight: 400;" (click)="closeDialog()">close</mat-icon>
+        </div>
     </div>
 
     <p> Channels dienen deinem Team zur Kommunikation.

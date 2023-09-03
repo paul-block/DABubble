@@ -183,7 +183,7 @@ export class ThreadComponent implements OnInit {
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result) {       
         this.fsDataThreadService.comments[i].comment = result;
         this.fsDataThreadService.comments[i].modified_comment = this.chatService.modifyMessageValue(result)
         this.fsDataThreadService.comments[i].text_edited = true
@@ -201,9 +201,16 @@ export class ThreadComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        console.log(result);
+        
         this.fsDataThreadService.current_chat_data.chat_message = result;
+        this.fsDataThreadService.current_chat_data.modified_message = this.chatService.modifyMessageValue(result)
+        console.log(this.fsDataThreadService.current_chat_data.modified_message);
+        
         this.fsDataThreadService.current_chat_data.chat_message_edited = true
         this.msgService.saveEditedMessageFromThread(this.fsDataThreadService.current_chat_data)
+        
+
       }
     });
   }
@@ -227,16 +234,7 @@ export class ThreadComponent implements OnInit {
 
   openDeleteMessage() {
     this.edit_comment = false;
-    const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
-      data: { comment: this.fsDataThreadService.current_chat_data.chat_message },
-      panelClass: 'my-dialog'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.fsDataThreadService.current_chat_data.chat_message = result;
-        this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
-      }
-    });
+    this.msgService.openDeleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
   }
 
 
@@ -274,10 +272,10 @@ export class ThreadComponent implements OnInit {
     const user = this.authService.all_users.find(element => element.uid === uid);
     return user.email
   }
-  
+
 
   openAttachmentMenu() {
-     this.open_attachment_menu = true
+    this.open_attachment_menu = true
     this.uploadService.chat_section = 'thread'
   }
 
@@ -302,8 +300,8 @@ export class ThreadComponent implements OnInit {
 
   textChanged(text: string) {
     this.comment_value = this.chatService.textChanged(text)
-    }
-  
+  }
+
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();

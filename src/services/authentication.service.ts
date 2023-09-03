@@ -106,7 +106,7 @@ export class AuthenticationService {
       this.signUp_successful = true
       setTimeout(() => this.signUp_successful = false, 3000);
     } catch (error) {
-      if (error.message == 'Firebase: Error (auth/email-already-in-use).') {
+      if (error.code === 'auth/email-already-in-use') {
         this.email_error = true
         setTimeout(() => this.email_error = false, 3000);
       } else

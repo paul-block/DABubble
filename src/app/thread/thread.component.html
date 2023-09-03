@@ -4,8 +4,8 @@
             <span>Thread</span>
             <span># {{fsDataThreadService.current_channelname}}</span>
         </div>
-        <div>
-            <img (click)="closeThread(false)" src="/assets/img/icons/close.png" alt="">
+        <div class="close-profile-menu">
+            <mat-icon style="font-weight: 400;" (click)="closeThread(false)">close</mat-icon>
         </div>
     </div>
 </header>
@@ -30,12 +30,12 @@
             (click)="stopPropagation($event) "
             (emojiClick)="addEmojiInDirectMessage($event, fsDataThreadService.direct_chat_index)"></emoji-mart>
 
-        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID != authService.userData.uid"
+        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID != authService.userData.uid && !fsDataThreadService.current_chat_data?.message_deleted"
             (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
 
-        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authService.userData.uid"
+        <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authService.userData.uid && !fsDataThreadService.current_chat_data?.message_deleted"
             (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy_user">
             <div class="emojy">
                 <img src="/assets/img/icons/add_reaction.png" alt="">
@@ -66,13 +66,20 @@
 
             <!--------------------------------------------Message---------------------------------------------------------------------------------->
 
-            <div class="message"
+
+            <div class="deleted" *ngIf="fsDataThreadService.current_chat_data?.message_deleted">
+                <mat-icon>delete_outline</mat-icon>
+                {{fsDataThreadService.current_chat_data.chat_message}}
+            </div>
+
+            <div class="message" *ngIf="!fsDataThreadService.current_chat_data?.message_deleted"
                 [class.message_user]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
                 <span (click)="profileService.openProfile(word)"
-                    *ngFor="let word of fsDataThreadService.current_message; let k = index"
+                    *ngFor="let word of fsDataThreadService.current_chat_data.modified_message; let k = index"
                     [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                    {{chatService.renameUid(word)}}&nbsp;
+                    {{chatService.renameUid(word)}}
                 </span>
+                <div style="font-size: 10px;" *ngIf="fsDataThreadService.current_chat_data.chat_message_edited">(bearbeitet)</div>
             </div>
             <div class="emoji_main">
                 <div *ngFor="let item of 0" class="emoji_count" matTooltip="{{react_user}} hat reagiert">
