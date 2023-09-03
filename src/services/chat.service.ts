@@ -47,11 +47,6 @@ export class ChatService {
   }
 
 
-  filterChats(chats) {
-    return chats.filter(chat => chat.chat_Member_IDs.includes(this.currentUser_id));
-  }
-
-
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
@@ -157,7 +152,7 @@ export class ChatService {
 
   getChatReceiverUser(chat) {
     let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.userReceiverID) {
+    if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
       chatReveiverID = chat.chat_Member_IDs[0];
     } else {
       chatReveiverID = chat.chat_Member_IDs[1];
