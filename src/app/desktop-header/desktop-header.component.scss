@@ -6,56 +6,33 @@ header {
     width: 100vw;
     padding: 10px 30px;
 
-    #logo {
-        width: 200px;
-    }
-
-    #profile {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        position: absolute;
-        right: 100px;
-        cursor: pointer;
-
-        .profile-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 100%;
-            margin-right: 20px;
+        #logo {
+            width: 200px;
         }
 
-        #name {
-            font-size: 26px;
-            font-weight: bold;
-
-            &:hover {
-                color: #535AF1;
-            }
-        }
-    }
-
-    .input-container {
-        position: relative;
-        left: 180px;
-
-        input {
-            padding: 10px 30px;
-            height: 35px;
-            width: 1300px;
-            border-radius: 42px;
-            border: none;
-            font-size: 22px;
-            font-weight: 400;
-        }
-
-        img {
+        #profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
             position: absolute;
-            height: 25px;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
+            right: 100px;
+            cursor: pointer;
+
+                #name {
+                    font-size: 26px;
+                    font-weight: bold;
+
+                    &:hover {
+                        color: #535AF1;
+                    }
+                }
+
+                .profile-img {
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 100%;
+                    margin-right: 20px;
+                }
         }
-    }
 }
 

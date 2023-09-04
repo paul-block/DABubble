@@ -6,7 +6,6 @@ import { finalize } from 'rxjs/operators';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 
 
-
 @Component({
   selector: 'app-profile-menu',
   templateUrl: './profile-menu.component.html',
@@ -22,7 +21,7 @@ export class ProfileMenuComponent {
   uploadProgress: number = 0;
   selectedFile: File = null;
   imageUrl: string;
-  current_imageUrl: string
+  current_imageUrl: string;
   current_username: string = this.authService.userData.user_name;
   current_email: string = this.authService.userData.email;
 
@@ -50,24 +49,12 @@ export class ProfileMenuComponent {
   }
 
 
-
   toggleEditDetails() {
     this.editDetailsVisible = !this.editDetailsVisible;
   }
 
-
-
-  // updateUserDetails() {
-  //   this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
-  //   this.dialog.closeAll();
-  //   this.fsDataThreadService.detailsVisible = false
-  // }
-
   updateUserDetails() {
-    if (this.current_username != this.authService.userData.user_name || 
-        this.current_email != this.authService.userData.email) {
     this.authService.updateUserDetails(this.current_username, this.current_email);
-    }
     this.dialog.closeAll();
     this.fsDataThreadService.detailsVisible = false
   }
@@ -93,11 +80,6 @@ export class ProfileMenuComponent {
     this.selectedFile = $event.target.files[0];
     if (this.selectedFile && this.selectedFile.type.startsWith('image/')) this.uploadImage();
     else this.file_error = true;
-  }
-
-
-  setAvatar(image: string) {
-   
   }
 
 

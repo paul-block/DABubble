@@ -15,17 +15,21 @@ import { FirestoreThreadDataService } from 'services/firestore-thread-data.servi
   styleUrls: ['./channel-sidebar.component.scss'],
 })
 export class ChannelSidebarComponent implements OnInit, OnDestroy {
-  channelsVisible: boolean = true;
-  authorizedChannels: any[] = [];
-  dmsVisible: boolean = true;
-  workspaceVisible: boolean = true;
-  openNewMsg: boolean = false;
+
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
-  private subChannels: Subscription;
-  currentUserSubscription: Subscription;
-  private subscription: Subscription;
+
+  channelsVisible: boolean = true;
+  dmsVisible: boolean = true;
+  workspaceVisible: boolean = true;
+  openNewMsg: boolean = false;
+ 
+  private authorizedChannelsSubscription: Subscription;
+  private currentUserSubscription: Subscription;
+  private newChannelIdSubscription: Subscription;
+
+  authorizedChannels: any[] = [];
   currentValue: string;
 
   constructor(
@@ -37,7 +41,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
   ) {
-    this.subscription = this.channelService.createtChannelId$.subscribe((newValue) => {
+    this.newChannelIdSubscription = this.channelService.createtChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
       if (this.currentValue) this.openChannel(this.currentValue);
     });
@@ -53,7 +57,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subChannels = this.channelService.authorizedChannels.subscribe(channels => {
+    this.authorizedChannelsSubscription = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;
     });
     
@@ -66,9 +70,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    if (this.subChannels) this.subChannels.unsubscribe();
-    if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
-    this.subscription.unsubscribe();
+    // if (this.authorizedChannelsSubscription) this.authorizedChannelsSubscription.unsubscribe();
+    // if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
+    // this.newChannelIdSubscription.unsubscribe();
+    this.authorizedChannelsSubscription.unsubscribe();
+    this.currentUserSubscription.unsubscribe();
+    this.newChannelIdSubscription.unsubscribe();
   }
 
 
@@ -88,7 +95,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   openAddChannel() {
-    const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'add-channel-dialog';
     this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
@@ -98,7 +104,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  
   sendNewMsg() {
     this.chatService.currentChatSection = 'noChatSectionSelected';
     this.chatService.currentChatID = 'noChatSelected';

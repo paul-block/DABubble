@@ -31,7 +31,6 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  addCertainUserValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
   googleUser_exist: boolean;
   all_users: any[];
@@ -250,12 +249,6 @@ export class AuthenticationService {
     if (userIndex !== -1) users.splice(userIndex, 1);
     return users
   }
-
-
-  updateCertainUserValue(value: string): void {
-    this.addCertainUserValue.next(value);
-  }
-
 
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
