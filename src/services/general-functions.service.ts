@@ -11,6 +11,10 @@ export class GeneralFunctionsService {
     event.preventDefault();
   };
 
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  };
+
   async generateCustomFirestoreID() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let id = '';

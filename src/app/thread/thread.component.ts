@@ -11,6 +11,7 @@ import { UploadService } from 'services/upload.service';
 import { ReactionBubbleService } from 'services/reaction-bubble.service';
 import { ProfileService } from 'services/profile.service';
 import { ChannelService } from 'services/channel.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
 
 
 
@@ -53,7 +54,8 @@ export class ThreadComponent implements OnInit {
     public uploadService: UploadService,
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public genFunctService: GeneralFunctionsService,
   ) { }
 
   @Output() threadClose = new EventEmitter<boolean>();
@@ -107,11 +109,6 @@ export class ThreadComponent implements OnInit {
       this.getAllUsers()
     }
     if (this.open_attachment_menu == true) this.open_attachment_menu = false
-  };
-
-
-  stopPropagation(event: Event) {
-    event.stopPropagation();
   };
 
 

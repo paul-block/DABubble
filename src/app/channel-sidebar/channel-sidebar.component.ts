@@ -70,9 +70,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    // if (this.authorizedChannelsSubscription) this.authorizedChannelsSubscription.unsubscribe();
-    // if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
-    // this.newChannelIdSubscription.unsubscribe();
     this.authorizedChannelsSubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
     this.newChannelIdSubscription.unsubscribe();

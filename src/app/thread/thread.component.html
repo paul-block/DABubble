@@ -15,32 +15,31 @@
     <div class="message_div "
         [class.row_reverse]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
 
-
         <div [class.show_edit_comment]="edit_comment && edit_comment_index == -1  " class="edit_comment"
             (click)="openEditComment(-1)">
-            <div class="menu_button" (click)="openEditMessage()" (click)="stopPropagation($event)">
+            <div class="menu_button" (click)="openEditMessage()" (click)="genFunctService.stopPropagation($event)">
                 <span>Nachricht bearbeiten</span>
             </div>
-            <div class="menu_button" (click)="openDeleteMessage()" (click)="stopPropagation($event)">
+            <div class="menu_button" (click)="openDeleteMessage()" (click)="genFunctService.stopPropagation($event)">
                 <span>Nachricht löschen</span>
             </div>
         </div>
 
         <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -1" class="emoji_picker"
-            (click)="stopPropagation($event) "
+            (click)="genFunctService.stopPropagation($event) "
             (emojiClick)="addEmojiInDirectMessage($event, fsDataThreadService.direct_chat_index)"></emoji-mart>
 
         <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID != authService.userData.uid && !fsDataThreadService.current_chat_data?.message_deleted"
-            (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy">
+            (click)="openEmojiPicker(-1)" (click)="genFunctService.stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
 
         <div *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authService.userData.uid && !fsDataThreadService.current_chat_data?.message_deleted"
-            (click)="openEmojiPicker(-1)" (click)="stopPropagation($event)" class="reaction_emojy_user">
+            (click)="openEmojiPicker(-1)" (click)="genFunctService.stopPropagation($event)" class="reaction_emojy_user">
             <div class="emojy">
                 <img src="/assets/img/icons/add_reaction.png" alt="">
             </div>
-            <div class="emojy" (click)="openEditCommentMenu(-1)" (click)="stopPropagation($event)">
+            <div class="emojy" (click)="openEditCommentMenu(-1)" (click)="genFunctService.stopPropagation($event)">
                 <img src="/assets/img/icons/more_vert.png">
             </div>
         </div>
@@ -141,10 +140,10 @@
 
         <div [class.show_edit_comment]="edit_comment && getUserName(fsDataThreadService.comments[i].uid) == authService.userData.user_name && edit_comment_index == i"
             class="edit_comment" (click)="openEditComment(i)">
-            <div class="menu_button" (click)="openEditComment(i)" (click)="stopPropagation($event)">
+            <div class="menu_button" (click)="openEditComment(i)" (click)="genFunctService.stopPropagation($event)">
                 <span>Nachricht bearbeiten</span>
             </div>
-            <div class="menu_button" (click)="openDeleteComment(i)" (click)="stopPropagation($event)">
+            <div class="menu_button" (click)="openDeleteComment(i)" (click)="genFunctService.stopPropagation($event)">
                 <span>Nachricht löschen</span>
             </div>
         </div>
@@ -152,20 +151,20 @@
         <!-----------------------------------------------------------------Emoji Picker----------------------------------------------------------------------------------------->
 
         <emoji-mart [class.d_block]="emojiPicker_open && picker_index == i" class="emoji_picker"
-            (click)="stopPropagation($event) " (emojiClick)="addEmojiInThread($event, i)"></emoji-mart>
+            (click)="genFunctService.stopPropagation($event) " (emojiClick)="addEmojiInThread($event, i)"></emoji-mart>
         <div *ngIf="authService.getUserInfo(fsDataThreadService.comments[i].uid).user_name != authService.userData.user_name"
-            (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy">
+            (click)="openEmojiPicker(i)" (click)="genFunctService.stopPropagation($event)" class="reaction_emojy">
             <div class="emojy"><img src="/assets/img/icons/add_reaction.png" alt=""></div>
         </div>
 
         <!-----------------------------------------------------------------add Emoji and Menu----------------------------------------------------------------------------------------->
 
         <div *ngIf="getUserName(fsDataThreadService.comments[i].uid) == authService.userData.user_name"
-            (click)="openEmojiPicker(i)" (click)="stopPropagation($event)" class="reaction_emojy_user">
+            (click)="openEmojiPicker(i)" (click)="genFunctService.stopPropagation($event)" class="reaction_emojy_user">
             <div class="emojy">
                 <img src="/assets/img/icons/add_reaction.png" alt="">
             </div>
-            <div class="emojy" (click)="openEditCommentMenu(i)" (click)="stopPropagation($event)">
+            <div class="emojy" (click)="openEditCommentMenu(i)" (click)="genFunctService.stopPropagation($event)">
                 <img src="/assets/img/icons/more_vert.png">
             </div>
         </div>
@@ -207,7 +206,7 @@
                     </div>
                     <div class="delete_file" *ngIf="fsDataThreadService.comments[i].uid == authService.userData.uid">
                         <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.comments[i].uploaded_files.file_name[k], i, k)"
-                            src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
+                            src="/assets/img/icons/close.png" (click)="genFunctService.stopPropagation($event)">
                     </div>
                 </div>
             </div>
@@ -299,13 +298,13 @@
             (ngModelChange)="textChanged($event)">placeholder="Antworten..."></textarea>
         <div class="icons_main">
             <div class="icons">
-                <div class="plus" (click)="openAttachmentMenu()" (click)="stopPropagation($event)">
+                <div class="plus" (click)="openAttachmentMenu()" (click)="genFunctService.stopPropagation($event)">
                     <div class="hover"><img src="/assets/img/icons/add.png" alt=""></div>
                 </div>
                 <div class="hover"><img src="/assets/img/icons/sentiment_satisfied.png" (click)="openEmojiPicker(-2)"
-                        (click)="stopPropagation($event)"></div>
+                        (click)="genFunctService.stopPropagation($event)"></div>
                 <div class="hover"><img src="/assets/img/icons/alternate_email.png" (click)="openUsers()"
-                        (click)="stopPropagation($event)"></div>
+                        (click)="genFunctService.stopPropagation($event)"></div>
             </div>
         </div>
         <img [class.inactive]="comment_value.length < 1 && uploadService.upload_array.file_name.length == 0"

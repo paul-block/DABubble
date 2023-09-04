@@ -473,3 +473,58 @@ h1 {
     }
 }
 
+.upload_content {
+    overflow: hidden;
+    background-color: white;
+    position: relative;
+    margin: 5px 0 5px 0;
+    margin-left: 15px;
+    margin-right: 15px;
+    transition: 200ms;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #adb0d9;
+    border-radius: 20px;
+    width: calc(100% - 30px);
+
+    a {
+        text-decoration: none;
+        font-size: 10px;
+    }
+
+    &:hover {
+        border-color: #444df2;
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+            0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+    }
+}
+
+.delete_file {
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: transparent;
+    transition: 200ms;
+
+    &:hover {
+        background-color: #eceefe;
+    }
+
+    img {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.file_image {
+    width: 40px;
+    z-index: 1;
+}
