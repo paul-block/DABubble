@@ -40,7 +40,7 @@ export class ChooseAvatarComponent {
 
     uploadImage() {
       this.file_error = false
-      const filePath = this.authenticationService.userData.uid + '/' + this.selectedFile.name;
+      const filePath = this.authenticationService.userData.uid + '/'  + 'avatar_' + this.selectedFile.name;
       const fileRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
       uploadTask.percentageChanges().subscribe(progress => {
