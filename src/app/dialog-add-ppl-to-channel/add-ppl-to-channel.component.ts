@@ -14,19 +14,19 @@ import { MessagesService } from 'services/messages.service';
   styleUrls: ['./add-ppl-to-channel.component.scss']
 })
 export class AddPplToChannelComponent implements OnInit {
-  checkboxValue = false;
-  selectedOption: string = 'all'
+
   certainInput: string;
   channelName: string;
   description: string;
+
   public searchControl = new FormControl();
+  public selectedOptionControl = new FormControl('all');
+
   userId: string;
   userSelected = false;
-  DelevoperTeamChannelRef = 'm3eNJFz61Ixm1cme5qAf';
-  counter: number = 0
+
   selectedUserNames: string[] = [];
   selectedUserAvatar: string[] = [];
-
 
 
   constructor(
@@ -42,6 +42,7 @@ export class AddPplToChannelComponent implements OnInit {
     this.description = data.description;
   }
 
+
   ngOnInit(): void {
     this.authService.addCertainUserValue.subscribe(value => {
       this.searchControl.setValue(value, { emitEvent: false });
@@ -49,24 +50,30 @@ export class AddPplToChannelComponent implements OnInit {
     this.searchControl.valueChanges.subscribe(inputValue => {
       this.authService.updateCertainUserValue(inputValue);
     });
+    this.selectedOptionControl.valueChanges.subscribe(value => {
+      this.onSelectedOptionChange();
+    });
     this.channelService.currentUserId.subscribe(userId => {
       this.userId = userId;
     });
     this.channelService.userSelected$.subscribe(
       userName => {
-        this.selectedUserNames.push(userName);
-        this.searchControl.setValue('');
-        this.authService.updateCertainUserValue('');
-        this.channelService.showSelectedUser(true);
-        this.channelService.toggleAutocomplete(true);
+       this.addSelectedUser(userName);
       }
     );
-
     this.channelService.userAvatar$.subscribe(
       avatar => {
         this.selectedUserAvatar.push(avatar);
       }
     );
+  }
+
+  addSelectedUser(userName: string) {
+    this.selectedUserNames.push(userName);
+    this.searchControl.setValue('');
+    this.authService.updateCertainUserValue('');
+    this.channelService.showSelectedUser(true);
+    this.channelService.toggleAutocomplete(true);
   }
 
   removeUserName(name: string) {
@@ -76,12 +83,12 @@ export class AddPplToChannelComponent implements OnInit {
     }
   }
 
+
   deleteSelectedUser(userName: string) {
     this.removeUserName(userName);
     this.authService.updateCertainUserValue('');
-    // this.channelService.showSelectedUser(false);
-    // this.channelService.toggleAutocomplete(true);
   }
+
 
   closeDialog() {
     this.dialog.closeAll();
@@ -90,14 +97,14 @@ export class AddPplToChannelComponent implements OnInit {
 
   async createNewChannel() {
     await this.channelService.createNewChannel(this.channelName, this.description);
-    if (this.selectedOption === 'all') {
+    if (this.selectedOptionControl.value === 'all') {
       const members = this.authService.all_users
       members.forEach(member => {
         let id = member.uid
         this.channelService.addUserToChannel(this.channelName, id);
       });
       setTimeout(() => this.sendAddAllMemberMessage() , 300);
-    } else if (this.selectedOption === 'certain' && this.selectedUserNames.length > 0) {
+    } else if (this.selectedOptionControl.value === 'certain' && this.selectedUserNames.length > 0) {
       const userIds = await Promise.all(
         this.selectedUserNames.map(userName => this.channelService.findUserByName(userName))
       );
@@ -140,3 +147,30 @@ export class AddPplToChannelComponent implements OnInit {
     this.messageService.newMessage()
   }
 }
+
+
+  // ngOnInit(): void {
+  //   this.authService.addCertainUserValue.subscribe(value => {
+  //     this.searchControl.setValue(value, { emitEvent: false });
+  //   });
+  //   this.searchControl.valueChanges.subscribe(inputValue => {
+  //     this.authService.updateCertainUserValue(inputValue);
+  //   });
+  //   this.channelService.currentUserId.subscribe(userId => {
+  //     this.userId = userId;
+  //   });
+  //   this.channelService.userSelected$.subscribe(
+  //     userName => {
+  //       this.selectedUserNames.push(userName);
+  //       this.searchControl.setValue('');
+  //       this.authService.updateCertainUserValue('');
+  //       this.channelService.showSelectedUser(true);
+  //       this.channelService.toggleAutocomplete(true);
+  //     }
+  //   );
+  //   this.channelService.userAvatar$.subscribe(
+  //     avatar => {
+  //       this.selectedUserAvatar.push(avatar);
+  //     }
+  //   );
+  // }

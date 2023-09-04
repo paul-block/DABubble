@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <div class="first-row">
         <span class="headline">Leute hinzufügen</span>
         <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
@@ -33,4 +33,41 @@
 
     <app-dialog-autocomplete
         [ngClass]="{'d-none': !certainInput || certainInput.length === 0}"></app-dialog-autocomplete>
+</div> -->
+
+<div class="container">
+    <div class="first-row">
+        <span class="headline">Leute hinzufügen</span>
+        <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
+    </div>
+    <label class="checkbox-container">
+        <div class="flex">
+            <input type="radio" class="round-checkbox" name="option" [formControl]="selectedOptionControl" value="all">
+            <span class="checkmark">Alle Mitglieder von <span id="highlight">DA-Bubble</span> hinzufügen</span>
+        </div>
+    </label>
+    <label class="checkbox-container">
+        <div class="flex">
+            <input type="radio" class="round-checkbox" name="option" [formControl]="selectedOptionControl"
+                value="certain">
+            <span class="checkmark">Bestimmte Leute hinzufügen</span>
+        </div>
+        <input *ngIf="selectedOptionControl.value === 'certain'" [formControl]="searchControl" id="certain-input"
+            type="text" placeholder="Name eingeben">
+        <div class="absolute" *ngIf="channelService.showSelectedUser$ | async">
+            <div class="selected-user" *ngFor="let userName of selectedUserNames; let i = index">
+                <img class="avatar" [src]="selectedUserAvatar[i]" alt="">
+                <span> {{ userName }}</span>
+                <mat-icon _ngcontent-ng-c2102270042="" (click)="deleteSelectedUser(userName)" role="img"
+                    class="mat-icon notranslate material-icons mat-ligature-font mat-icon-no-color pointer"
+                    aria-hidden="true" data-mat-icon-type="font">close</mat-icon>
+            </div>
+        </div>
+    </label>
+    <button class="primary-button" (click)="createNewChannel()"
+        [disabled]="selectedOptionControl.value === 'certain' && (!selectedOptionControl.value || selectedUserNames.length === 0)">Erstellen
+    </button>
+
+    <app-dialog-autocomplete
+        [ngClass]="{'d-none': !searchControl.value || searchControl.value.length === 0}"></app-dialog-autocomplete>
 </div>

@@ -36,7 +36,8 @@
       top: 100px;
       display: flex;
       gap: 2px;
-      flex-direction: column;
+      flex-wrap: wrap;
+      width: 460px;
       max-height: 110px;
       overflow: scroll;
 
