@@ -220,7 +220,7 @@ export class ThreadComponent implements OnInit {
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result || result.length == 0) {
+      if (result) {
         this.fsDataThreadService.comments.splice(i, 1)
         this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
         this.fsDataThreadService.updateData()
