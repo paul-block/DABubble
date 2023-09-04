@@ -203,7 +203,7 @@ export class MessagesService {
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result || result == '') {
         chatMessage.chat_message = result;
         if (chatMessage.answers == 0) this.deleteMessage(i, chatMessage)
         else this.changeMessageToDeleted(chatMessage)

@@ -85,7 +85,7 @@ export class ProfileMenuComponent {
 
   uploadImage() {
     this.file_error = false
-    const filePath = this.authService.userData.uid + '/' + this.selectedFile.name;
+    const filePath = this.authService.userData.uid + '/' + 'avatar_' + this.selectedFile.name;
     const fileRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, this.selectedFile);
     uploadTask.percentageChanges().subscribe(progress => {
