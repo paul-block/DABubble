@@ -138,15 +138,15 @@ export class FirestoreThreadDataService {
 
 
   updateThread(i: number, k: number) {
-    this.comments[i].uploaded_files.file_name.splice(k, 1)
-    this.comments[i].uploaded_files.download_link.splice(k, 1)
-    this.updateData()
+    this.comments[i].uploaded_files.file_name.splice(k, 1);
+    this.comments[i].uploaded_files.download_link.splice(k, 1);
+    this.updateData();
   }
 
 
   formatNameAndText(name: string): string {
     const [firstName, lastName] = name.split(' ');
     const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
-    return `${formattedName} `
+    return `${formattedName} `;
   }
 }

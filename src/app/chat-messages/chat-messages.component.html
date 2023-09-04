@@ -51,8 +51,8 @@
                         <div>{{uploadService.checkFileName(chatMessage.uploaded_files.file_name[k])}}
                         </div>
                         <div class="delete_file" *ngIf="chatMessage.uid == authService.userData.user_Sender_ID">
-                            <img (click)="uploadService.deleteSelectedFile(chatMessage.uploaded_files.file_name[k], i, k)"
-                                src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
+                            <img (click)="uploadService.deleteSelectedFile(chatMessage.uploaded_files.file_name[k], i, k, 'mainChat'); genFunctService.stopPropagation($event)"
+                                src="/assets/img/icons/close.png">
                         </div>
                     </div>
                 </div>

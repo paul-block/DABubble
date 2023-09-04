@@ -20,7 +20,7 @@ export class UploadService {
   }
   file = []
   file_images = ['exe', 'xls', 'csv', 'txt', 'ppt', 'zip', 'avi', 'css', 'doc', 'html', 'js', 'jpg', 'json', 'mp3', 'pdf', 'png', 'xml', 'svg', 'file']
-  chat_section:string
+  chat_section: string
 
   constructor(
     public authenticationService: AuthenticationService,
@@ -34,7 +34,7 @@ export class UploadService {
 
   onFileSelected(event: any): void {
     console.log(this.chat_section);
-    
+
     this.selectedFile = event.target.files[0];
     console.log(this.selectedFile);
 
@@ -83,7 +83,7 @@ export class UploadService {
     this.msgService.upload_array = this.upload_array;
     console.log('uploadArray ' + this.upload_array);
   }
-  
+
 
   async prepareUploadfiles() {
     for (let i = 0; i < this.upload_array.file_name.length; i++) {
@@ -151,10 +151,15 @@ export class UploadService {
   }
 
 
-  deleteSelectedFile(filename: string, i: number, k: number) {
-    let filePath = this.authenticationService.userData.uid + '/' + filename
-    this.deleteFile(filePath)
-    this.fsDataThreadService.updateThread(i, k)
+  deleteSelectedFile(filename: string, i: number, k: number, section: string) {
+    let filePath = this.authenticationService.userData.uid + '/' + filename;
+    this.deleteFile(filePath);
+    if (section === 'mainChat') {
+      this.msgService.updateUploadedFiles(i, k)
+    } else {
+      this.fsDataThreadService.updateThread(i, k);
+    }
+
   }
 
 
