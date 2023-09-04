@@ -120,6 +120,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChat(chat: { chat_ID: string; }) {
+    debugger
     if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';

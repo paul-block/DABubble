@@ -5,6 +5,7 @@ import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ChannelService } from './channel.service';
+import { GeneralFunctionsService } from './general-functions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class ChatService {
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
+    public genFunctService: GeneralFunctionsService,
   ) { }
 
 
@@ -121,29 +123,53 @@ export class ChatService {
   }
 
 
-  async newChat(userReceiverID: string) {
-    debugger
+  // async newChat(userReceiverID: string) {
+  //   const userID = this.currentUser_id;
+  //   this.directChatMessages = [];
+  //   let time_stamp = new Date();
+  //   if (userID !== undefined) {
+  //     try {
+  //       const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
+  //         chat_Member_IDs: [userID, userReceiverID],
+  //         created_At: time_stamp,
+  //       });
+
+  //       const newChatID = chatsCollectionRef.id;
+  //       const chatDocRef = doc(this.db, 'chats', newChatID);
+  //       await updateDoc(chatDocRef, {
+  //         chat_ID: newChatID
+  //       })
+  //     } catch (error) {
+  //       console.error("Error beim Erstellen eines neuen Chats: ", error);
+  //     }
+  //   } else {
+  //     console.error("Kein Benutzer ist eingeloggt");
+  //   }
+  // }
+
+  async newChat(userReceiverID: string): Promise<string | null> {
     const userID = this.currentUser_id;
-    this.directChatMessages = [];
-    let time_stamp = new Date();
-    if (userID !== undefined) {
+    return new Promise(async (resolve, reject) => {
       try {
-        const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
+        const time_stamp = new Date();
+  
+        if (!userID) {
+          reject("Kein Benutzer ist eingeloggt");
+          return;
+        }
+        const newChatID = await this.genFunctService.generateCustomFirestoreID();
+        await addDoc(collection(this.db, 'chats'), {
           chat_Member_IDs: [userID, userReceiverID],
           created_At: time_stamp,
-        });
-
-        const newChatID = chatsCollectionRef.id;
-        const chatDocRef = doc(this.db, 'chats', newChatID);
-        await updateDoc(chatDocRef, {
           chat_ID: newChatID
-        })
+        });
+  
+        resolve(newChatID);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
+        reject(error);
       }
-    } else {
-      console.error("Kein Benutzer ist eingeloggt");
-    }
+    });
   }
 
   textAreaMessageTo() {
