@@ -23,7 +23,8 @@ export class ProfileMenuComponent {
   selectedFile: File = null;
   imageUrl: string;
   current_imageUrl: string
-
+  current_username: string = this.authService.userData.user_name;
+  current_email: string = this.authService.userData.email;
 
   constructor(
     public authService: AuthenticationService,
@@ -56,8 +57,17 @@ export class ProfileMenuComponent {
 
 
 
+  // updateUserDetails() {
+  //   this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
+  //   this.dialog.closeAll();
+  //   this.fsDataThreadService.detailsVisible = false
+  // }
+
   updateUserDetails() {
-    this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
+    if (this.current_username != this.authService.userData.user_name || 
+        this.current_email != this.authService.userData.email) {
+    this.authService.updateUserDetails(this.current_username, this.current_email);
+    }
     this.dialog.closeAll();
     this.fsDataThreadService.detailsVisible = false
   }

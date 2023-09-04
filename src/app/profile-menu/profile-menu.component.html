@@ -49,8 +49,7 @@
                 <img src="assets/img/icons/account_circle.png" alt="">
                 <span>Vollständiger Name</span>
             </div>
-            <input type="text" [(ngModel)]="authService.userData.user_name"
-                placeholder="{{ authService.userData.user_name }}">
+            <input type="text" [(ngModel)]="current_username" placeholder="{{ current_username }}">
         </div>
 
         <div id="edit-email">
@@ -58,14 +57,14 @@
                 <img src="assets/img/mail.png" alt="">
                 <span>E-Mail-Adresse</span>
             </div>
-            <input type="text" [(ngModel)]="authService.userData.email" placeholder="{{ authService.userData.email }}">
+            <input type="text" [(ngModel)]="current_email" placeholder="{{ current_email }}">
         </div>
     </div>
 
     <div class="btn-container">
         <button class="secondary-button" (click)="toggleEditDetails()">Abbrechen</button>
-        <button class="primary-button" (click)="updateUserDetails()">Speichern</button>
-
+        <button class="primary-button" (click)="updateUserDetails()" [disabled]="current_username == this.authService.userData.user_name &&
+             current_email == this.authService.userData.email">Speichern</button>
     </div>
 </div>
 
