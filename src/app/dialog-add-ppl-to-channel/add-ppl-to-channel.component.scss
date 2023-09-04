@@ -8,107 +8,132 @@
   padding: 30px;
   gap: 40px;
   overflow-y: hidden;
+  position: relative;
 
-  .first-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .headline {
-      font-size: 22px;
-      font-weight: 700;
-    }
-  }
-
-  .checkbox-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-    position: relative;
-
-    #highlight {
-      color: #444df2;
-    }
-
-    .absolute {
-      position: absolute;
-      top: 100px;
-      display: flex;
-      gap: 2px;
-      flex-wrap: wrap;
-      width: 460px;
-      max-height: 110px;
-      overflow: scroll;
-
-      .selected-user {
+      .first-row {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        width: fit-content;
-        gap: 15px;
-        max-height: 28px;
-        background-color: #eceefe;
-        border-radius: 20px;
-        padding: 5px 20px;
-        font-size: 18px;
+        align-items: center;
 
-        img {
-          height: 28px;
+        .headline {
+          font-size: 22px;
+          font-weight: 700;
         }
       }
-    }
-  }
 
-  .round-checkbox {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: #ffffff;
-    border: 1px solid #757575;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    outline: none;
-  }
+      .checkbox-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        position: relative;
 
-  .round-checkbox:checked {
-    background-color: white;
-    position: relative;
-  }
+        .flex {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
 
-  .round-checkbox:checked:after {
-    content: "";
-    display: block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #444df2;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
+        .round-checkbox {
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          background-color: #ffffff;
+          border: 1px solid #757575;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          outline: none;
+        }
+      
+        .round-checkbox:checked {
+          background-color: white;
+          position: relative;
+        }
+      
+        .round-checkbox:checked:after {
+          content: "";
+          display: block;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #444df2;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
 
-  .flex {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
+        #certain-input {
+          border-radius: 30px;
+          border: 1px solid #adb0d9;
+          padding: 15px 20px;
+        }
+            
+        #highlight {
+          color: #444df2;
+        }
 
-  #certain-input {
-    border-radius: 30px;
-    border: 1px solid #adb0d9;
-    padding: 15px 20px;
-  }
+        .absolute {
+          position: absolute;
+          top: 100px;
+          display: flex;
+          gap: 2px;
+          flex-wrap: wrap;
+          width: 460px;
+          max-height: 110px;
+          overflow: scroll;
+
+            .selected-user {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: fit-content;
+              gap: 15px;
+              max-height: 28px;
+              background-color: #eceefe;
+              border-radius: 20px;
+              padding: 5px 20px;
+              font-size: 18px;
+            }
+        }
+      }
 
   button {
     align-self: flex-end;
   }
 }
 
-.d-none {
-  display: none;
+.autocomplete-container {
+  flex-direction: column;
+  background-color: white;
+  position: relative;
+  bottom: 120px;
+  left: 45px;
+  padding: 10px;
+  width: max-content;
+  border: 1px solid #ADB0D9;
+  border-radius: 0 30px 30px 30px;
+  overflow-x: hidden;
+  gap: 10px;
+  max-height: 132px;
+  
+      .dm-profile {
+          padding: 5px;
+          border-radius: 20px;
+          transition: 200ms;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 15px;
+
+              span {
+                  font-size: 18px;
+              }
+          &:hover {
+              background-color: #ECEEFE;
+          }    
+      }
 }
 
 .avatar {
@@ -117,3 +142,6 @@
   border-radius: 100%;
   border: 2px solid white;
 }
+
+
+

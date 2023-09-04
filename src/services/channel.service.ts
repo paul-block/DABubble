@@ -22,10 +22,10 @@ export class ChannelService {
   userAvatar$ = this.avatarSelectedSource.asObservable();
   private userSelectedSource = new Subject<string>();
   userSelected$ = this.userSelectedSource.asObservable();
-  private showSelectedUserDiv = new BehaviorSubject<boolean>(false);
-  showSelectedUser$ = this.showSelectedUserDiv.asObservable();
-  showAutoComplete = new BehaviorSubject<boolean>(true);
-  showAutoComplete$ = this.showAutoComplete.asObservable();
+  // private showSelectedUserDiv = new BehaviorSubject<boolean>(false);
+  // showSelectedUser$ = this.showSelectedUserDiv.asObservable();
+  // showAutoComplete = new BehaviorSubject<boolean>(true);
+  // showAutoComplete$ = this.showAutoComplete.asObservable();
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
   currentChannelData:any
@@ -58,9 +58,9 @@ export class ChannelService {
   }
   
 
-  showSelectedUser(value: boolean) {
-    this.showSelectedUserDiv.next(value);
-  }
+  // showSelectedUser(value: boolean) {
+  //   this.showSelectedUserDiv.next(value);
+  // }
 
   getUserId(uid: string) {
     this.userIdSubject.next(uid);
@@ -73,11 +73,6 @@ export class ChannelService {
   selectAvatar(avatarUrl: string) {
     this.avatarSelectedSource.next(avatarUrl);
   }
-
-  toggleAutocomplete(value: boolean) {
-    this.showAutoComplete.next(value);
-  }
-
 
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
     const channelRef = doc(this.db, 'channels', channelName);

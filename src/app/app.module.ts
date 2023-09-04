@@ -41,7 +41,7 @@ import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
 import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
-import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
+// import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
 // Material API imports
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
@@ -87,7 +87,7 @@ import { DataProtectionComponent } from './data-protection/data-protection.compo
     AddPplToChannelComponent,
     NewPasswordComponent,
     ChannelDirectSendMessageComponent,
-    DialogAutocompleteComponent,
+    // DialogAutocompleteComponent,
     ThreadComponent,
     DialogEditCommentComponent,
     SearchbarComponent,
