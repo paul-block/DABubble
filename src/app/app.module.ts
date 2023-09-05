@@ -56,6 +56,7 @@ import { ChatPlaceholderComponent } from './chat-placeholder/chat-placeholder.co
 import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/header-channel-direct-chat.component';
 import { ImprintComponent } from './imprint/imprint.component';
 import { DataProtectionComponent } from './data-protection/data-protection.component';
+import { EmptyChatPlaceholderComponent } from './empty-chat-placeholder/empty-chat-placeholder.component';
 
 
 
@@ -99,6 +100,7 @@ import { DataProtectionComponent } from './data-protection/data-protection.compo
     HeaderChannelDirectChatComponent,
     ImprintComponent,
     DataProtectionComponent,
+    EmptyChatPlaceholderComponent,
   ],
   imports: [
     HttpClientModule,

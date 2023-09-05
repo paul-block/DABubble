@@ -51,6 +51,12 @@ h1 {
     border: 1px solid #adb0d9;
 }
 
+app-empty-chat-placeholder{
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
 .chat-message-container {
     width: 100%;
     display: flex;
