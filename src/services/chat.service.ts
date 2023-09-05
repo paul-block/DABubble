@@ -1,6 +1,6 @@
 import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
@@ -40,19 +40,17 @@ export class ChatService {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
           if (change.type === 'added' && this.isUserChat(chatData)) {
-            debugger
-            
             this.chats.push(chatData);
           }
         });
         console.log(this.chats);
-        
+
         resolve();
       });
     });
   }
 
-  isUserChat(chatData){
+  isUserChat(chatData) {
     return chatData.chat_Member_IDs.includes(this.currentUser_id)
   }
 
@@ -110,7 +108,7 @@ export class ChatService {
     if (this.currentChatID) {
       const docRef = doc(this.db, 'chats', this.currentChatID);
       const docSnap = await getDoc(docRef);
-
+      debugger
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         return docSnap.data();
@@ -156,7 +154,7 @@ export class ChatService {
   //   return new Promise(async (resolve, reject) => {
   //     try {
   //       const time_stamp = new Date();
-  
+
   //       if (!userID) {
   //         reject("Kein Benutzer ist eingeloggt");
   //         return;
@@ -167,7 +165,7 @@ export class ChatService {
   //         created_At: time_stamp,
   //         chat_ID: newChatID
   //       });
-  
+
   //       resolve(newChatID);
   //     } catch (error) {
   //       console.error("Error beim Erstellen eines neuen Chats: ", error);
@@ -182,19 +180,19 @@ export class ChatService {
     return new Promise(async (resolve, reject) => {
       try {
         const time_stamp = new Date();
-  
+
         if (!userID) {
           reject("Kein Benutzer ist eingeloggt");
           return;
         }
-        const newChatID = await this.genFunctService.generateCustomFirestoreID();
-        await addDoc(collection(this.db, 'chats'), {
+        const customChatID = await this.genFunctService.generateCustomFirestoreID();
+        await setDoc(doc(collection(this.db, 'chats'), customChatID), {
           chat_Member_IDs: [userID, userReceiverID],
           created_At: time_stamp,
-          chat_ID: newChatID
+          chat_ID: customChatID
         });
-  
-        resolve(newChatID);
+
+        resolve(customChatID);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
         reject(error);
@@ -220,7 +218,7 @@ export class ChatService {
       } else {
         chatReveiverID = chat.chat_Member_IDs[1];
       }
-      
+
     } catch (error) {
       debugger
     }
