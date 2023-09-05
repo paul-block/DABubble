@@ -131,9 +131,6 @@ export class NewMsgComponent {
     this.chatService.currentChatID =  await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatSection = 'chats';
     this.chatService.currentChatData = await this.chatService.getChatDocument();
-    debugger
-    console.log(this.chatService.currentChatID);
-    console.log(this.chatService.currentChatData);
   }
   
   async openChat(chat) {

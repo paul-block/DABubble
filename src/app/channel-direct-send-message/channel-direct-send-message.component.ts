@@ -113,6 +113,7 @@ export class ChannelDirectSendMessageComponent {
 
 
   async openChat(chat) {
+    debugger
     if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
