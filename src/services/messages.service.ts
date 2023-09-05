@@ -109,7 +109,7 @@ export class MessagesService {
         }
       });
     });
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
 

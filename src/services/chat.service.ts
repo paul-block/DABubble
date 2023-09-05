@@ -175,9 +175,9 @@ export class ChatService {
 
   // RESOLVE 2. Version 
   async newChat(userReceiverID: string): Promise<string | null> {
+
     const userID = this.currentUser_id;
     this.directChatMessages = [];
-
     return new Promise(async (resolve, reject) => {
       try {
         const time_stamp = new Date();
@@ -213,15 +213,10 @@ export class ChatService {
 
   getChatReceiverUser(chat) {
     let chatReveiverID;
-    try {
-      if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
-        chatReveiverID = chat.chat_Member_IDs[0];
-      } else {
-        chatReveiverID = chat.chat_Member_IDs[1];
-      }
-
-    } catch (error) {
-      debugger
+    if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
+      chatReveiverID = chat.chat_Member_IDs[0];
+    } else {
+      chatReveiverID = chat.chat_Member_IDs[1];
     }
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
     return user;
