@@ -26,7 +26,7 @@ export class FirestoreThreadDataService {
   current_message_id: string;
   comments: any[] = []
   detailsVisible: boolean = false;
-
+  chat_user: string
   subscription: Subscription | undefined;
   current_changed_index: number
   fake_array = []
@@ -40,10 +40,8 @@ export class FirestoreThreadDataService {
 
 
   constructor(public authenticationService: AuthenticationService,
-    private storage: AngularFireStorage,
     private chatService: ChatService,
     private messageSevice: MessagesService,
-
   ) { }
 
 
@@ -133,7 +131,6 @@ export class FirestoreThreadDataService {
         await setDoc(docRef, thread_data);
       }
     });
-    
   }
 
 

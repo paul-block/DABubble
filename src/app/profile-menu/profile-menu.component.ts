@@ -4,7 +4,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
-import * as firebase from 'firebase/compat';
 import { UploadService } from 'services/upload.service';
 
 
@@ -111,17 +110,15 @@ export class ProfileMenuComponent {
 
   
   saveNewAvatar() {
-    let path = this.authService.userData.uid + '/' + this.authService.userData.avatar;
-    console.log(path);
-    
+    const decodedLink = decodeURIComponent(this.authService.userData.avatar);  
+    const parts = decodedLink.split('/');
+    const filename = parts[parts.length - 1].split('?')[0];
+    let path = this.authService.userData.uid + '/' + filename;
     this.file_error = false
     this.authService.setAvatarImage(this.current_imageUrl)
     this.dialogRef.close();
-    this.uploadService.deleteFile(path)
+    if (!this.images.includes('/assets/img/small_avatar/' + filename )) this.uploadService.deleteFile(path)
   }
-
-
-  
 
 
   onNoClick(): void {

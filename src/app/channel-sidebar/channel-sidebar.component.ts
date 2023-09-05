@@ -28,7 +28,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   dmsVisible: boolean = true;
   workspaceVisible: boolean = true;
   openNewMsg: boolean = false;
- 
+
   private authorizedChannelsSubscription: Subscription;
   private currentUserSubscription: Subscription;
   private newChannelIdSubscription: Subscription;
@@ -53,7 +53,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.authService.waitUntilAuthInitialized();
-    
+
     this.chatService.currentUser_id = this.auth.currentUser.uid
 
     await this.authService.usersPromise;
@@ -64,9 +64,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.authorizedChannelsSubscription.unsubscribe();
-    this.currentUserSubscription.unsubscribe();
-    this.newChannelIdSubscription.unsubscribe();
+    if (this.authorizedChannelsSubscription) this.authorizedChannelsSubscription.unsubscribe();
+    if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
+    if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
   }
 
   async openChannel(channelID: string) {
