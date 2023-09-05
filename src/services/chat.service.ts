@@ -40,6 +40,8 @@ export class ChatService {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
           if (change.type === 'added' && this.isUserChat(chatData)) {
+            debugger
+            
             this.chats.push(chatData);
           }
         });
@@ -185,16 +187,12 @@ export class ChatService {
           reject("Kein Benutzer ist eingeloggt");
           return;
         }
-        const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
+        const newChatID = await this.genFunctService.generateCustomFirestoreID();
+        await addDoc(collection(this.db, 'chats'), {
           chat_Member_IDs: [userID, userReceiverID],
           created_At: time_stamp,
-        });
-
-        const newChatID = chatsCollectionRef.id;
-        const chatDocRef = doc(this.db, 'chats', newChatID);
-        await updateDoc(chatDocRef, {
           chat_ID: newChatID
-        })
+        });
   
         resolve(newChatID);
       } catch (error) {
@@ -216,10 +214,15 @@ export class ChatService {
 
   getChatReceiverUser(chat) {
     let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
-      chatReveiverID = chat.chat_Member_IDs[0];
-    } else {
-      chatReveiverID = chat.chat_Member_IDs[1];
+    try {
+      if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
+        chatReveiverID = chat.chat_Member_IDs[0];
+      } else {
+        chatReveiverID = chat.chat_Member_IDs[1];
+      }
+      
+    } catch (error) {
+      debugger
     }
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
     return user;
