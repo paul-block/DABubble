@@ -39,8 +39,9 @@
                         <span class="select-none">Channels</span>
                     </div>
                 </div>
-                <svg #addChannel id="add-channel-icon" class="pointer sidebar-icon-hover" (click)="openAddChannel()"
-                    width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg #addChannel id="add-channel-icon" class="pointer sidebar-icon-hover"
+                    (click)="openAddChannelDialog()" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_4093_12442)">
                         <mask id="mask0_4093_12442" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
                             width="24" height="24">
@@ -68,7 +69,7 @@
                     </div>
                 </ng-container>
 
-                <div class="add-channel-container pointer" (click)="openAddChannel()">
+                <div class="add-channel-container pointer" (click)="openAddChannelDialog()">
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_4093_12456" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
                             width="24" height="25">

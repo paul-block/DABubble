@@ -1,6 +1,6 @@
 import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
@@ -44,13 +44,13 @@ export class ChatService {
           }
         });
         console.log(this.chats);
-        
+
         resolve();
       });
     });
   }
 
-  isUserChat(chatData){
+  isUserChat(chatData) {
     return chatData.chat_Member_IDs.includes(this.currentUser_id)
   }
 
@@ -108,7 +108,6 @@ export class ChatService {
     if (this.currentChatID) {
       const docRef = doc(this.db, 'chats', this.currentChatID);
       const docSnap = await getDoc(docRef);
-
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         return docSnap.data();
@@ -122,7 +121,7 @@ export class ChatService {
     }
   }
 
-
+  // URSPRÜNGLICHE VERSION 
   // async newChat(userReceiverID: string) {
   //   const userID = this.currentUser_id;
   //   this.directChatMessages = [];
@@ -147,24 +146,54 @@ export class ChatService {
   //   }
   // }
 
+
+  // RESOLVE 1. Version 
+  // async newChat(userReceiverID: string): Promise<string | null> {
+  //   const userID = this.currentUser_id;
+  //   return new Promise(async (resolve, reject) => {
+  //     try {
+  //       const time_stamp = new Date();
+
+  //       if (!userID) {
+  //         reject("Kein Benutzer ist eingeloggt");
+  //         return;
+  //       }
+  //       const newChatID = await this.genFunctService.generateCustomFirestoreID();
+  //       await addDoc(collection(this.db, 'chats'), {
+  //         chat_Member_IDs: [userID, userReceiverID],
+  //         created_At: time_stamp,
+  //         chat_ID: newChatID
+  //       });
+
+  //       resolve(newChatID);
+  //     } catch (error) {
+  //       console.error("Error beim Erstellen eines neuen Chats: ", error);
+  //       reject(error);
+  //     }
+  //   });
+  // }
+
+  // RESOLVE 2. Version 
   async newChat(userReceiverID: string): Promise<string | null> {
+
     const userID = this.currentUser_id;
+    this.directChatMessages = [];
     return new Promise(async (resolve, reject) => {
       try {
         const time_stamp = new Date();
-  
+
         if (!userID) {
           reject("Kein Benutzer ist eingeloggt");
           return;
         }
-        const newChatID = await this.genFunctService.generateCustomFirestoreID();
-        await addDoc(collection(this.db, 'chats'), {
+        const customChatID = await this.genFunctService.generateCustomFirestoreID();
+        await setDoc(doc(collection(this.db, 'chats'), customChatID), {
           chat_Member_IDs: [userID, userReceiverID],
           created_At: time_stamp,
-          chat_ID: newChatID
+          chat_ID: customChatID
         });
-  
-        resolve(newChatID);
+
+        resolve(customChatID);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
         reject(error);

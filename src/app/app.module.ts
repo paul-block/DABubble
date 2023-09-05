@@ -41,7 +41,6 @@ import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
 import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
-// import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
 // Material API imports
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
@@ -56,6 +55,7 @@ import { ChatPlaceholderComponent } from './chat-placeholder/chat-placeholder.co
 import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/header-channel-direct-chat.component';
 import { ImprintComponent } from './imprint/imprint.component';
 import { DataProtectionComponent } from './data-protection/data-protection.component';
+import { EmptyChatPlaceholderComponent } from './empty-chat-placeholder/empty-chat-placeholder.component';
 
 
 
@@ -87,7 +87,6 @@ import { DataProtectionComponent } from './data-protection/data-protection.compo
     AddPplToChannelComponent,
     NewPasswordComponent,
     ChannelDirectSendMessageComponent,
-    // DialogAutocompleteComponent,
     ThreadComponent,
     DialogEditCommentComponent,
     SearchbarComponent,
@@ -99,6 +98,7 @@ import { DataProtectionComponent } from './data-protection/data-protection.compo
     HeaderChannelDirectChatComponent,
     ImprintComponent,
     DataProtectionComponent,
+    EmptyChatPlaceholderComponent,
   ],
   imports: [
     HttpClientModule,

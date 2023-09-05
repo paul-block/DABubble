@@ -46,7 +46,14 @@ async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
         }
       }
     }
-    console.log("Kein Chat gefunden");
+    console.log("Kein Chat gefunden, erstelle neuen");
+    this.createNewChat();
+  } catch (error) {
+    console.error("Fehler in findChatWithUser: ", error);
+  }
+}
+
+async createNewChat() {
     this.newMsgService.openNewMsg = true;
     this.chatService.currentChatSection = 'chats';
     this.chatService.newChat(this.newMsgService.user_id);
@@ -56,10 +63,9 @@ async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
     this.chatService.currentChatData = await this.chatService.getChatDocument();
     console.log("currentChatData: ", this.chatService.currentChatData);
     this.chatService.textAreaMessageTo();
-  } catch (error) {
-    console.error("Fehler in findChatWithUser: ", error);
-  }
+    this.msgService.getMessages();
 }
+
 
 async openChat(chat) {
   if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;

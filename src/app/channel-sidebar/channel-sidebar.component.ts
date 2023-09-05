@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { NewMsgService } from 'services/new-msg.service';
 import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
+import { getAuth } from 'firebase/auth';
+
 import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
@@ -15,6 +17,8 @@ import { FirestoreThreadDataService } from 'services/firestore-thread-data.servi
   styleUrls: ['./channel-sidebar.component.scss'],
 })
 export class ChannelSidebarComponent implements OnInit, OnDestroy {
+
+  auth = getAuth();
 
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
@@ -29,7 +33,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   private currentUserSubscription: Subscription;
   private newChannelIdSubscription: Subscription;
 
-  authorizedChannels: any[] = [];
   currentValue: string;
 
   constructor(
@@ -41,7 +44,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
   ) {
-    this.newChannelIdSubscription = this.channelService.createtChannelId$.subscribe((newValue) => {
+    this.newChannelIdSubscription = this.channelService.createdChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
       if (this.currentValue) this.openChannel(this.currentValue);
     });
@@ -51,21 +54,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.authService.waitUntilAuthInitialized();
     
-    this.currentUserSubscription = this.authService.currentUser$.subscribe(user => {
-      if (user) {
-        this.chatService.currentUser_id = user.uid;
-      }
-    });
+    this.chatService.currentUser_id = this.auth.currentUser.uid
 
-    this.authorizedChannelsSubscription = this.channelService.authorizedChannels.subscribe(channels => {
-      this.channelService.channels = channels;
-    });
-    
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     this.chatService.initOwnChat();
     console.log('finished');
-    
   }
 
 
@@ -75,50 +69,23 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.newChannelIdSubscription.unsubscribe();
   }
 
-
-  toggleChannels() {
-    this.channelsVisible = !this.channelsVisible;
-  }
-
-
-  toggleDms() {
-    this.dmsVisible = !this.dmsVisible;
-  }
-
-
-  toggleWorkspace() {
-    this.workspaceVisible = !this.workspaceVisible;
-  }
-
-
-  openAddChannel() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'add-channel-dialog';
-    this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
-    this.addChannelOpen = true;
-    this.addChannelRef.afterClosed().subscribe(() => {
-      this.addChannelOpen = false;
-    });
-  }
-
-  
-  sendNewMsg() {
-    this.chatService.currentChatSection = 'noChatSectionSelected';
-    this.chatService.currentChatID = 'noChatSelected';
-    this.chatService.messageToPlaceholder = 'Nachricht an ...'
-    this.chatService.textAreaMessageTo();
-    this.msgService.emptyMessageText();
-    this.toggleNewMsgComponent();
-  }
-
-
-  toggleNewMsgComponent() {
-    this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
-  }
-
-
-  checkIfSameChatID(userReceiverID: string) {
-    return this.chatService.currentChatID !== userReceiverID;
+  async openChannel(channelID: string) {
+    if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
+    if (this.chatService.currentChatID !== channelID) {
+      this.chatService.currentChatSection = 'channels';
+      this.chatService.currentChatID = channelID;
+      this.channelService.currentChannelID = channelID
+      this.msgService.emptyMessageText();
+      try {
+        this.chatService.getCurrentChatData();
+        this.chatService.textAreaMessageTo();
+        this.channelService.loadCurrentChannel()
+        await this.msgService.getMessages();
+        this.fsDataThreadService.thread_open = false;
+      } catch (error) {
+        console.error("Fehler bei öffnen des Channels: ", error);
+      }
+    }
   }
 
 
@@ -140,29 +107,57 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 
+  sendNewMsg() {
+    this.chatService.currentChatSection = 'noChatSectionSelected';
+    this.chatService.currentChatID = 'noChatSelected';
+    this.chatService.messageToPlaceholder = 'Nachricht an ...'
+    this.chatService.textAreaMessageTo();
+    this.msgService.emptyMessageText();
+    this.toggleNewMsgComponent();
+  }
+
+
+  openAddChannelDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'add-channel-dialog';
+    this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
+    this.addChannelOpen = true;
+    this.addChannelRef.afterClosed().subscribe(() => {
+      this.addChannelOpen = false;
+    });
+  }
+
+
+  toggleNewMsgComponent() {
+    this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
+  }
+
+  toggleChannels() {
+    this.channelsVisible = !this.channelsVisible;
+  }
+
+
+  toggleDms() {
+    this.dmsVisible = !this.dmsVisible;
+  }
+
+
+  toggleWorkspace() {
+    this.workspaceVisible = !this.workspaceVisible;
+  }
+
+
+  checkIfSameChatID(userReceiverID: string) {
+    return this.chatService.currentChatID !== userReceiverID;
+  }
+
+
   isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
 
 
-  async openChannel(channelID: string) {
-    if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
-    if (this.chatService.currentChatID !== channelID) {
-      this.chatService.currentChatSection = 'channels';
-      this.chatService.currentChatID = channelID;
-      this.channelService.currentChannelID = channelID
-      this.msgService.emptyMessageText();
-      try {
-        this.chatService.getCurrentChatData();
-        this.chatService.textAreaMessageTo();
-        this.channelService.loadCurrentChannel()
-        await this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
-      } catch (error) {
-        console.error("Fehler bei öffnen des Channels: ", error);
-      }
-    }
-  }
+
 
 }
 
