@@ -42,6 +42,8 @@ export class AddPplToChannelComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log(this.searchControl.value);
+    
     this.searchControl.valueChanges
     .pipe(
       switchMap(value => this.filterUsers(value))
