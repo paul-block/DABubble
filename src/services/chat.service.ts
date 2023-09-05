@@ -108,7 +108,6 @@ export class ChatService {
     if (this.currentChatID) {
       const docRef = doc(this.db, 'chats', this.currentChatID);
       const docSnap = await getDoc(docRef);
-      debugger
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         return docSnap.data();
@@ -177,6 +176,8 @@ export class ChatService {
   // RESOLVE 2. Version 
   async newChat(userReceiverID: string): Promise<string | null> {
     const userID = this.currentUser_id;
+    this.directChatMessages = [];
+
     return new Promise(async (resolve, reject) => {
       try {
         const time_stamp = new Date();
