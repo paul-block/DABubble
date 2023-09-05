@@ -110,17 +110,29 @@ export class NewMsgComponent {
     return false;
   }
   
+  // async createNewChat(selectedUser, clickedValue: string) {
+  //   console.log("Neuer chat erstellt");
+  //   this.inputValue = '@' + clickedValue;
+  //   this.chatService.userReceiverID = selectedUser.uid;
+  //   this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
+  //   await this.chatService.newChat(this.chatService.userReceiverID);
+  //   this.chatService.currentChatSection = 'chats';
+  //   this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
+  //   this.chatService.currentChatData = await this.chatService.getChatDocument();
+  //   console.log(this.chatService.currentChatID);
+  //   console.log(this.chatService.chats);
+  // }
+
   async createNewChat(selectedUser, clickedValue: string) {
-    console.log("Neuer chat");
+    console.log("Neuer chat erstellt");
     this.inputValue = '@' + clickedValue;
     this.chatService.userReceiverID = selectedUser.uid;
     this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
-    await this.chatService.newChat(this.chatService.userReceiverID);
+    this.chatService.currentChatID =  await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatSection = 'chats';
-    this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
     this.chatService.currentChatData = await this.chatService.getChatDocument();
-    console.log(this.chatService.chats);
-    debugger
+    console.log(this.chatService.currentChatID);
+    console.log(this.chatService.currentChatData);
   }
   
   async openChat(chat) {
