@@ -110,6 +110,9 @@
                 flex-direction: column;
                 align-items: flex-start;
                 width: 270px;
+                height: 205px;
+                overflow-y: scroll;
+                overflow-x: hidden;
                 gap: 15px;
                 font-size: 18px;
                 margin-left: 30px;
@@ -211,26 +214,29 @@
             flex-direction: column;
             gap: 25px;
             margin-left: 15px;
+            height: 500px;
+            overflow-y: scroll;
+            overflow-x: hidden;
 
-            .dm-profile {
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                height: 50px;
-                gap: 15px;
-                width: 230px;
-                padding: 0 45px 0 25px;
-
-                img {
-                    width: 50px;
+                .dm-profile {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
                     height: 50px;
-                    border-radius: 50%;
-                }
+                    gap: 15px;
+                    width: 230px;
+                    padding: 0 45px 0 25px;
 
-                span {
-                    font-size: 18px;
+                    img {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                    }
+
+                    span {
+                        font-size: 18px;
+                    }
                 }
-            }
         }
     }
 
