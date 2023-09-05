@@ -18,17 +18,13 @@ export class ChannelService {
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
   userIdSubject = new BehaviorSubject<string | undefined>(undefined);
   currentUserId = this.userIdSubject.asObservable();
-  private avatarSelectedSource = new Subject<string>();
-  userAvatar$ = this.avatarSelectedSource.asObservable();
-  private userSelectedSource = new Subject<string>();
-  userSelected$ = this.userSelectedSource.asObservable();
-  // private showSelectedUserDiv = new BehaviorSubject<boolean>(false);
-  // showSelectedUser$ = this.showSelectedUserDiv.asObservable();
-  // showAutoComplete = new BehaviorSubject<boolean>(true);
-  // showAutoComplete$ = this.showAutoComplete.asObservable();
+  // private avatarSelectedSource = new Subject<string>();
+  // userAvatar$ = this.avatarSelectedSource.asObservable();
+  // private userSelectedSource = new Subject<string>();
+  // userSelected$ = this.userSelectedSource.asObservable();
   currentChannelID: string = 'noChannelSelected';
   channels: any[] = [];
-  currentChannelData:any
+  currentChannelData:any;
    auth = getAuth();
   private createtChannelId  = new BehaviorSubject<string>(undefined);
   createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
@@ -39,16 +35,19 @@ export class ChannelService {
     public afs: AngularFirestore,
     public generalFuncttions: GeneralFunctionsService,
   ) { 
-
-
     const dbRef = collection(this.db, "channels");
     onSnapshot(dbRef, docsSnap => {
       const channels: any[] = []
       docsSnap.forEach(doc => {
         channels.push(doc.data())
       })
-      this.channels = channels
+      this.channels = channels;
       this.loadCurrentChannel()
+
+      const user = this.auth.currentUser;
+      if (user !== null) {
+         this.getAuthorizedChannels(user.uid);
+      }
     });
   }
 
@@ -58,21 +57,17 @@ export class ChannelService {
   }
   
 
-  // showSelectedUser(value: boolean) {
-  //   this.showSelectedUserDiv.next(value);
-  // }
-
   getUserId(uid: string) {
     this.userIdSubject.next(uid);
   }
 
-  selectUser(userName: string) {
-    this.userSelectedSource.next(userName);
-  }
+  // selectUser(userName: string) {
+  //   this.userSelectedSource.next(userName);
+  // }
 
-  selectAvatar(avatarUrl: string) {
-    this.avatarSelectedSource.next(avatarUrl);
-  }
+  // selectAvatar(avatarUrl: string) {
+  //   this.avatarSelectedSource.next(avatarUrl);
+  // }
 
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
     const channelRef = doc(this.db, 'channels', channelName);

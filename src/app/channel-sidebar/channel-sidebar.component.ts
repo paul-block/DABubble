@@ -60,7 +60,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.authorizedChannelsSubscription = this.channelService.authorizedChannels.subscribe(channels => {
       this.channelService.channels = channels;
     });
-    
+
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     this.chatService.initOwnChat();
