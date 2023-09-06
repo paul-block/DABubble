@@ -224,8 +224,14 @@
                     justify-content: flex-start;
                     height: 50px;
                     gap: 15px;
-                    width: 230px;
+                    width: fit-content;
                     padding: 0 45px 0 25px;
+
+                    &:hover {
+                        transition: 200ms;
+                        background-color: #ECEEFE;
+                        border-radius: 20px;
+                    }
 
                     img {
                         width: 50px;
