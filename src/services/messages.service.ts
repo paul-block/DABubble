@@ -4,7 +4,6 @@ import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
-import { NewMsgService } from './new-msg.service';
 import { GeneralFunctionsService } from './general-functions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
@@ -36,14 +35,13 @@ export class MessagesService {
     public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
-    public newMsgService: NewMsgService,
     public genFunctService: GeneralFunctionsService,
   ) {
   }
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.newMsgService.openNewMsg) {
+    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.chatService.openNewMsgComponent) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;

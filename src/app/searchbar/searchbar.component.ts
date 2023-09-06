@@ -62,38 +62,41 @@ export class SearchbarComponent {
   async onSearchValueChange() {
     if (this.searchValue.length == 0) this.showResults = false;
     else {
-
       this.isLoading = true;
       this.showResults = true;
-
-      this.usersSet.clear();
-      this.channelsSet.clear();
-      this.filteredChannelMessagesSet.clear();
-      this.filteredChannels = [];
-      this.filteredUsers = [];
-      this.filteredChannelMessages = [];
-
-      await this.search('channels');
-      await this.search('users');
-      await this.searchMessagesInChannels();
-
-      this.filteredChannels = Array.from(this.channelsSet).filter(channel =>
-        channel.channelName.toLowerCase().startsWith(this.searchValue)
-      );
-      this.filteredUsers = Array.from(this.usersSet).filter(user =>
-        user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
-      );
-
-      this.filteredChannelMessages.filter(msg =>
-        msg.combinedMessage.toLowerCase().startsWith(this.searchValue.toLowerCase())
-      );
-
+      this.clear();
+      await this.getData('channels');
+      await this.getData('users');
+      await this.getChannelMessages();
+      this.filterResults();
       this.isLoading = false;
       this.show();
     }
   }
 
-  async search(collectionName: string) {
+  filterResults() {
+    this.filteredChannels = Array.from(this.channelsSet).filter(channel =>
+      channel.channelName.toLowerCase().startsWith(this.searchValue)
+    );
+    this.filteredUsers = Array.from(this.usersSet).filter(user =>
+      user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    );
+
+    this.filteredChannelMessages.filter(msg =>
+      msg.combinedMessage.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    );
+  }
+
+  clear() {
+    this.usersSet.clear();
+    this.channelsSet.clear();
+    this.filteredChannelMessagesSet.clear();
+    this.filteredChannels = [];
+    this.filteredUsers = [];
+    this.filteredChannelMessages = [];
+  }
+
+  async getData(collectionName: string) {
     const collectionRef = collection(this.db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
     querySnapshot.forEach((doc) => {
@@ -102,7 +105,7 @@ export class SearchbarComponent {
     });
   }
 
-  async searchMessagesInChannels() {
+  async getChannelMessages() {
     const channelsRef = collection(this.db, 'channels');
     const channelsSnapshot = await getDocs(channelsRef);
     const uniqueMessageMap = new Map();
@@ -127,7 +130,6 @@ export class SearchbarComponent {
         }
       });
     }
-
     this.filteredChannelMessages = [...uniqueMessageMap.values()];
   }
 

@@ -23,6 +23,12 @@ export class ChatService {
   currentUser_id: string
   open_users: boolean = false;
   userReceiverID: string;
+  userReceiverName: string;
+
+  openNewMsgComponent: boolean = false;
+  directedFromProfileButton: boolean = false;
+
+
 
   constructor(
     public authService: AuthenticationService,

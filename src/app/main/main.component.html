@@ -1,9 +1,9 @@
 <app-desktop-header></app-desktop-header>
 <section class="chat-interaction">
     <app-channel-sidebar></app-channel-sidebar>
-    <app-channel-direct-chat *ngIf="!newMsgService.openNewMsg" class="container-styling"
+    <app-channel-direct-chat *ngIf="!chatService.openNewMsgComponent" class="container-styling"
         (threadOpen)="setVariable($event)"></app-channel-direct-chat>
-    <app-new-msg *ngIf="newMsgService.openNewMsg" class="container-styling"></app-new-msg>
+    <app-new-msg *ngIf="chatService.openNewMsgComponent" class="container-styling"></app-new-msg>
     <app-thread (threadClose)="setVariable($event)" [class.open_thread]="fsDataThreadService.thread_open"
         class="thread container-styling overflow"></app-thread>
 </section>

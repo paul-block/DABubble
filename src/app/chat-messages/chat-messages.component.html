@@ -3,8 +3,8 @@
         <span>Dies ist der Anfang von Channel #{{ chatService.currentChatData.channelName }}</span>
         <span>{{chatService.currentChatData.description}}</span>
     </section>
-    <app-empty-chat-placeholder *ngIf="showPlaceholder()"></app-empty-chat-placeholder> 
-    
+    <app-empty-chat-placeholder *ngIf="showPlaceholder()"></app-empty-chat-placeholder>
+
     <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
             class="chat-messages-date">
@@ -28,10 +28,11 @@
                     <mat-icon>delete_outline</mat-icon>
                     {{chatMessage.chat_message}}
                 </div>
-                <div *ngIf="!chatMessage?.message_deleted" [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
+                <div *ngIf="!chatMessage?.message_deleted"
+                    [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                     class="chat-message-text-container">
-                   
-                    <div class="chat-message-text" >
+
+                    <div class="chat-message-text">
                         <div>
                             <span (click)="profileService.openProfile(word)"
                                 *ngFor="let word of chatMessage.modified_message; let k = index"
@@ -132,7 +133,8 @@
                         {{fsDataThreadService.getTimeSince(chatMessage.last_answer)}}</span>
                 </div>
             </div>
-            <div *ngIf="!chatMessage?.message_deleted" [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
+            <div *ngIf="!chatMessage?.message_deleted"
+                [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                 class="reaction-bar">
                 <img src="/assets/img/icons/check_mark_emoji.svg"
                     (click)="addEmojiInMessage(emojiService.checkMarkManualEvent, i, chatMessage);">
