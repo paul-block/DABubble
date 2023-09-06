@@ -54,11 +54,9 @@ async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
 async createNewChat() {
   this.chatService.openNewMsgComponent = true;
     this.chatService.currentChatSection = 'chats';
-    this.chatService.newChat(this.chatService.userReceiverID);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
-    console.log("currentChatID nach searchChat: ", this.chatService.currentChatID);
+    this.chatService.currentChatID = await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatData = await this.chatService.getChatDocument();
+    console.log("currentChatID nach searchChat: ", this.chatService.currentChatID);
     console.log("currentChatData: ", this.chatService.currentChatData);
     this.chatService.textAreaMessageTo();
     this.msgService.getMessages();

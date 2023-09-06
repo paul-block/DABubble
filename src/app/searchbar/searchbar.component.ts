@@ -4,6 +4,7 @@ import { HostListener } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ChatService } from 'services/chat.service';
+import { ChannelService } from 'services/channel.service';
 import { MessagesService } from 'services/messages.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 
@@ -32,7 +33,8 @@ export class SearchbarComponent {
 
   constructor(private elementRef: ElementRef, private dialog: MatDialog,
     public chatService: ChatService, public msgService: MessagesService,
-    public fsDataThreadService: FirestoreThreadDataService) { }
+    public fsDataThreadService: FirestoreThreadDataService,
+    public channelService: ChannelService) { }
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
@@ -165,15 +167,19 @@ export class SearchbarComponent {
     });
   }
 
-  openChannel(channelID) {
+  async openChannel(channelID: string) {
     this.searchValue = '';
+    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
+      this.channelService.currentChannelID = channelID
+      this.msgService.emptyMessageText();
       try {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
+        this.channelService.loadCurrentChannel()
+        await this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);

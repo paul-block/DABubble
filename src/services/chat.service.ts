@@ -30,6 +30,7 @@ export class ChatService {
 
 
 
+
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
@@ -165,6 +166,9 @@ export class ChatService {
   }
 
   getChatReceiverUser(chat) {
+    if (!chat) {
+      return null;
+    }
     let chatReveiverID;
     if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
       chatReveiverID = chat.chat_Member_IDs[0];
