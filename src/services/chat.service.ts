@@ -41,7 +41,6 @@ export class ChatService {
   async loadChats(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.chats = [];
-
       const querySnapshot = collection(this.db, 'chats');
       onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
@@ -67,7 +66,6 @@ export class ChatService {
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
-
           chatExists = true;
         }
       });
@@ -166,15 +164,23 @@ export class ChatService {
   }
 
   getChatReceiverUser(chat) {
-    if (!chat) {
-      return null;
-    }
     let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
-      chatReveiverID = chat.chat_Member_IDs[0];
-    } else {
-      chatReveiverID = chat.chat_Member_IDs[1];
+    try {
+      if (!chat) {
+        return null;
+      }
+      
+      if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
+        chatReveiverID = chat.chat_Member_IDs[0];
+      } else {
+        chatReveiverID = chat.chat_Member_IDs[1];
+      }
+    } catch (error) {
+      console.error(error);
+      
+      debugger
     }
+
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
     return user;
   }
