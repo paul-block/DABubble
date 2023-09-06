@@ -33,6 +33,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   currentValue: string;
 
+
   constructor(
     public authService: AuthenticationService,
     public dialog: MatDialog,
@@ -65,6 +66,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
     if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
   }
+
 
   async openChannel(channelID: string) {
     if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
@@ -152,9 +154,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
-
-
-
 
 }
 

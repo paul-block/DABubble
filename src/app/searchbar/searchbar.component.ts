@@ -7,6 +7,7 @@ import { ChatService } from 'services/chat.service';
 import { ChannelService } from 'services/channel.service';
 import { MessagesService } from 'services/messages.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { AuthenticationService } from 'services/authentication.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -34,7 +35,8 @@ export class SearchbarComponent {
   constructor(private elementRef: ElementRef, private dialog: MatDialog,
     public chatService: ChatService, public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
-    public channelService: ChannelService) { }
+    public channelService: ChannelService,
+    public authService: AuthenticationService) { }
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
@@ -67,9 +69,9 @@ export class SearchbarComponent {
       this.isLoading = true;
       this.showResults = true;
       this.clear();
-      await this.getData('channels');
-      await this.getData('users');
-      await this.getChannelMessages();
+      await this.getData('channels', this.authService.userData.uid);
+      await this.getData('users', this.authService.userData.uid);
+      await this.getChannelMessages(this.authService.userData.uid);
       this.filterResults();
       this.isLoading = false;
       this.show();
@@ -98,21 +100,41 @@ export class SearchbarComponent {
     this.filteredChannelMessages = [];
   }
 
-  async getData(collectionName: string) {
+  // async getData(collectionName: string) {
+  //   const collectionRef = collection(this.db, collectionName);
+  //   const querySnapshot = await getDocs(collectionRef);
+  //   querySnapshot.forEach((doc) => {
+  //     if (collectionName === 'channels') this.channelsSet.add(doc.data());
+  //     if (collectionName === 'users') this.usersSet.add(doc.data());
+  //   });
+  // }
+
+
+  async getData(collectionName: string, currentUserId: string) {
     const collectionRef = collection(this.db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
     querySnapshot.forEach((doc) => {
-      if (collectionName === 'channels') this.channelsSet.add(doc.data());
+      if (collectionName === 'channels') {
+        const channelData = doc.data();
+        if (channelData.assignedUsers?.includes(currentUserId)) {
+          this.channelsSet.add(channelData);
+        }
+      }
       if (collectionName === 'users') this.usersSet.add(doc.data());
     });
   }
+  
 
-  async getChannelMessages() {
+  async getChannelMessages(currentUserId) {
     const channelsRef = collection(this.db, 'channels');
     const channelsSnapshot = await getDocs(channelsRef);
     const uniqueMessageMap = new Map();
 
     for (let channelDoc of channelsSnapshot.docs) {
+      const channelData = channelDoc.data();
+      if (!channelData.assignedUsers?.includes(currentUserId)) {
+        continue;
+      }
       const channelName = channelDoc.data().channelName;
       const messagesRef = collection(channelDoc.ref, 'messages');
       const messagesSnapshot = await getDocs(messagesRef);
