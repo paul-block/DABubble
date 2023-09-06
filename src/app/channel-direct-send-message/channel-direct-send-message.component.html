@@ -12,12 +12,9 @@
 </div>
 
 <section class="write-new-message">
-
-    <!--------------------------------------------------- textarea ------------------------------------------------------->
-
     <textarea #messageTextarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder"
         [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()"
-        (keyup)="msgService.checkIfEmpty()"></textarea>
+        (keyup)="msgService.checkIfEmpty()" (keyup.enter)="onSendClick()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
 
