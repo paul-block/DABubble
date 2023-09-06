@@ -4,7 +4,6 @@ import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
-import { NewMsgService } from './new-msg.service';
 import { GeneralFunctionsService } from './general-functions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
@@ -35,14 +34,13 @@ export class MessagesService {
     public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
-    public newMsgService: NewMsgService,
     public genFunctService: GeneralFunctionsService,
   ) {
   }
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.newMsgService.openNewMsg) {
+    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.chatService.openNewMsgComponent) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;
@@ -91,25 +89,6 @@ export class MessagesService {
   }
 
 
-<<<<<<< HEAD
-  async getNewMessage() {
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-    const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
-    this.chatService.directChatMessages.push(latestDocument);
-    this.scrollToBottom();
-  }
-
-
-  async getChangedMessage() {
-    const currentMessage = this.chatService.directChatMessages[this.messageIndex];
-    currentMessage.chat_message = this.messageText;
-    currentMessage.modified_message = this.chatService.modifyMessageValue(this.messageText),
-    currentMessage.chat_message_edited = true;
-  }
-
-=======
->>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
@@ -126,11 +105,6 @@ export class MessagesService {
         } else if (change.type === 'removed') {
           this.spliceMessage(changedMessageData);
         }
-<<<<<<< HEAD
-        console.log(change.type);
-        
-=======
->>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
       });
     });
     // this.scrollToBottom();
