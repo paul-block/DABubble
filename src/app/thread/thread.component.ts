@@ -180,7 +180,7 @@ export class ThreadComponent implements OnInit {
       panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {       
+      if (result) {
         this.fsDataThreadService.comments[i].comment = result;
         this.fsDataThreadService.comments[i].modified_comment = this.chatService.modifyMessageValue(result)
         this.fsDataThreadService.comments[i].text_edited = true
@@ -198,22 +198,17 @@ export class ThreadComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
-        
         this.fsDataThreadService.current_chat_data.chat_message = result;
         this.fsDataThreadService.current_chat_data.modified_message = this.chatService.modifyMessageValue(result)
-        console.log(this.fsDataThreadService.current_chat_data.modified_message);
-        
         this.fsDataThreadService.current_chat_data.chat_message_edited = true
         this.msgService.saveEditedMessageFromThread(this.fsDataThreadService.current_chat_data)
-        
-
       }
     });
   }
 
 
   openDeleteComment(i: number) {
+    console.log(this.fsDataThreadService.current_chat_data);
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
       data: { comment: this.fsDataThreadService.comments[i].comment },
@@ -224,8 +219,18 @@ export class ThreadComponent implements OnInit {
         this.fsDataThreadService.comments.splice(i, 1)
         this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
         this.fsDataThreadService.updateData()
+        if (this.checkIfLastAnswer()) {
+          this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
+          this.fsDataThreadService.thread_open = false
+        }
       }
     });
+  }
+
+
+  checkIfLastAnswer() {
+    if (this.fsDataThreadService.current_chat_data.answers == 1 && this.fsDataThreadService.current_chat_data.message_deleted) return true
+    else return false
   }
 
 

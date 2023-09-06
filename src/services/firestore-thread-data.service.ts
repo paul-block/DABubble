@@ -60,7 +60,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
-    if (this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
+    if (this.chat_type == 'direct' && this.current_chat_data.answers != 1) this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
 
 
