@@ -30,7 +30,7 @@ export class NewMsgComponent {
 
     this.uid = this.authService.userData.uid;
 
-    if (this.chatService.directedFromProfileButton) {
+    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
       this.inputValue = '@' + this.chatService.userReceiverName;
     }
     else this.inputValue = '';

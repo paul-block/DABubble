@@ -88,6 +88,7 @@ export class ChannelDirectSendMessageComponent {
       await this.uploadService.checkForUpload();
       setTimeout(() => { this.msgService.newMessage(); }, 400);
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+      this.chatService.userReceiverName = '';
     } else {
       await this.uploadService.checkForUpload();
       setTimeout(() => { this.msgService.newMessage(); }, 400);
