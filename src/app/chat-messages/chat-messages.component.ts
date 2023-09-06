@@ -5,6 +5,7 @@ import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
 import { MessagesService } from 'services/messages.service';
 import { ProfileService } from 'services/profile.service';
 import { ReactionBubbleService } from 'services/reaction-bubble.service';
@@ -40,6 +41,7 @@ export class ChatMessagesComponent {
     public profileService: ProfileService,
     public uploadService: UploadService,
     private elementRef: ElementRef,
+    public genFunctService: GeneralFunctionsService,
   ) { }
 
 

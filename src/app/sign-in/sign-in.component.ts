@@ -31,7 +31,7 @@ export class SignInComponent {
     if (this.password.length > 7 && this.emailError && !this.authenticationService.signIn_error) {
       await this.authenticationService.SignIn(this.email, this.password)
       if (this.authenticationService.signIn_successful) {
-        setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+         setTimeout(() => this.router.navigateByUrl('/main'), 1900);
       }
     }
   }

@@ -1,10 +1,11 @@
 import { Injectable, OnInit, Query } from '@angular/core';
 import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc } from '@angular/fire/firestore';
+import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ChannelService } from './channel.service';
+import { GeneralFunctionsService } from './general-functions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,6 @@ export class ChatService {
   currentChatData;
   messageToPlaceholder: string = 'Nachricht an ...';
   chats: any[] = [];
-  private chatsSubject = new BehaviorSubject<any[]>([]);
   currentUser_id: string
   open_users: boolean = false;
   userReceiverID: string;
@@ -27,43 +27,47 @@ export class ChatService {
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
+    public genFunctService: GeneralFunctionsService,
   ) { }
 
-  async loadChats() {
-    this.chats = [];
-    const querySnapshot = await getDocs(collection(this.db, 'chats'));
-    const chats = querySnapshot.docs.map(doc => doc.data());
-    this.chatsSubject.next(chats);
+
+  async loadChats(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.chats = [];
+
+      const querySnapshot = collection(this.db, 'chats');
+      onSnapshot(querySnapshot, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const chatData = change.doc.data();
+          if (change.type === 'added' && this.isUserChat(chatData)) {
+            this.chats.push(chatData);
+          }
+        });
+        console.log(this.chats);
+
+        resolve();
+      });
+    });
   }
 
-  getUsersChatsObservable() {
-    return this.chatsSubject.asObservable().pipe(
-      switchMap(chats => {
-        const usersChats = this.filterChats(chats);
-        return usersChats;
-      })
-    );
+  isUserChat(chatData) {
+    return chatData.chat_Member_IDs.includes(this.currentUser_id)
   }
-
-
-  filterChats(chats) {
-    return chats.filter(chat => chat.chat_Member_IDs.includes(this.currentUser_id));
-  }
-
 
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
-
     if (this.chats.length != 0) {
       this.chats.forEach((chat) => {
         if (chat.chat_Member_IDs[0] === userID && chat.chat_Member_IDs[1] === userID) {
+
           chatExists = true;
         }
       });
     } else if (!chatExists) {
+
       await this.newChat(userID);
-      console.log('in');
+      console.log('ownChatGenerated');
     }
   }
 
@@ -104,7 +108,6 @@ export class ChatService {
     if (this.currentChatID) {
       const docRef = doc(this.db, 'chats', this.currentChatID);
       const docSnap = await getDoc(docRef);
-
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         return docSnap.data();
@@ -119,44 +122,45 @@ export class ChatService {
   }
 
 
-  async newChat(userReceiverID: string) {
+  async newChat(userReceiverID: string): Promise<string | null> {
     const userID = this.currentUser_id;
     this.directChatMessages = [];
-    let time_stamp = new Date();
-    if (userID !== undefined) {
+    return new Promise(async (resolve, reject) => {
       try {
-        const chatsCollectionRef = await addDoc(collection(this.db, 'chats'), {
+        const time_stamp = new Date();
+
+        if (!userID) {
+          reject("Kein Benutzer ist eingeloggt");
+          return;
+        }
+        const customChatID = await this.genFunctService.generateCustomFirestoreID();
+        await setDoc(doc(collection(this.db, 'chats'), customChatID), {
           chat_Member_IDs: [userID, userReceiverID],
           created_At: time_stamp,
+          chat_ID: customChatID
         });
 
-        const newChatID = chatsCollectionRef.id;
-        const chatDocRef = doc(this.db, 'chats', newChatID);
-        await updateDoc(chatDocRef, {
-          chat_ID: newChatID
-        }).then(() => {
-          this.loadChats();
-        });
+        resolve(customChatID);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
+        reject(error);
       }
-    } else {
-      console.error("Kein Benutzer ist eingeloggt");
-    }
+    });
   }
-
 
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
       this.messageToPlaceholder = 'Nachricht an ' + this.getChatReceiverUser(this.currentChatData).user_name;
     } else if (this.currentChatSection === 'channels') {
       this.messageToPlaceholder = 'Nachricht an ' + this.currentChatData.channelName;
+    } else {
+      this.messageToPlaceholder = 'Nachricht an ...';
     }
   }
 
   getChatReceiverUser(chat) {
     let chatReveiverID;
-    if (chat.chat_Member_IDs[0] !== this.authService.userData.uid) {
+    if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
       chatReveiverID = chat.chat_Member_IDs[0];
     } else {
       chatReveiverID = chat.chat_Member_IDs[1];
@@ -235,13 +239,13 @@ export class ChatService {
 
 
   addUserToTextarea(i: number, text: string) {
-    const search_word = this.at_users[i].word
+    const search_word = this.at_users[i].word;
     const words = text.split(' ');
-    let index = words.indexOf(search_word)
-    words[index] = ''
-    text = words.join(' ')
-    text += '@' + this.at_users[i].user_name
-    return text
+    let index = words.indexOf(search_word);
+    words[index] = '';
+    text = words.join(' ');
+    text += '@' + this.at_users[i].user_name;
+    return text;
   }
 
 

@@ -1,5 +1,11 @@
-// @import 'assets/styles/fonts.scss';
+@import './assets/fonts/nunito.css';
 @import '@ctrl/ngx-emoji-mart/picker';
+
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
+$hover-transition: all ease-in-out 125ms;
+$button-border-radius: 25px;
+$button-padding: 12px 25px;
 
 .d_none {
     display: none !important;
@@ -126,4 +132,131 @@ input[type="file"] {
     cursor: pointer;
     color: black;
     border-radius: 3px;
+}
+
+.deleted {
+    display: flex;
+    align-items: center;
+}
+
+// buttons
+
+button {
+    font-weight: 700;
+    font-size: 18px;
+    border: 1px solid transparent;
+}
+
+.primary-button {
+    transition: $hover-transition;
+    background-color: #444DF2;
+    cursor: pointer;
+    color: white;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
+
+    &:hover {
+        background-color: #797EF3;
+    }
+
+    &:active {
+        background-color: #444DF2;
+    }
+
+    &:disabled {
+        background-color: #686868;
+        cursor: default;
+    }
+}
+
+.primary-button-red {
+    transition: $hover-transition;
+    background-color: red;
+    cursor: pointer;
+    color: white;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
+
+    &:hover {
+        background-color: rgb(255, 79, 79);
+    }
+
+    &:active {
+        background-color: red;
+    }
+
+    &:disabled {
+        background-color: #686868;
+        cursor: default;
+    }
+}
+
+.secondary-button {
+    transition: $hover-transition;
+    background-color: white;
+    border: 1px solid #444DF2;
+    cursor: pointer;
+    color: #444DF2;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
+
+    &:hover {
+        color: white;
+        background-color: $hover-text-color;
+        border: 1px solid transparent;
+    }
+
+    &:active {
+        background-color: #444DF2;
+        color: white;
+    }
+
+    &:disabled {
+        color: #686868;
+        border: 1px solid #686868;
+        background-color: white;
+        cursor: default;
+    }
+}
+
+.secondary-button-red {
+    transition: $hover-transition;
+    background-color: white;
+    border: 1px solid red;
+    cursor: pointer;
+    color: red;
+    border-radius: $button-border-radius;
+    padding: $button-padding;
+
+    &:hover {
+        color: white;
+        background-color: rgb(255, 79, 79);
+        border: 1px solid transparent;
+    }
+
+    &:active {
+        background-color: red;
+        color: white;
+    }
+
+    &:disabled {
+        color: #686868;
+        border: 1px solid #686868;
+        background-color: white;
+        cursor: default;
+    }
+}
+
+.close-dialog {
+    cursor: pointer;
+    border-radius: 100%;
+    padding: 5px;
+    transition: $hover-transition;
+
+    &:hover {
+        background-color: $hover-background-color;
+        color: $hover-text-color;
+        transition: $hover-transition;
+        font-weight: 600;
+    }
 }

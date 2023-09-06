@@ -6,10 +6,7 @@
 <div id="profileDetails" *ngIf="detailsVisible || fsDataThreadService.detailsVisible">
     <div class="header-container">
         <span>Profil</span>
-        <div class="close-profile-menu">
-            <mat-icon (click)="toggleDetails()" mat-button mat-dialog-close>close</mat-icon>
-        </div>
-
+        <mat-icon class="close-dialog" (click)="toggleDetails()" mat-button mat-dialog-close>close</mat-icon>
     </div>
 
     <img class="profileImg" [src]="authService.userData.avatar" alt="">
@@ -37,12 +34,11 @@
     </div>
 </div>
 
+
 <div id="editProfile" *ngIf="editDetailsVisible">
     <div class="header-container">
         <span>Dein Profil bearbeiten</span>
-        <div class="close-profile-menu">
-            <mat-icon (click)="toggleEditDetails()" mat-button mat-dialog-close>close</mat-icon>
-        </div>
+        <mat-icon class="close-dialog" (click)="toggleEditDetails()" mat-dialog-close>close</mat-icon>
     </div>
 
     <img class="profileImg" [src]="authService.userData.avatar" (click)="editAvatarImage()">
@@ -54,8 +50,7 @@
                 <img src="assets/img/icons/account_circle.png" alt="">
                 <span>Vollständiger Name</span>
             </div>
-            <input type="text" [(ngModel)]="authService.userData.user_name"
-                placeholder="{{ authService.userData.user_name }}">
+            <input type="text" [(ngModel)]="current_username" placeholder="{{ current_username }}">
         </div>
 
         <div id="edit-email">
@@ -63,14 +58,14 @@
                 <img src="assets/img/mail.png" alt="">
                 <span>E-Mail-Adresse</span>
             </div>
-            <input type="text" [(ngModel)]="authService.userData.email" placeholder="{{ authService.userData.email }}">
+            <input type="text" [(ngModel)]="current_email" placeholder="{{ current_email }}">
         </div>
     </div>
 
     <div class="btn-container">
-        <button id="cancel-btn" mat-fab extended (click)="toggleEditDetails()">Abbrechen</button>
-        <button id="save-btn" mat-fab extended (click)="updateUserDetails()">Speichern</button>
-
+        <button class="secondary-button" (click)="toggleEditDetails()">Abbrechen</button>
+        <button class="primary-button" (click)="updateUserDetails()" [disabled]="current_username == this.authService.userData.user_name &&
+             current_email == this.authService.userData.email">Speichern</button>
     </div>
 </div>
 
@@ -78,7 +73,7 @@
 <div class="edit_avatar_div" *ngIf="editAvatarVisible">
     <div class="header-container">
         <span>Dein Profilbild bearbeiten</span>
-        <img (click)="closeEditAvatar()" class="sidebar-icon-hover" src="assets/img/icons/close.png" alt="">
+        <mat-icon class="close-dialog" (click)="closeEditAvatar()" mat-dialog-close>close</mat-icon>
     </div>
     <img class="profileImg" [src]="current_imageUrl">
     <span>Wähle einen Standard Avatar...</span>
@@ -94,8 +89,8 @@
     </div>
 
     <div class="buttons">
-        <div class="save_button" (click)="saveNewAvatar()">Speichern</div>
-        <div class="abort_button" (click)="onNoClick()">Abbrechen</div>
+        <button class="secondary-button" (click)="onNoClick()">Abbrechen</button>
+        <button class="primary-button" (click)="saveNewAvatar()">Speichern</button>
     </div>
     <div class="error" *ngIf="file_error">Bitte wähle ein Bildformat !</div>
 </div>

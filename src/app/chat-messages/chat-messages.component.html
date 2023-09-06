@@ -1,8 +1,17 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
 <section class="chat-messages" #ChatContainerREF>
     <section *ngIf=" this.chatService.currentChatSection == 'channels'" class="channel_description">
         <span>Du siehst dir den Channel #{{ chatService.currentChatData.channelName }} an</span>
         <span>{{chatService.currentChatData.description}}</span>
     </section>
+<<<<<<< HEAD
+=======
+    <app-empty-chat-placeholder *ngIf="chatService.directChatMessages.length === 0 && chatService.currentChatSection === 'chats'"></app-empty-chat-placeholder> 
+    
+>>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
     <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
             class="chat-messages-date">
@@ -22,9 +31,14 @@
                     <span class="last-message-time">{{ msgService.getTimestampTime(chatMessage.created_At)
                         }}</span>
                 </div>
-                <div [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
+                <div class="deleted" *ngIf="chatMessage?.message_deleted">
+                    <mat-icon>delete_outline</mat-icon>
+                    {{chatMessage.chat_message}}
+                </div>
+                <div *ngIf="!chatMessage?.message_deleted" [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                     class="chat-message-text-container">
-                    <div class="chat-message-text">
+                   
+                    <div class="chat-message-text" >
                         <div>
                             <span (click)="profileService.openProfile(word)"
                                 *ngFor="let word of chatMessage.modified_message; let k = index"
@@ -45,8 +59,8 @@
                         <div>{{uploadService.checkFileName(chatMessage.uploaded_files.file_name[k])}}
                         </div>
                         <div class="delete_file" *ngIf="chatMessage.uid == authService.userData.user_Sender_ID">
-                            <img (click)="uploadService.deleteSelectedFile(chatMessage.uploaded_files.file_name[k], i, k)"
-                                src="/assets/img/icons/close.png" (click)="stopPropagation($event)">
+                            <img (click)="uploadService.deleteSelectedFile(chatMessage.uploaded_files.file_name[k], i, k, 'mainChat'); genFunctService.stopPropagation($event)"
+                                src="/assets/img/icons/close.png">
                         </div>
                     </div>
                 </div>
@@ -55,7 +69,7 @@
                 <!-- Emoji reaction direct right from emoji reactions -->
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="chat-message-details-reactions">
-                    <div class="z_index">
+                    <div class="z_index" *ngIf="!chatMessage?.message_deleted">
                         <svg #emojiMessagePopupREF
                             (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(i); "
                             width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -125,7 +139,7 @@
                         {{fsDataThreadService.getTimeSince(chatMessage.last_answer)}}</span>
                 </div>
             </div>
-            <div [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
+            <div *ngIf="!chatMessage?.message_deleted" [ngClass]="{'reaction-bar-sender':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                 class="reaction-bar">
                 <img src="/assets/img/icons/check_mark_emoji.svg"
                     (click)="addEmojiInMessage(emojiService.checkMarkManualEvent, i, chatMessage);">
@@ -169,7 +183,7 @@
                     <div class="edit-message" *ngIf="toggleEditMessage">
                         <span (click)="msgService.editMessage(i, chatMessage)">Nachricht
                             bearbeiten</span>
-                        <span (click)="msgService.deleteMessage(i, chatMessage)">Nachricht
+                        <span (click)="msgService.openDeleteMessage(i, chatMessage)">Nachricht
                             löschen</span>
                     </div>
                 </div>

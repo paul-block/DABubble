@@ -1,7 +1,7 @@
 <div class="dialog-container">
     <div class="head-container">
         <span>Channel erstellen</span>
-        <img (click)="closeDialog()" src="assets/img/icons/close.png" class="sidebar-icon-hover" alt="">
+        <mat-icon class="close-dialog" (click)="closeDialog()">close</mat-icon>
     </div>
 
     <p> Channels dienen deinem Team zur Kommunikation.
@@ -13,14 +13,16 @@
     <form [formGroup]="form">
         <div id="channel-input">
             <img src="assets/img/icons/tag.svg" alt="">
-            <input type="text" formControlName="channel-name" placeholder="z.B Kooperationsprojekte" required (focus)="error = false">
-            <span *ngIf="error" class="error">Channel-Name exestiert bereits</span>
+            <input type="text" formControlName="channel-name" placeholder="z.B Kooperationsprojekte" required
+                (focus)="error = false">
+            <span *ngIf="error" class="error">Channel-Name existiert bereits</span>
         </div>
 
         <span>Beschreibung (optional)</span>
 
         <input id="optional-input" type="text" formControlName="description" placeholder="Dein Text hier">
 
-        <button [disabled]="!form.valid" mat-fab extended (click)="checkIfChannelNameExist()" #create>Erstellen</button>
+        <button class="primary-button" [disabled]="!form.valid" (click)="checkIfChannelNameExist()"
+            #create>Erstellen</button>
     </form>
 </div>

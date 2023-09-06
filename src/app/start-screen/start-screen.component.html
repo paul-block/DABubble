@@ -16,7 +16,7 @@
     <div class="content">
         <router-outlet></router-outlet>
     </div>
-    <div class="sign_in" routerLinkActive="d_none" [routerLinkActiveOptions]="{exact: false}">
+    <div class="sign_in" *ngIf="router.url === '/sign-in'">
         Neu bei DABubble?
         <div class="create_text" [routerLink]="['/sign-up']">Konto erstellen</div>
     </div>

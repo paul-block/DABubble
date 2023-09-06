@@ -1,14 +1,15 @@
-import { ElementRef, Injectable } from '@angular/core';
-import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, orderBy, query, getDocs, deleteDoc, getDoc, onSnapshot } from '@angular/fire/firestore';
-import { getAuth } from '@angular/fire/auth';
+import { Injectable } from '@angular/core';
+import { doc, getFirestore, updateDoc, collection, orderBy, query, deleteDoc, getDoc, onSnapshot, setDoc, DocumentData } from '@angular/fire/firestore';
 import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
 import { NewMsgService } from './new-msg.service';
-import { UploadService } from './upload.service';
-import { ChannelService } from './channel.service';
+import { GeneralFunctionsService } from './general-functions.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
+import { FirestoreThreadDataService } from './firestore-thread-data.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +27,17 @@ export class MessagesService {
   private scrollSubject = new Subject<void>();
   answers_count: any;
   time: any;
-  upload_array;
+  upload_array: any;
 
 
   constructor(
+    public dialog: MatDialog,
     public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public newMsgService: NewMsgService,
-
-  ) { 
+    public genFunctService: GeneralFunctionsService,
+  ) {
   }
 
 
@@ -49,7 +51,9 @@ export class MessagesService {
 
   async newMessage() {
     let time_stamp = new Date();
-    const messagesCollectionRef = await addDoc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), {
+    const customMessageID = await this.genFunctService.generateCustomFirestoreID();
+
+    await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
       chat_message: this.messageText,
       user_Sender_ID: this.authService.userData.uid,
       user_Sender_Name: this.authService.userData.user_name,
@@ -60,17 +64,8 @@ export class MessagesService {
       answers: 0,
       last_answer: '',
       uploaded_files: this.upload_array,
-    })
-    this.saveMessage(messagesCollectionRef)
-  }
-
-
-  async saveMessage(messagesCollectionRef) {
-    const newMessageID = messagesCollectionRef.id;
-    await updateDoc(messagesCollectionRef, {
-      message_ID: newMessageID,
+      message_ID: customMessageID
     }).then(() => {
-      // this.getNewMessage();
       this.messageText = '';
     });
   }
@@ -96,6 +91,7 @@ export class MessagesService {
   }
 
 
+<<<<<<< HEAD
   async getNewMessage() {
     const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
@@ -112,6 +108,8 @@ export class MessagesService {
     currentMessage.chat_message_edited = true;
   }
 
+=======
+>>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
   async getMessages() {
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
@@ -120,18 +118,42 @@ export class MessagesService {
     const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
     onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
+        const changedMessageData = change.doc.data();
         if (change.type === 'added') {
-          const userData = change.doc.data();
-          this.chatService.directChatMessages.push(userData);
-          console.log('change ' + userData);
-          this.scrollToBottom();
+          this.chatService.directChatMessages.push(changedMessageData);
+        } else if (change.type === 'modified') {
+          this.getChangedMessage(changedMessageData);
+        } else if (change.type === 'removed') {
+          this.spliceMessage(changedMessageData);
         }
+<<<<<<< HEAD
         console.log(change.type);
         
+=======
+>>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
       });
     });
-    
+    // this.scrollToBottom();
+  }
 
+
+  async getChangedMessage(changedMessageData: DocumentData) {
+    const changedchatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
+    changedchatMessage.chat_message = changedMessageData.chat_message;
+    changedchatMessage.modified_message = changedMessageData.modified_message;
+    changedchatMessage.chat_message_edited = changedMessageData.chat_message_edited;
+    changedchatMessage.emoji_data = changedMessageData.emoji_data;
+    changedchatMessage.answers = changedMessageData.answers;
+    changedchatMessage.last_answer = changedMessageData.last_answer;
+    changedchatMessage.uploaded_files = changedMessageData.uploaded_files;
+  }
+
+
+  async spliceMessage(changedMessageData: DocumentData) {
+    const index = this.chatService.directChatMessages.findIndex(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
+    if (index !== -1) {
+      this.chatService.directChatMessages.splice(index, 1);
+    }
   }
 
 
@@ -147,7 +169,7 @@ export class MessagesService {
   }
 
 
-  async editMessage(i: number, chatMessage) {
+  async editMessage(i: number, chatMessage: { message_ID: string; chat_message: string; }) {
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     this.editMessageText = true;
@@ -157,7 +179,6 @@ export class MessagesService {
 
   async saveEditedMessage() {
     try {
-      this.getChangedMessage();
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await updateDoc(messageRef, {
         chat_message: this.messageText,
@@ -174,23 +195,24 @@ export class MessagesService {
   }
 
 
-  async saveEditedMessageFromThread(chat) {
+  async saveEditedMessageFromThread(chat: { message_ID: any; chat_message: any; chat_message_edited: any; modified_message: any; }) {
     let id = chat.message_ID
     let message = chat.chat_message
     let edited = chat.chat_message_edited
     const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
     await updateDoc(messageRef, {
       chat_message: message,
-      chat_message_edited: edited
+      chat_message_edited: edited,
+      modified_message: chat.modified_message
     })
   }
 
 
   async deleteMessage(i: number, chatMessage) {
+    console.log(chatMessage);
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     try {
-      this.spliceMessage();
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await deleteDoc(messageRef)
     } catch (error) {
@@ -199,12 +221,32 @@ export class MessagesService {
   }
 
 
-  async spliceMessage() {
-    this.chatService.directChatMessages.splice(this.messageIndex, 1);
+  openDeleteMessage(i: number, chatMessage: { chat_message: any; answers: number; }) {
+    const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
+      data: { comment: chatMessage.chat_message },
+      panelClass: 'my-dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result || result == '') {
+        chatMessage.chat_message = result;
+        if (chatMessage.answers == 0) this.deleteMessage(i, chatMessage)
+        else this.changeMessageToDeleted(chatMessage)
+      }
+    });
   }
 
 
-  getTimestampTime(timestamp) {
+  async changeMessageToDeleted(chatMessage) {
+    chatMessage.chat_message = 'Diese Nachricht wurde gelöscht.'
+    const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
+    await updateDoc(messageRef, {
+      chat_message: chatMessage.chat_message,
+      message_deleted: true
+    })
+  }
+
+
+  getTimestampTime(timestamp: { toDate: () => any; }) {
     const dateObj = timestamp.toDate();
     const hours = dateObj.getHours();
     const minutes = dateObj.getMinutes();
@@ -212,7 +254,7 @@ export class MessagesService {
   }
 
 
-  async updateMessagesReactions(chatMessage) {
+  async updateMessagesReactions(chatMessage: { message_ID: string; }) {
     const docRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
     await updateDoc(docRef, {
       emoji_data: this.emoji_data,
@@ -223,7 +265,7 @@ export class MessagesService {
   }
 
 
-  formatDate(timestamp): string {
+  formatDate(timestamp: { toDate: () => any; }): string {
     const date = timestamp.toDate();
     const now = new Date();
 
@@ -237,5 +279,24 @@ export class MessagesService {
 
   emptyMessageText() {
     this.messageText = '';
+  }
+
+  updateUploadedFiles(i: number, k: number) {
+    console.log(this.chatService.directChatMessages[i]);
+    this.chatService.directChatMessages[i].uploaded_files.file_name.splice(k, 1);
+    this.chatService.directChatMessages[i].uploaded_files.download_link.splice(k, 1);
+    this.messageID = this.chatService.directChatMessages[i].message_ID;
+    this.saveEditedUploads(i);
+  }
+
+  async saveEditedUploads(i: number) {
+    try {
+      const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
+      await updateDoc(messageRef, {
+        uploaded_files: this.chatService.directChatMessages[i].uploaded_files,
+      })
+    } catch (error) {
+      console.error('Error updating files:', error);
+    }
   }
 }

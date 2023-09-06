@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
-
+import { UploadService } from 'services/upload.service';
 
 
 @Component({
@@ -22,15 +22,17 @@ export class ProfileMenuComponent {
   uploadProgress: number = 0;
   selectedFile: File = null;
   imageUrl: string;
-  current_imageUrl: string
-
+  current_imageUrl: string;
+  current_username: string = this.authService.userData.user_name;
+  current_email: string = this.authService.userData.email;
 
   constructor(
     public authService: AuthenticationService,
     private dialog: MatDialog,
     private storage: AngularFireStorage,
     public fsDataThreadService: FirestoreThreadDataService,
-    public dialogRef: MatDialogRef<ProfileMenuComponent>
+    public dialogRef: MatDialogRef<ProfileMenuComponent>,
+    public uploadService: UploadService
   ) { }
 
   signOut() {
@@ -49,15 +51,12 @@ export class ProfileMenuComponent {
   }
 
 
-
   toggleEditDetails() {
     this.editDetailsVisible = !this.editDetailsVisible;
   }
 
-
-
   updateUserDetails() {
-    this.authService.updateUserDetails(this.authService.userData.user_name, this.authService.userData.email);
+    this.authService.updateUserDetails(this.current_username, this.current_email);
     this.dialog.closeAll();
     this.fsDataThreadService.detailsVisible = false
   }
@@ -86,14 +85,9 @@ export class ProfileMenuComponent {
   }
 
 
-  setAvatar(image: string) {
-   
-  }
-
-
   uploadImage() {
     this.file_error = false
-    const filePath = this.authService.userData.uid + '/' + this.selectedFile.name;
+    const filePath = this.authService.userData.uid + '/' + 'avatar_' + this.selectedFile.name;
     const fileRef = this.storage.ref(filePath);
     const uploadTask = this.storage.upload(filePath, this.selectedFile);
     uploadTask.percentageChanges().subscribe(progress => {
@@ -116,14 +110,18 @@ export class ProfileMenuComponent {
 
   
   saveNewAvatar() {
+    const decodedLink = decodeURIComponent(this.authService.userData.avatar);  
+    const parts = decodedLink.split('/');
+    const filename = parts[parts.length - 1].split('?')[0];
+    let path = this.authService.userData.uid + '/' + filename;
     this.file_error = false
     this.authService.setAvatarImage(this.current_imageUrl)
     this.dialogRef.close();
+    if (!this.images.includes('/assets/img/small_avatar/' + filename )) this.uploadService.deleteFile(path)
   }
 
 
   onNoClick(): void {
     this.dialogRef.close();
-   // if (this.current_imageUrl) this.authService.userData.avatar = this.current_imageUrl
   }
 }

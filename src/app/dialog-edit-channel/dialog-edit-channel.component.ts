@@ -20,13 +20,14 @@ export class DialogEditChannelComponent implements OnInit {
   channelDescription: string = 'Dieser Channel ist für alles rund um #Entwicklerteam-Thema vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.';
   creatorName: string = '';
   assignedUsers = [];
-  delete_Channel:boolean = false
+  delete_Channel: boolean = false
+  leave_Channel: boolean = false;
 
   constructor(
     public authService: AuthenticationService,
     public chatService: ChatService,
     public channelService: ChannelService,
-    public uploadService:UploadService,
+    public uploadService: UploadService,
     public messageService: MessagesService,
   ) { }
 
@@ -41,6 +42,12 @@ export class DialogEditChannelComponent implements OnInit {
   getCreatorName() {
     const userData = this.authService.all_users.find(user => user.uid === this.chatService.currentChatData.createdBy);
     this.creatorName = userData.user_name;
+  }
+
+
+  toggleLeaveText() {
+    this.leave_Channel = !this.leave_Channel;
+    console.log(this.leave_Channel);
   }
 
 
@@ -95,23 +102,23 @@ export class DialogEditChannelComponent implements OnInit {
 
 
   async deleteChannel() {
-  this.channelService.deleteChannel(this.chatService.currentChatData.channel_ID);
-  this.chatService.currentChatSection = 'noChatSectionSelected'
+    this.channelService.deleteChannel(this.chatService.currentChatData.channel_ID);
+    this.chatService.currentChatSection = 'noChatSectionSelected'
   }
 
 
-  openDeleteText() { 
+  openDeleteText() {
     this.delete_Channel = !this.delete_Channel
   }
-  
+
 
   abortDelete() {
     this.delete_Channel = !this.delete_Channel
   }
 
   async sendLeaveMessage() {
-      this.uploadService.checkForUpload()
-      this.messageService.messageText = this.authService.userData.user_name + ' hat #' + this.channelService.currentChannelData.channelName + ' verlassen.'
-      await this.messageService.newMessage()
+    this.uploadService.checkForUpload()
+    this.messageService.messageText = this.authService.userData.user_name + ' hat #' + this.channelService.currentChannelData.channelName + ' verlassen.'
+    await this.messageService.newMessage()
   }
 }

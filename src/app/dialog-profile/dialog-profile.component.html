@@ -1,12 +1,10 @@
 <div id="profileDetails">
     <div class="header-container">
         <span>Profil</span>
-        <div class="close-profile-menu">
-            <mat-icon (click)="close()" mat-button mat-dialog-close>close</mat-icon>
-        </div>
+        <mat-icon class="close-dialog" (click)="close()" mat-button mat-dialog-close>close</mat-icon>
     </div>
 
-    <img class="profileImg" [src]="getImageUrl(data.user.uid)" alt="">
+    <img class="profileImg" [src]="getImageUrl(data.user.uid)">
 
     <div class="middle-part">
         <div class="edit-container">

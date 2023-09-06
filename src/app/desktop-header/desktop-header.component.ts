@@ -20,7 +20,6 @@ export class DesktopHeaderComponent {
   constructor(private dialog: MatDialog, public authService: AuthenticationService, public fsDataThreadService: FirestoreThreadDataService,) { }
 
 
-
   openProfileMenu() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();

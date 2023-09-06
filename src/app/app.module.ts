@@ -41,7 +41,6 @@ import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogEditCommentComponent } from './dialog-edit-comment/dialog-edit-comment.component';
 import { ChannelDirectSendMessageComponent } from './channel-direct-send-message/channel-direct-send-message.component';
-import { DialogAutocompleteComponent } from './dialog-autocomplete/dialog-autocomplete.component';
 // Material API imports
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
@@ -54,6 +53,9 @@ import { MatInputModule } from '@angular/material/input';
 import { ChatMessagesComponent } from './chat-messages/chat-messages.component';
 import { ChatPlaceholderComponent } from './chat-placeholder/chat-placeholder.component';
 import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/header-channel-direct-chat.component';
+import { ImprintComponent } from './imprint/imprint.component';
+import { DataProtectionComponent } from './data-protection/data-protection.component';
+import { EmptyChatPlaceholderComponent } from './empty-chat-placeholder/empty-chat-placeholder.component';
 
 
 
@@ -85,7 +87,6 @@ import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/h
     AddPplToChannelComponent,
     NewPasswordComponent,
     ChannelDirectSendMessageComponent,
-    DialogAutocompleteComponent,
     ThreadComponent,
     DialogEditCommentComponent,
     SearchbarComponent,
@@ -95,6 +96,9 @@ import { HeaderChannelDirectChatComponent } from './header-channel-direct-chat/h
     ChatMessagesComponent,
     ChatPlaceholderComponent,
     HeaderChannelDirectChatComponent,
+    ImprintComponent,
+    DataProtectionComponent,
+    EmptyChatPlaceholderComponent,
   ],
   imports: [
     HttpClientModule,

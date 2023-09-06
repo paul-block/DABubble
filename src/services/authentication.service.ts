@@ -31,11 +31,10 @@ export class AuthenticationService {
   email_error: boolean
   signUp_successful: boolean
   userName: string
-  addCertainUserValue = new BehaviorSubject<string>('');
   email_send: boolean = null;
   googleUser_exist: boolean;
   all_users: any[];
-
+  usersPromise: Promise<any>;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -54,13 +53,17 @@ export class AuthenticationService {
     });
 
 
-    const dbRef = collection(this.db, "users");
-    onSnapshot(dbRef, docsSnap => {
-      const users: any[] = []
-      docsSnap.forEach(doc => {
-        users.push(doc.data())
-      })
-      this.all_users = users
+    
+    this.usersPromise = new Promise<void>((resolve) => {
+      const dbRef = collection(this.db, "users");
+      onSnapshot(dbRef, docsSnap => {
+        const users: any[] = [];
+        docsSnap.forEach(doc => {
+          users.push(doc.data())
+        })
+        this.all_users = users;
+        resolve();
+      });
     });
 
 
@@ -102,7 +105,7 @@ export class AuthenticationService {
       this.signUp_successful = true
       setTimeout(() => this.signUp_successful = false, 3000);
     } catch (error) {
-      if (error.message == 'Firebase: Error (auth/email-already-in-use).') {
+      if (error.code === 'auth/email-already-in-use') {
         this.email_error = true
         setTimeout(() => this.email_error = false, 3000);
       } else
@@ -240,18 +243,18 @@ export class AuthenticationService {
   }
 
 
-  updateCertainUserValue(value: string): void {
-    this.addCertainUserValue.next(value);
+  async usersWithoutCurrentuser() {
+    const users = await this.getAllUsers();
+    const userIndex = users.findIndex(user => user.user_name === this.userData.user_name);
+    if (userIndex !== -1) users.splice(userIndex, 1);
+    return users
   }
-
 
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
-
     if (user !== null) {
       const userRef = doc(this.db, 'users', user.uid);
-
       await updateDoc(userRef, {
         user_name: userName,
         email: email

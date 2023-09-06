@@ -56,9 +56,9 @@ export class DialogAddMembersComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-
     this.users = await this.filterUserAllreadyAssigned()
   }
+
 
   filterUsers() {
     if (this.inputSearchUser.length > 0) {
@@ -67,14 +67,18 @@ export class DialogAddMembersComponent implements OnInit {
       );
     } else {
       this.filteredUsers = this.users;
+      if (this.filteredUsers.length === 0) console.log('kein username gefunden');
+
     }
   }
+
 
   selectUser(user) {
     this.choosedUser = true;
     this.inputSearchUser = user.user_name;
     this.selectedUsers.push(user);
   }
+
 
   addNewMember() {
     this.selectedUsers.forEach(user => {
@@ -85,14 +89,12 @@ export class DialogAddMembersComponent implements OnInit {
     this.choosedUser = null;
     this.inputSearchUser = '';
     this.dialogRef.close();
-   
-   
   }
+
 
   clearInputName(userToRemove) {
     this.inputSearchUser = ''
     this.choosedUser = false;
-    console.log('clearInputName');
     this.selectedUsers = this.selectedUsers.filter(user => user.uid !== userToRemove.uid);
   }
 
@@ -108,7 +110,7 @@ export class DialogAddMembersComponent implements OnInit {
   }
 
 
-  sendAddMemberMessage(user:string) {
+  sendAddMemberMessage(user: string) {
     this.uploadService.checkForUpload()
     this.messageService.messageText = user + ' ist #' + this.channelService.currentChannelData.channelName + ' beigetreten.'
     this.messageService.newMessage()

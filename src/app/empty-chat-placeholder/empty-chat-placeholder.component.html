@@ -1,0 +1,5 @@
+<img [src]="authService.getImageUrl(chatService.getChatReceiverUser(chatService.currentChatData).uid)"
+    alt="chat receiver image">
+<h1>{{ chatService.getChatReceiverUser(chatService.currentChatData).user_name }}</h1>
+<h1 *ngIf="chatService.currentChatData.chat_Member_IDs[0] === chatService.currentChatData.chat_Member_IDs[1]">(Du)
+</h1>

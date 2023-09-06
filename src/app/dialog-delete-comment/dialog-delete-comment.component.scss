@@ -1,70 +1,46 @@
 @mixin content_center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .button_div {
-    gap: 32px;
-    display: flex;
-    :nth-child(1),
-    :nth-child(2) {
-      transition: 200ms;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 141px;
-      height: 49px;
-      @include content_center();
-      border: 1px solid #797ef3;
-      box-shadow: 7px 5px 10px -4px rgba(0, 0, 0, 0.51);
-      border-radius: 50px;
-      background-color: white;
-      color: #444df2;
-      &:hover {
-        background-color: #444df2;
-        color: white;
-      }
-    }
-    :nth-child(2) {
-      background-color: red;
-      color: white;
-      &:hover {
-        background-color: rgba(255, 0, 0, 0.762);
-      }
-    }
-  }
+  gap: 32px;
+  display: flex;
+}
 
- .headline {
-    width: 100%;
-    span {
-        font-size: 18px;
-    }
-    h3 {
-        font-size: 22px;
-        font-weight: 700;
-    }
+.headline {
+  width: 100%;
 
- }
-  
-  :host {
-    gap: 20px;
-    width: 450px;
-    height: 350px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    background: #fff;
-    padding: 20px;
-    overflow: hidden;
-  }
-
-  .delete_commennt_div {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #adb0d9;
+  span {
     font-size: 18px;
-    border-radius: 20px;
-    @include content_center()
   }
+
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+}
+
+:host {
+  gap: 20px;
+  width: 450px;
+  height: 350px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  background: #fff;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.delete_comment_div {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #adb0d9;
+  font-size: 18px;
+  border-radius: 20px;
+  @include content_center()
+}

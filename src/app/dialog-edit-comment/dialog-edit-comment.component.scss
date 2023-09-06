@@ -5,7 +5,7 @@
 }
 
 textarea {
-  padding: 5px;
+  padding: 10px;
   border: 1px solid #adb0d9;
   height: 100%;
   width: 100%;
@@ -14,6 +14,7 @@ textarea {
   font-size: 18px;
   border-radius: 20px;
   color: #686868;
+
   &:focus {
     color: black;
   }
@@ -35,32 +36,6 @@ textarea {
 .button_div {
   gap: 32px;
   display: flex;
-  :nth-child(2),
-  :nth-child(3) {
-    transition: 200ms;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    width: 141px;
-    height: 49px;
-    @include content_center();
-    border: 1px solid #797ef3;
-    box-shadow: 7px 5px 10px -4px rgba(0, 0, 0, 0.51);
-    border-radius: 50px;
-    background-color: white;
-    color: #444df2;
-    &:hover {
-      background-color: #444df2;
-      color: white;
-    }
-  }
-  :nth-child(3) {
-    background-color: #444df2;
-    color: white;
-    &:hover {
-      background-color: #797ef3;
-    }
-  }
 }
 
 .emojy {
@@ -80,17 +55,12 @@ textarea {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
-        brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
     }
   }
 }
 
-button {
-  border: none;
-}
-
 .emoji_picker {
-    z-index: 2;
-    width: 100% !important;
+  z-index: 2;
+  width: 100% !important;
 }

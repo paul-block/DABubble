@@ -18,6 +18,7 @@
                 <mat-icon (click)="clearInputName(user)">close</mat-icon>
             </div>
         </div>
+        <div class="search-user-popup" *ngIf=" filteredUsers?.length == 0">Keine Übereinstimmung gefunden</div>
         <div class="search-user-popup" *ngIf="inputSearchUser.length  && !choosedUser && filteredUsers.length > 0" >
             <div *ngFor="let user of filteredUsers" (click)="selectUser(user)">
                 <img [src]="user.avatar">
@@ -26,6 +27,6 @@
         </div>
     </div>
     <div class="add-member-channel">
-        <button (click)="addNewMember()" [disabled]="selectedUsers.length === 0">Hinzufügen</button>
+        <button class="primary-button" (click)="addNewMember()" [disabled]="selectedUsers.length === 0">Hinzufügen</button>
     </div>
 </section>

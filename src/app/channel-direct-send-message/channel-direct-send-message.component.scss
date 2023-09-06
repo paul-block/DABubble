@@ -45,7 +45,6 @@ $hover-transition: all ease-in-out 125ms;
     align-items: center;
     background-color: white;
     border: none;
-    cursor: pointer;
 
 
 
@@ -57,6 +56,7 @@ $hover-transition: all ease-in-out 125ms;
 }
 
 .ready-to-send {
+    cursor: pointer;
     mat-icon {
         color: $hover-text-color;
     }
@@ -117,8 +117,8 @@ $hover-transition: all ease-in-out 125ms;
     z-index: 11;
     background-color: white;
     position: absolute;
-    top: 5px;
-    left: 50px;
+    top: 30px;
+    left: 20px;
     display: none;
     align-items: center;
     justify-content: center;
@@ -156,7 +156,8 @@ $hover-transition: all ease-in-out 125ms;
 
 .at_user_div {
     position: absolute;
-    bottom: 150px;
+    left: -20px;
+    bottom: 120px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -199,12 +200,13 @@ $hover-transition: all ease-in-out 125ms;
 
 .upload_main {
     width: 100%;
+    position: relative;
 }
 
 .upload_content {
     overflow: hidden;
     background-color: white;
-    position: relative;
+    position: absolute;
     margin: 5px 0 5px 0;
     margin-left: 15px;
     margin-right: 15px;
