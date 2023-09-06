@@ -6,73 +6,52 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GeneralFunctionsService } from './general-functions.service';
-import { AuthenticationService } from './authentication.service';
-import { FirestoreThreadDataService } from './firestore-thread-data.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChannelService {
   db = getFirestore();
+  auth = getAuth();
+
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
-  userIdSubject = new BehaviorSubject<string | undefined>(undefined);
-  currentUserId = this.userIdSubject.asObservable();
-  private avatarSelectedSource = new Subject<string>();
-  userAvatar$ = this.avatarSelectedSource.asObservable();
-  private userSelectedSource = new Subject<string>();
-  userSelected$ = this.userSelectedSource.asObservable();
-  // private showSelectedUserDiv = new BehaviorSubject<boolean>(false);
-  // showSelectedUser$ = this.showSelectedUserDiv.asObservable();
-  // showAutoComplete = new BehaviorSubject<boolean>(true);
-  // showAutoComplete$ = this.showAutoComplete.asObservable();
+
+  private createdChannelId  = new BehaviorSubject<string>(undefined);
+  createdChannelId$ : Observable<string> = this.createdChannelId .asObservable();
+
   currentChannelID: string = 'noChannelSelected';
+  currentChannelData:any;
   channels: any[] = [];
-  currentChannelData:any
-   auth = getAuth();
-  private createtChannelId  = new BehaviorSubject<string>(undefined);
-  createtChannelId$ : Observable<string> = this.createtChannelId .asObservable();
-  
-  
+
+
   constructor(
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
     public generalFuncttions: GeneralFunctionsService,
   ) { 
-
-
     const dbRef = collection(this.db, "channels");
     onSnapshot(dbRef, docsSnap => {
       const channels: any[] = []
       docsSnap.forEach(doc => {
         channels.push(doc.data())
       })
-      this.channels = channels
+      this.channels = channels;
       this.loadCurrentChannel()
+
+      const user = this.auth.currentUser;
+      if (user !== null) {
+         this.getAuthorizedChannels(user.uid);
+      }
     });
   }
 
 
-  setCreatetChannelId(newValue: string) {
-    this.createtChannelId.next(newValue);
+  setCreatedChannelId(newValue: string) {
+    this.createdChannelId.next(newValue);
   }
   
-
-  // showSelectedUser(value: boolean) {
-  //   this.showSelectedUserDiv.next(value);
-  // }
-
-  getUserId(uid: string) {
-    this.userIdSubject.next(uid);
-  }
-
-  selectUser(userName: string) {
-    this.userSelectedSource.next(userName);
-  }
-
-  selectAvatar(avatarUrl: string) {
-    this.avatarSelectedSource.next(avatarUrl);
-  }
 
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
     const channelRef = doc(this.db, 'channels', channelName);
@@ -103,7 +82,7 @@ export class ChannelService {
         await updateDoc(channelCollectionRef, {
           channel_ID: newChannelID
         });
-        this.setCreatetChannelId(channelCollectionRef.id)
+        this.setCreatedChannelId(channelCollectionRef.id)
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
       }
@@ -120,7 +99,7 @@ export class ChannelService {
     querySnapshot.forEach((doc) => {
       channels.push(doc.data());
     });
-    this.authorizedChannelsSubject.next(channels);
+    this.channels = channels;
   }
 
 
@@ -158,6 +137,7 @@ export class ChannelService {
     }
   }
 
+  
   async updateChannelInfo(currentChatData, changes){
     const auth = getAuth();
     const user = auth.currentUser; 
@@ -184,7 +164,7 @@ export class ChannelService {
 
 
   loadStandardChannel() {
-    this.setCreatetChannelId('RRraQrPndWV95cqAWCZR')
+    this.setCreatedChannelId('RRraQrPndWV95cqAWCZR')
   }
 
 

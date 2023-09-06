@@ -31,7 +31,7 @@
         [disabled]="selectedOptionControl.value === 'certain' && (!selectedOptionControl.value || selectedUser.length === 0)">Erstellen
     </button>
 </div>
-
+<div class="autocomplete-container" *ngIf="filteredUsers.length == 0 && searchControl.value != null">Keine Übereinstimmung gefunden</div>
 <div class="autocomplete-container"
     *ngIf="searchControl.value && searchControl.value.length != 0 && filteredUsers.length != 0">
     <div *ngFor="let user of filteredUsers" class="dm-profile pointer sidebar-hover" (click)="addUser(user)">

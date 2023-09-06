@@ -81,7 +81,6 @@ export class UploadService {
   async checkForUpload() {
     if (this.upload_array.file_name.length > 0) await this.prepareUploadfiles();
     this.msgService.upload_array = this.upload_array;
-    console.log('uploadArray ' + this.upload_array);
   }
 
 

@@ -2,7 +2,8 @@
     <div class="header_content">
         <div class="channel">
             <span>Thread</span>
-            <span># {{fsDataThreadService.current_channelname}}</span>
+            <span *ngIf="this.chatService.currentChatSection == 'channels'">#{{fsDataThreadService.current_channelname}}</span>
+            <span *ngIf="this.chatService.currentChatSection == 'chats'">{{chatService.getChatReceiverUser(this.chatService.currentChatData)?.user_name}}</span>
         </div>
         <div class="close-profile-menu">
             <mat-icon style="font-weight: 400;" (click)="closeThread(false)">close</mat-icon>
@@ -78,7 +79,8 @@
                     [class.highlighted]="chatService.checkIfWordIsAnId(word)">
                     {{chatService.renameUid(word)}}
                 </span>
-                <div style="font-size: 10px;" *ngIf="fsDataThreadService.current_chat_data.chat_message_edited">(bearbeitet)</div>
+                <div style="font-size: 10px;" *ngIf="fsDataThreadService.current_chat_data.chat_message_edited">
+                    (bearbeitet)</div>
             </div>
             <div class="emoji_main">
                 <div *ngFor="let item of 0" class="emoji_count" matTooltip="{{react_user}} hat reagiert">
@@ -265,7 +267,7 @@
         </div>
     </div>
 
-<!-----------------------------------------------------------------Textarea----------------------------------------------------------------------------------------->
+    <!-----------------------------------------------------------------Textarea----------------------------------------------------------------------------------------->
 
     <div class="type_message">
         <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
@@ -273,7 +275,7 @@
             <label class="menu_button" for="fileInput">Datei anhängen</label>
         </div>
 
-    <!------------------------------------------------------------------@User-->
+        <!------------------------------------------------------------------@User-->
 
         <div class="at_user_div" *ngIf="chatService.open_users && chatService.at_users.length > 0">
             <div>
@@ -286,14 +288,14 @@
 
         </div>
 
-    <!------------------------------------------------------------------Emoji-->
+        <!------------------------------------------------------------------Emoji-->
         <div class="z_index">
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
                 (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
         </div>
 
-    <!------------------------------------------------------------------TextField-->
-    
+        <!------------------------------------------------------------------TextField-->
+
         <textarea #messageTextarea type="text" [(ngModel)]="comment_value"
             (ngModelChange)="textChanged($event)">placeholder="Antworten..."></textarea>
         <div class="icons_main">
@@ -308,7 +310,7 @@
             </div>
         </div>
         <img [class.inactive]="comment_value.length < 1 && uploadService.upload_array.file_name.length == 0"
-            class="send_button" src="/assets/img/icons/send (1).png" alt="" (click)="postComment()">
+            class="send_button" src="/assets/img/icons/send (1).png" (keyup.enter)="postComment()">
     </div>
 
 </div>

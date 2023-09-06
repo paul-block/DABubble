@@ -29,13 +29,14 @@ export class NewMsgComponent {
       public fsDataThreadService: FirestoreThreadDataService
       ) {
 
-    this.uid = this.authService.getUid();
+    this.uid = this.authService.userData.uid;
 
     if (this.newMsgService.directedFromProfileButton) {
       this.inputValue = '@' + this.newMsgService.user_name;
     }
-    else this.inputValue = ''
+    else this.inputValue = '';
   }
+
 
   async valueChange(value: string) {
     this.filteredUsersByName = [];
@@ -51,6 +52,7 @@ export class NewMsgComponent {
     );
   }
 
+
   selectValue(event: Event, category: string, id:string) {
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
     if (category == 'userName' || category == 'userEmail') {
@@ -65,6 +67,7 @@ export class NewMsgComponent {
     this.filteredChannels = [];
   }
 
+
   async checkExistingChat(selectedUser, clickedValue?: string) {
     const currentUserUID = this.chatService.currentUser_id;
     
@@ -77,6 +80,7 @@ export class NewMsgComponent {
     await this.createNewChat(selectedUser, clickedValue);
   }
   
+
   async findSelfChat(currentUserUID: string) {
     for (const chat of this.chatService.chats) {
       if (chat.chat_Member_IDs) {
@@ -94,6 +98,7 @@ export class NewMsgComponent {
     return false;
   }
   
+
   async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
     for (const chat of this.chatService.chats) {
       if (chat.chat_Member_IDs) {
@@ -110,18 +115,6 @@ export class NewMsgComponent {
     return false;
   }
   
-  // async createNewChat(selectedUser, clickedValue: string) {
-  //   console.log("Neuer chat erstellt");
-  //   this.inputValue = '@' + clickedValue;
-  //   this.chatService.userReceiverID = selectedUser.uid;
-  //   this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
-  //   await this.chatService.newChat(this.chatService.userReceiverID);
-  //   this.chatService.currentChatSection = 'chats';
-  //   this.chatService.currentChatID = await this.chatService.searchChat(this.chatService.userReceiverID);
-  //   this.chatService.currentChatData = await this.chatService.getChatDocument();
-  //   console.log(this.chatService.currentChatID);
-  //   console.log(this.chatService.chats);
-  // }
 
   async createNewChat(selectedUser, clickedValue: string) {
     console.log("Neuer chat erstellt");
@@ -134,6 +127,7 @@ export class NewMsgComponent {
     this.msgService.getMessages();
   }
   
+
   async openChat(chat) {
     if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
@@ -150,6 +144,7 @@ export class NewMsgComponent {
       }
     }
   }
+
 
   async openChannel(channelID) {
     if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
