@@ -27,6 +27,7 @@ export class MessagesService {
   answers_count: any;
   time: any;
   upload_array: any;
+  messagesLoaded: boolean = false;
 
 
   constructor(
@@ -90,6 +91,7 @@ export class MessagesService {
 
 
   async getMessages() {
+    this.messagesLoaded = false;
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
     this.previousMessageDate === null;
@@ -106,8 +108,9 @@ export class MessagesService {
           this.spliceMessage(changedMessageData);
         }
       });
+      this.messagesLoaded = true;
     });
-    // this.scrollToBottom();
+    
   }
 
 
