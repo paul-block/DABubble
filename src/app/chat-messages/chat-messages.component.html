@@ -4,7 +4,7 @@
         <span>Du siehst dir den Channel #{{ chatService.currentChatData.channelName }} an</span>
         <span>{{chatService.currentChatData.description}}</span>
     </section>
-    <app-empty-chat-placeholder *ngIf="chatService.directChatMessages.length === 0"></app-empty-chat-placeholder> 
+    <app-empty-chat-placeholder *ngIf="chatService.directChatMessages.length === 0 && chatService.currentChatSection === 'chats'"></app-empty-chat-placeholder> 
     
     <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
