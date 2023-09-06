@@ -13,20 +13,31 @@ section {
     display: flex;
     gap: 10px;
 
+    img:hover+div h1 {
+        color: $hover-text-color;
+        transition: $hover-transition;
+    }
+
+
     img {
         width: 100px;
         height: 100px;
         cursor: pointer;
+        border-radius: 100%;
     }
 
     div {
         display: flex;
         align-items: flex-end;
+        gap: 5px;
+
+
 
         h1 {
             margin: unset;
             cursor: pointer;
             font-weight: 700;
+            transition: $hover-transition;
 
             &:hover {
                 color: $hover-text-color;
@@ -36,7 +47,8 @@ section {
     }
 }
 
-.text-other-user {
+.text-other-user,
+.text-own-user {
     color: rgb(78, 78, 78);
     font-size: 20px;
 }

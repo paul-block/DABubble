@@ -61,7 +61,6 @@ export class ChatService {
   }
 
   async initOwnChat() {
-    debugger
     const userID = this.currentUser_id;
     let chatExists = false;
     if (this.chats.length != 0) {

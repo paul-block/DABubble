@@ -1,15 +1,13 @@
 <section>
-    <div class="user-receiver"
-        (click)="profileService.openProfile(chatService.getChatReceiverUser(chatService.currentChatData).uid)">
+    <div class="user-receiver">
         <img [src]="authService.getImageUrl(chatService.getChatReceiverUser(chatService.currentChatData).uid)"
-            alt="chat receiver image">
+            alt="chat receiver image" (click)="profileService.openProfile(chatService.getChatReceiverUser(chatService.currentChatData).uid)">
         <div>
-            <h1>
+            <h1 (click)="profileService.openProfile(chatService.getChatReceiverUser(chatService.currentChatData).uid)">
                 {{ chatService.getChatReceiverUser(chatService.currentChatData).user_name }}
-            </h1>
-            <h1
-                *ngIf="chatService.currentChatData.chat_Member_IDs[0] === chatService.currentChatData.chat_Member_IDs[1]">
-                (Du)
+                <span *ngIf="chatService.currentChatData.chat_Member_IDs[0] ===
+                    chatService.currentChatData.chat_Member_IDs[1]">
+                    (Du)</span>
             </h1>
         </div>
     </div>
