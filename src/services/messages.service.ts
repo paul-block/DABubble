@@ -28,6 +28,7 @@ export class MessagesService {
   answers_count: any;
   time: any;
   upload_array: any;
+  messagesLoaded: boolean = false;
 
 
   constructor(
@@ -91,26 +92,8 @@ export class MessagesService {
   }
 
 
-<<<<<<< HEAD
-  async getNewMessage() {
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = await getDocs(query(chatMessagesRef, orderBy("created_At", "asc")));
-    const latestDocument = docDirectChatMessagesSnapshot.docs[docDirectChatMessagesSnapshot.docs.length - 1].data();
-    this.chatService.directChatMessages.push(latestDocument);
-    this.scrollToBottom();
-  }
-
-
-  async getChangedMessage() {
-    const currentMessage = this.chatService.directChatMessages[this.messageIndex];
-    currentMessage.chat_message = this.messageText;
-    currentMessage.modified_message = this.chatService.modifyMessageValue(this.messageText),
-    currentMessage.chat_message_edited = true;
-  }
-
-=======
->>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
   async getMessages() {
+    this.messagesLoaded = false;
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
     this.previousMessageDate === null;
@@ -126,14 +109,10 @@ export class MessagesService {
         } else if (change.type === 'removed') {
           this.spliceMessage(changedMessageData);
         }
-<<<<<<< HEAD
-        console.log(change.type);
-        
-=======
->>>>>>> 76d1e7e34342d27335149baa1a54aa8fb720541d
       });
+      this.messagesLoaded = true;
     });
-    // this.scrollToBottom();
+    
   }
 
 

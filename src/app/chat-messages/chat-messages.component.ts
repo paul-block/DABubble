@@ -143,4 +143,8 @@ export class ChatMessagesComponent {
   public openThread(value: boolean) {
     this.threadOpen.emit(value)
   }
+
+  showPlaceholder(){
+    return this.chatService.directChatMessages.length === 0 && this.chatService.currentChatSection === 'chats' && this.msgService.messagesLoaded;
+  }
 }

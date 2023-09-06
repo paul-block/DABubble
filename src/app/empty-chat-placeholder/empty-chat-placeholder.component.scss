@@ -1,0 +1,52 @@
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
+$hover-transition: all ease-in-out 125ms;
+
+section {
+    padding: 10px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-receiver {
+    display: flex;
+    gap: 10px;
+
+    img {
+        width: 100px;
+        height: 100px;
+        cursor: pointer;
+    }
+
+    div {
+        display: flex;
+        align-items: flex-end;
+
+        h1 {
+            margin: unset;
+            cursor: pointer;
+            font-weight: 700;
+
+            &:hover {
+                color: $hover-text-color;
+                transition: $hover-transition;
+            }
+        }
+    }
+}
+
+.text-other-user {
+    color: rgb(78, 78, 78);
+    font-size: 20px;
+}
+
+.highlight-user {
+    color: $hover-text-color;
+    cursor: pointer;
+    transition: $hover-transition;
+
+    &:hover {
+        font-weight: 700;
+    }
+}
