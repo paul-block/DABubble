@@ -2,7 +2,6 @@ import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/
 import { ChatService } from 'services/chat.service';
 import { EmojiService } from 'services/emoji.service';
 import { MessagesService } from 'services/messages.service';
-import { NewMsgService } from 'services/new-msg.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { UploadService } from 'services/upload.service';
 import { AuthenticationService } from 'services/authentication.service';
@@ -26,7 +25,6 @@ export class ChannelDirectSendMessageComponent {
     public chatService: ChatService,
     public msgService: MessagesService,
     public emojiService: EmojiService,
-    public newMsgService: NewMsgService,
     public fsDataThreadService: FirestoreThreadDataService,
     public uploadService: UploadService,
     public genFService: GeneralFunctionsService,
@@ -84,12 +82,13 @@ export class ChannelDirectSendMessageComponent {
   }
 
   public async onSendClick() {
-    if (this.newMsgService.openNewMsg) {
-      this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
+    if (this.chatService.openNewMsgComponent) {
+      this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
       this.chatService.currentChatSection = 'chats';
       await this.uploadService.checkForUpload();
       setTimeout(() => { this.msgService.newMessage(); }, 400);
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+      this.chatService.userReceiverName = '';
     } else {
       await this.uploadService.checkForUpload();
       setTimeout(() => { this.msgService.newMessage(); }, 400);
@@ -115,7 +114,7 @@ export class ChannelDirectSendMessageComponent {
 
   async openChat(chat) {
     debugger
-    if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
+    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
       this.chatService.currentChatID = chat.chat_ID;

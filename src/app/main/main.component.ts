@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
-import { NewMsgService } from 'services/new-msg.service';
+import { ChatService } from 'services/chat.service';
 
 @Component({
   selector: 'app-main',
@@ -11,7 +10,7 @@ import { NewMsgService } from 'services/new-msg.service';
 export class MainComponent {
   open_thread: boolean
 
-  constructor(public newMsgService: NewMsgService,  public fsDataThreadService: FirestoreThreadDataService) {
+  constructor(public chatService: ChatService,  public fsDataThreadService: FirestoreThreadDataService) {
   }
 
   setVariable(value: boolean) {

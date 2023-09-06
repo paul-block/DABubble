@@ -2,11 +2,9 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, 
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { Subscription } from 'rxjs';
-import { NewMsgService } from 'services/new-msg.service';
 import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
 import { getAuth } from 'firebase/auth';
-
 import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
@@ -35,10 +33,10 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   currentValue: string;
 
+
   constructor(
     public authService: AuthenticationService,
     public dialog: MatDialog,
-    public newMsgService: NewMsgService,
     public channelService: ChannelService,
     public chatService: ChatService,
     public msgService: MessagesService,
@@ -69,8 +67,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
   }
 
+
   async openChannel(channelID: string) {
-    if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
+    if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
@@ -90,7 +89,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChat(chat: { chat_ID: string; }) {
-    if (this.newMsgService.openNewMsg) this.toggleNewMsgComponent();
+    if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
       this.chatService.currentChatID = chat.chat_ID;
@@ -129,7 +128,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   toggleNewMsgComponent() {
-    this.newMsgService.openNewMsg = !this.newMsgService.openNewMsg;
+    this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
   }
 
   toggleChannels() {
@@ -155,9 +154,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
-
-
-
 
 }
 

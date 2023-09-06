@@ -4,8 +4,10 @@ import { HostListener } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ChatService } from 'services/chat.service';
+import { ChannelService } from 'services/channel.service';
 import { MessagesService } from 'services/messages.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { AuthenticationService } from 'services/authentication.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -32,7 +34,9 @@ export class SearchbarComponent {
 
   constructor(private elementRef: ElementRef, private dialog: MatDialog,
     public chatService: ChatService, public msgService: MessagesService,
-    public fsDataThreadService: FirestoreThreadDataService) { }
+    public fsDataThreadService: FirestoreThreadDataService,
+    public channelService: ChannelService,
+    public authService: AuthenticationService) { }
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
@@ -62,52 +66,75 @@ export class SearchbarComponent {
   async onSearchValueChange() {
     if (this.searchValue.length == 0) this.showResults = false;
     else {
-
       this.isLoading = true;
       this.showResults = true;
-
-      this.usersSet.clear();
-      this.channelsSet.clear();
-      this.filteredChannelMessagesSet.clear();
-      this.filteredChannels = [];
-      this.filteredUsers = [];
-      this.filteredChannelMessages = [];
-
-      await this.search('channels');
-      await this.search('users');
-      await this.searchMessagesInChannels();
-
-      this.filteredChannels = Array.from(this.channelsSet).filter(channel =>
-        channel.channelName.toLowerCase().startsWith(this.searchValue)
-      );
-      this.filteredUsers = Array.from(this.usersSet).filter(user =>
-        user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
-      );
-
-      this.filteredChannelMessages.filter(msg =>
-        msg.combinedMessage.toLowerCase().startsWith(this.searchValue.toLowerCase())
-      );
-
+      this.clear();
+      await this.getData('channels', this.authService.userData.uid);
+      await this.getData('users', this.authService.userData.uid);
+      await this.getChannelMessages(this.authService.userData.uid);
+      this.filterResults();
       this.isLoading = false;
       this.show();
     }
   }
 
-  async search(collectionName: string) {
+  filterResults() {
+    this.filteredChannels = Array.from(this.channelsSet).filter(channel =>
+      channel.channelName.toLowerCase().startsWith(this.searchValue)
+    );
+    this.filteredUsers = Array.from(this.usersSet).filter(user =>
+      user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    );
+
+    this.filteredChannelMessages.filter(msg =>
+      msg.combinedMessage.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    );
+  }
+
+  clear() {
+    this.usersSet.clear();
+    this.channelsSet.clear();
+    this.filteredChannelMessagesSet.clear();
+    this.filteredChannels = [];
+    this.filteredUsers = [];
+    this.filteredChannelMessages = [];
+  }
+
+  // async getData(collectionName: string) {
+  //   const collectionRef = collection(this.db, collectionName);
+  //   const querySnapshot = await getDocs(collectionRef);
+  //   querySnapshot.forEach((doc) => {
+  //     if (collectionName === 'channels') this.channelsSet.add(doc.data());
+  //     if (collectionName === 'users') this.usersSet.add(doc.data());
+  //   });
+  // }
+
+
+  async getData(collectionName: string, currentUserId: string) {
     const collectionRef = collection(this.db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
     querySnapshot.forEach((doc) => {
-      if (collectionName === 'channels') this.channelsSet.add(doc.data());
+      if (collectionName === 'channels') {
+        const channelData = doc.data();
+        if (channelData.assignedUsers?.includes(currentUserId)) {
+          this.channelsSet.add(channelData);
+        }
+      }
       if (collectionName === 'users') this.usersSet.add(doc.data());
     });
   }
+  
 
-  async searchMessagesInChannels() {
+  async getChannelMessages(currentUserId) {
     const channelsRef = collection(this.db, 'channels');
     const channelsSnapshot = await getDocs(channelsRef);
     const uniqueMessageMap = new Map();
 
     for (let channelDoc of channelsSnapshot.docs) {
+      const channelData = channelDoc.data();
+      if (!channelData.assignedUsers?.includes(currentUserId)) {
+        continue;
+      }
       const channelName = channelDoc.data().channelName;
       const messagesRef = collection(channelDoc.ref, 'messages');
       const messagesSnapshot = await getDocs(messagesRef);
@@ -127,7 +154,6 @@ export class SearchbarComponent {
         }
       });
     }
-
     this.filteredChannelMessages = [...uniqueMessageMap.values()];
   }
 
@@ -163,15 +189,19 @@ export class SearchbarComponent {
     });
   }
 
-  openChannel(channelID) {
+  async openChannel(channelID: string) {
     this.searchValue = '';
+    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;
+      this.channelService.currentChannelID = channelID
+      this.msgService.emptyMessageText();
       try {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
+        this.channelService.loadCurrentChannel()
+        await this.msgService.getMessages();
         this.fsDataThreadService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);

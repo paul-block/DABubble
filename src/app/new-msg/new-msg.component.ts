@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NewMsgService } from 'services/new-msg.service';
 import { ChannelService } from 'services/channel.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
@@ -21,7 +20,7 @@ export class NewMsgComponent {
   selectedValue: string;
   uid: string;
 
-  constructor(public newMsgService: NewMsgService,
+  constructor(
      public authService: AuthenticationService,
       public channelService: ChannelService,
       public chatService: ChatService,
@@ -31,8 +30,8 @@ export class NewMsgComponent {
 
     this.uid = this.authService.userData.uid;
 
-    if (this.newMsgService.directedFromProfileButton) {
-      this.inputValue = '@' + this.newMsgService.user_name;
+    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
+      this.inputValue = '@' + this.chatService.userReceiverName;
     }
     else this.inputValue = '';
   }
@@ -129,7 +128,7 @@ export class NewMsgComponent {
   
 
   async openChat(chat) {
-    if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
+    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
       this.chatService.currentChatID = chat.chat_ID;
@@ -147,7 +146,7 @@ export class NewMsgComponent {
 
 
   async openChannel(channelID) {
-    if (this.newMsgService.openNewMsg) this.newMsgService.openNewMsg = false;
+    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
       this.chatService.currentChatID = channelID;

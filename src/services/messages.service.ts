@@ -4,7 +4,6 @@ import { ChatService } from './chat.service';
 import { AuthenticationService } from './authentication.service';
 import { EmojiService } from './emoji.service';
 import { Subject } from 'rxjs/internal/Subject';
-import { NewMsgService } from './new-msg.service';
 import { GeneralFunctionsService } from './general-functions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
@@ -28,6 +27,7 @@ export class MessagesService {
   answers_count: any;
   time: any;
   upload_array: any;
+  messagesLoaded: boolean = false;
 
 
   constructor(
@@ -35,14 +35,13 @@ export class MessagesService {
     public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
-    public newMsgService: NewMsgService,
     public genFunctService: GeneralFunctionsService,
   ) {
   }
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.newMsgService.openNewMsg) {
+    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.chatService.openNewMsgComponent) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;
@@ -92,6 +91,7 @@ export class MessagesService {
 
 
   async getMessages() {
+    this.messagesLoaded = false;
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
     this.previousMessageDate === null;
@@ -108,8 +108,9 @@ export class MessagesService {
           this.spliceMessage(changedMessageData);
         }
       });
+      this.messagesLoaded = true;
     });
-    // this.scrollToBottom();
+    
   }
 
 
