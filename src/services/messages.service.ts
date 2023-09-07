@@ -28,7 +28,7 @@ export class MessagesService {
   time: any;
   upload_array: any;
   messagesLoaded: boolean = false;
-
+  private chatSnapshotUnsubscribe: () => void;
 
   constructor(
     public dialog: MatDialog,
@@ -91,13 +91,16 @@ export class MessagesService {
 
 
   async getMessages() {
+    if (this.chatSnapshotUnsubscribe) {
+      this.chatSnapshotUnsubscribe();
+    }
     this.messagesLoaded = false;
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
-    this.previousMessageDate === null;
+    
     const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
-    onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
+    this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const changedMessageData = change.doc.data();
         if (change.type === 'added') {
@@ -110,19 +113,18 @@ export class MessagesService {
       });
       this.messagesLoaded = true;
     });
-    
   }
 
 
   async getChangedMessage(changedMessageData: DocumentData) {
-    const changedchatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
-    changedchatMessage.chat_message = changedMessageData.chat_message;
-    changedchatMessage.modified_message = changedMessageData.modified_message;
-    changedchatMessage.chat_message_edited = changedMessageData.chat_message_edited;
-    changedchatMessage.emoji_data = changedMessageData.emoji_data;
-    changedchatMessage.answers = changedMessageData.answers;
-    changedchatMessage.last_answer = changedMessageData.last_answer;
-    changedchatMessage.uploaded_files = changedMessageData.uploaded_files;
+    let changedChatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
+    if (changedChatMessage) {
+      for (const variable in changedMessageData) {
+        if (changedMessageData.hasOwnProperty(variable)) {
+          changedChatMessage[variable] = changedMessageData[variable];
+        }
+      }
+    }
   }
 
 
