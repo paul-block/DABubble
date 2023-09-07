@@ -12,9 +12,9 @@
 </div>
 
 <section class="write-new-message">
-    <textarea #messageTextarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder"
-        [(ngModel)]="msgService.messageText" (keydown)="msgService.checkIfEmpty()"
-        (keyup)="msgService.checkIfEmpty()" (keyup.enter)="onSendClick()"></textarea>
+    <textarea #messageTextarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder" (keydown)="handleEnter($event)"
+        [(ngModel)]="msgService.messageText" 
+         (keyup.enter)="onSendClick()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
 
@@ -46,8 +46,8 @@
             </div>
             <mat-icon (click)="togglePopup('open_users')">alternate_email</mat-icon>
         </div>
-        <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.readyToSend }"
-            [disabled]="!msgService.readyToSend" class="send-message">
+        <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.messageText.length > 0 || uploadService.upload_array.file_name.length > 0}"
+            [disabled]="msgService.messageText.length == 0 && uploadService.upload_array.file_name.length == 0" class="send-message">
             <mat-icon>send</mat-icon>
         </button>
     </div>

@@ -41,7 +41,7 @@ export class MessagesService {
 
 
   checkIfEmpty() {
-    if (this.messageText.length && this.chatService.currentChatID !== 'noChatSelected' || this.chatService.openNewMsgComponent) {
+    if (this.messageText.length > 0 && this.chatService.currentChatID !== 'noChatSelected' || this.chatService.openNewMsgComponent) {
       this.readyToSend = true;
     } else {
       this.readyToSend = false;
@@ -123,6 +123,7 @@ export class MessagesService {
     changedchatMessage.answers = changedMessageData.answers;
     changedchatMessage.last_answer = changedMessageData.last_answer;
     changedchatMessage.uploaded_files = changedMessageData.uploaded_files;
+    changedchatMessage.message_deleted = changedMessageData.message_deleted;
   }
 
 

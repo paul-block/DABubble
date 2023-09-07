@@ -113,8 +113,6 @@ export class ThreadComponent implements OnInit {
 
 
   async postComment() {
-    console.log(this.comment_value.length);
-    
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
     if (this.comment_value.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
       let time_stamp = new Date()
@@ -319,13 +317,9 @@ export class ThreadComponent implements OnInit {
 
   handleEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter' ) {
-      // Verhindern Sie den Standardzeilenumbruch
       event.preventDefault();
       if (event.key === 'Enter' && event.shiftKey)
       this.comment_value += '\n';
-      // Führen Sie hier Ihren gewünschten Code für den Zeilenumbruch aus
-      // Zum Beispiel: Fügen Sie ein Zeilenumbruchzeichen '\n' zum Inhalt der Textarea hinzu.
-      // this.textareaContent += '\n';
     }
   }
 }

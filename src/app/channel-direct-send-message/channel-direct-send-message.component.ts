@@ -82,17 +82,22 @@ export class ChannelDirectSendMessageComponent {
   }
 
   public async onSendClick() {
-    if (this.chatService.openNewMsgComponent) {
-      this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
-      this.chatService.currentChatSection = 'chats';
-      await this.uploadService.checkForUpload();
-      setTimeout(() => { this.msgService.newMessage(); }, 400);
-      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
-      this.chatService.userReceiverName = '';
-    } else {
-      await this.uploadService.checkForUpload();
-      setTimeout(() => { this.msgService.newMessage(); }, 400);
-      setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+    console.log(this.uploadService.upload_array.file_name);
+    if (this.msgService.messageText.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
+     
+      
+      if (this.chatService.openNewMsgComponent) {
+        this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
+        this.chatService.currentChatSection = 'chats';
+        await this.uploadService.checkForUpload();
+        setTimeout(() => { this.msgService.newMessage(); }, 400);
+        setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+        this.chatService.userReceiverName = '';
+      } else {
+        await this.uploadService.checkForUpload();
+        setTimeout(() => { this.msgService.newMessage(); }, 400);
+        setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+      }
     }
   }
 
@@ -127,6 +132,15 @@ export class ChannelDirectSendMessageComponent {
       } catch (error) {
         console.error("Fehler bei öffnen des Chats: ", error);
       }
+    }
+  }
+
+
+  handleEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (event.key === 'Enter' && event.shiftKey)
+        this.msgService.messageText += '\n';
     }
   }
 }
