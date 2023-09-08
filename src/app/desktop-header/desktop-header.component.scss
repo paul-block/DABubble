@@ -2,9 +2,9 @@ header {
     display: flex;
     align-items: center;
     height: 80px;
-    position: relative;
-    width: 100vw;
-    padding: 10px 30px;
+    justify-content: space-between;
+    gap: 25px;
+    margin: 0px 25px;
 
     #logo {
         width: 200px;
@@ -13,9 +13,8 @@ header {
     #profile {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 20px;
-        position: absolute;
-        right: 100px;
         cursor: pointer;
 
         #name {
@@ -37,12 +36,18 @@ header {
 }
 
 .container-header-img {
-    width: 360px;
     display: flex;
     justify-content: center;
 }
 
-app-searchbar {
-    margin-left: 25px;
-    width: calc(100% - 60px - 50px - 252px - 360px);
+.box {
+    gap: 10px;
+}
+
+.box-small {
+    flex-basis: 400px;
+}
+
+.box-large {
+    flex-grow: 1;
 }
