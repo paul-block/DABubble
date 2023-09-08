@@ -13,16 +13,16 @@ $slide-transition: all ease-in-out 250ms;
 }
 
 .thread {
-    display: none;
-    transition: 300ms;
     width: 0px;
+    transition: $slide-transition;
     height: 100%;
     background-color: white;
 }
 
 .open_thread {
-    width: 30%;
-    display: block;
+    transition: $slide-transition;
+    width: 25%;
+    
 }
 
 .chat-interaction {
@@ -35,10 +35,6 @@ $slide-transition: all ease-in-out 250ms;
 .box {
     gap: 10px;
     transition: $slide-transition;
-}
-
-.box-small {
-    flex-basis: 400px;
 }
 
 .box-large {
