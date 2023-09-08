@@ -8,6 +8,7 @@ import { getAuth } from 'firebase/auth';
 import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -24,7 +25,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   channelsVisible: boolean = true;
   dmsVisible: boolean = true;
-  workspaceVisible: boolean = true;
   openNewMsg: boolean = false;
 
   private authorizedChannelsSubscription: Subscription;
@@ -41,6 +41,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public chatService: ChatService,
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
+    public genFunctService: GeneralFunctionsService,
   ) {
     this.newChannelIdSubscription = this.channelService.createdChannelId$.subscribe((newValue) => {
       this.currentValue = newValue;
@@ -138,11 +139,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   toggleDms() {
     this.dmsVisible = !this.dmsVisible;
-  }
-
-
-  toggleWorkspace() {
-    this.workspaceVisible = !this.workspaceVisible;
   }
 
 

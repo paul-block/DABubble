@@ -4,12 +4,13 @@
     padding: 32px 30px;
     gap: 50px;
     position: relative;
-    width: 300px;
+    // width: 300px;
     border-radius: 30px;
     height: calc(100vh - 210px);
     background-color: white;
-    margin-left: 25px;
+    // margin-left: 25px;
     border-radius: 30px;
+    overflow: hidden;
 
     .rotate270 {
         transform: rotate(270deg);
@@ -218,31 +219,31 @@
             overflow-y: scroll;
             overflow-x: hidden;
 
-                .dm-profile {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                    height: 50px;
-                    gap: 15px;
-                    width: fit-content;
-                    padding: 0 45px 0 25px;
+            .dm-profile {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                height: 50px;
+                gap: 15px;
+                width: fit-content;
+                padding: 0 45px 0 25px;
 
-                    &:hover {
-                        transition: 200ms;
-                        background-color: #ECEEFE;
-                        border-radius: 20px;
-                    }
-
-                    img {
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 50%;
-                    }
-
-                    span {
-                        font-size: 18px;
-                    }
+                &:hover {
+                    transition: 200ms;
+                    background-color: #ECEEFE;
+                    border-radius: 20px;
                 }
+
+                img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                }
+
+                span {
+                    font-size: 18px;
+                }
+            }
         }
     }
 
@@ -269,31 +270,5 @@
         background-color: #ECEEFE;
         border-radius: 50%;
         cursor: pointer;
-    }
-}
-
-.vertical-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotate(270deg);
-    gap: 15px;
-    background-color: white;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 5px;
-    padding-right: 5px;
-    border-bottom-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-    box-shadow: 4px 4px 7px 0px #00000033;
-    position: absolute;
-    left: -155px;
-    top: 70%;
-    width: 350px;
-    z-index: 999;
-
-    span {
-        font-size: 18px;
-        user-select: none;
     }
 }

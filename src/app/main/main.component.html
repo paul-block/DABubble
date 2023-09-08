@@ -1,9 +1,14 @@
 <app-desktop-header></app-desktop-header>
 <section class="chat-interaction">
-    <app-channel-sidebar></app-channel-sidebar>
-    <app-channel-direct-chat *ngIf="!chatService.openNewMsgComponent" class="container-styling"
+    <app-channel-sidebar class="box"
+        [ngClass]="{'slidein-sidebar': sidebarVisible, 'slideout-sidebar': !sidebarVisible, 'hide-sidebar': timeoutSidebarHide, 'show-sidebar': !timeoutSidebarHide}"></app-channel-sidebar>
+    <app-channel-direct-chat *ngIf="!chatService.openNewMsgComponent" class="box container-styling box-large"
         (threadOpen)="setVariable($event)"></app-channel-direct-chat>
-    <app-new-msg *ngIf="chatService.openNewMsgComponent" class="container-styling"></app-new-msg>
+    <app-new-msg *ngIf="chatService.openNewMsgComponent" class="box container-styling box-large"></app-new-msg>
     <app-thread (threadClose)="setVariable($event)" [class.open_thread]="fsDataThreadService.thread_open"
-        class="thread container-styling overflow"></app-thread>
+        class="box thread container-styling overflow box-small"></app-thread>
 </section>
+<div class="vertical-text pointer select-none" (click)="toggleSidebar()">
+    <span>Workspace-Menü schließen</span>
+    <img src="assets/img/icons/hide_menu.png" alt="">
+</div>

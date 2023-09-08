@@ -2,37 +2,47 @@ header {
     display: flex;
     align-items: center;
     height: 80px;
-    position: relative;;
+    position: relative;
     width: 100vw;
     padding: 10px 30px;
 
-        #logo {
-            width: 200px;
+    #logo {
+        width: 200px;
+    }
+
+    #profile {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: absolute;
+        right: 100px;
+        cursor: pointer;
+
+        #name {
+            font-size: 26px;
+            font-weight: bold;
+
+            &:hover {
+                color: #535AF1;
+            }
         }
 
-        #profile {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            position: absolute;
-            right: 100px;
-            cursor: pointer;
-
-                #name {
-                    font-size: 26px;
-                    font-weight: bold;
-
-                    &:hover {
-                        color: #535AF1;
-                    }
-                }
-
-                .profile-img {
-                    width: 70px;
-                    height: 70px;
-                    border-radius: 100%;
-                    margin-right: 20px;
-                }
+        .profile-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 100%;
+            margin-right: 20px;
         }
+    }
 }
 
+.container-header-img {
+    width: 360px;
+    display: flex;
+    justify-content: center;
+}
+
+app-searchbar {
+    margin-left: 25px;
+    width: calc(100% - 60px - 50px - 252px - 360px);
+}

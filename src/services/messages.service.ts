@@ -97,7 +97,7 @@ export class MessagesService {
     this.messagesLoaded = false;
     this.emojiService.resetInitializedEmojiRef();
     this.chatService.directChatMessages = [];
-    
+
     const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
     this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
@@ -118,11 +118,9 @@ export class MessagesService {
 
   async getChangedMessage(changedMessageData: DocumentData) {
     let changedChatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
-    if (changedChatMessage) {
-      for (const variable in changedMessageData) {
-        if (changedMessageData.hasOwnProperty(variable)) {
-          changedChatMessage[variable] = changedMessageData[variable];
-        }
+    for (const variable in changedMessageData) {
+      if (changedMessageData.hasOwnProperty(variable)) {
+        changedChatMessage[variable] = changedMessageData[variable];
       }
     }
   }

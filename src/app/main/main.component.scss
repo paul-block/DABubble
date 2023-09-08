@@ -1,3 +1,5 @@
+$slide-transition: all ease-in-out 250ms;
+
 .placeholder-top {
     height: 120px;
     width: 100%;
@@ -16,7 +18,6 @@
     width: 0px;
     height: 100%;
     background-color: white;
-    margin-right: 25px;
 }
 
 .open_thread {
@@ -24,23 +25,92 @@
     display: block;
 }
 
+.chat-interaction {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    margin: 0px 25px;
+}
+
+.box {
+    gap: 10px;
+    transition: $slide-transition;
+}
+
+.box-small {
+    flex-basis: 400px;
+}
+
+.box-large {
+    flex-grow: 1;
+}
+
 .container-styling {
     border-radius: 30px;
     height: calc(100vh - 120px - 25px);
     margin-bottom: 25px;
-}
-
-.chat-interaction {
-    display: flex;
-    width: 100%;
-}
-
-app-channel-direct-chat, app-new-msg {
     background-color: white;
-    width: 100%;
-    margin: 0 25px;
 }
 
 .overflow {
     overflow-y: hidden;
+}
+
+.vertical-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(270deg);
+    gap: 15px;
+    background-color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: 4px 4px 7px 0px #00000033;
+    position: absolute;
+    left: -155px;
+    top: 70%;
+    width: 350px;
+    z-index: 999;
+
+    span {
+        font-size: 18px;
+        user-select: none;
+    }
+}
+
+.select-none {
+    user-select: none;
+}
+
+.hide-sidebar {
+    display: none;
+}
+
+.show-sidebar {
+    flex-basis: 400px;
+    width: 400px;
+    overflow: hidden;
+    visibility: hidden;
+    transition: $slide-transition;
+}
+
+.slideout-sidebar {
+    transition: $slide-transition;
+
+    flex-basis: 0px;
+    width: 0px;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.slidein-sidebar {
+    transition: $slide-transition;
+    flex-basis: 400px;
+    width: 400px;
+    overflow: visible;
+    visibility: visible;
 }
