@@ -208,7 +208,6 @@ export class ThreadComponent implements OnInit {
 
 
   openDeleteComment(i: number) {
-    console.log(this.fsDataThreadService.current_chat_data);
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
       data: { comment: this.fsDataThreadService.comments[i].comment },
@@ -313,5 +312,14 @@ export class ThreadComponent implements OnInit {
 
   async getAllUsers() {
     this.chatService.at_users = await this.authService.getAllUsers();
+  }
+
+
+  handleEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter' ) {
+      event.preventDefault();
+      if (event.key === 'Enter' && event.shiftKey)
+      this.comment_value += '\n';
+    }
   }
 }

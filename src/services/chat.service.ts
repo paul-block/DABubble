@@ -38,6 +38,24 @@ export class ChatService {
   ) { }
 
 
+  // async loadChats(): Promise<void> {
+  //   return new Promise<void>((resolve) => {
+  //     this.chats = [];
+  //     const querySnapshot = collection(this.db, 'chats');
+  //     onSnapshot(querySnapshot, (snapshot) => {
+  //       snapshot.docChanges().forEach((change) => {
+  //         const chatData = change.doc.data();
+  //         if (change.type === 'added' && this.isUserChat(chatData)) {
+  //           this.chats.push(chatData);
+  //         }
+  //       });
+  //       console.log(this.chats);
+
+  //       resolve();
+  //     });
+  //   });
+  // }
+
   async loadChats(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.chats = [];
@@ -45,16 +63,19 @@ export class ChatService {
       onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
-          if (change.type === 'added' && this.isUserChat(chatData)) {
+          const isDataAlreadyInChats = this.chats.some(chat => JSON.stringify(chat) === JSON.stringify(chatData));
+          
+          if (change.type === 'added' && this.isUserChat(chatData) && !isDataAlreadyInChats) {
             this.chats.push(chatData);
           }
         });
         console.log(this.chats);
-
+  
         resolve();
       });
     });
   }
+  
 
   isUserChat(chatData) {
     return chatData.chat_Member_IDs.includes(this.currentUser_id)
@@ -163,10 +184,31 @@ export class ChatService {
     }
   }
 
+  // getChatReceiverUser(chat) {
+  //   let chatReveiverID;
+  //   try {
+  //     if (!chat) {
+  //       return null;
+  //     }
+      
+  //     if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
+  //       chatReveiverID = chat.chat_Member_IDs[0];
+  //     } else {
+  //       chatReveiverID = chat.chat_Member_IDs[1];
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+      
+  //   }
+
+  //   const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
+  //   return user;
+  // }
+
   getChatReceiverUser(chat) {
     let chatReveiverID;
     try {
-      if (!chat) {
+      if (!chat || chat.channelName) {
         return null;
       }
       
@@ -176,14 +218,14 @@ export class ChatService {
         chatReveiverID = chat.chat_Member_IDs[1];
       }
     } catch (error) {
-      console.error(error);
-      
-      debugger
+      console.error("Ein Fehler ist aufgetreten beim Verarbeiten des Chats:", chat);
+      console.error("Stacktrace:", error.stack);
     }
-
+  
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
     return user;
   }
+  
 
   getCurrentChatData() {
     if (this.currentChatSection === 'channels') {
