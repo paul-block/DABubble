@@ -33,7 +33,10 @@ export class NewMsgComponent {
     if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
       this.inputValue = '@' + this.chatService.userReceiverName;
     }
-    else this.inputValue = '';
+    else {
+      this.inputValue = '';
+      this.chatService.messageToPlaceholder = 'Nachricht an ...';
+    }
   }
 
 
@@ -120,8 +123,8 @@ export class NewMsgComponent {
     this.inputValue = '@' + clickedValue;
     this.chatService.userReceiverID = selectedUser.uid;
     this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
-    this.chatService.currentChatID =  await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatSection = 'chats';
+    this.chatService.currentChatID =  await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatData = await this.chatService.getChatDocument();
     this.msgService.getMessages();
   }

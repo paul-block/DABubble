@@ -164,7 +164,7 @@ export class ChannelService {
 
 
   loadStandardChannel() {
-    this.setCreatedChannelId('RRraQrPndWV95cqAWCZR')
+    this.setCreatedChannelId('RRraQrPndWV95cqAWCZR');
   }
 
 

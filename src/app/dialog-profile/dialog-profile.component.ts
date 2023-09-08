@@ -22,6 +22,9 @@ export class DialogProfileComponent {
   ) {}
 
 async sendMsg(user_id: string, user_name:string) {
+  this.chatService.currentChatSection = 'chats';
+  this.chatService.currentChatID = 'noChatSelected';
+  this.chatService.messageToPlaceholder = 'Nachricht an ...'
   this.chatService.userReceiverID = user_id;
   this.chatService.userReceiverName = user_name;
   console.log(user_id, user_name);
