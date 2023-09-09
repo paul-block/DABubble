@@ -16,6 +16,7 @@ header {
         justify-content: center;
         gap: 20px;
         cursor: pointer;
+        position: relative;
 
         #name {
             font-size: 26px;
@@ -31,6 +32,14 @@ header {
             height: 70px;
             border-radius: 100%;
             margin-right: 20px;
+        }
+
+        svg {
+            position: absolute;
+            bottom: 2px;
+            right: 140px;
+            border: 2px solid white;
+            border-radius: 50%;
         }
     }
 }

@@ -227,6 +227,7 @@
                 gap: 15px;
                 width: fit-content;
                 padding: 0 45px 0 25px;
+                position: relative;
 
                 &:hover {
                     transition: 200ms;
@@ -242,6 +243,20 @@
 
                 span {
                     font-size: 18px;
+                }
+
+                svg {
+                    position: absolute;
+                    left: 64px;
+                    bottom: 0;
+                    border: 2px solid white;
+                    border-radius: 50%;
+                }
+
+                .offline {
+                    circle {
+                        fill: #686868 !important;
+                    }
                 }
             }
         }
