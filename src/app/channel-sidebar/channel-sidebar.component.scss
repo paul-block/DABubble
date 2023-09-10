@@ -30,7 +30,6 @@
 
         #logo {
             width: 60px;
-
         }
 
         span {
@@ -285,5 +284,33 @@
         background-color: #ECEEFE;
         border-radius: 50%;
         cursor: pointer;
+    }
+}
+
+@media (max-width: 1280px) {
+    .workspace-menu {
+        padding: 25px 15px;
+        height: calc(100vh - 115px - 50px);
+
+        .channel-container {
+            .selection {
+                .channel-second-row {
+                    width: unset;
+                }
+            }
+        }
+
+        header {
+            #logo {
+                width: 42px;
+            }
+
+            span {
+                font-size: 20px;
+                font-weight: 700;
+                width: unset;
+                height: unset;
+            }
+        }
     }
 }

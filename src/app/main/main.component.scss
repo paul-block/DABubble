@@ -1,138 +1,174 @@
 $slide-transition: all ease-in-out 250ms;
 
 .placeholder-top {
-  height: 120px;
-  width: 100%;
+    height: 120px;
+    width: 100%;
 }
 
 .placeholder-left {
-  width: 400px;
-  height: 100%;
-  background-color: white;
-  margin-left: 25px;
+    width: 400px;
+    height: 100%;
+    background-color: white;
+    margin-left: 25px;
 }
 
 .thread {
-  display: none;
-  height: 100%;
-  background-color: white;
-  width: 25%;
+    display: none;
+    height: 100%;
+    background-color: white;
+    width: 25%;
 }
 
 .open_thread {
-  animation: slide_in 250ms ease-in-out;
-  display: block;
+    min-width: 350px;
+    animation: slide_in 250ms ease-in-out;
+    display: block;
 }
 
 .close_thread {
-  animation: slide_out 250ms ease-in-out;
+    animation: slide_out 250ms ease-in-out;
 }
 
 .chat-interaction {
-  display: flex;
-  justify-content: space-between;
-  gap: 25px;
-  margin: 0px 25px;
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    margin: 0px 25px;
 }
 
 .box {
-  gap: 10px;
-  transition: $slide-transition;
+    gap: 10px;
+    transition: $slide-transition;
+}
+
+.box-small {
+    flex-basis: 400px;
 }
 
 .box-large {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .container-styling {
-  transition: 250ms;
-  border-radius: 30px;
-  height: calc(100vh - 120px - 25px);
-  margin-bottom: 25px;
-  background-color: white;
+    transition: 250ms;
+    border-radius: 30px;
+    height: calc(100vh - 120px - 25px);
+    margin-bottom: 25px;
+    background-color: white;
 }
 
 .overflow {
-  overflow-y: hidden;
+    overflow-y: hidden;
 }
 
 .vertical-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(270deg);
-  gap: 15px;
-  background-color: white;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-right-radius: 30px;
-  border-bottom-left-radius: 30px;
-  box-shadow: 4px 4px 7px 0px #00000033;
-  position: absolute;
-  left: -155px;
-  top: 70%;
-  width: 350px;
-  z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(270deg);
+    gap: 15px;
+    background-color: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    box-shadow: 4px 4px 7px 0px #00000033;
+    position: absolute;
+    left: -155px;
+    top: 70%;
+    width: 350px;
+    z-index: 999;
 
-  span {
-    font-size: 18px;
-    user-select: none;
-  }
+    span {
+        font-size: 18px;
+        user-select: none;
+    }
 }
 
 .select-none {
-  user-select: none;
+    user-select: none;
 }
 
 .hide-sidebar {
-  display: none;
+    display: none;
 }
 
 .show-sidebar {
-  flex-basis: 400px;
-  width: 400px;
-  overflow: hidden;
-  visibility: hidden;
-  transition: $slide-transition;
+    flex-basis: 400px;
+    width: 400px;
+    min-width: 400px;
+    overflow: hidden;
+    visibility: hidden;
+    transition: $slide-transition;
 }
 
 .slideout-sidebar {
-  transition: $slide-transition;
-
-  flex-basis: 0px;
-  width: 0px;
-  overflow: hidden;
-  visibility: hidden;
+    transition: $slide-transition;
+    flex-basis: 0px;
+    min-width: 0px;
+    width: 0px;
+    overflow: hidden;
+    visibility: hidden;
 }
 
 .slidein-sidebar {
-  transition: $slide-transition;
-  flex-basis: 400px;
-  width: 400px;
-  overflow: visible;
-  visibility: visible;
+    transition: $slide-transition;
+    flex-basis: 400px;
+    min-width: 400px;
+    width: 400px;
+    overflow: visible;
+    visibility: visible;
 }
 
 @keyframes slide_in {
-  0% {
-    transform: translateX(150%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+    0% {
+        transform: translateX(150%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
 }
 
 @keyframes slide_out {
-  0% {
-    width: 25%;
-    transform: translateX(0%);
-    display: block;
-  }
-  100% {
-    transform: translateX(150%);
-    width: 0;
-    display: none;
-  }
+    0% {
+        width: 25%;
+        transform: translateX(0%);
+        display: block;
+    }
+
+    100% {
+        transform: translateX(150%);
+        width: 0;
+        display: none;
+    }
+}
+
+@media (max-width: 1280px) {
+    .show-sidebar {
+        flex-basis: 300px;
+        width: 300px;
+        min-width: 300px;
+    }
+
+    .slidein-sidebar {
+        flex-basis: 300px;
+        min-width: 300px;
+        width: 300px;
+    }
+
+    .box-small {
+        flex-basis: 300px;
+    }
+
+    .chat-interaction {
+        gap: 10px;
+        margin: 0px 10px;
+    }
+
+    .container-styling {
+        height: calc(100vh - 90px - 25px);
+    }
 }

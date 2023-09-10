@@ -9,3 +9,9 @@
     font-size: 20px;
     color: rgb(78, 78, 78);
 }
+
+@media (max-width: 1280px) {
+    .noChatSelected-placeholder {
+        margin: 0px 15px;
+    }
+}

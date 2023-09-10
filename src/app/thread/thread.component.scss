@@ -6,7 +6,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 98px;
+  min-height: 102px;
   box-shadow: 0px 6px 6px -2px rgba(0, 0, 0, 0.08);
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
@@ -26,6 +26,7 @@ header {
   border-radius: 100%;
   cursor: pointer;
   transition: 200ms;
+
   &:hover {
     background-color: $hover-background-color;
   }
@@ -161,8 +162,7 @@ header {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
-        brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
     }
   }
 }
@@ -198,6 +198,7 @@ header {
 
   &:hover {
     background-color: #eceefe;
+
     .reaction_emojy_user {
       opacity: 1;
       z-index: 10;
@@ -226,6 +227,7 @@ header {
 
   &:hover {
     background-color: #eceefe;
+
     .reaction_emojy_user {
       opacity: 1;
       z-index: 10;
@@ -274,8 +276,7 @@ header {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
-        brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
     }
   }
 }
@@ -332,6 +333,7 @@ header {
   transition: 200ms;
   border-radius: 35px;
   cursor: pointer;
+
   &:hover {
     background-color: #eceefe;
   }
@@ -373,9 +375,11 @@ header {
   display: flex;
   align-items: center;
   gap: 20px;
+
   :nth-child(1) {
     transition: 200ms;
     cursor: pointer;
+
     &:hover {
       color: #535af1;
     }
@@ -415,8 +419,7 @@ header {
   cursor: pointer;
 
   &:hover {
-    filter: invert(53%) sepia(23%) saturate(5121%) hue-rotate(213deg)
-      brightness(100%) contrast(91%);
+    filter: invert(53%) sepia(23%) saturate(5121%) hue-rotate(213deg) brightness(100%) contrast(91%);
   }
 }
 
@@ -444,8 +447,7 @@ textarea {
 
 .inactive {
   pointer-events: none;
-  filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%)
-    contrast(94%);
+  filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%) contrast(94%);
 }
 
 .mat-tooltip {
@@ -482,9 +484,11 @@ textarea {
   flex-direction: column;
   color: white;
   text-align: center;
+
   span {
     font-size: 18px;
   }
+
   p {
     margin: 0;
     font-size: 16;
@@ -499,18 +503,22 @@ textarea {
 
 .row_reverse {
   flex-direction: row-reverse;
+
   .message {
     border-radius: 20px 0px 20px 20px;
     max-width: 90%;
   }
+
   .message_sub {
     align-items: flex-end;
     margin-left: 0;
     margin-right: 20px;
   }
+
   .user_time {
     flex-direction: row-reverse;
   }
+
   .reaction_emojy {
     right: 280px;
     width: min-content;
@@ -536,6 +544,7 @@ textarea {
   border-radius: 10px;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
     0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+
   :nth-child(1) {
     overflow-y: auto;
   }
@@ -552,6 +561,7 @@ textarea {
   border-radius: 5px;
   padding: 5px;
   cursor: pointer;
+
   &:hover {
     background-color: #eceefe;
   }
@@ -570,6 +580,7 @@ textarea {
   height: 50px;
   border-radius: 100%;
   cursor: pointer;
+
   &:hover {
     box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
       0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
@@ -596,10 +607,12 @@ textarea {
   border: 1px solid #adb0d9;
   border-radius: 20px;
   width: calc(100% - 30px);
+
   a {
     text-decoration: none;
     font-size: 10px;
   }
+
   &:hover {
     border-color: #444df2;
     box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
@@ -618,6 +631,7 @@ textarea {
   cursor: pointer;
   background-color: transparent;
   transition: 200ms;
+
   &:hover {
     background-color: #eceefe;
   }
@@ -642,4 +656,10 @@ textarea {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+@media (max-width: 1280px) {
+  header {
+    min-height: 100px;
+  }
 }
