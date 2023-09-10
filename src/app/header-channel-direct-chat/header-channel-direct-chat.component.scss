@@ -46,7 +46,7 @@ header {
     }
 }
 
-.chat-receiver-directChat{
+.chat-receiver-directChat {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -57,7 +57,7 @@ header {
     position: relative;
     cursor: pointer;
 
-    img{
+    img {
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -171,5 +171,42 @@ h1 {
     &:hover mat-icon {
         color: $hover-text-color;
         transition: $hover-transition;
+    }
+}
+
+@media (max-width: 1500px) {
+    header {
+        padding: 25px 15px;
+    }
+
+    .chat-receiver-directChat {
+
+        mat-icon,
+        h1 {
+            font-size: 20px;
+        }
+    }
+
+    .chat-receiver {
+
+        mat-icon,
+        h1 {
+            font-size: 20px;
+        }
+    }
+
+    .already-members {
+        padding: 10px 16px;
+        border-radius: 100%;
+    }
+
+    .already-members-avatars {
+        display: none;
+    }
+}
+
+@media (max-width: 1280px) {
+    header {
+        padding: 25px 15px;
     }
 }

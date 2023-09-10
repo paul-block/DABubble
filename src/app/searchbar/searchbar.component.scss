@@ -1,5 +1,6 @@
 .input-container {
     width: 100%;
+    position: relative;
 
     input {
         width: calc(100% - 60px);
@@ -15,7 +16,7 @@
         }
     }
 
-    img {
+    .search-img {
         position: absolute;
         height: 25px;
         right: 30px;
@@ -26,13 +27,12 @@
 
 .search-container {
     position: absolute;
-    left: 410px;
-    top: 85px;
-    width: 1360px;
+    top: 68px;
+    width: calc(100% - 20px);
     height: fit-content;
     background-color: white;
     border-radius: 30px;
-    border: 1px solid black;
+    border: 2px solid #adb0d9;
     z-index: 999;
     padding: 20px 10px;
     gap: 5px;

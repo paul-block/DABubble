@@ -21,7 +21,7 @@ $slide-transition: all ease-in-out 250ms;
 }
 
 .open_thread {
-    width: 30%;
+    min-width: 350px;
     display: block;
 }
 
@@ -93,6 +93,7 @@ $slide-transition: all ease-in-out 250ms;
 .show-sidebar {
     flex-basis: 400px;
     width: 400px;
+    min-width: 400px;
     overflow: hidden;
     visibility: hidden;
     transition: $slide-transition;
@@ -100,8 +101,8 @@ $slide-transition: all ease-in-out 250ms;
 
 .slideout-sidebar {
     transition: $slide-transition;
-
     flex-basis: 0px;
+    min-width: 0px;
     width: 0px;
     overflow: hidden;
     visibility: hidden;
@@ -110,7 +111,39 @@ $slide-transition: all ease-in-out 250ms;
 .slidein-sidebar {
     transition: $slide-transition;
     flex-basis: 400px;
+    min-width: 400px;
     width: 400px;
     overflow: visible;
     visibility: visible;
+}
+
+@media (max-width: 1280px) {
+    .show-sidebar {
+        flex-basis: 300px;
+        width: 300px;
+        min-width: 300px;
+    }
+
+    .slidein-sidebar {
+        flex-basis: 300px;
+        min-width: 300px;
+        width: 300px;
+    }
+
+    .box-small {
+        flex-basis: 300px;
+    }
+
+    .chat-interaction {
+        gap: 10px;
+        margin: 0px 10px;
+    }
+
+    .box-large {
+        max-width: 400px;
+    }
+
+    .container-styling {
+        height: calc(100vh - 90px - 25px);
+    }
 }
