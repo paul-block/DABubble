@@ -18,6 +18,9 @@ import { UploadService } from 'services/upload.service';
 })
 
 export class ChatMessagesComponent {
+
+
+  
   db = getFirestore();
   @Output() threadOpen = new EventEmitter<boolean>();
   messageCreator: boolean = false;
@@ -42,7 +45,7 @@ export class ChatMessagesComponent {
     public uploadService: UploadService,
     private elementRef: ElementRef,
     public genFunctService: GeneralFunctionsService,
-  ) { }
+  ) {}
 
 
 

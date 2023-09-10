@@ -64,18 +64,18 @@ export class ChatService {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
           const isDataAlreadyInChats = this.chats.some(chat => JSON.stringify(chat) === JSON.stringify(chatData));
-          
+
           if (change.type === 'added' && this.isUserChat(chatData) && !isDataAlreadyInChats) {
             this.chats.push(chatData);
           }
         });
         console.log(this.chats);
-  
+
         resolve();
       });
     });
   }
-  
+
 
   isUserChat(chatData) {
     return chatData.chat_Member_IDs.includes(this.currentUser_id)
@@ -190,7 +190,7 @@ export class ChatService {
   //     if (!chat) {
   //       return null;
   //     }
-      
+
   //     if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
   //       chatReveiverID = chat.chat_Member_IDs[0];
   //     } else {
@@ -198,7 +198,7 @@ export class ChatService {
   //     }
   //   } catch (error) {
   //     console.error(error);
-      
+
   //   }
 
   //   const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
@@ -211,7 +211,7 @@ export class ChatService {
       if (!chat || chat.channelName) {
         return null;
       }
-      
+
       if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
         chatReveiverID = chat.chat_Member_IDs[0];
       } else {
@@ -221,11 +221,11 @@ export class ChatService {
       console.error("Ein Fehler ist aufgetreten beim Verarbeiten des Chats:", chat);
       console.error("Stacktrace:", error.stack);
     }
-  
+
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
     return user;
   }
-  
+
 
   getCurrentChatData() {
     if (this.currentChatSection === 'channels') {
@@ -253,7 +253,7 @@ export class ChatService {
             words[i] = formattedName
             words.splice(i + 1, 1)
           }
-          if (firstName == word_without_at && !lastName)  words[i] = formattedName 
+          if (firstName == word_without_at && !lastName) words[i] = formattedName
         }
       }
     }
@@ -319,12 +319,7 @@ export class ChatService {
 
 
   checkForBreak(word: string) {
-    if (word.includes('\n')) {
-      console.log(word);
-      
-      return true
-
-    } 
+    if (word.includes('\n')) return true
     else return false
   }
 }
