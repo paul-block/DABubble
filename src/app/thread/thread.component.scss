@@ -1,5 +1,5 @@
-$hover-background-color: #ECEEFE;
-$hover-text-color: #535AF1;
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
 
 header {
   box-sizing: border-box;
@@ -27,7 +27,7 @@ header {
   cursor: pointer;
   transition: 200ms;
   &:hover {
-      background-color: $hover-background-color;
+    background-color: $hover-background-color;
   }
 }
 
@@ -294,7 +294,7 @@ header {
   padding: 15px;
   background-color: #eceefe;
   border-radius: 0px 20px 20px 20px;
-  width: max-content;
+  max-width: 80%;
 }
 
 .message_user {

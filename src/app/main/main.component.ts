@@ -36,4 +36,8 @@ export class MainComponent {
       }, 10);
     }
   }
+
+  open() {
+    this.fsDataThreadService.thread_open = true
+  }
 }
