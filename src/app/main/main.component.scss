@@ -13,15 +13,19 @@ $slide-transition: all ease-in-out 250ms;
 }
 
 .thread {
-  width: 0px;
+  display: none;
   height: 100%;
   background-color: white;
-  transition: 0.2s ease-out
+  width: 25%;
 }
 
 .open_thread {
-  transition:1s ease-in-out;
-  width: 30%
+  animation: slide_in 250ms ease-in-out;
+  display: block;
+}
+
+.close_thread {
+  animation: slide_out 250ms ease-in-out;
 }
 
 .chat-interaction {
@@ -41,6 +45,7 @@ $slide-transition: all ease-in-out 250ms;
 }
 
 .container-styling {
+  transition: 250ms;
   border-radius: 30px;
   height: calc(100vh - 120px - 25px);
   margin-bottom: 25px;
@@ -110,11 +115,24 @@ $slide-transition: all ease-in-out 250ms;
   visibility: visible;
 }
 
-@keyframes slide {
+@keyframes slide_in {
   0% {
-    width: 0%;
+    transform: translateX(150%);
   }
   100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide_out {
+  0% {
     width: 25%;
+    transform: translateX(0%);
+    display: block;
+  }
+  100% {
+    transform: translateX(150%);
+    width: 0;
+    display: none;
   }
 }
