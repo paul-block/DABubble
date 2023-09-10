@@ -5,8 +5,8 @@
     <app-channel-direct-chat *ngIf="!chatService.openNewMsgComponent" class="box container-styling box-large"
         (threadOpen)="setVariable($event)"></app-channel-direct-chat>
     <app-new-msg *ngIf="chatService.openNewMsgComponent" class="box container-styling box-large"></app-new-msg>
-    <app-thread (threadClose)="setVariable($event)" [class.open_thread]="fsDataThreadService.thread_open"
-        class="box thread container-styling overflow box-small"></app-thread>
+    <app-thread  [class.open_thread]="fsDataThreadService.thread_open" [class.close_thread]="!fsDataThreadService.thread_open"
+        class=" thread container-styling overflow"></app-thread>
 </section>
 <div class="vertical-text pointer select-none" (click)="toggleSidebar()">
     <span>Workspace-Menü schließen</span>

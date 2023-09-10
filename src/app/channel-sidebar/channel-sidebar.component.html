@@ -112,6 +112,10 @@
                 <img [src]="chatService.getChatReceiverUser(chat)?.avatar" alt="user avatar">
                 <span>{{chatService.getChatReceiverUser(chat)?.user_name}}{{ isCurrentUserChat(chat) ? ' (Du)' : ''
                     }}</span>
+                <svg [ngClass]="{'offline': chatService.getChatReceiverUser(chat)?.status === 'Abwesend'}" width="12"
+                    height="13" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="8" cy="8.5" r="8" fill="#92C83E" />
+                </svg>
             </div>
         </div>
     </div>

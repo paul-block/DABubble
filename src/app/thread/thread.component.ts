@@ -42,6 +42,8 @@ export class ThreadComponent implements OnInit {
   edit_comment_index: number;
   open_attachment_menu: boolean;
   uploadProgress: number = 0;
+  selectedEmoji: string
+  emojiPicker_open: boolean = false;
 
 
   constructor(
@@ -58,9 +60,8 @@ export class ThreadComponent implements OnInit {
     public genFunctService: GeneralFunctionsService,
   ) { }
 
-  @Output() threadClose = new EventEmitter<boolean>();
-  selectedEmoji: string
-  emojiPicker_open: boolean = false;
+  
+  
 
 
   async ngOnInit(): Promise<void> {
@@ -71,7 +72,6 @@ export class ThreadComponent implements OnInit {
 
 
   closeThread(value: boolean) {
-    this.threadClose.emit(value)
     this.fsDataThreadService.thread_open = false
   }
 

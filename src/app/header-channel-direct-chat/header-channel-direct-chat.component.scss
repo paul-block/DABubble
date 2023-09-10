@@ -78,6 +78,20 @@ header {
         color: $hover-text-color;
         transition: $hover-transition;
     }
+
+    svg {
+        position: absolute;
+        left: 43px;
+        bottom: -3px;
+        border: 2px solid white;
+        border-radius: 50%;
+    }
+
+    .offline {
+        circle {
+            fill: #686868 !important;
+        }
+    }
 }
 
 .edit-dialog-open {

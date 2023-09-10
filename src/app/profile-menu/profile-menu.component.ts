@@ -71,7 +71,7 @@ export class ProfileMenuComponent {
 
 
   closeEditAvatar() {
-    this.authService.userData.avatar = this.current_imageUrl
+    
     this.editAvatarVisible = false
     this.editDetailsVisible = true
   }
