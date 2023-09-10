@@ -21,7 +21,6 @@ export class FirestoreThreadDataService {
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
   channel_messages = [];
-  thread_open: boolean = false
   current_message: any;
   current_message_id: string;
   comments: any[] = []
@@ -60,7 +59,7 @@ export class FirestoreThreadDataService {
     await updateDoc(docRef, {
       comments: this.comments
     });
-    if (this.chat_type == 'direct' && this.current_chat_data.answers != 1) this.messageSevice.saveNumberOfAnswers(this.current_message_id)
+    if (this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
   }
 
 
@@ -76,14 +75,14 @@ export class FirestoreThreadDataService {
 
   async openThread(i: number) {
     this.chat_type = 'channel'
-    this.thread_open = true
+    this.chatService.thread_open = true
     this.current_message = this.channel_messages[i].message
     this.validateIdFromMessage(i);
   }
 
 
   openDirectChatThread(i: number) {
-    this.thread_open = true
+    this.chatService.thread_open = true
     this.current_channelname = this.chatService.currentChatData.channelName
     this.current_chat_data = this.chatService.directChatMessages[i]
     this.direct_chat_index = i

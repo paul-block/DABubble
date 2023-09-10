@@ -24,7 +24,7 @@ export class ChatService {
   open_users: boolean = false;
   userReceiverID: string;
   userReceiverName: string;
-
+  thread_open: boolean = false
   openNewMsgComponent: boolean = false;
   directedFromProfileButton: boolean = false;
 
@@ -248,15 +248,12 @@ export class ChatService {
         let word_without_at = word1.substring(1);
         for (let j = 0; j < this.authService.all_users.length; j++) {
           const [firstName, lastName] = this.authService.all_users[j].user_name.split(' ');
+          const formattedName = this.authService.all_users[j].uid
           if (lastName && lastName == word2) {
-            const formattedName = this.authService.all_users[j].uid
             words[i] = formattedName
             words.splice(i + 1, 1)
           }
-          if (firstName == word_without_at && !lastName) {
-            const formattedName = this.authService.all_users[j].uid
-            words[i] = formattedName
-          }
+          if (firstName == word_without_at && !lastName)  words[i] = formattedName 
         }
       }
     }
@@ -318,5 +315,16 @@ export class ChatService {
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return '@' + user.user_name
     else return word
+  }
+
+
+  checkForBreak(word: string) {
+    if (word.includes('\n')) {
+      console.log(word);
+      
+      return true
+
+    } 
+    else return false
   }
 }

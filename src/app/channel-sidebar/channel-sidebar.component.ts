@@ -81,7 +81,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
         this.chatService.textAreaMessageTo();
         this.channelService.loadCurrentChannel()
         await this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
+        this.chatService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }
@@ -99,7 +99,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
         this.chatService.currentChatData = chat;
         this.chatService.textAreaMessageTo();
         this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
+        this.chatService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Chats: ", error);
       }

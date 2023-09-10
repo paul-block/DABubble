@@ -128,7 +128,7 @@ export class ChannelDirectSendMessageComponent {
         this.chatService.currentChatData = chat;
         this.chatService.textAreaMessageTo();
         this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
+        this.chatService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Chats: ", error);
       }
@@ -141,6 +141,7 @@ export class ChannelDirectSendMessageComponent {
       event.preventDefault();
       if (event.key === 'Enter' && event.shiftKey)
         this.msgService.messageText += '\n';
+        this.msgService.messageText += ' ';
     }
   }
 }

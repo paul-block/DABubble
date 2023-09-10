@@ -7,7 +7,6 @@ import { Subject } from 'rxjs/internal/Subject';
 import { GeneralFunctionsService } from './general-functions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
-import { FirestoreThreadDataService } from './firestore-thread-data.service';
 
 
 @Injectable({
@@ -206,7 +205,10 @@ export class MessagesService {
     dialogRef.afterClosed().subscribe(result => {
       if (result || result == '') {
         chatMessage.chat_message = result;
-        if (chatMessage.answers == 0) this.deleteMessage(i, chatMessage)
+        if (chatMessage.answers == 0) {
+          this.deleteMessage(i, chatMessage)
+          this.chatService.thread_open = false
+        }
         else this.changeMessageToDeleted(chatMessage)
       }
     });

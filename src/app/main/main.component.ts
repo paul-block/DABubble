@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { ChatService } from 'services/chat.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
+import { MessagesService } from 'services/messages.service';
 
 @Component({
   selector: 'app-main',
@@ -17,6 +18,7 @@ export class MainComponent {
     public chatService: ChatService,
     public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
+    public messageService: MessagesService
   ) { }
 
   setVariable(value: boolean) {

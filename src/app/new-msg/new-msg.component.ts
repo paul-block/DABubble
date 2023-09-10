@@ -140,7 +140,7 @@ export class NewMsgComponent {
         this.chatService.currentChatData = chat;
         this.chatService.textAreaMessageTo();
         this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
+        this.chatService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Chats: ", error);
       }
@@ -158,7 +158,7 @@ export class NewMsgComponent {
         this.chatService.getCurrentChatData();
         this.chatService.textAreaMessageTo();
         this.msgService.getMessages();
-        this.fsDataThreadService.thread_open = false;
+        this.chatService.thread_open = false;
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }

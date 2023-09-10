@@ -37,7 +37,8 @@
                             <span (click)="profileService.openProfile(word)"
                                 *ngFor="let word of chatMessage.modified_message; let k = index"
                                 [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                                {{chatService.renameUid(word)}}&nbsp;
+                                {{chatService.renameUid(word)}}
+                                <ng-container *ngIf="chatService.checkForBreak(word)" ><br></ng-container>
                             </span>
                         </div>
                         <span class="message-edited" *ngIf="chatMessage.chat_message_edited">(bearbeitet)</span>

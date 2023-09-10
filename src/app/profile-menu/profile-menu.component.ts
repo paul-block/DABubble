@@ -5,6 +5,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { UploadService } from 'services/upload.service';
+import { ChatService } from 'services/chat.service';
 
 
 @Component({
@@ -32,13 +33,14 @@ export class ProfileMenuComponent {
     private storage: AngularFireStorage,
     public fsDataThreadService: FirestoreThreadDataService,
     public dialogRef: MatDialogRef<ProfileMenuComponent>,
-    public uploadService: UploadService
+    public uploadService: UploadService,
+    public chatService: ChatService
   ) { }
 
   signOut() {
     this.authService.signOut();
     this.dialog.closeAll();
-    this.fsDataThreadService.thread_open = false
+    this.chatService.thread_open = false
   }
 
 

@@ -143,13 +143,10 @@ app-empty-chat-placeholder{
     font-size: 18px;
     font-weight: 400;
     background-color: $hover-background-color;
-    display: flex;
-    flex-direction: column;
+   
     width: fit-content;
 
-    div {
-        display: flex;
-    }
+  
 }
 
 .message-edited {

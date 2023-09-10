@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
+import { FirestoreThreadDataService } from './firestore-thread-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeneralFunctionsService {
   showSidebarText: boolean = true;
-  constructor() { }
+
+
+  constructor( ) { }
 
   preventDefault(event: Event) {
     event.preventDefault();

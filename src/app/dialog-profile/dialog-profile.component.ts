@@ -76,7 +76,7 @@ async openChat(chat) {
       this.chatService.currentChatData = chat;
       this.chatService.textAreaMessageTo();
       this.msgService.getMessages();
-      this.fsDataThreadService.thread_open = false;
+      this.chatService.thread_open = false;
     } catch (error) {
       console.error("Fehler bei öffnen des Chats: ", error);
     }

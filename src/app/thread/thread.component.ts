@@ -60,8 +60,8 @@ export class ThreadComponent implements OnInit {
     public genFunctService: GeneralFunctionsService,
   ) { }
 
-  
-  
+
+
 
 
   async ngOnInit(): Promise<void> {
@@ -72,7 +72,7 @@ export class ThreadComponent implements OnInit {
 
 
   closeThread(value: boolean) {
-    this.fsDataThreadService.thread_open = false
+    this.chatService.thread_open = false
   }
 
 
@@ -220,7 +220,7 @@ export class ThreadComponent implements OnInit {
         this.fsDataThreadService.updateData()
         if (this.checkIfLastAnswer()) {
           this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
-          this.fsDataThreadService.thread_open = false
+          this.chatService.thread_open = false
         }
       }
     });
@@ -316,10 +316,11 @@ export class ThreadComponent implements OnInit {
 
 
   handleEnter(event: KeyboardEvent): void {
-    if (event.key === 'Enter' ) {
+    if (event.key === 'Enter') {
       event.preventDefault();
       if (event.key === 'Enter' && event.shiftKey)
-      this.comment_value += '\n';
+        this.comment_value += '\n';
+      this.comment_value += ' '
     }
   }
 }

@@ -15,7 +15,7 @@
     </header>
 
 
-    <div *ngIf="fsDataThreadService.thread_open" class="thread_content">
+    <div *ngIf="chatService.thread_open" class="thread_content">
         <div class="message_div "
             [class.row_reverse]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
 
@@ -52,7 +52,7 @@
 
 
             <div class="bottom_line" *ngIf="fsDataThreadService.comments?.length > 0">
-                <div style="display: flex; width: max-content;">
+                <div style="display: flex; min-width: fit-content;">
                     <span>{{fsDataThreadService.comments.length}} Antwort</span>
                     <div style="width: max-content;" *ngIf="fsDataThreadService.comments?.length > 1">en</div>
                 </div>
@@ -83,6 +83,7 @@
                         *ngFor="let word of fsDataThreadService.current_chat_data.modified_message; let k = index"
                         [class.highlighted]="chatService.checkIfWordIsAnId(word)">
                         {{chatService.renameUid(word)}}
+                        <ng-container *ngIf="chatService.checkForBreak(word)" ><br></ng-container>
                     </span>
                     <div style="font-size: 10px;" *ngIf="fsDataThreadService.current_chat_data.chat_message_edited">
                         (bearbeitet)</div>
@@ -201,7 +202,10 @@
                         *ngFor="let word of fsDataThreadService.comments[i].modified_comment; let k = index"
                         [class.highlighted]="chatService.checkIfWordIsAnId(word)">
                         {{chatService.renameUid(word)}}
+                       <ng-container *ngIf="chatService.checkForBreak(word)" ><br></ng-container>
                     </span>
+                    
+                    
                     <div style="font-size: 10px;" *ngIf="fsDataThreadService.comments[i].text_edited">(bearbeitet)</div>
                 </div>
 
