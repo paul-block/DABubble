@@ -1,62 +1,99 @@
 header {
+  display: flex;
+  align-items: center;
+  height: 100px;
+  justify-content: space-between;
+  gap: 25px;
+  margin: 0px 25px;
+
+  #logo {
+    width: 200px;
+  }
+
+  #profile {
     display: flex;
     align-items: center;
-    height: 100px;
-    justify-content: space-between;
-    gap: 25px;
-    margin: 0px 25px;
+    justify-content: center;
+    gap: 20px;
+    cursor: pointer;
+    position: relative;
 
-    #logo {
-        width: 200px;
+    #name {
+      font-size: 26px;
+      font-weight: bold;
+
+      &:hover {
+        color: #535af1;
+      }
     }
 
-    #profile {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        cursor: pointer;
-        position: relative;
-
-        #name {
-            font-size: 26px;
-            font-weight: bold;
-
-            &:hover {
-                color: #535AF1;
-            }
-        }
-
-        .profile-img {
-            width: 70px;
-            height: 70px;
-            border-radius: 100%;
-            margin-right: 20px;
-        }
-
-        svg {
-            position: absolute;
-            bottom: 2px;
-            right: 140px;
-            border: 2px solid white;
-            border-radius: 50%;
-        }
+    .profile-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 100%;
+      margin-right: 20px;
     }
+
+    svg {
+      position: absolute;
+      bottom: 2px;
+      right: 140px;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+  }
 }
 
 .container-header-img {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .box {
-    gap: 10px;
+  gap: 10px;
 }
 
 .box-small {
-    flex-basis: 400px;
+  flex-basis: 400px;
 }
 
 .box-large {
-    flex-grow: 1;
+  flex-grow: 1;
+}
+
+@media  (max-width: 1280px) {
+  #name {
+    display: none;
+  }
+
+  #arrow {
+    display: none;
+  }
+
+  #dot {
+    position: relative;
+    svg {
+        right: 73px !important;
+    }
+  }
+
+  #profile {
+    justify-content: flex-end !important;
+    flex-basis: 0;
+  }
+
+  header {
+    margin: 0;
+  }
+
+  #searchbar {
+    width: -webkit-fill-available;
+    margin-left: 321px;
+  }
+
+  .container-header-img {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
 }
