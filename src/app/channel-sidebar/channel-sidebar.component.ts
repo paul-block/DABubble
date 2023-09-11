@@ -18,7 +18,6 @@ import { GeneralFunctionsService } from 'services/general-functions.service';
 export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   auth = getAuth();
-
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
@@ -70,6 +69,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChannel(channelID: string) {
+    this.chatService.open_chat = true
     if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
       this.chatService.currentChatSection = 'channels';
@@ -90,6 +90,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChat(chat: { chat_ID: string; }) {
+    this.chatService.open_chat = true
     if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';

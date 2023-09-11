@@ -13,6 +13,7 @@ import { GeneralFunctionsService } from './general-functions.service';
 export class ChatService {
 
   db = getFirestore();
+  open_chat:boolean = false
   at_users: any
   currentChatSection = 'noChatSectionSelected';
   currentChatID: string = 'noChatSelected';

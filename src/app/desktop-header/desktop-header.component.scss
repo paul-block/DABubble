@@ -97,3 +97,10 @@ header {
     left: 20px;
   }
 }
+
+@media  (max-width: 1000px) {
+
+    #searchbar {
+        margin-left: 243px;
+    }
+}

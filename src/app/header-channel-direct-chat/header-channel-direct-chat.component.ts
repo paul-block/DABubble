@@ -131,4 +131,8 @@ export class HeaderChannelDirectChatComponent {
     const user = this.authService.all_users.find(user => user.uid === id);
     return user.avatar;
   }
+
+  closeChat() {
+    this.chatService.open_chat = false
+  }
 }
