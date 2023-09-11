@@ -353,6 +353,10 @@
         justify-content: flex-start !important;
     }
 
+    .channel-second-row {
+        margin-left: 0 !important;
+    }
+
     .selection {
         align-items: flex-start !important;
     }
@@ -373,5 +377,9 @@
         position: absolute;
         right: 0;
         top: -81px;
+    }
+
+    .dm-profile {
+        padding: 0 !important;
     }
 }
