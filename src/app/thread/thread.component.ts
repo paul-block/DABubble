@@ -28,7 +28,7 @@ export class ThreadComponent implements OnInit {
   @ViewChild('picker', { static: false }) picker: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
-  comment_value: string = ''
+  comment_value: string = ' '
   picker_index: number
   response: string = 'Antwort'
   channel_message = {
@@ -306,7 +306,7 @@ export class ThreadComponent implements OnInit {
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();
-    this.comment_value = this.chatService.addUserToTextarea(i, this.comment_value)
+    this.comment_value =  this.chatService.addUserToTextarea(i, this.comment_value)
   }
 
 
@@ -318,9 +318,11 @@ export class ThreadComponent implements OnInit {
   handleEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (event.key === 'Enter' && event.shiftKey)
+      if (event.key === 'Enter' && event.shiftKey) {
+        this.comment_value += ' '
         this.comment_value += '\n';
-      this.comment_value += ' '
+        this.comment_value += ' '
+      }
     }
   }
 }

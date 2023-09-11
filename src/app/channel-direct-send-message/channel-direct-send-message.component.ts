@@ -84,8 +84,8 @@ export class ChannelDirectSendMessageComponent {
   public async onSendClick() {
     console.log(this.uploadService.upload_array.file_name);
     if (this.msgService.messageText.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
-     
-      
+
+
       if (this.chatService.openNewMsgComponent) {
         this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
         this.chatService.currentChatSection = 'chats';
@@ -139,9 +139,11 @@ export class ChannelDirectSendMessageComponent {
   handleEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (event.key === 'Enter' && event.shiftKey)
+      if (event.key === 'Enter' && event.shiftKey) {
+        this.msgService.messageText += ' ';
         this.msgService.messageText += '\n';
         this.msgService.messageText += ' ';
+      }
     }
   }
 }

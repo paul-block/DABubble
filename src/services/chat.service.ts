@@ -299,12 +299,13 @@ export class ChatService {
     let index = words.indexOf(search_word);
     words[index] = '';
     text = words.join(' ');
-    text += '@' + this.at_users[i].user_name;
+    text += ' ' + '@' + this.at_users[i].user_name;
     return text;
   }
 
 
   checkIfWordIsAnId(word: string) {
+    if ( word.includes('\n')) word = word.replace(/\n/, '');
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return true
     else return false
