@@ -164,6 +164,14 @@ export class NewMsgComponent {
       }
     }
   }
+  
+
+  closeChat() {
+    this.chatService.open_chat = false
+    setTimeout(() => {
+      this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
+    }, 300);
+  }
 }
 
 

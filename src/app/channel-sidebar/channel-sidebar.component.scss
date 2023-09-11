@@ -364,4 +364,14 @@
     .new_message_button {
         display: flex;
     }
+    
+    #edit {
+        display: none;
+    }
+
+    #add-channel-icon {
+        position: absolute;
+        right: 0;
+        top: -81px;
+    }
 }

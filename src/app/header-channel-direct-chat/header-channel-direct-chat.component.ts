@@ -42,8 +42,6 @@ export class HeaderChannelDirectChatComponent {
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.windowWidth = event.target.innerWidth;
-    console.log(this.windowWidth);
-
   }
 
 

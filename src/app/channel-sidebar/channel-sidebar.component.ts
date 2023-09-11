@@ -113,6 +113,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     // this.chatService.currentChatID = 'noChatSelected';
     // this.chatService.messageToPlaceholder = 'Nachricht an ...'
     // this.chatService.textAreaMessageTo();
+    this.chatService.open_chat = true
     this.msgService.emptyMessageText();
     this.toggleNewMsgComponent();
   }
