@@ -95,10 +95,10 @@
                                         false)?.join('
                                         und ')}}</span>
                                     <span
-                                        *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.getUid()">hat
+                                        *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] !== authService.userData.uid">hat
                                         reagiert</span>
                                     <span
-                                        *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.getUid()">hast
+                                        *ngIf="emoji?.react_users?.length === 1 && emoji?.react_users[0] === authService.userData.uid">hast
                                         reagiert</span>
                                     <span *ngIf="emoji?.react_users?.length === 2">
                                         haben

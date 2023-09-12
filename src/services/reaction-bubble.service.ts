@@ -25,7 +25,7 @@ export class ReactionBubbleService {
   switchIDsWithNames(react_userIDs) {
     const names_react_user = [];
     react_userIDs.forEach(react_userID => {
-      if (react_userID === this.authService.getUid()) {
+      if (react_userID === this.authService.userData.uid) {
         names_react_user.push('Du')
       } else {
         names_react_user.push(this.authService.getUserInfo(react_userID).user_name)
