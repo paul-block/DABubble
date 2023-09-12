@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { ChatService } from 'services/chat.service';
 
 @Component({
   selector: 'app-desktop-header',
@@ -17,7 +18,10 @@ export class DesktopHeaderComponent {
   all_users: any[];
 
 
-  constructor(private dialog: MatDialog, public authService: AuthenticationService, public fsDataThreadService: FirestoreThreadDataService,) { }
+  constructor(private dialog: MatDialog, 
+    public authService: AuthenticationService,
+     public fsDataThreadService: FirestoreThreadDataService,
+     public chatService: ChatService) { }
 
 
   openProfileMenu() {
@@ -37,5 +41,9 @@ export class DesktopHeaderComponent {
       this.profileMenuOpen = false;
       this.fsDataThreadService.detailsVisible = false
     });
+  }
+
+  closeChat() {
+    this.chatService.open_chat = false
   }
 }

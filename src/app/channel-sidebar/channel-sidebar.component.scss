@@ -342,6 +342,14 @@
         z-index: 11;
         border-radius: 0;
         padding: 50px;
+
+            header {
+                    display: none !important;
+            }
+    }
+
+    #add-channel-icon {
+        top: 0 !important;
     }
 
     .workspace {
@@ -381,5 +389,9 @@
 
     .dm-profile {
         padding: 0 !important;
+
+            svg {
+                left: 40px !important;
+            }
     }
 }
