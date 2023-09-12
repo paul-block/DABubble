@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FirestoreThreadDataService } from './firestore-thread-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +6,9 @@ import { FirestoreThreadDataService } from './firestore-thread-data.service';
 export class GeneralFunctionsService {
   showSidebarText: boolean = true;
   changeMobileLogo: boolean = false;
+  isMobileScreen: boolean = false;
 
-
-  constructor( ) { }
+  constructor() { }
 
   preventDefault(event: Event) {
     event.preventDefault();

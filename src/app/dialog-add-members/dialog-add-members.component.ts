@@ -44,7 +44,7 @@ export class DialogAddMembersComponent implements OnInit {
   selectedUsers = [];
   users: any[] = [];
   filteredUsers: any
-  currentChannel: string = 'Wunderland die 4';
+  currentChannel: string = '';
 
   constructor(
     private authService: AuthenticationService,
@@ -83,7 +83,7 @@ export class DialogAddMembersComponent implements OnInit {
   addNewMember() {
     this.selectedUsers.forEach(user => {
       this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, user.uid);
-      this.sendAddMemberMessage(user.user_name)
+      this.sendAddMemberMessage(user.user_name);
     });
     this.selectedUsers = [];
     this.choosedUser = null;

@@ -280,4 +280,8 @@ export class AuthenticationService {
     const user = this.all_users.find(element => element.uid === uid);
     return user.avatar
   }
+
+  isCurrentUser(user):boolean{
+    return user === this.userData.uid ? true : false;
+  }
 }

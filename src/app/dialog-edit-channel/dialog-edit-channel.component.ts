@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
 import { MessagesService } from 'services/messages.service';
+import { ProfileService } from 'services/profile.service';
 import { UploadService } from 'services/upload.service';
 
 @Component({
@@ -22,6 +24,7 @@ export class DialogEditChannelComponent implements OnInit {
   assignedUsers = [];
   delete_Channel: boolean = false
   leave_Channel: boolean = false;
+  windowWidth: number;
 
   constructor(
     public authService: AuthenticationService,
@@ -29,6 +32,8 @@ export class DialogEditChannelComponent implements OnInit {
     public channelService: ChannelService,
     public uploadService: UploadService,
     public messageService: MessagesService,
+    public profileService: ProfileService,
+    public genFunctService: GeneralFunctionsService
   ) { }
 
   async ngOnInit() {
@@ -36,6 +41,19 @@ export class DialogEditChannelComponent implements OnInit {
     this.channelDescription = this.chatService.currentChatData.description;
     this.assignedUsers = this.chatService.currentChatData.assignedUsers;
     this.getCreatorName();
+  }
+
+
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.windowWidth = event.target.innerWidth;
+    if (this.windowWidth > 1000) {
+      this.genFunctService.isMobileScreen = false;
+    } else {
+      this.genFunctService.isMobileScreen = true;
+    }
   }
 
 

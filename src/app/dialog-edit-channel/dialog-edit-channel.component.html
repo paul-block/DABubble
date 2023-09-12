@@ -1,3 +1,11 @@
+<div class="title title-mobile">
+  <div>
+    <mat-icon>tag</mat-icon>
+    <h1>{{ chatService.currentChatData.channelName }}</h1>
+  </div>
+  <mat-icon mat-button mat-dialog-close class="close-dialog">close</mat-icon>
+</div>
+
 <section class="p-20">
   <div class="title">
     <div>
@@ -37,20 +45,49 @@
       <div class="parting-line"></div>
       <h2>Erstellt von</h2>
       <span class="channel-creator">{{ creatorName }}</span>
-    </ng-container> 
+    </ng-container>
     <div *ngIf="delete_Channel" class="realy_delete">
       <span>Diesen Channel löschen?</span>
-      <span>Wenn du einen Channel löschst, werden alle Nachrichten dieses Channels sofort aus DA-Bubble entfernt. Das kann nicht rückgängig gemacht werden.</span>
+      <span>Wenn du einen Channel löschst, werden alle Nachrichten dieses Channels sofort aus DA-Bubble entfernt. Das
+        kann nicht rückgängig gemacht werden.</span>
     </div>
     <div *ngIf="leave_Channel" class="realy_delete">
       <span>Diesen Channel verlassen?</span>
-      <span>Wenn du diesen Channel verlässt, hast du keinen Zugriff mehr auf die Inhalte davon. Das kann nur rückgängig gemacht werden, wenn dich wieder jemand zu diesem Channel hinzufügt.</span>
+      <span>Wenn du diesen Channel verlässt, hast du keinen Zugriff mehr auf die Inhalte davon. Das kann nur rückgängig
+        gemacht werden, wenn dich wieder jemand zu diesem Channel hinzufügt.</span>
     </div>
   </div>
-  
+
+  <!-- mobile members -->
+
+  <div class="container-channel-name-description members" *ngIf="genFunctService.isMobileScreen">
+    <div class="title-members">
+      <h1>Mitglieder</h1>
+    </div>
+    <div class="channel-members">
+      <div *ngFor="let assignedUser of channelService.currentChannelData.assignedUsers;"
+        (click)="profileService.openProfile(assignedUser)">
+        <img [src]="authService.getImageUrl(assignedUser)">
+        <span>{{authService.getUserInfo(assignedUser)?.user_name}}{{ authService.isCurrentUser(assignedUser) ? ' (Du)' :
+          ''
+          }}</span>
+      </div>
+    </div>
+    <div *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="add-members"
+      (click)="closeRedirectAddMember()">
+      <mat-icon>person_add_alt</mat-icon>
+      <span>Mitglieder hinzufügen</span>
+    </div>
+  </div>
+
+  <!-- leave channel buttons -->
+
   <div *ngIf="!delete_Channel && !leave_Channel" class="leave-channel">
-    <button class="primary-button-red" *ngIf="this.chatService.currentChatData.createdBy == authService.userData.uid && chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="openDeleteText()" >Channel löschen</button>
-    <button class="secondary-button-red" *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" (click)="toggleLeaveText()">Channel verlassen</button>
+    <button class="primary-button-red"
+      *ngIf="this.chatService.currentChatData.createdBy == authService.userData.uid && chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'"
+      (click)="openDeleteText()">Channel löschen</button>
+    <button class="secondary-button-red" *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'"
+      (click)="toggleLeaveText()">Channel verlassen</button>
   </div>
 
   <div *ngIf="delete_Channel" class="leave-channel">
@@ -62,4 +99,6 @@
     <button class="primary-button-red" (click)="leaveChannel()" mat-dialog-close>Channel verlassen</button>
     <button class="primary-button" (click)="toggleLeaveText()">Abbrechen</button>
   </div>
+
+
 </section>

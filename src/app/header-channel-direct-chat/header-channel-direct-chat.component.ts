@@ -7,6 +7,7 @@ import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
 import { ProfileService } from 'services/profile.service';
 import { ChannelService } from 'services/channel.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
 
 @Component({
   selector: 'app-header-channel-direct-chat',
@@ -33,7 +34,8 @@ export class HeaderChannelDirectChatComponent {
     public authService: AuthenticationService,
     public chatService: ChatService,
     public profileService: ProfileService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public genFunctService: GeneralFunctionsService
   ) {
     this.windowWidth = window.innerWidth;
   }
@@ -46,6 +48,14 @@ export class HeaderChannelDirectChatComponent {
 
 
   editChannel() {
+    if (this.windowWidth > 1000) {
+      this.openEditChannel();
+    } else if (this.windowWidth < 1000) {
+      this.openEditChannelMobile();
+    }
+  }
+
+  openEditChannel() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
 
@@ -57,6 +67,27 @@ export class HeaderChannelDirectChatComponent {
 
     this.dialogEditChannelRef = this.dialog.open(DialogEditChannelComponent, dialogConfig);
     this.isEditChannelDialogOpen = true;
+
+    this.dialogEditChannelRef.afterClosed().subscribe(() => {
+      this.isEditChannelDialogOpen = false;
+    });
+  }
+
+  openEditChannelMobile() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.position = {
+      top: `100px`,
+      left: `0px`
+    };
+    dialogConfig.width = '100%';
+    dialogConfig.maxWidth = '100vw';
+    dialogConfig.height = '100vh';
+    dialogConfig.panelClass = 'custom-edit-channel-dialog';
+
+    this.dialogEditChannelRef = this.dialog.open(DialogEditChannelComponent, dialogConfig);
+    this.isEditChannelDialogOpen = true;
+    this.genFunctService.isMobileScreen = true;
 
     this.dialogEditChannelRef.afterClosed().subscribe(() => {
       this.isEditChannelDialogOpen = false;
@@ -78,12 +109,11 @@ export class HeaderChannelDirectChatComponent {
       if (closedWithRedirection && this.windowWidth > 1500) {
         this.dialogEditMembersRef = null;
         this.addMembers();
-      }
-      if (closedWithRedirection && this.windowWidth < 1500) {
+      } else if (closedWithRedirection && this.windowWidth < 1500) {
         this.dialogEditMembersRef = null;
         this.addMemberMobile();
       }
-     
+
       this.isEditMembersDialogOpen = false;
     });
   }
@@ -115,6 +145,8 @@ export class HeaderChannelDirectChatComponent {
       top: `${rect.bottom}px`,
       left: `${rect.right - 520}px`,
     };
+    dialogConfig.width = '100%';
+    dialogConfig.maxWidth = '100vw';
     dialogConfig.panelClass = 'custom-edit-members-dialog';
     this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
     this.isAddMembersDialogOpen = true;
@@ -122,7 +154,7 @@ export class HeaderChannelDirectChatComponent {
       this.isAddMembersDialogOpen = false;
     });
   }
-  
+
 
 
   channelMemberAvatars(id: string) {

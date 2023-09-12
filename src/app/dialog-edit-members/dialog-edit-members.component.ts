@@ -25,7 +25,5 @@ export class DialogEditMembersComponent {
     this.dialogRef.close(true);
   }
 
-  isCurrentUser(user):boolean{
-    return user === this.authService.getUid() ? true : false;
-  }
+  
 }

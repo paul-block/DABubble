@@ -6,7 +6,7 @@
     <div class="channel-members">
         <div *ngFor="let assignedUser of channelService.currentChannelData.assignedUsers;" (click)="profileService.openProfile(assignedUser)">
             <img [src]="authService.getImageUrl(assignedUser)">
-            <span>{{authService.getUserInfo(assignedUser)?.user_name}}{{ isCurrentUser(assignedUser) ? ' (Du)' : '' }}</span>
+            <span>{{authService.getUserInfo(assignedUser)?.user_name}}{{ authService.isCurrentUser(assignedUser) ? ' (Du)' : '' }}</span>
         </div>
     </div>
     <div *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="add-members" (click)="closeRedirectAddMember()">
