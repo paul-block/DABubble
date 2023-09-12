@@ -69,6 +69,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChannel(channelID: string) {
+    this.changeMobileLogo();
     this.chatService.open_chat = true
     if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== channelID) {
@@ -90,6 +91,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   async openChat(chat: { chat_ID: string; }) {
+    this.changeMobileLogo();
     this.chatService.open_chat = true
     if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
     if (this.chatService.currentChatID !== chat.chat_ID) {
@@ -109,10 +111,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
 
   sendNewMsg() {
-    // this.chatService.currentChatSection = 'chats';
-    // this.chatService.currentChatID = 'noChatSelected';
-    // this.chatService.messageToPlaceholder = 'Nachricht an ...'
-    // this.chatService.textAreaMessageTo();
+    this.changeMobileLogo();
     this.chatService.open_chat = true
     this.msgService.emptyMessageText();
     this.toggleNewMsgComponent();
@@ -129,6 +128,11 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
+  changeMobileLogo() {
+    if (window.innerWidth <= 1000) {
+      this.genFunctService.changeMobileLogo = true;
+    }
+  }
 
   toggleNewMsgComponent() {
     this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;

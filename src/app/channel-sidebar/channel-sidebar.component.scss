@@ -337,7 +337,7 @@
 
     .workspace-menu {
         width: 100vw;
-        height: 100%;
+        height: calc(100vh - 100px);
         box-sizing: border-box;
         z-index: 11;
         border-radius: 0;
@@ -357,9 +357,9 @@
         margin-left: 15px;
     }
 
-    .channel-first-row {
-        justify-content: flex-start !important;
-    }
+    // .channel-first-row {
+    //     justify-content: flex-start !important;
+    // }
 
     .channel-second-row {
         margin-left: 0 !important;
@@ -381,11 +381,6 @@
         display: none;
     }
 
-    #add-channel-icon {
-        position: absolute;
-        right: 0;
-        top: -81px;
-    }
 
     .dm-profile {
         padding: 0 !important;
@@ -393,5 +388,11 @@
             svg {
                 left: 40px !important;
             }
+    }
+}
+
+@media (max-height: 700px) {
+    .dm-selection {
+        height: 100px !important;
     }
 }

@@ -51,6 +51,7 @@ header {
 .container-header-img {
   display: flex;
   justify-content: flex-start;
+  margin-left: 20px;
 }
 
 .box {
@@ -94,18 +95,9 @@ header {
     margin-left: 321px;
   }
 
-  .container-header-img {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-  }
 }
 
 @media  (max-width: 1000px) {
-
-  .container-header-img {
-    display: none !important;
-  }
 
   .mobile-logo-container {
     display: flex !important;

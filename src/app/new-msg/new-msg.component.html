@@ -1,12 +1,12 @@
 <div class="container">
     <header>
-        <div style="display: flex; align-items: center;">
-            <div class="arrow_back" (click)="closeChat()">
+        <!-- <div style="display: flex; align-items: center;"> -->
+        <!-- <div class="arrow_back" (click)="closeChat()">
                 <img src="/assets/img/arrow_back.png" alt="">
-            </div>
-            <span id="headline">Neue Nachricht</span>
-        </div>
-        
+            </div> -->
+        <span id="headline">Neue Nachricht</span>
+        <!-- </div> -->
+
         <div class="input-container">
             <span>An: </span>
             <input [(ngModel)]="inputValue" (ngModelChange)="valueChange(inputValue)" type="text"

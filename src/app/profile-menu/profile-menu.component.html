@@ -3,6 +3,20 @@
     <span (click)="signOut()">Log out</span>
 </div>
 
+<div id="mobile-menu-container">
+    <div id="rectangle"></div>
+    <div (click)="toggleDetails()">
+        <img src="assets/img/icons/account_circle.png" alt="">
+        <span>Profil</span>
+    </div>
+    <div (click)="signOut()">
+        <img src="assets/img/icons/logout.png" alt="">
+        <span>
+            Log out
+        </span>
+    </div>
+</div>
+
 <div id="profileDetails" *ngIf="detailsVisible || fsDataThreadService.detailsVisible">
     <div class="header-container">
         <span>Profil</span>

@@ -6,6 +6,7 @@ import { FirestoreThreadDataService } from './firestore-thread-data.service';
 })
 export class GeneralFunctionsService {
   showSidebarText: boolean = true;
+  changeMobileLogo: boolean = false;
 
 
   constructor( ) { }

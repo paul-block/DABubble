@@ -1,9 +1,9 @@
 <header>
-    <div class="container-header-img box box-small">
+    <div *ngIf="!genFuncService.changeMobileLogo" class="container-header-img box box-small">
         <img class="pointer" id="logo" src="assets/img/header-img.png" alt="">
     </div>
 
-    <div class="mobile-logo-container" (click)="closeChat()">
+    <div *ngIf="genFuncService.changeMobileLogo" class="mobile-logo-container" (click)="closeChat()">
         <img id="mobile-arrow" src="assets/img/icons/mobile-arrow.png" alt="">
         <img id="mobile-logo" src="assets/img/icons/Workspace logo.png" alt="">
         <span>Code learning</span>

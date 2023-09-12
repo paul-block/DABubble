@@ -110,7 +110,8 @@ app-channel-direct-send-message {
 
 @media (max-width: 1000px) {
 
-    .arrow_back {
-        display: flex;
+    #autocomplete {
+      left: 65px !important;
+      width: 240px !important;
     }
 }
