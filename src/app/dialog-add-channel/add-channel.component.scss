@@ -91,3 +91,10 @@
         background-color: #ECEEFE;
     }
 }
+
+@media (max-width: 1000px) {
+    .dialog-container {
+        height: 100vh !important;
+        width: unset !important;
+    }
+}
