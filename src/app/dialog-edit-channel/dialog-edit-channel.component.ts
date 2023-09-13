@@ -90,18 +90,20 @@ export class DialogEditChannelComponent implements OnInit {
 
 
   changeEditText(section) {
-    this.editChannelName = 'Bearbeiten';
-    this.editChannelDescription = 'Bearbeiten';
     this.saveEditChannelInfo();
     if (section === 'name') {
       this.editName = !this.editName;
       if (this.editName) {
         this.editChannelName = 'Speichern';
+      } else {
+        this.editChannelName = 'Bearbeiten';
       }
     } else if (section === 'description') {
       this.editDescription = !this.editDescription;
       if (this.editDescription) {
         this.editChannelDescription = 'Speichern';
+      } else {
+        this.editChannelDescription = 'Bearbeiten';
       }
     }
   }
@@ -124,23 +126,23 @@ export class DialogEditChannelComponent implements OnInit {
 
   async deleteChannel() {
     this.channelService.deleteChannel(this.chatService.currentChatData.channel_ID);
-    this.chatService.currentChatSection = 'noChatSectionSelected'
+    this.chatService.currentChatSection = 'noChatSectionSelected';
   }
 
 
   openDeleteText() {
-    this.delete_Channel = !this.delete_Channel
+    this.delete_Channel = !this.delete_Channel;
   }
 
 
   abortDelete() {
-    this.delete_Channel = !this.delete_Channel
+    this.delete_Channel = !this.delete_Channel;
   }
 
   async sendLeaveMessage() {
-    this.uploadService.checkForUpload()
-    this.messageService.messageText = this.authService.userData.user_name + ' hat #' + this.channelService.currentChannelData.channelName + ' verlassen.'
-    await this.messageService.newMessage()
+    this.uploadService.checkForUpload();
+    this.messageService.messageText = this.authService.userData.user_name + ' hat #' + this.channelService.currentChannelData.channelName + ' verlassen.';
+    await this.messageService.newMessage();
   }
 
   closeRedirectAddMember() {
