@@ -98,7 +98,6 @@ export class HeaderChannelDirectChatComponent {
         this.dialogEditChannelRef = null;
         this.addMemberMobile();
       }
-
       this.isEditChannelDialogOpen = false;
     });
   }
