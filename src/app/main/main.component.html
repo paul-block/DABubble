@@ -1,5 +1,5 @@
 <app-desktop-header></app-desktop-header>
-<section class="chat-interaction">
+<section class="chat-interaction" [class.margin]="!chatService.thread_open">
     <app-channel-sidebar class="box"
         [ngClass]="{'slidein-sidebar': sidebarVisible, 'slideout-sidebar': !sidebarVisible, 'hide-sidebar': timeoutSidebarHide, 'show-sidebar': !timeoutSidebarHide}"></app-channel-sidebar>
     <app-channel-direct-chat *ngIf="!chatService.openNewMsgComponent"

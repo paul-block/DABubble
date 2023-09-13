@@ -28,7 +28,11 @@ $slide-transition: all ease-in-out 250ms;
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  margin: 0px 25px;
+  margin: 0px 25px 0 25px;
+}
+
+.margin{
+  margin-right: 0;
 }
 
 .box {
