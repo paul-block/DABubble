@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from '../dialog-delete-comment/dialog-delete-comment.component';
 import { EmojiService } from '../../services/emoji.service';
 import { MessagesService } from 'services/messages.service';
@@ -174,10 +174,12 @@ export class ThreadComponent implements OnInit {
 
 
   openEditComment(i: number) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'edit_comment';
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
-      data: { comment: this.fsDataThreadService.comments[i].comment },
-      panelClass: 'my-dialog'
+      ...dialogConfig,
+      data: { comment: this.fsDataThreadService.comments[i].comment }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -193,8 +195,7 @@ export class ThreadComponent implements OnInit {
   openEditMessage() {
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogEditCommentComponent, {
-      data: { comment: this.fsDataThreadService.current_chat_data.chat_message },
-      panelClass: 'my-dialog'
+      data: { comment: this.fsDataThreadService.current_chat_data.chat_message }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -208,10 +209,12 @@ export class ThreadComponent implements OnInit {
 
 
   openDeleteComment(i: number) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'delete_comment';
     this.edit_comment = false;
     const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
+      ...dialogConfig,
       data: { comment: this.fsDataThreadService.comments[i].comment },
-      panelClass: 'my-dialog'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result || result == '') {
@@ -306,7 +309,7 @@ export class ThreadComponent implements OnInit {
 
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();
-    this.comment_value =  this.chatService.addUserToTextarea(i, this.comment_value)
+    this.comment_value = this.chatService.addUserToTextarea(i, this.comment_value)
   }
 
 

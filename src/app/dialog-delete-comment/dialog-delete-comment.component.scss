@@ -20,7 +20,25 @@
     font-size: 22px;
     font-weight: 700;
   }
+}
 
+.delete_comment_main {
+  overflow: hidden;
+  height: 200px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #adb0d9;
+  font-size: 18px;
+  border-radius: 20px;
+  margin: 0 15px;
+}
+
+.delete_comment_div {
+  @include content_center();
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 6px;
 }
 
 :host {
@@ -32,15 +50,4 @@
   flex-direction: column;
   background: #fff;
   padding: 20px;
-  overflow: hidden;
-}
-
-.delete_comment_div {
-  padding: 6px;
-  width: 100%;
-  height: 100%;
-  border: 1px solid #adb0d9;
-  font-size: 18px;
-  border-radius: 20px;
-  @include content_center()
 }

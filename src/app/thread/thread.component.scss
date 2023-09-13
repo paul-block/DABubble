@@ -44,8 +44,16 @@ header {
   display: none;
   z-index: 20;
   position: absolute;
-  left: 0;
+  left: -12px;
   top: -10px;
+}
+
+.emoji_picker_textarea {
+  display: none;
+  z-index: 20;
+  position: absolute;
+  left: -12;
+  bottom: 150px;
 }
 
 .d_block {
@@ -314,7 +322,7 @@ header {
   padding: 15px;
   background-color: #eceefe;
   border-radius: 0px 20px 20px 20px;
-  max-width: 90%;
+  width: max-content;
 }
 
 .message_user {
@@ -680,5 +688,12 @@ textarea {
 @media (max-width: 1280px) {
   header {
     min-height: 100px;
+  }
+}
+
+@media (max-width: 1280px) {
+
+  .reaction_emojy_user {
+    left: 15px;
   }
 }
