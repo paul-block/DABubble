@@ -35,7 +35,15 @@ export class AddChannelComponent {
     const description = this.form.controls['description'].value;
   
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'add-channel-dialog';
+    if (window.innerWidth <= 1000) {
+      dialogConfig.position = {
+        bottom: `0px`
+    }
+      dialogConfig.height = '250px';
+      dialogConfig.panelClass = 'mobile-profile-menu-dialog';
+    } else {
+      dialogConfig.panelClass = 'add-channel-dialog';
+    }
     dialogConfig.data = { channelName: channelName, description: description };
     this.dialog.closeAll();
     this.addPPlRef = this.dialog.open(AddPplToChannelComponent, dialogConfig);

@@ -59,7 +59,7 @@ header {
 }
 
 .box-small {
-  flex-basis: 400px;
+  flex-basis: 380px;
 }
 
 .box-large {
@@ -67,9 +67,6 @@ header {
 }
 
 @media  (max-width: 1280px) {
-  #name {
-    display: none;
-  }
 
   #arrow {
     display: none;
@@ -82,22 +79,30 @@ header {
     }
   }
 
-  #profile {
-    flex-basis: 0;
-  }
+  // #profile {
+  //   flex-basis: 0;
+  // }
 
   header {
     margin: 0;
   }
 
-  #searchbar {
-    width: -webkit-fill-available;
-    margin-left: 321px;
+  .box-small {
+    flex-basis: 275px;
   }
+
+  // #searchbar {
+  //   width: -webkit-fill-available;
+  //   margin-left: 321px;
+  // }
 
 }
 
 @media  (max-width: 1000px) {
+
+  #name {
+    display: none;
+  }
 
   .mobile-logo-container {
     display: flex !important;
@@ -119,7 +124,10 @@ header {
   }
 
     #searchbar {
-        // margin-left: 243px;
         display: none;
+    }
+
+    #logo {
+      width: 175px !important;
     }
 }

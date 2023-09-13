@@ -15,8 +15,10 @@
                 value="certain">
             <span class="checkmark">Bestimmte Leute hinzufügen</span>
         </div>
+        <span *ngIf="userExists && searchControl.value.length > 0" id="user-exists">Nutzer bereits hinzugefügt</span>
         <input *ngIf="selectedOptionControl.value === 'certain'" [formControl]="searchControl" id="certain-input"
             type="text" placeholder="Name eingeben">
+
         <div class="absolute" *ngIf="showSelectedUsers">
             <div class="selected-user" *ngFor="let user of selectedUser; let i = index">
                 <img class="avatar" [src]="user.avatar" alt="">
@@ -31,7 +33,8 @@
         [disabled]="selectedOptionControl.value === 'certain' && (!selectedOptionControl.value || selectedUser.length === 0)">Erstellen
     </button>
 </div>
-<div class="autocomplete-container" *ngIf="filteredUsers.length == 0 && searchControl.value != null">Keine Übereinstimmung gefunden</div>
+<div class="autocomplete-container" *ngIf="filteredUsers.length == 0 && searchControl.value != null">Keine
+    Übereinstimmung gefunden</div>
 <div class="autocomplete-container"
     *ngIf="searchControl.value && searchControl.value.length != 0 && filteredUsers.length != 0">
     <div *ngFor="let user of filteredUsers" class="dm-profile pointer sidebar-hover" (click)="addUser(user)">
