@@ -160,3 +160,18 @@ section {
         }
     }
 }
+
+.mobile-rectangle {
+    width: 62px;
+    height: 6px;
+    border-radius: 23px;
+    background-color: #D9D9D9;
+    align-self: center;
+}
+
+@media (max-width: 1000px) {
+    section {
+        max-width: unset;
+        width: unset
+    }
+}

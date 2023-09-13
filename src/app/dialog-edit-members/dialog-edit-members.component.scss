@@ -71,7 +71,7 @@ section {
         }
     }
 
-    img{
+    img {
         width: 50px;
         height: 50px;
         border-radius: 100%;
@@ -107,5 +107,16 @@ section {
     span {
         font-weight: 400;
         font-size: 18px;
+    }
+}
+
+@media (max-width: 1000px) {
+    section {
+        max-width: unset;
+        width: 280px;
+    }
+
+    .p-20 {
+        padding: 20px;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { AuthenticationService } from 'services/authentication.service';
@@ -19,11 +19,11 @@ export class DesktopHeaderComponent {
   all_users: any[];
 
 
-  constructor(private dialog: MatDialog, 
+  constructor(private dialog: MatDialog,
     public authService: AuthenticationService,
-     public fsDataThreadService: FirestoreThreadDataService,
-     public chatService: ChatService, 
-     public genFuncService: GeneralFunctionsService) { }
+    public fsDataThreadService: FirestoreThreadDataService,
+    public chatService: ChatService,
+    public genFuncService: GeneralFunctionsService) { }
 
 
   openProfileMenu() {
@@ -32,17 +32,19 @@ export class DesktopHeaderComponent {
 
     if (window.innerWidth <= 1000) {
       dialogConfig.position = {
-          bottom: `0px`
+        bottom: `0px`
       }
+      dialogConfig.width = '100%';
+      dialogConfig.maxWidth = '100vw';
       dialogConfig.panelClass = 'mobile-profile-menu-dialog';
-  } else {
+    } else {
       dialogConfig.position = {
-          top: `${rect.bottom + 5}px`,
-          right: `25px`
+        top: `${rect.bottom + 5}px`,
+        right: `25px`
       };
       dialogConfig.panelClass = 'custom-open-profile-menu-dialog';
-  }
-   
+    }
+
 
     this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
     this.profileMenuOpen = true;

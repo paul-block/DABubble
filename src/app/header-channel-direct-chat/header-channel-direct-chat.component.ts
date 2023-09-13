@@ -104,12 +104,23 @@ export class HeaderChannelDirectChatComponent {
 
 
   editMembers() {
-    const rect = this.ElementEditMembersRef.nativeElement.getBoundingClientRect();
+
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = {
-      top: `${rect.bottom}px`,
-      left: `${rect.right - 420}px`,
-    };
+
+    if (this.windowWidth > 1000) {
+      const rect = this.ElementEditMembersRef.nativeElement.getBoundingClientRect();
+      dialogConfig.position = {
+        top: `${rect.bottom}px`,
+        left: `${rect.right - 420}px`,
+      };
+    } else if (this.windowWidth <= 1000) {
+      const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
+      dialogConfig.position = {
+        top: `${rect.bottom}px`,
+        left: `${rect.left - 320 + 44}px`,
+      };
+    }
+
     dialogConfig.panelClass = 'custom-edit-members-dialog';
     this.dialogEditMembersRef = this.dialog.open(DialogEditMembersComponent, dialogConfig);
     this.isEditMembersDialogOpen = true;
@@ -135,7 +146,7 @@ export class HeaderChannelDirectChatComponent {
         top: `${rect.bottom}px`,
         left: `${rect.right - 520}px`,
       };
-      dialogConfig.panelClass = 'custom-edit-members-dialog';
+      dialogConfig.panelClass = 'custom-add-members-dialog';
       this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
       this.isAddMembersDialogOpen = true;
       this.dialogAddMembersRef.afterClosed().subscribe(() => {
@@ -147,15 +158,14 @@ export class HeaderChannelDirectChatComponent {
 
 
   addMemberMobile() {
-    const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.position = {
-      top: `${rect.bottom}px`,
-      left: `${rect.right - 520}px`,
+      bottom: `0px`,
+      left: `0px`,
     };
     dialogConfig.width = '100%';
     dialogConfig.maxWidth = '100vw';
-    dialogConfig.panelClass = 'custom-edit-members-dialog';
+    dialogConfig.panelClass = 'custom-add-members-dialog';
     this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
     this.isAddMembersDialogOpen = true;
     this.dialogAddMembersRef.afterClosed().subscribe(() => {
@@ -164,11 +174,11 @@ export class HeaderChannelDirectChatComponent {
   }
 
 
-
   channelMemberAvatars(id: string) {
     const user = this.authService.all_users.find(user => user.uid === id);
     return user.avatar;
   }
+
 
   closeChat() {
     this.chatService.open_chat = false

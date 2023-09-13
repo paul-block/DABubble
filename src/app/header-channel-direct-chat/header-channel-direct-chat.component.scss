@@ -138,11 +138,12 @@ h1 {
     width: 40px;
     height: 40px;
     cursor: pointer;
+
     &:hover {
-      border-radius: 100%;
-      background-color: #eceefe;
+        border-radius: 100%;
+        background-color: #eceefe;
     }
-  }
+}
 
 .already-members {
     padding: 3px 10px;
@@ -224,7 +225,7 @@ h1 {
     }
 
     .already-members {
-       visibility: hidden;
+        visibility: hidden;
     }
 
     .already-members-avatars {
@@ -237,10 +238,3 @@ h1 {
         padding: 25px 15px;
     }
 }
-
-// @media (max-width: 1000px) {
-
-//     .arrow_back {
-//         display: flex;
-//     }
-// }
