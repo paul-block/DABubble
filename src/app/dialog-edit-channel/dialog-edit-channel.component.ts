@@ -1,4 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DialogAddMembersComponent } from 'app/dialog-add-members/dialog-add-members.component';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
@@ -33,7 +35,8 @@ export class DialogEditChannelComponent implements OnInit {
     public uploadService: UploadService,
     public messageService: MessagesService,
     public profileService: ProfileService,
-    public genFunctService: GeneralFunctionsService
+    public genFunctService: GeneralFunctionsService,
+    private dialogRef: MatDialogRef<DialogAddMembersComponent>,
   ) { }
 
   async ngOnInit() {
@@ -138,5 +141,9 @@ export class DialogEditChannelComponent implements OnInit {
     this.uploadService.checkForUpload()
     this.messageService.messageText = this.authService.userData.user_name + ' hat #' + this.channelService.currentChannelData.channelName + ' verlassen.'
     await this.messageService.newMessage()
+  }
+
+  closeRedirectAddMember() {
+    this.dialogRef.close(true);
   }
 }

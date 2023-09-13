@@ -92,6 +92,15 @@ export class HeaderChannelDirectChatComponent {
     this.dialogEditChannelRef.afterClosed().subscribe(() => {
       this.isEditChannelDialogOpen = false;
     });
+
+    this.dialogEditChannelRef.afterClosed().subscribe((closedWithRedirection: boolean) => {
+      if (closedWithRedirection && this.windowWidth < 1000) {
+        this.dialogEditChannelRef = null;
+        this.addMemberMobile();
+      }
+
+      this.isEditChannelDialogOpen = false;
+    });
   }
 
 

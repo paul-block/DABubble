@@ -241,6 +241,10 @@ section {
   .p-20 {
     padding-top: 0px;
   }
+
+  .min-height-name {
+    min-height: 100px;
+  }
 }
 
 .members {
@@ -268,6 +272,14 @@ section {
     }
   }
 }
+
+@media (max-width: 500px) {
+  .leave-channel {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
 
 .channel-members {
   display: flex;
