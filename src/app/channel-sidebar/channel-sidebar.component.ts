@@ -120,7 +120,12 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   openAddChannelDialog() {
     const dialogConfig = new MatDialogConfig();
+    if (window.innerWidth <= 1000){
+      dialogConfig.panelClass = 'mobile-add-channel-dialog';
+    } 
+    else {
     dialogConfig.panelClass = 'add-channel-dialog';
+  }
     this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
     this.addChannelOpen = true;
     this.addChannelRef.afterClosed().subscribe(() => {

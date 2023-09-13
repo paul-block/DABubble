@@ -13,27 +13,26 @@ $slide-transition: all ease-in-out 250ms;
 }
 
 .thread {
-  display: none;
   height: 100%;
   background-color: white;
-  width: 25%;
+  width: 0%;
 }
 
 .open_thread {
   min-width: 350px;
   animation: slide_in 250ms ease-in-out;
-  display: block;
-}
-
-.close_thread {
-  animation: slide_out 250ms ease-in-out;
+  width: 25%;
 }
 
 .chat-interaction {
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  margin: 0px 25px;
+  margin: 0px 25px 0 25px;
+}
+
+.margin{
+  margin-right: 0;
 }
 
 .box {
@@ -136,13 +135,13 @@ $slide-transition: all ease-in-out 250ms;
   0% {
     width: 25%;
     transform: translateX(0%);
-    display: block;
+  
   }
 
   100% {
     transform: translateX(150%);
     width: 0;
-    display: none;
+    
   }
 }
 
@@ -211,8 +210,8 @@ $slide-transition: all ease-in-out 250ms;
   }
 
   .mobile_chat {
-    visibility: hidden; 
-    opacity: 0;            
+    visibility: hidden;
+    opacity: 0;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
     z-index: 12;
     box-sizing: border-box;
@@ -224,9 +223,23 @@ $slide-transition: all ease-in-out 250ms;
   }
 
   .open_main_chat {
-    visibility: visible;    
-    opacity: 1;              
+    visibility: visible;
+    opacity: 1;
     animation: slide_in 0.3s ease-in-out;
     overflow: hidden;
+  }
+
+  .thread {
+    top: 0;
+    z-index: 13;
+    position: absolute;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateX(100%);
+  }
+
+  .open_thread {
+    transform: translateX(0%);
   }
 }

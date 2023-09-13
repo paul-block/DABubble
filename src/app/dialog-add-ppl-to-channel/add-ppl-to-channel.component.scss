@@ -1,7 +1,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 600px;
   max-height: 350px;
   background-color: white;
   border-radius: 30px;
@@ -142,6 +141,62 @@
   border-radius: 100%;
   border: 2px solid white;
 }
+
+#user-exists {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: red;
+}
+
+@media (max-width: 1000px) {
+
+  .container {
+    gap: 25px !important;
+
+      button {
+        padding: 10px 20px !important;
+        z-index: 999;
+      }
+
+      .absolute {
+        width: fit-content !important;
+        padding: 0 !important;
+        overflow: unset !important;
+        overflow-y: scroll !important;
+        max-height: 90px !important;
+
+          .selected-user {
+            padding: 0 !important;
+            gap: 10px !important;
+          }
+      }
+}
+
+.autocomplete-container {
+  height: 110px;
+  overflow-y: scroll;
+  bottom: 100px !important;
+  left: 50px !important;
+  z-index: 999;
+  }
+
+  #user-exists {
+    top: 25px !important;
+    right: 70px !important;
+  }
+}
+
+@media (max-width: 374px) {
+    .container {
+      width: 300px !important;
+    }
+
+    .selected-user {
+      gap: 0px !important;
+    }
+}
+
 
 
 

@@ -1,5 +1,5 @@
-@import './assets/fonts/nunito.css';
-@import '@ctrl/ngx-emoji-mart/picker';
+@import "./assets/fonts/nunito.css";
+@import "@ctrl/ngx-emoji-mart/picker";
 
 $hover-background-color: #eceefe;
 $hover-text-color: #535af1;
@@ -8,24 +8,24 @@ $button-border-radius: 25px;
 $button-padding: 12px 25px;
 
 .d_none {
-    display: none !important;
+  display: none !important;
 }
 
 .d_block {
-    display: block !important;
+  display: block !important;
 }
 
 .d_flex {
-    display: flex !important;
+  display: flex !important;
 }
 
 html,
 body {
-    height: 100%;
-    margin: 0;
-    font-family: 'Nunito', sans-serif !important;
-    background-color: #ECEEFE;
-    overflow: hidden !important;
+  height: 100%;
+  margin: 0;
+  font-family: "Nunito", sans-serif !important;
+  background-color: #eceefe;
+  overflow: hidden !important;
 }
 
 h1,
@@ -36,29 +36,29 @@ h5,
 h6,
 button,
 textarea {
-    font-family: 'Nunito', sans-serif !important;
+  font-family: "Nunito", sans-serif !important;
 }
 
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {
-    scrollbar-width: auto;
-    scrollbar-color: #ADB0D9 white;
+  scrollbar-width: auto;
+  scrollbar-color: #adb0d9 white;
 }
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-    width: 4px;
+  width: 4px;
 }
 
 *::-webkit-scrollbar-track {
-    background: white;
+  background: white;
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #ADB0D9;
-    // border-radius: 10px;
-    border: 3px none #ffffff;
+  background-color: #adb0d9;
+  // border-radius: 10px;
+  border: 3px none #ffffff;
 }
 
 .mat-body,
@@ -66,218 +66,234 @@ textarea {
 .mat-typography .mat-body,
 .mat-typography .mat-body-2,
 .mat-typography {
-    line-height: unset;
+  line-height: unset;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .custom-edit-channel-dialog {
-    .mat-mdc-dialog-container .mdc-dialog__surface {
-        border-radius: 0px 30px 30px 30px !important;
-        box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
-    }
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 0px 30px 30px 30px !important;
+    box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
+  }
 }
 
 .custom-edit-members-dialog {
-    .mat-mdc-dialog-container .mdc-dialog__surface {
-        border-radius: 30px 0px 30px 30px !important;
-        box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
-    }
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 30px 0px 30px 30px !important;
+    box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
+  }
 }
 
 .mobile-profile-menu-dialog {
-    .mat-mdc-dialog-container .mdc-dialog__surface {
-        border-radius: 30px 30px 0px 0px !important;
-    }
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 30px 30px 0px 0px !important;
+  }
+}
+
+.mobile-add-channel-dialog {
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 0px 0px 0px 0px !important;
+  }
 }
 
 .add-channel-dialog {
-    .mat-mdc-dialog-container .mdc-dialog__surface {
-        border-radius: 30px 30px 30px 30px !important;
-        box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
-    }
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 30px 30px 30px 30px !important;
+    box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
+  }
 }
 
 .custom-open-profile-menu-dialog {
-    .mat-mdc-dialog-container .mdc-dialog__surface {
-        border-radius: 30px 0px 30px 30px !important;
-        box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
-    }
+  .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 30px 0px 30px 30px !important;
+    box-shadow: 0px 6px 14px 0px rgba($color: #000000, $alpha: 0.2);
+  }
 }
 
 .br-20 {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 .default {
-    cursor: default;
+  cursor: default;
 }
 
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mat-mdc-dialog-container {
-
-    .mdc-dialog__surface {
-        border-radius: 20px !important;
-        overflow: hidden;
-    }
+  .mdc-dialog__surface {
+    border-radius: 20px !important;
+    overflow: hidden;
+  }
 }
 
 input[type="file"] {
-    display: none;
+  display: none;
 }
 
 .highlighted {
-    background-color: yellow;
-    cursor: pointer;
-    color: black;
-    border-radius: 3px;
+  background-color: yellow;
+  cursor: pointer;
+  color: black;
+  border-radius: 3px;
 }
 
 .deleted {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 // buttons
 
 button {
-    font-weight: 700;
-    font-size: 18px;
-    border: 1px solid transparent;
+  font-weight: 700;
+  font-size: 18px;
+  border: 1px solid transparent;
 }
 
 .primary-button {
-    transition: $hover-transition;
-    background-color: #444DF2;
-    cursor: pointer;
-    color: white;
-    border-radius: $button-border-radius;
-    padding: $button-padding;
+  transition: $hover-transition;
+  background-color: #444df2;
+  cursor: pointer;
+  color: white;
+  border-radius: $button-border-radius;
+  padding: $button-padding;
 
-    &:hover {
-        background-color: #797EF3;
-    }
+  &:hover {
+    background-color: #797ef3;
+  }
 
-    &:active {
-        background-color: #444DF2;
-    }
+  &:active {
+    background-color: #444df2;
+  }
 
-    &:disabled {
-        background-color: #686868;
-        cursor: default;
-    }
+  &:disabled {
+    background-color: #686868;
+    cursor: default;
+  }
 }
 
 .primary-button-red {
-    transition: $hover-transition;
+  transition: $hover-transition;
+  background-color: red;
+  cursor: pointer;
+  color: white;
+  border-radius: $button-border-radius;
+  padding: $button-padding;
+
+  &:hover {
+    background-color: rgb(255, 79, 79);
+  }
+
+  &:active {
     background-color: red;
-    cursor: pointer;
-    color: white;
-    border-radius: $button-border-radius;
-    padding: $button-padding;
+  }
 
-    &:hover {
-        background-color: rgb(255, 79, 79);
-    }
-
-    &:active {
-        background-color: red;
-    }
-
-    &:disabled {
-        background-color: #686868;
-        cursor: default;
-    }
+  &:disabled {
+    background-color: #686868;
+    cursor: default;
+  }
 }
 
 .secondary-button {
-    transition: $hover-transition;
+  transition: $hover-transition;
+  background-color: white;
+  border: 1px solid #444df2;
+  cursor: pointer;
+  color: #444df2;
+  border-radius: $button-border-radius;
+  padding: $button-padding;
+
+  &:hover {
+    color: white;
+    background-color: $hover-text-color;
+    border: 1px solid transparent;
+  }
+
+  &:active {
+    background-color: #444df2;
+    color: white;
+  }
+
+  &:disabled {
+    color: #686868;
+    border: 1px solid #686868;
     background-color: white;
-    border: 1px solid #444DF2;
-    cursor: pointer;
-    color: #444DF2;
-    border-radius: $button-border-radius;
-    padding: $button-padding;
-
-    &:hover {
-        color: white;
-        background-color: $hover-text-color;
-        border: 1px solid transparent;
-    }
-
-    &:active {
-        background-color: #444DF2;
-        color: white;
-    }
-
-    &:disabled {
-        color: #686868;
-        border: 1px solid #686868;
-        background-color: white;
-        cursor: default;
-    }
+    cursor: default;
+  }
 }
 
 .secondary-button-red {
-    transition: $hover-transition;
+  transition: $hover-transition;
+  background-color: white;
+  border: 1px solid red;
+  cursor: pointer;
+  color: red;
+  border-radius: $button-border-radius;
+  padding: $button-padding;
+
+  &:hover {
+    color: white;
+    background-color: rgb(255, 79, 79);
+    border: 1px solid transparent;
+  }
+
+  &:active {
+    background-color: red;
+    color: white;
+  }
+
+  &:disabled {
+    color: #686868;
+    border: 1px solid #686868;
     background-color: white;
-    border: 1px solid red;
-    cursor: pointer;
-    color: red;
-    border-radius: $button-border-radius;
-    padding: $button-padding;
-
-    &:hover {
-        color: white;
-        background-color: rgb(255, 79, 79);
-        border: 1px solid transparent;
-    }
-
-    &:active {
-        background-color: red;
-        color: white;
-    }
-
-    &:disabled {
-        color: #686868;
-        border: 1px solid #686868;
-        background-color: white;
-        cursor: default;
-    }
+    cursor: default;
+  }
 }
 
 .close-dialog {
-    cursor: pointer;
-    border-radius: 100%;
-    padding: 5px;
-    transition: $hover-transition;
+  cursor: pointer;
+  border-radius: 100%;
+  padding: 5px;
+  transition: $hover-transition;
 
-    &:hover {
-        background-color: $hover-background-color;
-        color: $hover-text-color;
-        transition: $hover-transition;
-        font-weight: 600;
-    }
+  &:hover {
+    background-color: $hover-background-color;
+    color: $hover-text-color;
+    transition: $hover-transition;
+    font-weight: 600;
+  }
+}
+
+.delete_comment {
+  width: 550px;
 }
 
 @media (max-width: 1000px) {
-    .cdk-overlay-pane {
-        width: 100vw !important;
-        max-width: 100vw !important;
-    }
+  .cdk-overlay-pane {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
 
-    .custom-edit-channel-dialog {
-        .mat-mdc-dialog-container .mdc-dialog__surface {
-            border-radius: unset !important;
-            box-shadow: unset !important;
-        }
+  .custom-edit-channel-dialog {
+    .mat-mdc-dialog-container .mdc-dialog__surface {
+      border-radius: unset !important;
+      box-shadow: unset !important;
     }
+  }
 
+  .edit_comment {
+    margin: 0 20px;
+  }
+
+  .delete_comment {
+    margin: 0 20px;
+  }
 }

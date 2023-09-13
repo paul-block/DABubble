@@ -1,4 +1,4 @@
-<div class="content">
+
     <header>
         <div class="header_content">
             <div class="channel">
@@ -287,7 +287,7 @@
         <!-----------------------------------------------------------------Textarea----------------------------------------------------------------------------------------->
 
         <div class="type_message">
-            <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
+            <div [class.show_edit_comment]="open_attachment_menu" class="add_data">
                 <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
                 <label class="menu_button" for="fileInput">Datei anhängen</label>
             </div>
@@ -307,7 +307,7 @@
 
             <!------------------------------------------------------------------Emoji-->
             <div class="z_index">
-                <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
+                <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker_textarea"  
                     (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
             </div>
 
@@ -331,4 +331,3 @@
                 class="send_button" src="/assets/img/icons/send (1).png" (click)="postComment()">
         </div>
     </div>
-</div>

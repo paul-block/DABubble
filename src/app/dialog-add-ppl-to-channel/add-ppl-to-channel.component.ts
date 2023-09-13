@@ -23,6 +23,7 @@ export class AddPplToChannelComponent implements OnInit {
   public selectedOptionControl = new FormControl('all');
 
   showSelectedUsers = false;
+  userExists = false;
 
   filteredUsers: any[] = [];
   selectedUser: any[]  = [];
@@ -50,16 +51,39 @@ export class AddPplToChannelComponent implements OnInit {
     )
     .subscribe(users => {
       this.filteredUsers = users;
+      if (this.searchControl.value === '') this.userExists = false;
     });
+
+    this.selectedOptionControl.valueChanges.subscribe((value) => {
+      if (window.innerWidth <= 1000) {
+       if (value === 'certain') {
+          this.dialogRef.updateSize('100vw', '350px');  
+      } else {
+          this.dialogRef.updateSize('100vw', '250px');  
+      }
+    }
+  });
   }
 
 
-  addUser(user: object) {
-    this.selectedUser.push(user);
-    this.showSelectedUsers = true;
-    this.searchControl.setValue('');
-  }
+  // addUser(user: object) {
+  //   this.selectedUser.push(user);
+  //   this.showSelectedUsers = true;
+  //   this.searchControl.setValue('');
+  // }
 
+  addUser(user) {
+    const userExists = this.selectedUser.some(existingUser => existingUser.user_name === user.user_name); 
+  
+    if (!userExists) {
+      this.selectedUser.push(user);
+      this.showSelectedUsers = true;
+      this.searchControl.setValue('');
+    } else {
+      console.log("User bereits im Array vorhanden!");
+      this.userExists = true;
+    }
+  }
 
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.authService.usersWithoutCurrentuser();
