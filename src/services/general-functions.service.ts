@@ -27,4 +27,12 @@ export class GeneralFunctionsService {
     }
     return id;
   }
+
+  isMobileWidth() {
+    return window.innerWidth <= 1000;
+  }
+
+  isDesktopWidth() {
+    return window.innerWidth > 1000;
+  }
 }

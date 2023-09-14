@@ -214,10 +214,15 @@ section {
   display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1280px) {
   section {
     max-width: unset;
     width: unset;
+  }
+}
+
+@media (max-width: 1000px) {
+  section {
     overflow: auto;
     max-height: calc(100vh - 154px);
     padding-top: 20px !important;

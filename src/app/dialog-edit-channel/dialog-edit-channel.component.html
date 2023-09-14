@@ -23,7 +23,7 @@
     </div>
     <div class="edit-channel-name" *ngIf="editName">
       <mat-icon>tag</mat-icon>
-      <input [placeholder]="channelName" [(ngModel)]="channelName" type="text">
+      <input [placeholder]="channelName" [(ngModel)]="channelName" maxlength="12" type="text">
     </div>
 
     <div *ngIf="!editName">
