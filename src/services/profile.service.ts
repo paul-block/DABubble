@@ -33,6 +33,10 @@ export class ProfileService {
       if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
       else {
         const dialogConfig = new MatDialogConfig();
+        if (window.innerWidth <= 1000) {
+          dialogConfig.width = '90vw';
+          dialogConfig.maxWidth = '90vw';
+        } 
         dialogConfig.panelClass = 'add-channel-dialog';
         dialogConfig.data = { user: this.authService.getUserInfo(uid) };
         this.dialog.open(DialogProfileComponent, dialogConfig);

@@ -34,7 +34,7 @@ export class DesktopHeaderComponent {
       dialogConfig.position = {
         bottom: `0px`
       }
-      dialogConfig.width = '100%';
+      dialogConfig.width = '100vw';
       dialogConfig.maxWidth = '100vw';
       dialogConfig.panelClass = 'mobile-profile-menu-dialog';
     } else {
