@@ -1,8 +1,6 @@
 $hover-background-color: #eceefe;
 $hover-text-color: #535af1;
 
-
-
 header {
   box-sizing: border-box;
   display: flex;
@@ -44,16 +42,19 @@ header {
   display: none;
   z-index: 20;
   position: absolute;
-  left: -12px;
+  left: 0px;
   top: -10px;
+  width: 100%;
 }
 
-.emoji_picker_textarea {
+.emoji_picker_above{
   display: none;
   z-index: 20;
   position: absolute;
-  left: -12;
+  left: 0;
   bottom: 150px;
+  width: 100%;
+  top: unset;
 }
 
 .d_block {
@@ -189,7 +190,8 @@ header {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
+        brightness(97%) contrast(94%);
     }
   }
 }
@@ -303,7 +305,8 @@ header {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
+        brightness(97%) contrast(94%);
     }
   }
 }
@@ -446,7 +449,8 @@ header {
   cursor: pointer;
 
   &:hover {
-    filter: invert(53%) sepia(23%) saturate(5121%) hue-rotate(213deg) brightness(100%) contrast(91%);
+    filter: invert(53%) sepia(23%) saturate(5121%) hue-rotate(213deg)
+      brightness(100%) contrast(91%);
   }
 }
 
@@ -474,7 +478,8 @@ textarea {
 
 .inactive {
   pointer-events: none;
-  filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%) contrast(94%);
+  filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%)
+    contrast(94%);
 }
 
 .mat-tooltip {
@@ -692,7 +697,6 @@ textarea {
 }
 
 @media (max-width: 1280px) {
-
   .reaction_emojy_user {
     left: 15px;
   }

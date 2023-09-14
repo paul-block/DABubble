@@ -11,6 +11,7 @@ export class EmojiService {
   picker_reaction_bar: boolean = false;
   openPickerBelow: boolean = false;
   checkMarkManualEvent: any =
+  
     {
       "emoji": {
         "name": "White Heavy Check Mark",
@@ -233,9 +234,12 @@ export class EmojiService {
 
 
   decidePopupOpenAboveOrBelow(emojiPopup: ElementRef<any>, container: { top: number; }) {
+    const viewportHeight = window.innerHeight;
+    console.log(viewportHeight);
+    
     const emojiPopupRect = emojiPopup.nativeElement.getBoundingClientRect();
     const emojiPickerHeight = 427;
-    if (emojiPopupRect.top - emojiPickerHeight < container.top) this.openPickerBelow = true;
+    if (emojiPopupRect.top - emojiPickerHeight < container.top || emojiPopupRect.top - emojiPickerHeight > viewportHeight) this.openPickerBelow = true;
     else this.openPickerBelow = false;
   }
 
