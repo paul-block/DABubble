@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';
@@ -23,9 +23,9 @@ import { GeneralFunctionsService } from 'services/general-functions.service';
 export class ThreadComponent implements OnInit {
 
 
-
+  @ViewChildren('comment') comments: QueryList<ElementRef>;
+  @ViewChild('type_message') textarea!: ElementRef;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
-  @ViewChild('picker', { static: false }) picker: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ' '
@@ -44,6 +44,7 @@ export class ThreadComponent implements OnInit {
   uploadProgress: number = 0;
   selectedEmoji: string
   emojiPicker_open: boolean = false;
+  show_picker_above: boolean
 
 
   constructor(
@@ -61,9 +62,6 @@ export class ThreadComponent implements OnInit {
   ) { }
 
 
-
-
-
   async ngOnInit(): Promise<void> {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
@@ -76,7 +74,19 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  openEmojiPicker(i: number) {
+  openEmojiPicker(i: number, section: string) {
+    this.show_picker_above = false
+    const textAreaRect = this.textarea.nativeElement.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    if (textAreaRect.bottom > viewportHeight - 427 && section == 'textarea') this.show_picker_above = true
+    if (this.comments && section === 'comment') {
+      let ArrayEmojiMessagePopupsRef = [];
+      this.comments.forEach((popupRef) => {
+        ArrayEmojiMessagePopupsRef.push(popupRef);
+      });
+      let commentRect = ArrayEmojiMessagePopupsRef[i].nativeElement.getBoundingClientRect();
+      if (commentRect.top > viewportHeight - 427 ) this.show_picker_above = true;
+    }
     this.picker_index = i
     this.emojiPicker_open = true
   }
