@@ -1,4 +1,7 @@
 $slide-transition: all ease-in-out 250ms;
+$hover-background-color: #eceefe;
+$hover-text-color: #535af1;
+$hover-transition: all ease-in-out 125ms;
 
 .placeholder-top {
   height: 120px;
@@ -31,7 +34,7 @@ $slide-transition: all ease-in-out 250ms;
   margin: 0px 25px 0 25px;
 }
 
-.margin{
+.margin {
   margin-right: 0;
 }
 
@@ -84,6 +87,30 @@ $slide-transition: all ease-in-out 250ms;
     font-size: 18px;
     user-select: none;
   }
+
+  &:hover path {
+    stroke: $hover-text-color;
+    transition: $hover-transition;
+    font-weight: 700;
+  }
+
+  &:hover span {
+    color: $hover-text-color;
+    stroke: $hover-text-color;
+    transition: $hover-transition;
+    font-weight: 700;
+  }
+
+  &:hover rect {
+    stroke: $hover-text-color;
+    transition: $hover-transition;
+    font-weight: 700;
+  }
+
+  svg {
+    transform: rotate(90deg);
+  }
+
 }
 
 .select-none {
@@ -135,13 +162,13 @@ $slide-transition: all ease-in-out 250ms;
   0% {
     width: 25%;
     transform: translateX(0%);
-  
+
   }
 
   100% {
     transform: translateX(150%);
     width: 0;
-    
+
   }
 }
 

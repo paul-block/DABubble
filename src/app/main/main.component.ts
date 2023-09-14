@@ -13,6 +13,7 @@ export class MainComponent {
   open_thread: boolean;
   sidebarVisible: boolean = true;
   timeoutSidebarHide: boolean = false;
+  toggleSidebarMenuText: string = 'Workspace-Menü schließen';
 
   constructor(
     public chatService: ChatService,
@@ -31,11 +32,17 @@ export class MainComponent {
       setTimeout(() => {
         this.timeoutSidebarHide = true;
       }, 300);
+      this.changeText('Workspace-Menü öffnen');
     } else {
       this.timeoutSidebarHide = false;
       setTimeout(() => {
         this.sidebarVisible = true;
       }, 10);
+      this.changeText('Workspace-Menü schließen');
     }
+  }
+
+  changeText(text) {
+    this.toggleSidebarMenuText = text;
   }
 }
