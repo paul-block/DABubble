@@ -1,5 +1,5 @@
 import { Injectable, } from '@angular/core';
-import { doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
+import { deleteDoc, doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -130,6 +130,12 @@ export class FirestoreThreadDataService {
         await setDoc(docRef, thread_data);
       }
     });
+  }
+
+
+  async deletThread() {
+    const docRef = doc(this.db, 'threads', this.current_message_id);
+    await deleteDoc(docRef);
   }
 
 
