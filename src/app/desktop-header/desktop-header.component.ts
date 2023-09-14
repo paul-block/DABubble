@@ -30,7 +30,7 @@ export class DesktopHeaderComponent {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
 
-    if (window.innerWidth <= 1000) {
+    if (this.genFuncService.isMobileWidth()) {
       dialogConfig.position = {
         bottom: `0px`
       }
