@@ -28,7 +28,7 @@ export class ThreadComponent implements OnInit {
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
   emoji_exist: boolean;
   react_user: string = 'test'
-  comment_value: string = ' '
+  comment_value: string = ''
   picker_index: number
   response: string = 'Antwort'
   channel_message = {
@@ -45,6 +45,7 @@ export class ThreadComponent implements OnInit {
   selectedEmoji: string
   emojiPicker_open: boolean = false;
   show_picker_above: boolean
+  regex = /[^\n]/;
 
 
   constructor(
@@ -85,7 +86,7 @@ export class ThreadComponent implements OnInit {
         ArrayEmojiMessagePopupsRef.push(popupRef);
       });
       let commentRect = ArrayEmojiMessagePopupsRef[i].nativeElement.getBoundingClientRect();
-      if (commentRect.top > viewportHeight - 427 ) this.show_picker_above = true;
+      if (commentRect.top > viewportHeight - 427) this.show_picker_above = true;
     }
     this.picker_index = i
     this.emojiPicker_open = true
@@ -124,7 +125,7 @@ export class ThreadComponent implements OnInit {
 
   async postComment() {
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
-    if (this.comment_value.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
+    if (this.comment_value.length > 0 && !this.checkComment(this.comment_value) || this.uploadService.upload_array.file_name.length > 0) {
       let time_stamp = new Date()
       let comment_data = {
         comment: this.comment_value,
@@ -141,6 +142,12 @@ export class ThreadComponent implements OnInit {
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     }
+  }
+
+
+  checkComment(text: string) {
+    const cleanedStr = text.replace(/\s/g, '');
+    return cleanedStr === '';
   }
 
 
@@ -228,15 +235,24 @@ export class ThreadComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result || result == '') {
-        this.fsDataThreadService.comments.splice(i, 1)
-        this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
-        this.fsDataThreadService.updateData()
-        if (this.checkIfLastAnswer()) {
-          this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
-          this.chatService.thread_open = false
-        }
+        if (this.checkIfLastAnswer()) this.deleteThread()
+        else this.updateThread(i)
       }
     });
+  }
+
+
+  deleteThread() {
+    this.msgService.deleteMessage(this.fsDataThreadService.direct_chat_index, this.fsDataThreadService.current_chat_data)
+    this.fsDataThreadService.deletThread()
+    this.chatService.thread_open = false
+  }
+
+
+  updateThread(i:number) {
+    this.fsDataThreadService.comments.splice(i, 1)
+          this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
+          this.fsDataThreadService.updateData()
   }
 
 
