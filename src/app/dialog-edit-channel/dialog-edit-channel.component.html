@@ -19,7 +19,9 @@
     [ngClass]="{'edit-container-channel-name-description':editName}">
     <div class="space-between">
       <h2>Channel-Name</h2>
-      <span class="edit-text" (click)="changeEditText('name')">{{ editChannelName }}</span>
+      <span class="edit-text hide-mobile" (click)="changeEditText('name')">{{ editChannelName }}</span>
+      <mat-icon class="hide-big-screen material-icons-outlined edit-icons"
+        (click)="changeEditText('name')">{{ editChannelNameMobile }}</mat-icon>
     </div>
     <div class="edit-channel-name" *ngIf="editName">
       <mat-icon>tag</mat-icon>
@@ -37,7 +39,9 @@
     <ng-container *ngIf="!delete_Channel && !leave_Channel">
       <div class="space-between">
         <h2>Beschreibung</h2>
-        <span class="edit-text" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
+        <span class="edit-text hide-mobile" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
+        <mat-icon class="hide-big-screen material-icons-outlined edit-icons"
+          (click)="changeEditText('description')">{{ editChannelDescriptionMobile }}</mat-icon>
       </div>
       <span *ngIf="!editDescription" class="channel-description">{{ chatService.currentChatData.description }}</span>
       <input class="edit-channel-description" *ngIf="editDescription" type="text" [placeholder]="channelDescription"

@@ -17,6 +17,8 @@ import { UploadService } from 'services/upload.service';
 export class DialogEditChannelComponent implements OnInit {
   editChannelName: string = 'Bearbeiten';
   editChannelDescription: string = 'Bearbeiten';
+  editChannelNameMobile: string = 'edit';
+  editChannelDescriptionMobile: string = 'edit';
   editChannelUsers: boolean = false;
   editName: boolean = false;
   editDescription: boolean = false;
@@ -95,15 +97,20 @@ export class DialogEditChannelComponent implements OnInit {
       this.editName = !this.editName;
       if (this.editName) {
         this.editChannelName = 'Speichern';
+        this.editChannelNameMobile = 'check_circle'
       } else {
         this.editChannelName = 'Bearbeiten';
+        this.editChannelNameMobile = 'edit'
       }
     } else if (section === 'description') {
       this.editDescription = !this.editDescription;
       if (this.editDescription) {
         this.editChannelDescription = 'Speichern';
+        this.editChannelDescriptionMobile = 'check_circle'
       } else {
         this.editChannelDescription = 'Bearbeiten';
+        this.editChannelDescriptionMobile = 'edit'
+
       }
     }
   }

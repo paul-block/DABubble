@@ -163,6 +163,14 @@ section {
   }
 }
 
+.edit-icons {
+  cursor: pointer;
+  font-weight: 500;
+  background-color: $hover-background-color;
+  border-radius: 100%;
+  padding: 5px;
+}
+
 .space-between {
   justify-content: space-between;
 }
