@@ -327,7 +327,7 @@
                             (click)="genFunctService.stopPropagation($event)"></div>
                 </div>
             </div>
-            <img [class.inactive]="comment_value.length < 1 && uploadService.upload_array.file_name.length == 0"
+            <img [class.inactive]="comment_value.length == '' && uploadService.upload_array.file_name.length == 0"
                 class="send_button" src="/assets/img/icons/send (1).png" (click)="postComment()">
         </div>
     </div>
