@@ -1,15 +1,21 @@
-<div *ngIf="!fsDataThreadService.detailsVisible && !detailsVisible" id="menu-container">
-    <span (click)="toggleDetails()">Profil</span>
-    <span (click)="signOut()">Log out</span>
+<div *ngIf="!fsDataThreadService.detailsVisible && !detailsVisible && !editAvatarVisible" id="menu-container">
+    <div class="profile_logout" (click)="toggleDetails()">
+        <img src="assets/img/icons/account_circle.png" alt="">
+        <span >Profil</span>
+    </div>
+    <div class="profile_logout" (click)="signOut()">
+        <img src="assets/img/icons/logout.png" alt="">
+        <span >Log out</span>
+    </div>
 </div>
 
-<div id="mobile-menu-container" *ngIf="!fsDataThreadService.detailsVisible && !detailsVisible">
+<div id="mobile-menu-container" *ngIf="!fsDataThreadService.detailsVisible && !detailsVisible && !editAvatarVisible">
     <div id="rectangle"></div>
-    <div (click)="toggleDetails()">
+    <div style="cursor: pointer;" (click)="toggleDetails()">
         <img src="assets/img/icons/account_circle.png" alt="">
         <span>Profil</span>
     </div>
-    <div (click)="signOut()">
+    <div (click)="signOut()" style="cursor: pointer;">
         <img src="assets/img/icons/logout.png" alt="">
         <span>
             Log out
