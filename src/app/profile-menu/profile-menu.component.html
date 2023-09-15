@@ -1,9 +1,9 @@
-<div *ngIf="!fsDataThreadService.detailsVisible" id="menu-container">
+<div *ngIf="!fsDataThreadService.detailsVisible && !detailsVisible" id="menu-container">
     <span (click)="toggleDetails()">Profil</span>
     <span (click)="signOut()">Log out</span>
 </div>
 
-<div id="mobile-menu-container">
+<div id="mobile-menu-container" *ngIf="!fsDataThreadService.detailsVisible && !detailsVisible">
     <div id="rectangle"></div>
     <div (click)="toggleDetails()">
         <img src="assets/img/icons/account_circle.png" alt="">

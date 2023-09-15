@@ -12,7 +12,7 @@ import { ChannelService } from 'services/channel.service';
 export class AddChannelComponent {
 
 
-  error:boolean = false
+  error: boolean = false
   addPPlRef: MatDialogRef<AddPplToChannelComponent>;
   addPplOpen: boolean = false;
 
@@ -24,26 +24,18 @@ export class AddChannelComponent {
   constructor(
     public dialog: MatDialog,
     public channelService: ChannelService
-    ) {}
+  ) { }
 
   closeDialog() {
     this.dialog.closeAll();
-  } 
+  }
 
   openAddPplToChannel() {
     const channelName = this.form.controls['channel-name'].value;
     const description = this.form.controls['description'].value;
-  
     const dialogConfig = new MatDialogConfig();
-    if (window.innerWidth <= 1000) {
-      dialogConfig.position = {
-        bottom: `0px`
-    }
-      dialogConfig.height = '250px';
-      dialogConfig.panelClass = 'mobile-profile-menu-dialog';
-    } else {
-      dialogConfig.panelClass = 'add-channel-dialog';
-    }
+    dialogConfig.width = '710px'
+    dialogConfig.panelClass = 'dialog-add-people';
     dialogConfig.data = { channelName: channelName, description: description };
     this.dialog.closeAll();
     this.addPPlRef = this.dialog.open(AddPplToChannelComponent, dialogConfig);
@@ -51,7 +43,7 @@ export class AddChannelComponent {
     this.addPPlRef.afterClosed().subscribe(() => {
       this.addPplOpen = false;
     });
-  } 
+  }
 
   checkIfChannelNameExist() {
     let channelName = this.form.controls['channel-name'].value;
