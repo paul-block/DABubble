@@ -118,7 +118,6 @@ export class ChannelDirectSendMessageComponent {
 
 
   async openChat(chat) {
-    debugger
     if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.chatService.currentChatID !== chat.chat_ID) {
       this.chatService.currentChatSection = 'chats';
@@ -146,4 +145,20 @@ export class ChannelDirectSendMessageComponent {
       }
     }
   }
+
+
+  noChatSelected() {
+    return this.chatService.currentChatID === 'noChatSelected';
+  }
+
+
+  messageEmpty() {
+    return this.msgService.messageText.length === 0;
+  }
+
+
+  noFileSelected() {
+    return this.uploadService.upload_array.file_name.length === 0;
+  }
+
 }

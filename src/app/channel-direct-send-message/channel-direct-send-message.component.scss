@@ -12,6 +12,7 @@ $hover-transition: all ease-in-out 125ms;
     flex-direction: column;
     border: 1px solid #adb0d9;
 
+
     &:hover {
         border: 1px solid #797EF3;
     }
@@ -21,6 +22,7 @@ $hover-transition: all ease-in-out 125ms;
         font-size: 18px;
         border: none;
         resize: none;
+        background-color: white;
     }
 
     textarea:focus {
@@ -46,10 +48,7 @@ $hover-transition: all ease-in-out 125ms;
     background-color: white;
     border: none;
 
-
-
     mat-icon {
-
         color: #686868;
     }
 
@@ -73,20 +72,39 @@ $hover-transition: all ease-in-out 125ms;
     color: #686868;
     position: relative;
 
-    &:hover mat-icon {
-        color: black;
-    }
+    // &:hover mat-icon {
+    //     color: black;
+    // }
 
-    mat-icon {
+    button {
         border-radius: 100%;
         padding: 8px;
         cursor: pointer;
         transition: $hover-transition;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
 
         &:hover {
             background-color: $hover-background-color;
+            transition: $hover-transition;
+        }
+
+        &:hover mat-icon {
             color: $hover-text-color;
             transition: $hover-transition;
+        }
+
+        &:disabled {
+            &:hover {
+                background-color: white;
+                cursor: default;
+            }
+
+            &:hover mat-icon {
+                color: #1010104D;
+            }
         }
     }
 }
@@ -262,6 +280,10 @@ $hover-transition: all ease-in-out 125ms;
 .file_image {
     width: 40px;
     z-index: 1;
+}
+
+.add-attachment {
+    background-color: white;
 }
 
 @media (max-width: 1280px) {
