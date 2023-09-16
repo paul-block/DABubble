@@ -179,6 +179,7 @@ $slide-transition: all ease-in-out 250ms;
     opacity: 1;
     animation: slide_in 0.3s ease-in-out;
     overflow: hidden;
+    padding-bottom: 10px;
   }
 
   .thread {
