@@ -82,7 +82,7 @@ export class FirestoreThreadDataService {
 
 
   openDirectChatThread(i: number) {
-    if (this.window_width < 1200  && this.window_width > 1000)  {
+    if (this.window_width < 1300  && this.window_width > 1000)  {
       console.log(this.window_width);
       
       if(this.chatService.sidebarVisible) this.chatService.sidebarVisible = false
