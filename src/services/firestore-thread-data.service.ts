@@ -1,12 +1,11 @@
-import { Injectable, } from '@angular/core';
+import { HostListener, Injectable, OnInit, } from '@angular/core';
 import { deleteDoc, doc, getDocs, onSnapshot, setDoc, updateDoc } from '@angular/fire/firestore';
 import { getFirestore, collection } from "firebase/firestore";
 import { AuthenticationService } from './authentication.service';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { ChatService } from './chat.service';
 import { MessagesService } from './messages.service';
-import { Observable, Subscription, catchError, finalize } from 'rxjs';
-import { of } from 'rxjs';
+import { Subscription } from 'rxjs';
+
 
 
 
@@ -33,6 +32,7 @@ export class FirestoreThreadDataService {
   current_chat_data: any;
   direct_chat_index: number;
   current_channelname: any;
+  window_width = window.innerWidth
 
 
 
@@ -82,6 +82,7 @@ export class FirestoreThreadDataService {
 
 
   openDirectChatThread(i: number) {
+    if (this.window_width < 1200 && this.chatService.sidebarVisible)  this.chatService.sidebarVisible = false
     this.chatService.thread_open = true
     this.current_channelname = this.chatService.currentChatData.channelName
     this.current_chat_data = this.chatService.directChatMessages[i]

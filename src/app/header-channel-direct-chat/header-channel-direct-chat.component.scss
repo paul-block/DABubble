@@ -223,18 +223,17 @@ h1 {
             font-size: 20px;
         }
     }
-
-    .already-members {
-        visibility: hidden;
-    }
-
-    .already-members-avatars {
-        display: none;
-    }
 }
 
 @media (max-width: 1280px) {
     header {
         padding: 25px 15px;
+    }
+}
+
+@media (max-width: 1000px) {
+
+    .already-members {
+        visibility: hidden;
     }
 }

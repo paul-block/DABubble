@@ -49,103 +49,61 @@ export class HeaderChannelDirectChatComponent {
 
   editChannel() {
     if (this.windowWidth > 1000) {
-      this.openEditChannel();
+      this.genFunctService.isMobileScreen = false;
+      this.openEditChannel()
     } else if (this.windowWidth < 1000) {
-      this.openEditChannelMobile();
+      this.genFunctService.isMobileScreen = true;
+      this.openEditChannel()
     }
   }
 
+
   openEditChannel() {
-    const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.position = {
-      top: `${rect.bottom}px`,
-      left: `${rect.left}px`,
-    };
     dialogConfig.panelClass = 'custom-edit-channel-dialog';
-
     this.dialogEditChannelRef = this.dialog.open(DialogEditChannelComponent, dialogConfig);
     this.isEditChannelDialogOpen = true;
-
     this.dialogEditChannelRef.afterClosed().subscribe(() => {
-      this.isEditChannelDialogOpen = false;
-    });
-  }
-
-  openEditChannelMobile() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.position = {
-      top: `100px`,
-      left: `0px`
-    };
-    dialogConfig.width = '100%';
-    dialogConfig.maxWidth = '100vw';
-    dialogConfig.height = '100vh';
-    dialogConfig.panelClass = 'custom-edit-channel-dialog';
-
-    this.dialogEditChannelRef = this.dialog.open(DialogEditChannelComponent, dialogConfig);
-    this.isEditChannelDialogOpen = true;
-    this.genFunctService.isMobileScreen = true;
-
-    this.dialogEditChannelRef.afterClosed().subscribe(() => {
-      this.isEditChannelDialogOpen = false;
-    });
-
-    this.dialogEditChannelRef.afterClosed().subscribe((closedWithRedirection: boolean) => {
-      if (closedWithRedirection && this.windowWidth < 1000) {
-        this.dialogEditChannelRef = null;
-        this.addMemberMobile();
-      }
       this.isEditChannelDialogOpen = false;
     });
   }
 
 
   editMembers() {
-
     const dialogConfig = new MatDialogConfig();
-
-    if (this.windowWidth > 1000) {
-      const rect = this.ElementEditMembersRef.nativeElement.getBoundingClientRect();
-      dialogConfig.position = {
-        top: `${rect.bottom}px`,
-        left: `${rect.right - 420}px`,
-      };
-    } else if (this.windowWidth <= 1000) {
-      const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
-      dialogConfig.position = {
-        top: `${rect.bottom}px`,
-        left: `${rect.left - 320 + 44}px`,
-      };
-    }
-
     dialogConfig.panelClass = 'custom-edit-members-dialog';
     this.dialogEditMembersRef = this.dialog.open(DialogEditMembersComponent, dialogConfig);
     this.isEditMembersDialogOpen = true;
     this.dialogEditMembersRef.afterClosed().subscribe((closedWithRedirection: boolean) => {
-      if (closedWithRedirection && this.windowWidth > 1500) {
+      if (closedWithRedirection && window.innerWidth > 1000) { 
         this.dialogEditMembersRef = null;
         this.addMembers();
-      } else if (closedWithRedirection && this.windowWidth < 1500) {
-        this.dialogEditMembersRef = null;
-        this.addMemberMobile();
       }
-
+      if (closedWithRedirection && window.innerWidth < 1000) {
+        this.dialogEditMembersRef = null;
+        this.addMembersMobile();
+      }
       this.isEditMembersDialogOpen = false;
     });
   }
 
 
-  addMembers() {
-    if (this.windowWidth > 1500) {
+  addMembersMobile() {
       const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.position = {
-        top: `${rect.bottom}px`,
-        left: `${rect.right - 520}px`,
-      };
+      dialogConfig.panelClass = 'custom-add-members-dialog';
+      this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
+      this.isAddMembersDialogOpen = true;
+      this.dialogAddMembersRef.afterClosed().subscribe(() => {
+        this.isAddMembersDialogOpen = false;
+      });
+  }
+
+
+  addMembers() {
+    if (this.windowWidth > 1000) {
+      const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
+      const dialogConfig = new MatDialogConfig();
       dialogConfig.panelClass = 'custom-add-members-dialog';
       this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
       this.isAddMembersDialogOpen = true;
@@ -154,23 +112,6 @@ export class HeaderChannelDirectChatComponent {
       });
     }
     else this.editMembers()
-  }
-
-
-  addMemberMobile() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = {
-      bottom: `0px`,
-      left: `0px`,
-    };
-    dialogConfig.width = '100%';
-    dialogConfig.maxWidth = '100vw';
-    dialogConfig.panelClass = 'custom-add-members-dialog';
-    this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
-    this.isAddMembersDialogOpen = true;
-    this.dialogAddMembersRef.afterClosed().subscribe(() => {
-      this.isAddMembersDialogOpen = false;
-    });
   }
 
 

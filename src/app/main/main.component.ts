@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { ChatService } from 'services/chat.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
@@ -11,8 +11,8 @@ import { MessagesService } from 'services/messages.service';
 })
 export class MainComponent {
   open_thread: boolean;
-  sidebarVisible: boolean = true;
-  timeoutSidebarHide: boolean = false;
+  windowWidth: number;
+ 
 
   constructor(
     public chatService: ChatService,
@@ -21,21 +21,26 @@ export class MainComponent {
     public messageService: MessagesService
   ) { }
 
+
+  ngOnInit(): void {
+    this.windowWidth = window.innerWidth;
+    
+    
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    console.log(this.windowWidth);
+    this.windowWidth = window.innerWidth;
+   if(this.windowWidth < 1200 && this.chatService.thread_open == true) this.chatService.sidebarVisible = false;
+    
+  }
+
   setVariable(value: boolean) {
     this.open_thread = value;
   }
 
-  toggleSidebar() {
-    if (this.sidebarVisible) {
-      this.sidebarVisible = false;
-      setTimeout(() => {
-        this.timeoutSidebarHide = true;
-      }, 300);
-    } else {
-      this.timeoutSidebarHide = false;
-      setTimeout(() => {
-        this.sidebarVisible = true;
-      }, 10);
-    }
-  }
+
+
+  
 }
