@@ -161,9 +161,8 @@ $slide-transition: all ease-in-out 250ms;
   }
 
   .mobile_chat {
+    display: none;
     z-index: -1;
-    visibility: hidden;
-    opacity: 0;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
     box-sizing: border-box;
     position: absolute;
@@ -174,27 +173,27 @@ $slide-transition: all ease-in-out 250ms;
   }
 
   .open_main_chat {
+    display: block;
     z-index: 12;
-    visibility: visible;
-    opacity: 1;
     animation: slide_in 0.3s ease-in-out;
     overflow: hidden;
     padding-bottom: 10px;
   }
 
   .thread {
+    display:none;
     top: 100px;
-    right: 0;
+    left: 0;
     z-index: -1;
     position: absolute;
     border-radius: 0;
-    width: 0;
     height: 100%;
   }
 
   .open_thread {
+    display: block;
     transition: 300ms;
-    left: 0;
+    animation: slide_in 0.3s ease-in-out;
     width: 100%;
     z-index: 13;
   }
