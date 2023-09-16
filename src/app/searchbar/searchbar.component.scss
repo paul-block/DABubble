@@ -119,3 +119,9 @@
 .d-none {
     display: none !important;
 }
+
+@media ( max-width: 1200px) {
+    input::placeholder {
+        font-size: 18px;
+    }
+}

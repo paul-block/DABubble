@@ -697,8 +697,12 @@ textarea {
   }
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1000px) {
   .reaction_emojy_user {
     left: 15px;
+  }
+
+  .thread_content {
+    padding-bottom: 215px
   }
 }

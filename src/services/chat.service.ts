@@ -13,7 +13,7 @@ import { GeneralFunctionsService } from './general-functions.service';
 export class ChatService {
 
   db = getFirestore();
-  open_chat:boolean = false
+  open_chat: boolean = false
   at_users: any
   currentChatSection = 'noChatSectionSelected';
   currentChatID: string = 'noChatSelected';
@@ -28,7 +28,9 @@ export class ChatService {
   thread_open: boolean = false
   openNewMsgComponent: boolean = false;
   directedFromProfileButton: boolean = false;
-
+  sidebarVisible: boolean = true;
+  timeoutSidebarHide: boolean = false;
+  toggleSidebarMenuText: string = 'Workspace-Menü schließen';
 
 
 
@@ -38,25 +40,6 @@ export class ChatService {
     public genFunctService: GeneralFunctionsService,
   ) { }
 
-
-  // async loadChats(): Promise<void> {
-  //   return new Promise<void>((resolve) => {
-  //     this.chats = [];
-  //     const querySnapshot = collection(this.db, 'chats');
-  //     onSnapshot(querySnapshot, (snapshot) => {
-  //       snapshot.docChanges().forEach((change) => {
-  //         const chatData = change.doc.data();
-  //         if (change.type === 'added' && this.isUserChat(chatData)) {
-  //           this.chats.push(chatData);
-  //         }
-  //       });
-  //       console.log(this.chats);
-
-  //       resolve();
-  //     });
-  //   });
-  // }
-
   async loadChats(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.chats = [];
@@ -64,14 +47,9 @@ export class ChatService {
       onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
-          const isDataAlreadyInChats = this.chats.some(chat => JSON.stringify(chat) === JSON.stringify(chatData));
-
-          if (change.type === 'added' && this.isUserChat(chatData) && !isDataAlreadyInChats) {
-            this.chats.push(chatData);
-          }
+          const isDataAlreadyInChats = this.chats.some(chat => JSON.stringify(chat) === JSON.stringify(chatData))
+          if (change.type === 'added' && this.isUserChat(chatData) && !isDataAlreadyInChats) this.chats.push(chatData);
         });
-        console.log(this.chats);
-
         resolve();
       });
     });
@@ -81,6 +59,7 @@ export class ChatService {
   isUserChat(chatData) {
     return chatData.chat_Member_IDs.includes(this.currentUser_id)
   }
+
 
   async initOwnChat() {
     const userID = this.currentUser_id;
@@ -306,7 +285,7 @@ export class ChatService {
 
 
   checkIfWordIsAnId(word: string) {
-    if ( word.includes('\n')) word = word.replace(/\n/, '');
+    if (word.includes('\n')) word = word.replace(/\n/, '');
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return true
     else return false
@@ -323,5 +302,36 @@ export class ChatService {
   checkForBreak(word: string) {
     if (word.includes('\n')) return true
     else return false
+  }
+
+  toggleSidebar() {
+    if (window.innerWidth < 1200 && this.thread_open == true) this.thread_open = false
+    if (this.sidebarVisible) {
+      this.sidebarVisible = false;
+      this.changeText('Workspace-Menü öffnen');
+    } else {
+      this.sidebarVisible = true
+      this.changeText('Workspace-Menü schließen');
+    }
+  }
+
+  // toggleSidebar() {
+  //   if (this.sidebarVisible) {
+  //     this.sidebarVisible = false;
+  //     setTimeout(() => {
+  //       this.timeoutSidebarHide = true;
+  //     }, 300);
+  //     this.changeText('Workspace-Menü öffnen');
+  //   } else {
+  //     this.timeoutSidebarHide = false;
+  //     setTimeout(() => {
+  //       this.sidebarVisible = true;
+  //     }, 10);
+  //     this.changeText('Workspace-Menü schließen');
+  //   }
+  // }
+
+  changeText(text) {
+    this.toggleSidebarMenuText = text;
   }
 }

@@ -33,11 +33,7 @@ export class ProfileService {
       if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
       else {
         const dialogConfig = new MatDialogConfig();
-        if (window.innerWidth <= 1000) {
-          dialogConfig.width = '90vw';
-          dialogConfig.maxWidth = '90vw';
-        } 
-        dialogConfig.panelClass = 'add-channel-dialog';
+        dialogConfig.panelClass = 'dialog_profile';
         dialogConfig.data = { user: this.authService.getUserInfo(uid) };
         this.dialog.open(DialogProfileComponent, dialogConfig);
       }
@@ -54,11 +50,7 @@ export class ProfileService {
 
   openCurrentUserDetails() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = {
-      top: '80',
-      right: '25'
-    };
-    dialogConfig.panelClass = 'custom-edit-channel-dialog';
+    dialogConfig.panelClass = 'dialog_user_profile';
     this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
     this.fsDataThreadService.detailsVisible = true
     this.profileMenuRef.afterClosed().subscribe(() => {

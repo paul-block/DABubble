@@ -58,5 +58,6 @@ export class DesktopHeaderComponent {
   closeChat() {
     this.genFuncService.changeMobileLogo = false;
     this.chatService.open_chat = false
+    this.chatService.thread_open = false
   }
 }

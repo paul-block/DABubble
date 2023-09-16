@@ -129,7 +129,7 @@ input {
     }
 }
 
-.button_div {
+.button_div_sign_in {
     display: flex;
     gap: 30px;
 }
@@ -383,7 +383,7 @@ input {
 @media screen and (max-height: 950px) {
 
     .signin_div {
-        gap: 23px;
+        gap: 15px;
         margin-top: 16px;
         p {
             font-size: 16px;
@@ -392,6 +392,15 @@ input {
 
     .headline {
         font-size: 30px;
+    }
+
+    .google_button {
+        height: 50px;
+    }
+
+    .button_div_sign_in {
+        display: flex;
+        gap: 15px;
     }
 
 }
@@ -428,4 +437,6 @@ input {
         top: 50px;
         font-size: 10px;
     }
+
+   
 }

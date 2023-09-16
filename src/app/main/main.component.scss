@@ -16,22 +16,21 @@ $hover-transition: all ease-in-out 125ms;
 }
 
 .thread {
+  transition: 300ms;
   height: 100%;
   background-color: white;
   width: 0%;
 }
 
 .open_thread {
-  min-width: 350px;
-  animation: slide_in 250ms ease-in-out;
-  width: 25%;
+  width: 350px;
 }
 
 .chat-interaction {
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  margin: 0px 25px 0 25px;
+  margin: 0px 25px 0 0px;
 }
 
 .margin {
@@ -117,40 +116,19 @@ $hover-transition: all ease-in-out 125ms;
   user-select: none;
 }
 
-.hide-sidebar {
-  display: none;
-}
-
-.show-sidebar {
-  flex-basis: 400px;
-  width: 400px;
-  min-width: 400px;
-  overflow: hidden;
-  visibility: hidden;
-  transition: $slide-transition;
-}
-
 .slideout-sidebar {
-  transition: $slide-transition;
-  flex-basis: 0px;
-  min-width: 0px;
-  width: 0px;
-  overflow: hidden;
-  visibility: hidden;
+  width: 0;
 }
 
 .slidein-sidebar {
   transition: $slide-transition;
-  flex-basis: 400px;
-  min-width: 400px;
   width: 400px;
-  overflow: visible;
-  visibility: visible;
+  margin-left: 25px;
 }
 
 @keyframes slide_in {
   0% {
-    transform: translateX(150%);
+    transform: translateX(-100%);
   }
 
   100% {
@@ -160,42 +138,11 @@ $hover-transition: all ease-in-out 125ms;
 
 @keyframes slide_out {
   0% {
-    width: 25%;
     transform: translateX(0%);
-
   }
 
   100% {
-    transform: translateX(150%);
-    width: 0;
-
-  }
-}
-
-@media (max-width: 1280px) {
-  .show-sidebar {
-    flex-basis: 300px;
-    width: 300px;
-    min-width: 300px;
-  }
-
-  .slidein-sidebar {
-    flex-basis: 300px;
-    min-width: 300px;
-    width: 300px;
-  }
-
-  .box-small {
-    flex-basis: 300px;
-  }
-
-  .chat-interaction {
-    gap: 10px;
-    margin: 0px 10px;
-  }
-
-  .container-styling {
-    height: calc(100vh - 90px - 25px);
+    transform: translateX(-100%);
   }
 }
 
@@ -231,47 +178,50 @@ $hover-transition: all ease-in-out 125ms;
     display: none;
   }
 
+  .slidein-sidebar {
+    margin: 0;
+  }
+
   .chat-interaction {
     margin: 0;
     height: calc(100% - 100px);
   }
 
   .mobile_chat {
-    visibility: hidden;
-    opacity: 0;
+    display: none;
+    z-index: -1;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-    z-index: 12;
     box-sizing: border-box;
     position: absolute;
     left: 0;
     border-radius: 0;
     height: calc(100vh - 90px - 10px);
-    width: 100%;
+    width: 100vw;
   }
 
   .open_main_chat {
-    visibility: visible;
-    opacity: 1;
+    display: block;
+    z-index: 12;
     animation: slide_in 0.3s ease-in-out;
     overflow: hidden;
+    padding-bottom: 10px;
   }
 
   .thread {
-    top: 0;
-    z-index: 13;
+    display:none;
+    top: 100px;
+    left: 0;
+    z-index: -1;
     position: absolute;
     border-radius: 0;
-    width: 100%;
     height: 100%;
-    transform: translateX(100%);
-    // visibility: hidden;
-    // opacity: 0;
   }
 
   .open_thread {
-    animation: slide_in 250ms ease-in-out;
-    transform: translateX(0%);
-    // visibility: visible;
-    // opacity: 1;
+    display: block;
+    transition: 300ms;
+    animation: slide_in 0.3s ease-in-out;
+    width: 100%;
+    z-index: 13;
   }
 }
