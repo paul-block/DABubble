@@ -90,10 +90,7 @@ export class ChatService {
         }
       });
     }
-    if (!chatExists) {
-      await this.newChat(userID);
-      console.log('ownChatGenerated');
-    }
+    if (!chatExists) await this.newChat(userID);
   }
 
   async searchChat(userReceiverID): Promise<string | null> {

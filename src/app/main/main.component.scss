@@ -20,7 +20,8 @@ $slide-transition: all ease-in-out 250ms;
 }
 
 .open_thread {
-  width: 350px;
+  min-width: 350px;
+  width: 30%;
 }
 
 .chat-interaction {

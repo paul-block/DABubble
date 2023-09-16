@@ -104,6 +104,7 @@ export class AuthenticationService {
         })
       this.signUp_successful = true
       setTimeout(() => this.signUp_successful = false, 3000);
+      this.channelService.loadStandardChannel()
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         this.email_error = true

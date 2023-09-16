@@ -51,7 +51,7 @@ header {
   display: none;
   z-index: 20;
   position: absolute;
-  left: 0;
+  left: -10px;
   bottom: 150px;
   width: 100%;
   top: unset;
@@ -704,5 +704,9 @@ textarea {
 
   .thread_content {
     padding-bottom: 215px
+  }
+
+  .emoji_picker_above {
+    bottom: -50px;
   }
 }
