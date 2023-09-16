@@ -209,6 +209,7 @@ $hover-transition: all ease-in-out 125ms;
   }
 
   .thread {
+    min-width: unset;
     display:none;
     top: 100px;
     left: 0;
