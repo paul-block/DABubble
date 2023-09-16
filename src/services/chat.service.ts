@@ -30,7 +30,7 @@ export class ChatService {
   directedFromProfileButton: boolean = false;
   sidebarVisible: boolean = true;
   timeoutSidebarHide: boolean = false;
-
+  toggleSidebarMenuText: string = 'Workspace-Menü schließen';
 
 
 
@@ -39,25 +39,6 @@ export class ChatService {
     public channelService: ChannelService,
     public genFunctService: GeneralFunctionsService,
   ) { }
-
-
-  // async loadChats(): Promise<void> {
-  //   return new Promise<void>((resolve) => {
-  //     this.chats = [];
-  //     const querySnapshot = collection(this.db, 'chats');
-  //     onSnapshot(querySnapshot, (snapshot) => {
-  //       snapshot.docChanges().forEach((change) => {
-  //         const chatData = change.doc.data();
-  //         if (change.type === 'added' && this.isUserChat(chatData)) {
-  //           this.chats.push(chatData);
-  //         }
-  //       });
-  //       console.log(this.chats);
-
-  //       resolve();
-  //     });
-  //   });
-  // }
 
   async loadChats(): Promise<void> {
     return new Promise<void>((resolve) => {
@@ -322,7 +303,32 @@ export class ChatService {
 
   toggleSidebar() {
     if (window.innerWidth < 1200 && this.thread_open == true) this.thread_open = false
-    if (this.sidebarVisible) this.sidebarVisible = false;
-    else this.sidebarVisible = true
+    if (this.sidebarVisible) {
+      this.sidebarVisible = false;
+      this.changeText('Workspace-Menü öffnen');
+    } else {
+      this.sidebarVisible = true
+      this.changeText('Workspace-Menü schließen');
+    }
+  }
+
+  // toggleSidebar() {
+  //   if (this.sidebarVisible) {
+  //     this.sidebarVisible = false;
+  //     setTimeout(() => {
+  //       this.timeoutSidebarHide = true;
+  //     }, 300);
+  //     this.changeText('Workspace-Menü öffnen');
+  //   } else {
+  //     this.timeoutSidebarHide = false;
+  //     setTimeout(() => {
+  //       this.sidebarVisible = true;
+  //     }, 10);
+  //     this.changeText('Workspace-Menü schließen');
+  //   }
+  // }
+
+  changeText(text) {
+    this.toggleSidebarMenuText = text;
   }
 }

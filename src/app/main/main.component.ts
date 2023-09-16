@@ -24,8 +24,6 @@ export class MainComponent {
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
-    
-    
   }
 
   @HostListener('window:resize', ['$event'])
@@ -39,8 +37,4 @@ export class MainComponent {
   setVariable(value: boolean) {
     this.open_thread = value;
   }
-
-
-
-  
 }
