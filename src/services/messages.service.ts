@@ -185,7 +185,6 @@ export class MessagesService {
 
 
   async deleteMessage(i: number, chatMessage) {
-    console.log(chatMessage);
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
     try {

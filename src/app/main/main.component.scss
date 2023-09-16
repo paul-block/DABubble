@@ -23,7 +23,8 @@ $hover-transition: all ease-in-out 125ms;
 }
 
 .open_thread {
-  width: 350px;
+  min-width: 400px;
+  width: 30%;
 }
 
 .chat-interaction {
@@ -208,6 +209,7 @@ $hover-transition: all ease-in-out 125ms;
   }
 
   .thread {
+    min-width: unset;
     display:none;
     top: 100px;
     left: 0;

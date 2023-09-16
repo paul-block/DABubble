@@ -71,10 +71,7 @@ export class ChatService {
         }
       });
     }
-    if (!chatExists) {
-      await this.newChat(userID);
-      console.log('ownChatGenerated');
-    }
+    if (!chatExists) await this.newChat(userID);
   }
 
   async searchChat(userReceiverID): Promise<string | null> {
@@ -305,7 +302,7 @@ export class ChatService {
   }
 
   toggleSidebar() {
-    if (window.innerWidth < 1200 && this.thread_open == true) this.thread_open = false
+    if (window.innerWidth < 1300 && this.thread_open == true) this.thread_open = false
     if (this.sidebarVisible) {
       this.sidebarVisible = false;
       this.changeText('Workspace-Menü öffnen');
