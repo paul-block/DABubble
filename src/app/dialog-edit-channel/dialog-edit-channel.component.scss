@@ -289,6 +289,10 @@ section {
     flex-direction: column;
     gap: 15px;
   }
+
+  .min-height-description {
+    min-height: unset;
+  }
 }
 
 
@@ -357,4 +361,6 @@ section {
     font-weight: 400;
     font-size: 18px;
   }
+
+
 }

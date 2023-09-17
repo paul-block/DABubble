@@ -69,8 +69,8 @@ app-empty-chat-placeholder {
 .chat-message {
   display: flex;
   gap: 25px;
-  padding: 10px 0px;
-  width: calc(100% - 100px);
+  padding: 10px 15px;
+  width: calc(100% - 30px);
   transition: $hover-transition;
   position: relative;
 
@@ -323,7 +323,7 @@ app-empty-chat-placeholder {
   span {
     cursor: pointer;
     padding: 10px 20px;
-    white-space: nowrap;
+    white-space: wrap;
     font-size: 20px;
     font-weight: 500;
     border-radius: 100px;
@@ -540,6 +540,11 @@ app-empty-chat-placeholder {
   }
 
   .chat-message-text {
+    flex-wrap: wrap;
+    display: flex;
+    gap: 5px;
+    max-width: 300px;
+
     span {
       max-width: 200px;
       word-wrap: break-word;
@@ -558,25 +563,38 @@ app-empty-chat-placeholder {
 }
 
 @media (max-width: 1000px) {
+  .emoji_main {
+    max-width: 350px;
+    display: flex;
+    flex-wrap: wrap;
+  }
 
+  .edit-message {
+    right: 18px;
+    left: unset;
+    border-radius: 30px 0px 30px 30px;
+    padding: 10px 9px;
+  }
 
-    .edit-message {
-        right: 18px;
-        left: unset;
-        border-radius: 30px 0px 30px 30px;
-        padding: 10px 9px;
-    }
-
-    .chat-message {
-      gap: 10px;
-    }
+  .chat-message {
+    gap: 10px;
+  }
 }
 
 @media (max-width: 500px) {
 
   .chat-message {
-    width: calc(100% - 78px);
+    width: calc(100% - 20px);
+    padding: 0 10px;
+  }
+
+  .chat-message-text {
+    max-width: 200px;
+  }
+
+  .emoji_main {
+    max-width: 208px;
+    // display: flex;
+    // flex-wrap: wrap;
   }
 }
-
-
