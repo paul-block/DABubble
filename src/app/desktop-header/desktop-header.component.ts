@@ -51,13 +51,14 @@ export class DesktopHeaderComponent {
 
     this.profileMenuRef.afterClosed().subscribe(() => {
       this.profileMenuOpen = false;
-      this.fsDataThreadService.detailsVisible = false
+      this.fsDataThreadService.detailsVisible = false;
     });
   }
 
   closeChat() {
     this.genFuncService.changeMobileLogo = false;
-    this.chatService.open_chat = false
-    this.chatService.thread_open = false
+    this.chatService.open_chat = false;
+    this.chatService.thread_open = false;
+    this.chatService.currentChatID = '';
   }
 }

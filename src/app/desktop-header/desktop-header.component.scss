@@ -66,8 +66,7 @@ header {
   flex-grow: 1;
 }
 
-@media  (max-width: 1280px) {
-
+@media (max-width: 1280px) {
   #arrow {
     display: none;
   }
@@ -75,8 +74,12 @@ header {
   #dot {
     position: relative;
     svg {
-        right: 20px !important;
+      right: 20px !important;
     }
+  }
+
+  #name {
+    display: none;
   }
 
   // #profile {
@@ -85,6 +88,10 @@ header {
 
   header {
     margin: 0;
+    #profile {
+      position: absolute;
+      right: 0;
+    }
   }
 
   .box-small {
@@ -96,11 +103,9 @@ header {
   //   width: -webkit-fill-available;
   //   margin-left: 321px;
   // }
-
 }
 
-@media  (max-width: 1000px) {
-
+@media (max-width: 1000px) {
   #name {
     display: none;
   }
@@ -111,24 +116,24 @@ header {
     margin-left: 20px;
     cursor: pointer;
 
-      #mobile-logo {
-        height: 50px;
-        width: 50px;
-        margin-right: 10px;
-      }
+    #mobile-logo {
+      height: 50px;
+      width: 50px;
+      margin-right: 10px;
+    }
 
-      span {
-        font-weight: bold;
-        font-size: 20px;
-        width: max-content;
-      }
+    span {
+      font-weight: bold;
+      font-size: 20px;
+      width: max-content;
+    }
   }
 
-    #searchbar {
-        display: none;
-    }
+  #searchbar {
+    display: none;
+  }
 
-    #logo {
-      width: 175px !important;
-    }
+  #logo {
+    width: 175px !important;
+  }
 }

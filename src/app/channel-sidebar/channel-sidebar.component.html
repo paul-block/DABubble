@@ -108,7 +108,9 @@
         </div>
 
         <div class="dm-selection select-none" *ngIf="dmsVisible">
-            <div *ngFor="let chat of chatService.chats" class="dm-profile pointer" (click)="openChat(chat)">
+            <div *ngFor="let chat of chatService.chats"
+                [ngClass]="{'active-chat': chat.chat_ID === chatService.currentChatID}" class="dm-profile pointer"
+                (click)="openChat(chat)">
                 <img [src]="chatService.getChatReceiverUser(chat)?.avatar" alt="user avatar">
                 <span>{{chatService.getChatReceiverUser(chat)?.user_name}}{{ isCurrentUserChat(chat) ? ' (Du)' : ''
                     }}</span>
@@ -120,6 +122,6 @@
         </div>
     </div>
     <div class="new_message_button" (click)="sendNewMsg()">
-        <img src="/assets/img/icons/edit_square_white.png" >
+        <img src="/assets/img/icons/edit_square_white.png">
     </div>
 </div>
