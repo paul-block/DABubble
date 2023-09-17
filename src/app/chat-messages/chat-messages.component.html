@@ -123,12 +123,12 @@
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center">
                     <div class="answers">
-                        <div *ngIf="chatMessage.answers > 0">{{chatMessage.answers}}</div>
+                        <!-- <div *ngIf="chatMessage.answers > 0">{{chatMessage.answers}}</div> -->
                         <span *ngIf="chatMessage.answers == 0 || chatMessage.answers > 1"
                             class="chat-message-answers-amount"
-                            (click)="fsDataThreadService.openDirectChatThread(i)">Antworten</span>
+                            (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}} Antworten</span>
                         <span *ngIf="chatMessage.answers == 1" class="chat-message-answers-amount"
-                            (click)="fsDataThreadService.openDirectChatThread(i)">Antwort</span>
+                            (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}} Antwort</span>
                     </div>
                     <span *ngIf="chatMessage.answers > 0" class="last-message-time">Letze Antwort
                         {{fsDataThreadService.getTimeSince(chatMessage.last_answer)}}</span>
