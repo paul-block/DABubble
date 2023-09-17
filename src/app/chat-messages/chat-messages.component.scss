@@ -582,6 +582,34 @@ app-empty-chat-placeholder {
 }
 
 @media (max-width: 500px) {
+  .reaction-bar-emoji {
+    position: unset;
+  }
+
+  .emoji_picker_reaction-bar {
+    position: fixed;
+    top: calc((100% / 2) - (427px / 2));
+    left: calc((100% / 2) - (342px / 2));
+  }
+
+  .z_index {
+    position: unset;
+  }
+
+  .emoji_picker {
+    position: fixed;
+    top: calc((100% / 2) - (427px / 2));
+    left: calc(50% - (294px / 2));
+  }
+
+  .reaction-bar {
+    left: 10px;
+  }
+
+  .reaction-bar-sender {
+    right: 10px;
+    left: unset;
+  }
 
   .chat-message {
     width: calc(100% - 20px);
@@ -594,7 +622,17 @@ app-empty-chat-placeholder {
 
   .emoji_main {
     max-width: 208px;
-    // display: flex;
-    // flex-wrap: wrap;
+  }
+
+  .chat-message-answers-amount {
+    white-space: nowrap;
+  }
+
+  .container-answers {
+    max-width: 210px;
+  }
+
+  .emoji_picker_left {
+    right: -85px;
   }
 }

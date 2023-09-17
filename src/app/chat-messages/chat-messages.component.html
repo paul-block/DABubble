@@ -121,7 +121,7 @@
 
                 </div>
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
-                    class="gap-10 items-center">
+                    class="gap-10 items-center container-answers">
                     <div class="answers">
                         <span *ngIf="chatMessage.answers > 1"
                             class="chat-message-answers-amount"
