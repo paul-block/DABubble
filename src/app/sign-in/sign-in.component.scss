@@ -307,12 +307,12 @@ input {
         transform: translateY(+300%);
     }
 
-    20% {
+    10% {
         opacity: 1;
         transform: translateY(-10%);
     }
 
-    80% {
+    90% {
         opacity: 1;
         transform: translateY(-10%);
     }
@@ -409,7 +409,7 @@ input {
 
     input {
         height: 50px;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 
     .google_button {
@@ -436,6 +436,10 @@ input {
     .error {
         top: 50px;
         font-size: 10px;
+    }
+
+    .imprint {
+        margin-top: 10px;
     }
 
    
