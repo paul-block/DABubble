@@ -61,14 +61,19 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 
-  openChat(id: string, chatSection: string) {
+  async openChat(id: string, chatSection: string) {
     this.ensureChatSectionVisible();
     if (this.chatService.currentChatID !== id) {
       this.chatService.currentChatSection = chatSection;
       this.setCurrentID(id);
       try {
-        this.getCurrentData();
-      } catch(error) {
+        await this.getCurrentData();
+        console.log('test');
+
+
+        this.msgService.scrollToBottom()
+
+      } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }
     }
@@ -108,12 +113,14 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 
-  getCurrentData() {
+  async getCurrentData() {
     this.chatService.getCurrentChatData();
     this.chatService.textAreaMessageTo();
     if (this.chatService.currentChatSection == 'channels') this.channelService.loadCurrentChannel();
-    this.msgService.getMessages();
-    this.chatService.thread_open = false;
+    this.msgService.getMessages().then(() => {
+      this.chatService.thread_open = false;
+      this.msgService.scrollToBottom()
+    });
   }
 
 

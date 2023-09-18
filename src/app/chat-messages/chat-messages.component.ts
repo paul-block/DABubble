@@ -24,7 +24,7 @@ export class ChatMessagesComponent {
   toggleEditMessage: boolean = false;
   emojiPicker_open: boolean = false;
   picker_reaction_bar: boolean = false;
-  @ViewChild('ChatContainerREF') public ElementChatContainerRef: ElementRef;
+  @ViewChild('ChatContainerREF') public scrollContainer: ElementRef;
   @ViewChildren('emojiMessagePopupREF') ElementEmojiMessagePopupsRef: QueryList<ElementRef>;
   @ViewChildren('emojiPopupReactionBarREF') ElementEmojiPopupReactionBarRef: QueryList<ElementRef>;
   private scrollSubscription: Subscription;
@@ -48,7 +48,7 @@ export class ChatMessagesComponent {
 
   ngOnInit(): void {
     this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
-      this.scrollToBottom();
+      this.scrollDivToBottom();
     });
   }
 
@@ -60,10 +60,9 @@ export class ChatMessagesComponent {
   }
 
 
-  scrollToBottom() {
-    if (this.ElementChatContainerRef) {
-      this.ElementChatContainerRef.nativeElement.scrollTop = this.ElementChatContainerRef.nativeElement.scrollHeight;
-    }
+  scrollDivToBottom() {
+    const scrollContainerElement = this.scrollContainer.nativeElement;
+    scrollContainerElement.scrollTop = scrollContainerElement.scrollHeight;
   }
 
 

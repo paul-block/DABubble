@@ -89,30 +89,27 @@ export class MessagesService {
   }
 
 
-  async getMessages() {
-    if (this.chatSnapshotUnsubscribe) {
-      this.chatSnapshotUnsubscribe();
-    }
-    this.messagesLoaded = false;
-    this.emojiService.resetInitializedEmojiRef();
-    this.chatService.directChatMessages = [];
-
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
-    this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        const changedMessageData = change.doc.data();
-        if (change.type === 'added') {
-          this.chatService.directChatMessages.push(changedMessageData);
-        } else if (change.type === 'modified') {
-          this.getChangedMessage(changedMessageData);
-        } else if (change.type === 'removed') {
-          this.spliceMessage(changedMessageData);
-        }
+  async getMessages(): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      if (this.chatSnapshotUnsubscribe) this.chatSnapshotUnsubscribe();
+      this.messagesLoaded = false;
+      this.emojiService.resetInitializedEmojiRef();
+      this.chatService.directChatMessages = [];
+      const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+      const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
+      this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const changedMessageData = change.doc.data();
+          if (change.type === 'added') this.chatService.directChatMessages.push(changedMessageData);
+          else if (change.type === 'modified') this.getChangedMessage(changedMessageData);
+          else if (change.type === 'removed') this.spliceMessage(changedMessageData);
+        });
+        this.messagesLoaded = true;
+        resolve();
       });
-      this.messagesLoaded = true;
     });
   }
+
 
 
   async getChangedMessage(changedMessageData: DocumentData) {

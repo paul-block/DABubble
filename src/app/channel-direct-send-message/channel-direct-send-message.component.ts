@@ -82,20 +82,23 @@ export class ChannelDirectSendMessageComponent {
   }
 
   public async onSendClick() {
-    console.log(this.uploadService.upload_array.file_name);
     if (this.msgService.messageText.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
-
-
       if (this.chatService.openNewMsgComponent) {
         this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
         this.chatService.currentChatSection = 'chats';
         await this.uploadService.checkForUpload();
-        setTimeout(() => { this.msgService.newMessage(); }, 400);
+        setTimeout(async () => {
+          await this.msgService.newMessage();
+          this.msgService.scrollToBottom()
+        }, 400);
         setTimeout(() => this.uploadService.emptyUploadArray(), 500);
         this.chatService.userReceiverName = '';
       } else {
         await this.uploadService.checkForUpload();
-        setTimeout(() => { this.msgService.newMessage(); }, 400);
+        setTimeout(async () => {
+          await this.msgService.newMessage();
+          this.msgService.scrollToBottom()
+        }, 400);
         setTimeout(() => this.uploadService.emptyUploadArray(), 500);
       }
     }
