@@ -15,7 +15,7 @@
     </header>
 
 
-    <div *ngIf="chatService.thread_open" class="thread_content">
+    <div #ChatContainerREF *ngIf="chatService.thread_open" class="thread_content">
         <div class="message_div "
             [class.row_reverse]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
 

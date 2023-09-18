@@ -12,6 +12,7 @@ import { ReactionBubbleService } from 'services/reaction-bubble.service';
 import { ProfileService } from 'services/profile.service';
 import { ChannelService } from 'services/channel.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
+import { Subscription } from 'rxjs';
 
 
 
@@ -23,9 +24,11 @@ import { GeneralFunctionsService } from 'services/general-functions.service';
 export class ThreadComponent implements OnInit {
 
 
+  @ViewChild('ChatContainerREF') public scrollContainer: ElementRef;
   @ViewChildren('comment') comments: QueryList<ElementRef>;
   @ViewChild('type_message') textarea!: ElementRef;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
+  private scrollSubscription: Subscription;
   emoji_exist: boolean;
   react_user: string = 'test'
   comment_value: string = ''
@@ -67,6 +70,15 @@ export class ThreadComponent implements OnInit {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
     await this.getAllUsers()
+    this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
+      if (this.scrollContainer) this.scrollDivToBottom();
+    });
+  }
+
+
+  scrollDivToBottom() {
+    const scrollContainerElement = this.scrollContainer.nativeElement;
+    scrollContainerElement.scrollTop = scrollContainerElement.scrollHeight;
   }
 
 
@@ -136,7 +148,11 @@ export class ThreadComponent implements OnInit {
         text_edited: false,
         uploaded_files: this.uploadService.upload_array
       }
-      setTimeout(() => this.fsDataThreadService.saveThread(comment_data), 500);
+      setTimeout(() => {
+        this.fsDataThreadService.saveThread(comment_data),
+          this.msgService.scrollToBottom()
+        500
+      });
       this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
@@ -249,10 +265,10 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  updateThread(i:number) {
+  updateThread(i: number) {
     this.fsDataThreadService.comments.splice(i, 1)
-          this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
-          this.fsDataThreadService.updateData()
+    this.fsDataThreadService.fake_array.length = this.fsDataThreadService.comments.length
+    this.fsDataThreadService.updateData()
   }
 
 
