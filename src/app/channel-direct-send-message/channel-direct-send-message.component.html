@@ -12,9 +12,9 @@
 </div>
 
 <section class="write-new-message">
-    <textarea #messageTextarea name="" id="" cols="10" rows="2" [placeholder]="chatService.messageToPlaceholder" (keydown)="handleEnter($event)"
-        [(ngModel)]="msgService.messageText" 
-         (keyup.enter)="onSendClick()"></textarea>
+    <textarea [disabled]="noChatSelected()" #messageTextarea name="" id="" cols="10" rows="2"
+        [placeholder]="chatService.messageToPlaceholder" (keydown)="handleEnter($event)"
+        [(ngModel)]="msgService.messageText" (keyup.enter)="onSendClick()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
 
@@ -32,22 +32,24 @@
                 </div>
 
             </div>
-
-            <div class="plus" (click)="togglePopup('open_attachment_menu');">
-                <div class="hover"><mat-icon>add</mat-icon></div>
-            </div>
+            <button class="add-attachment" (click)="togglePopup('open_attachment_menu');" [disabled]="noChatSelected()">
+                <mat-icon>add</mat-icon>
+            </button>
 
             <div class="parting-line"></div>
-            <div class="z_index">
+            <button [disabled]="noChatSelected()"
+                (click)="togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(-2);" class="z_index emojiPicker">
                 <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2"
                     class="emoji_picker" (emojiClick)="addEmojitoTextarea($event);">
                 </emoji-mart>
-                <mat-icon (click)="togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(-2);">mood</mat-icon>
-            </div>
-            <mat-icon (click)="togglePopup('open_users')">alternate_email</mat-icon>
+                <mat-icon>mood</mat-icon>
+            </button>
+            <button [disabled]="noChatSelected()"
+                (click)="togglePopup('open_users')"><mat-icon>alternate_email</mat-icon></button>
+
         </div>
-        <button (click)="onSendClick()" [ngClass]="{'ready-to-send': msgService.messageText.length > 0 || uploadService.upload_array.file_name.length > 0}"
-            [disabled]="msgService.messageText.length == 0 && uploadService.upload_array.file_name.length == 0" class="send-message">
+        <button (click)="onSendClick()" [ngClass]="{'ready-to-send': !noFileSelected() || !messageEmpty()}"
+            [disabled]="noFileSelected() || messageEmpty()" class="send-message">
             <mat-icon>send</mat-icon>
         </button>
     </div>

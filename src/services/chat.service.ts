@@ -312,22 +312,6 @@ export class ChatService {
     }
   }
 
-  // toggleSidebar() {
-  //   if (this.sidebarVisible) {
-  //     this.sidebarVisible = false;
-  //     setTimeout(() => {
-  //       this.timeoutSidebarHide = true;
-  //     }, 300);
-  //     this.changeText('Workspace-Menü öffnen');
-  //   } else {
-  //     this.timeoutSidebarHide = false;
-  //     setTimeout(() => {
-  //       this.sidebarVisible = true;
-  //     }, 10);
-  //     this.changeText('Workspace-Menü schließen');
-  //   }
-  // }
-
   changeText(text) {
     this.toggleSidebarMenuText = text;
   }

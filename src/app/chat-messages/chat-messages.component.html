@@ -64,7 +64,7 @@
                 <!-- Emoji reaction direct right from emoji reactions -->
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="chat-message-details-reactions">
-                    <div class="z_index" *ngIf="!chatMessage?.message_deleted">
+                    <div class="z_index emojiPicker" *ngIf="!chatMessage?.message_deleted">
                         <svg #emojiMessagePopupREF
                             (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(i); "
                             width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -121,14 +121,13 @@
 
                 </div>
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
-                    class="gap-10 items-center">
+                    class="gap-10 items-center container-answers">
                     <div class="answers">
-                        <div *ngIf="chatMessage.answers > 0">{{chatMessage.answers}}</div>
-                        <span *ngIf="chatMessage.answers == 0 || chatMessage.answers > 1"
+                        <span *ngIf="chatMessage.answers > 1"
                             class="chat-message-answers-amount"
-                            (click)="fsDataThreadService.openDirectChatThread(i)">Antworten</span>
+                            (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}} Antworten</span>
                         <span *ngIf="chatMessage.answers == 1" class="chat-message-answers-amount"
-                            (click)="fsDataThreadService.openDirectChatThread(i)">Antwort</span>
+                            (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}} Antwort</span>
                     </div>
                     <span *ngIf="chatMessage.answers > 0" class="last-message-time">Letze Antwort
                         {{fsDataThreadService.getTimeSince(chatMessage.last_answer)}}</span>
@@ -141,7 +140,7 @@
                     (click)="addEmojiInMessage(emojiService.checkMarkManualEvent, i, chatMessage);">
                 <img src="/assets/img/icons/hands_up_emoji.svg"
                     (click)="addEmojiInMessage(emojiService.raisedHandsManualEvent, i, chatMessage);">
-                <div class="reaction-bar-emoji">
+                <div class="reaction-bar-emoji emojiPicker">
                     <svg #emojiPopupReactionBarREF
                         (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('picker_reaction_bar'); emojiService.openEmojiPicker(i);"
                         width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">

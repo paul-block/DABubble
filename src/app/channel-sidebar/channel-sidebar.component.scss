@@ -214,6 +214,18 @@
       overflow-y: scroll;
       overflow-x: hidden;
 
+      .active-chat {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #eceefe;
+        padding: 4px 20px;
+        color: #535af1;
+        font-weight: 700;
+        gap: 10px;
+        border-radius: 25px;
+      }
+
       .dm-profile {
         display: flex;
         align-items: center;
@@ -415,3 +427,4 @@
     gap: 15px !important;
   }
 }
+
