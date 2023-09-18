@@ -37,7 +37,8 @@ export class SignInComponent {
   }
 
   guestLogin() {
-    this.router.navigateByUrl('/main');
+    this.authenticationService.guestSignIn()
+    setTimeout(() => this.router.navigateByUrl('/main'), 1900);
   }
 
 

@@ -131,6 +131,21 @@ export class AuthenticationService {
   }
 
 
+  async guestSignIn() {
+    try {
+      const result = await this.afAuth
+        .signInWithEmailAndPassword('gast@gast.de', 'Amidala6%')
+      this.signIn_successful = true
+      this.setOnlineStatus('gast@gast.de', 'Aktiv')
+      setTimeout(() => this.signIn_successful = false, 3000);
+      this.channelService.loadStandardChannel()
+    } catch (error) {
+      this.signIn_error = true
+      setTimeout(() => this.signIn_error = false, 3000);
+    }
+  }
+
+
   async setOnlineStatus(email: string, status: string) {
     const user = this.all_users.find(element => element.email === email);
     const userRef = doc(this.db, 'users', user.uid);

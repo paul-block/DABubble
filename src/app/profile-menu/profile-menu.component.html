@@ -34,7 +34,7 @@
     <div class="middle-part">
         <div class="edit-container">
             <span id="name">{{ authService.userData.user_name }}</span>
-            <span id="edit" class="pointer" (click)="toggleEditDetails()">Bearbeiten</span>
+            <span *ngIf="authService.userData.uid !='plaeSD3H9uSglwCNTY5TwDQHb8u1'" id="edit" class="pointer" (click)="toggleEditDetails()">Bearbeiten</span>
         </div>
         <div class="status">
             <svg [ngClass]="{'offline': authService.userData.status === 'Abwesend'}" width="16" height="17"
@@ -47,7 +47,7 @@
     </div>
 
 
-    <div class="email-container">
+    <div *ngIf="authService.userData.uid !='plaeSD3H9uSglwCNTY5TwDQHb8u1'" class="email-container">
         <img src="assets/img/mail.png" alt="">
         <span id="email-headline">E-Mail-Adresse</span>
         <a id="email-address" href="mailto:{{ authService.userData.email }}">{{ authService.userData.email }}</a>
