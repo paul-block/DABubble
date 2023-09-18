@@ -235,8 +235,6 @@ export class EmojiService {
 
   decidePopupOpenAboveOrBelow(emojiPopup: ElementRef<any>, container: { top: number; }) {
     const viewportHeight = window.innerHeight;
-    console.log(viewportHeight);
-    
     const emojiPopupRect = emojiPopup.nativeElement.getBoundingClientRect();
     const emojiPickerHeight = 427;
     if (emojiPopupRect.top - emojiPickerHeight < container.top || emojiPopupRect.top - emojiPickerHeight > viewportHeight) this.openPickerBelow = true;

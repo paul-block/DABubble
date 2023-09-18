@@ -18,9 +18,6 @@ import { UploadService } from 'services/upload.service';
 })
 
 export class ChatMessagesComponent {
-
-
-  
   db = getFirestore();
   @Output() threadOpen = new EventEmitter<boolean>();
   messageCreator: boolean = false;
@@ -45,7 +42,7 @@ export class ChatMessagesComponent {
     public uploadService: UploadService,
     private elementRef: ElementRef,
     public genFunctService: GeneralFunctionsService,
-  ) {}
+  ) { }
 
 
 
@@ -71,14 +68,20 @@ export class ChatMessagesComponent {
 
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const emojipicker = target.closest('.emojiPicker');
+    if (!emojipicker) {
+      this.emojiService.picker_reaction_bar = false;
+      this.emojiService.emojiPicker_open = false;
+    }
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.toggleEditMessage = false;
       this.emojiService.picker_reaction_bar = false;
+
       if (this.emojiService.picker_index === -2) {
         this.emojiPicker_open = false;
       }
-
     }
   }
 
@@ -147,7 +150,8 @@ export class ChatMessagesComponent {
     this.threadOpen.emit(value)
   }
 
-  showPlaceholder(){
+
+  showPlaceholder() {
     return this.chatService.directChatMessages.length === 0 && this.chatService.currentChatSection === 'chats' && this.msgService.messagesLoaded;
   }
 }
