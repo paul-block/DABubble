@@ -68,11 +68,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       this.setCurrentID(id);
       try {
         await this.getCurrentData();
-        console.log('test');
-
-
-        this.msgService.scrollToBottom()
-
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }
