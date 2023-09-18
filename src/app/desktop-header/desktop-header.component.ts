@@ -1,10 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { ChatService } from 'services/chat.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
+import { ProfileService } from 'services/profile.service';
 
 @Component({
   selector: 'app-desktop-header',
@@ -23,13 +24,23 @@ export class DesktopHeaderComponent {
     public authService: AuthenticationService,
     public fsDataThreadService: FirestoreThreadDataService,
     public chatService: ChatService,
-    public genFuncService: GeneralFunctionsService) { }
+    public genFuncService: GeneralFunctionsService,
+    public profileService: ProfileService) { }
 
 
   openProfileMenu() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
+    this.checkMobileOrDesktopVersion(dialogConfig, rect);
+    this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
+    this.profileMenuOpen = true;
+    this.profileMenuRef.afterClosed().subscribe(() => {
+      this.profileMenuOpen = false;
+      this.fsDataThreadService.detailsVisible = false;
+    });
+  }
 
+  checkMobileOrDesktopVersion(dialogConfig, rect) {
     if (this.genFuncService.isMobileWidth()) {
       dialogConfig.position = {
         bottom: `0px`
@@ -44,15 +55,6 @@ export class DesktopHeaderComponent {
       };
       dialogConfig.panelClass = 'custom-open-profile-menu-dialog';
     }
-
-
-    this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
-    this.profileMenuOpen = true;
-
-    this.profileMenuRef.afterClosed().subscribe(() => {
-      this.profileMenuOpen = false;
-      this.fsDataThreadService.detailsVisible = false;
-    });
   }
 
   closeChat() {
