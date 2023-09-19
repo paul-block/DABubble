@@ -9,6 +9,7 @@ import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
+import { UploadService } from 'services/upload.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -39,6 +40,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
+    public uploadService: UploadService,
   ) {
     this.newChannelIdSubscription = this.channelService.createdChannelId$.subscribe((newId) => {
       this.currentChannelId = newId;
@@ -53,11 +55,26 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
+    if (this.authService.newUser) {
+      this.loadStartChannel()
+    }
   }
 
 
   ngOnDestroy() {
     if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
+  }
+
+
+  async loadStartChannel() {
+    this.authService.newUser = false
+    this.channelService.loadStandardChannel()
+    let user = this.authService.userData.user_name
+    await this.uploadService.checkForUpload()
+    this.msgService.messageText = user + ' ist #allgemein beigetreten.'
+    await this.msgService.newMessage().then(async () => {
+      this.msgService.getMessages()
+    })
   }
 
 

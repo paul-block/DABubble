@@ -34,8 +34,7 @@ export class ChooseAvatarComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.channelService.loadStandardChannel()
-
+    this.authService.newUser = true
   }
 
 
@@ -80,12 +79,6 @@ export class ChooseAvatarComponent implements OnInit {
 
 
   async goToMain() {
-    let user = this.authService.userData.user_name
-    await this.uploadService.checkForUpload()
-    this.messageService.messageText = user + ' ist #allgemein beigetreten.'
-    await this.messageService.newMessage()
-    this.channelService.loadStandardChannel();
-    await this.messageService.getMessages()
     this.router.navigateByUrl('/main');
   }
 }

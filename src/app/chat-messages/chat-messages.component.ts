@@ -149,8 +149,11 @@ export class ChatMessagesComponent {
   }
 
   checkForScroll() {
-    const divElement = this.scrollContainer.nativeElement;
-    if (divElement.scrollHeight > divElement.clientHeight) return true
+    if (this.scrollContainer) {
+      const divElement = this.scrollContainer.nativeElement;
+      if (divElement.scrollHeight > divElement.clientHeight) return true
+      else return false
+    }
     else return false
   }
 }

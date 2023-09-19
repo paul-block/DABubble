@@ -48,23 +48,25 @@ export class MessagesService {
   }
 
   async newMessage() {
-    let time_stamp = new Date();
-    const customMessageID = await this.genFunctService.generateCustomFirestoreID();
-
-    await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
-      chat_message: this.messageText,
-      user_Sender_ID: this.authService.userData.uid,
-      user_Sender_Name: this.authService.userData.user_name,
-      created_At: time_stamp,
-      chat_message_edited: false,
-      emoji_data: [],
-      modified_message: this.chatService.modifyMessageValue(this.messageText),
-      answers: 0,
-      last_answer: '',
-      uploaded_files: this.upload_array,
-      message_ID: customMessageID
-    }).then(() => {
-      this.messageText = '';
+    return new Promise<void>(async (resolve) => {
+      let time_stamp = new Date();
+      const customMessageID = await this.genFunctService.generateCustomFirestoreID();
+      await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
+        chat_message: this.messageText,
+        user_Sender_ID: this.authService.userData.uid,
+        user_Sender_Name: this.authService.userData.user_name,
+        created_At: time_stamp,
+        chat_message_edited: false,
+        emoji_data: [],
+        modified_message: this.chatService.modifyMessageValue(this.messageText),
+        answers: 0,
+        last_answer: '',
+        uploaded_files: this.upload_array,
+        message_ID: customMessageID
+      }).then(() => {
+        this.messageText = '';
+      });
+      resolve();
     });
   }
 

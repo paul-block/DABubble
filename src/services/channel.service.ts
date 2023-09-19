@@ -39,7 +39,6 @@ export class ChannelService {
       })
       this.channels = channels;
       this.loadCurrentChannel()
-
       const user = this.auth.currentUser;
       if (user !== null) {
          this.getAuthorizedChannels(user.uid);
