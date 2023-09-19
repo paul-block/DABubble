@@ -1,29 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-dialog-add-members',
-//   templateUrl: './dialog-add-members.component.html',
-//   styleUrls: ['./dialog-add-members.component.scss']
-// })
-// export class DialogAddMembersComponent {
-//   inputSearchUser: string = '';
-//   choosedUser: boolean = false;
-
-//   selectUser() {
-//     this.choosedUser = !this.choosedUser;
-//     this.inputSearchUser = '';
-//   }
-
-//   addNewMember() {
-//     console.log('newMemberAdded');
-//     this.choosedUser = false;
-//   }
-
-//   clearInputName(){
-//     console.log('clearInputName');
-//     this.choosedUser = false;
-//   }
-// }
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
@@ -40,11 +14,11 @@ import { UploadService } from 'services/upload.service';
 })
 export class DialogAddMembersComponent implements OnInit {
   inputSearchUser: string = '';
-  choosedUser: boolean = false;
+  userAlreadyAdded: boolean = false;
   selectedUsers = [];
   users: any[] = [];
   filteredUsers: any
-  currentChannel: string = '';
+  loading: boolean = true;
 
   constructor(
     private authService: AuthenticationService,
@@ -55,51 +29,51 @@ export class DialogAddMembersComponent implements OnInit {
     public uploadService: UploadService
   ) { }
 
+
   async ngOnInit(): Promise<void> {
-    this.users = await this.filterUserAllreadyAssigned()
+    this.users = await this.filterAlreadyAssignedUsers()
+    this.filterUsers()
+    this.loading = false;
   }
 
 
   filterUsers() {
+    this.userAlreadyAdded = false;
     if (this.inputSearchUser.length > 0) {
-      this.filteredUsers = this.users.filter(user =>
+        this.filteredUsers = this.users.filter(user =>
         user.user_name.toLowerCase().startsWith(this.inputSearchUser.toLowerCase())
       );
-    } else {
-      this.filteredUsers = this.users;
-      if (this.filteredUsers.length === 0) console.log('kein username gefunden');
-
-    }
+    } else this.filteredUsers = this.users;
   }
 
 
   selectUser(user) {
-    this.choosedUser = true;
-    this.inputSearchUser = user.user_name;
-    this.selectedUsers.push(user);
+    if (this.inputSearchUser.length > 0 && !this.selectedUsers.includes(user)) {
+      this.userAlreadyAdded = false;
+      this.selectedUsers.push(user);
+      this.inputSearchUser = '';
+    } else this.userAlreadyAdded = true;
   }
 
 
-  addNewMember() {
-    this.selectedUsers.forEach(user => {
-      this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, user.uid);
-      this.sendAddMemberMessage(user.user_name);
-    });
-    this.selectedUsers = [];
-    this.choosedUser = null;
+  async addNewMember() {
     this.inputSearchUser = '';
     this.dialogRef.close();
+    for (let user of this.selectedUsers) {
+      await this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, user.uid);
+      await this.sendAddMemberMessage(user.user_name);
+      this.messageService.scrollToBottom();
+  } 
+    this.selectedUsers = [];
   }
 
 
-  clearInputName(userToRemove) {
-    this.inputSearchUser = ''
-    this.choosedUser = false;
+  removeSelectedUser(userToRemove) {
     this.selectedUsers = this.selectedUsers.filter(user => user.uid !== userToRemove.uid);
   }
 
 
-  async filterUserAllreadyAssigned(): Promise<any> {
+  async filterAlreadyAssignedUsers(): Promise<any> {
     let users = await this.authService.getAllUsers();
     this.channelService.currentChannelData.assignedUsers.forEach((assignedUser: any) => {
       let user = users.find(element => element.uid === assignedUser)
@@ -110,9 +84,9 @@ export class DialogAddMembersComponent implements OnInit {
   }
 
 
-  sendAddMemberMessage(user: string) {
-    this.uploadService.checkForUpload()
+ async sendAddMemberMessage(user: string) {
+   await this.uploadService.checkForUpload()
     this.messageService.messageText = user + ' ist #' + this.channelService.currentChannelData.channelName + ' beigetreten.'
-    this.messageService.newMessage()
+   await this.messageService.newMessage()
   }
 }

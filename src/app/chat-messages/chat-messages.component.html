@@ -67,7 +67,7 @@
                     class="chat-message-details-reactions">
                     <div class="z_index emojiPicker" *ngIf="!chatMessage?.message_deleted">
                         <svg #emojiMessagePopupREF
-                            (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(i); "
+                            (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'Message', scrollContainer, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(i); "
                             width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
                                 width="25" height="24">
@@ -143,7 +143,7 @@
                     (click)="addEmojiInMessage(emojiService.raisedHandsManualEvent, i, chatMessage);">
                 <div class="reaction-bar-emoji emojiPicker">
                     <svg #emojiPopupReactionBarREF
-                        (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', ElementChatContainerRef, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('picker_reaction_bar'); emojiService.openEmojiPicker(i);"
+                        (click)="emojiService.checkOpenEmojiPopupAboveOrBelow(i, 'ReactionBar', scrollContainer, ElementEmojiMessagePopupsRef, ElementEmojiPopupReactionBarRef); togglePopup('picker_reaction_bar'); emojiService.openEmojiPicker(i);"
                         width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_3922_2015" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="8" y="8"
                             width="25" height="24">
