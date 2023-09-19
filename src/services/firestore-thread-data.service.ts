@@ -51,6 +51,7 @@ export class FirestoreThreadDataService {
       comments: this.comments
     });
     if (this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
+    this.messageSevice.scrollToBottom()
   }
 
 
@@ -82,10 +83,8 @@ export class FirestoreThreadDataService {
 
 
   openDirectChatThread(i: number) {
-    if (this.window_width < 1300  && this.window_width > 1000)  {
-      console.log(this.window_width);
-      
-      if(this.chatService.sidebarVisible) this.chatService.sidebarVisible = false
+    if (this.window_width < 1300 && this.window_width > 1000) {
+      if (this.chatService.sidebarVisible) this.chatService.sidebarVisible = false
     }
     this.chatService.thread_open = true
     this.current_channelname = this.chatService.currentChatData.channelName
@@ -93,8 +92,14 @@ export class FirestoreThreadDataService {
     this.direct_chat_index = i
     this.current_message = this.chatService.directChatMessages[i].modified_message
     this.current_message_id = this.chatService.directChatMessages[i].message_ID
-    this.loadThread(this.current_message_id)
-    this.chat_type = 'direct'
+    this.loadThread(this.current_message_id).then(() => {
+      this.chat_type = 'direct'
+      this.messageSevice.scrollToBottom()
+    });
+
+
+
+
   }
 
 
@@ -121,21 +126,25 @@ export class FirestoreThreadDataService {
   }
 
 
-  async loadThread(documentId: string) {
-    const docRef = doc(this.db, 'threads', documentId);
-    onSnapshot(doc(this.db, "threads", documentId), async (doc) => {
-      const changedData = doc.data();
-      if (changedData) {
-        this.comments = changedData.comments
-        this.fake_array.length = this.comments.length
-      } else {
-        let thread_data = {
-          comments: []
+  async loadThread(documentId: string): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      const docRef = doc(this.db, 'threads', documentId);
+      onSnapshot(doc(this.db, "threads", documentId), async (doc) => {
+        const changedData = doc.data();
+        if (changedData) {
+          this.comments = changedData.comments;
+          this.fake_array.length = this.comments.length;
+        } else {
+          let thread_data = {
+            comments: []
+          }
+          await setDoc(docRef, thread_data);
         }
-        await setDoc(docRef, thread_data);
-      }
+        resolve();
+      });
     });
   }
+
 
 
   async deletThread() {

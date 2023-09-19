@@ -39,7 +39,6 @@ export class ChannelService {
       })
       this.channels = channels;
       this.loadCurrentChannel()
-
       const user = this.auth.currentUser;
       if (user !== null) {
          this.getAuthorizedChannels(user.uid);
@@ -56,7 +55,6 @@ export class ChannelService {
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
     const channelRef = doc(this.db, 'channels', channelName);
     const channelSnapshot = await getDoc(channelRef);
-
     if (channelSnapshot.exists()) {
       const channelData = channelSnapshot.data();
       const assignedUsers = channelData?.assignedUsers || [];
@@ -66,6 +64,7 @@ export class ChannelService {
       return [];
     }
   }
+
 
   async createNewChannel(channel: string, description?: string) {
     const user = this.auth.currentUser;

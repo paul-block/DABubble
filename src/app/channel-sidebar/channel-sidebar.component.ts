@@ -9,6 +9,7 @@ import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
+import { UploadService } from 'services/upload.service';
 
 @Component({
   selector: 'app-channel-sidebar',
@@ -26,11 +27,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   dmsVisible: boolean = true;
   openNewMsg: boolean = false;
 
-  private authorizedChannelsSubscription: Subscription;
-  private currentUserSubscription: Subscription;
   private newChannelIdSubscription: Subscription;
 
-  currentValue: string;
+  currentChannelId: string;
 
 
   constructor(
@@ -41,10 +40,11 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
+    public uploadService: UploadService,
   ) {
-    this.newChannelIdSubscription = this.channelService.createdChannelId$.subscribe((newValue) => {
-      this.currentValue = newValue;
-      if (this.currentValue) this.openChannel(this.currentValue);
+    this.newChannelIdSubscription = this.channelService.createdChannelId$.subscribe((newId) => {
+      this.currentChannelId = newId;
+      if (this.currentChannelId) this.openChat(this.currentChannelId, 'channels');
     });
   }
 
@@ -55,31 +55,36 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
+    if (this.authService.newUser) {
+      this.loadStartChannel()
+    }
   }
 
 
   ngOnDestroy() {
-    if (this.authorizedChannelsSubscription) this.authorizedChannelsSubscription.unsubscribe();
-    if (this.currentUserSubscription) this.currentUserSubscription.unsubscribe();
     if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
   }
 
 
-  async openChannel(channelID: string) {
-    this.changeMobileLogo();
-    this.chatService.open_chat = true
-    if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
-    if (this.chatService.currentChatID !== channelID) {
-      this.chatService.currentChatSection = 'channels';
-      this.chatService.currentChatID = channelID;
-      this.channelService.currentChannelID = channelID;
-      this.msgService.emptyMessageText();
+  async loadStartChannel() {
+    this.authService.newUser = false
+    this.channelService.loadStandardChannel()
+    let user = this.authService.userData.user_name
+    await this.uploadService.checkForUpload()
+    this.msgService.messageText = user + ' ist #allgemein beigetreten.'
+    await this.msgService.newMessage().then(async () => {
+      this.msgService.getMessages()
+    })
+  }
+
+
+  async openChat(id: string, chatSection: string) {
+    this.ensureChatSectionVisible();
+    if (this.chatService.currentChatID !== id) {
+      this.chatService.currentChatSection = chatSection;
+      this.setCurrentID(id);
       try {
-        this.chatService.getCurrentChatData();
-        this.chatService.textAreaMessageTo();
-        this.channelService.loadCurrentChannel()
-        await this.msgService.getMessages();
-        this.chatService.thread_open = false;
+        await this.getCurrentData();
       } catch (error) {
         console.error("Fehler bei öffnen des Channels: ", error);
       }
@@ -87,28 +92,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
 
-  async openChat(chat: { chat_ID: string; }) {
-    this.changeMobileLogo();
-    this.chatService.open_chat = true
-    if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
-    if (this.chatService.currentChatID !== chat.chat_ID) {
-      this.chatService.currentChatSection = 'chats';
-      this.chatService.currentChatID = chat.chat_ID;
-      this.msgService.emptyMessageText();
-      try {
-        this.chatService.currentChatData = chat;
-        this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
-        this.chatService.thread_open = false;
-      } catch (error) {
-        console.error("Fehler bei öffnen des Chats: ", error);
-      }
-    }
-  }
-
-
   sendNewMsg() {
-    this.changeMobileLogo();
+    this.checkChangeToMobileLogo();
     this.chatService.open_chat = true
     this.msgService.emptyMessageText();
     this.toggleNewMsgComponent();
@@ -125,15 +110,43 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeMobileLogo() {
+
+  checkChangeToMobileLogo() {
     if (window.innerWidth <= 1000) {
       this.genFunctService.changeMobileLogo = true;
     }
   }
 
+
+  setCurrentID(id: string) {
+    this.chatService.currentChatID = id;
+    if (this.chatService.currentChatSection == 'channels') this.channelService.currentChannelID = id;
+    this.msgService.emptyMessageText();
+  }
+
+
+  async getCurrentData() {
+    this.chatService.getCurrentChatData();
+    this.chatService.textAreaMessageTo();
+    if (this.chatService.currentChatSection == 'channels') this.channelService.loadCurrentChannel();
+    this.msgService.getMessages().then(() => {
+      this.chatService.thread_open = false;
+      this.msgService.scrollToBottom()
+    });
+  }
+
+
+  ensureChatSectionVisible() {
+    this.checkChangeToMobileLogo();
+    this.chatService.open_chat = true
+    if (this.chatService.openNewMsgComponent) this.toggleNewMsgComponent();
+  }
+
+
   toggleNewMsgComponent() {
     this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
   }
+
 
   toggleChannels() {
     this.channelsVisible = !this.channelsVisible;

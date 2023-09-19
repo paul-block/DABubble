@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AnimationBuilder, AnimationFactory, animate, style } from '@angular/animations';
+import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { getFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'services/authentication.service';
@@ -22,7 +23,7 @@ export class ChatMessagesComponent {
   @Output() threadOpen = new EventEmitter<boolean>();
   messageCreator: boolean = false;
   toggleEditMessage: boolean = false;
-  @ViewChild('ChatContainerREF') public ElementChatContainerRef: ElementRef;
+  @ViewChild('ChatContainerREF') public scrollContainer: ElementRef;
   @ViewChildren('emojiMessagePopupREF') ElementEmojiMessagePopupsRef: QueryList<ElementRef>;
   @ViewChildren('emojiPopupReactionBarREF') ElementEmojiPopupReactionBarRef: QueryList<ElementRef>;
   private scrollSubscription: Subscription;
@@ -40,13 +41,16 @@ export class ChatMessagesComponent {
     public uploadService: UploadService,
     private elementRef: ElementRef,
     public genFunctService: GeneralFunctionsService,
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private builder: AnimationBuilder
   ) { }
 
 
 
   ngOnInit(): void {
     this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
-      this.scrollToBottom();
+      this.scrollDivToBottom();
     });
   }
 
@@ -58,10 +62,17 @@ export class ChatMessagesComponent {
   }
 
 
-  scrollToBottom() {
-    if (this.ElementChatContainerRef) {
-      this.ElementChatContainerRef.nativeElement.scrollTop = this.ElementChatContainerRef.nativeElement.scrollHeight;
-    }
+  scrollDivToBottom() {
+    const scrollContainerElement = this.scrollContainer.nativeElement;
+    scrollContainerElement.scrollTop = scrollContainerElement.scrollHeight;
+  }
+
+  scrollDivToTop() {
+    const scrollContainerElement = this.scrollContainer.nativeElement;
+    scrollContainerElement.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Fügt eine sanfte Scroll-Animation hinzu
+    });
   }
 
 
@@ -82,8 +93,8 @@ export class ChatMessagesComponent {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.toggleEditMessage = false;
     }
-
   }
+
 
 
   togglePopup(popupVariable: string) {
@@ -155,5 +166,14 @@ export class ChatMessagesComponent {
 
   showPlaceholder() {
     return this.chatService.directChatMessages.length === 0 && this.chatService.currentChatSection === 'chats' && this.msgService.messagesLoaded;
+  }
+
+  checkForScroll() {
+    if (this.scrollContainer) {
+      const divElement = this.scrollContainer.nativeElement;
+      if (divElement.scrollHeight > divElement.clientHeight) return true
+      else return false
+    }
+    else return false
   }
 }

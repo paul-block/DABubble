@@ -48,23 +48,25 @@ export class MessagesService {
   }
 
   async newMessage() {
-    let time_stamp = new Date();
-    const customMessageID = await this.genFunctService.generateCustomFirestoreID();
-
-    await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
-      chat_message: this.messageText,
-      user_Sender_ID: this.authService.userData.uid,
-      user_Sender_Name: this.authService.userData.user_name,
-      created_At: time_stamp,
-      chat_message_edited: false,
-      emoji_data: [],
-      modified_message: this.chatService.modifyMessageValue(this.messageText),
-      answers: 0,
-      last_answer: '',
-      uploaded_files: this.upload_array,
-      message_ID: customMessageID
-    }).then(() => {
-      this.messageText = '';
+    return new Promise<void>(async (resolve) => {
+      let time_stamp = new Date();
+      const customMessageID = await this.genFunctService.generateCustomFirestoreID();
+      await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
+        chat_message: this.messageText,
+        user_Sender_ID: this.authService.userData.uid,
+        user_Sender_Name: this.authService.userData.user_name,
+        created_At: time_stamp,
+        chat_message_edited: false,
+        emoji_data: [],
+        modified_message: this.chatService.modifyMessageValue(this.messageText),
+        answers: 0,
+        last_answer: '',
+        uploaded_files: this.upload_array,
+        message_ID: customMessageID
+      }).then(() => {
+        this.messageText = '';
+      });
+      resolve();
     });
   }
 
@@ -89,30 +91,27 @@ export class MessagesService {
   }
 
 
-  async getMessages() {
-    if (this.chatSnapshotUnsubscribe) {
-      this.chatSnapshotUnsubscribe();
-    }
-    this.messagesLoaded = false;
-    this.emojiService.resetInitializedEmojiRef();
-    this.chatService.directChatMessages = [];
-
-    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-    const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
-    this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        const changedMessageData = change.doc.data();
-        if (change.type === 'added') {
-          this.chatService.directChatMessages.push(changedMessageData);
-        } else if (change.type === 'modified') {
-          this.getChangedMessage(changedMessageData);
-        } else if (change.type === 'removed') {
-          this.spliceMessage(changedMessageData);
-        }
+  async getMessages(): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      if (this.chatSnapshotUnsubscribe) this.chatSnapshotUnsubscribe();
+      this.messagesLoaded = false;
+      this.emojiService.resetInitializedEmojiRef();
+      this.chatService.directChatMessages = [];
+      const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+      const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
+      this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const changedMessageData = change.doc.data();
+          if (change.type === 'added') this.chatService.directChatMessages.push(changedMessageData);
+          else if (change.type === 'modified') this.getChangedMessage(changedMessageData);
+          else if (change.type === 'removed') this.spliceMessage(changedMessageData);
+        });
+        this.messagesLoaded = true;
+        resolve();
       });
-      this.messagesLoaded = true;
     });
   }
+
 
 
   async getChangedMessage(changedMessageData: DocumentData) {

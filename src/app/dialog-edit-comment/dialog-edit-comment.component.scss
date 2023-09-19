@@ -9,6 +9,7 @@ textarea {
   outline: none;
   font-size: 18px;
   color: #686868;
+  border: none;
 
   &:focus {
     color: black;
@@ -43,7 +44,7 @@ textarea {
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  padding: 6px;
+  padding: 9px;
 }
 
 .button_div {

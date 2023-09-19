@@ -35,6 +35,7 @@ export class AuthenticationService {
   googleUser_exist: boolean;
   all_users: any[];
   usersPromise: Promise<any>;
+  newUser:boolean = false
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -104,7 +105,6 @@ export class AuthenticationService {
         })
       this.signUp_successful = true
       setTimeout(() => this.signUp_successful = false, 3000);
-      this.channelService.loadStandardChannel()
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         this.email_error = true
@@ -122,6 +122,20 @@ export class AuthenticationService {
         .signInWithEmailAndPassword(email, password)
       this.signIn_successful = true
       this.setOnlineStatus(email, 'Aktiv')
+      setTimeout(() => this.signIn_successful = false, 3000);
+    } catch (error) {
+      this.signIn_error = true
+      setTimeout(() => this.signIn_error = false, 3000);
+    }
+  }
+
+
+  async guestSignIn() {
+    try {
+      const result = await this.afAuth
+        .signInWithEmailAndPassword('gast@gast.de', 'Amidala6%')
+      this.signIn_successful = true
+      this.setOnlineStatus('gast@gast.de', 'Aktiv')
       setTimeout(() => this.signIn_successful = false, 3000);
       this.channelService.loadStandardChannel()
     } catch (error) {

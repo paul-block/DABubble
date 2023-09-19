@@ -40,6 +40,7 @@ export class ChatService {
     public genFunctService: GeneralFunctionsService,
   ) { }
 
+
   async loadChats(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.chats = [];
@@ -74,19 +75,17 @@ export class ChatService {
     if (!chatExists) await this.newChat(userID);
   }
 
+
   async searchChat(userReceiverID): Promise<string | null> {
     const auth = getAuth();
     const user = auth.currentUser;
     let foundChatId = null;
-
     if (user !== null) {
       try {
         const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
-
         docChatsSnapshot.forEach((chat) => {
           const chatData = chat.data();
           const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
-
           if (
             (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) ||
             (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)
@@ -94,9 +93,7 @@ export class ChatService {
             foundChatId = chatData.chat_ID;
           }
         });
-
         return foundChatId;
-
       } catch (error) {
         console.error("Fehler bei der Suche nach einem Chat: ", error);
         return null;
@@ -106,6 +103,7 @@ export class ChatService {
       return null;
     }
   }
+
 
   async getChatDocument() {
     if (this.currentChatID) {
@@ -150,6 +148,7 @@ export class ChatService {
       }
     });
   }
+  
 
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
