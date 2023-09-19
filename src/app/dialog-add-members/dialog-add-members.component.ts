@@ -38,15 +38,12 @@ export class DialogAddMembersComponent implements OnInit {
 
 
   filterUsers() {
+    this.userAlreadyAdded = false;
     if (this.inputSearchUser.length > 0) {
-      this.filteredUsers = this.users.filter(user =>
+        this.filteredUsers = this.users.filter(user =>
         user.user_name.toLowerCase().startsWith(this.inputSearchUser.toLowerCase())
       );
-    } else {
-      this.filteredUsers = this.users;
-      if (this.filteredUsers.length === 0) console.log('kein username gefunden');
-
-    }
+    } else this.filteredUsers = this.users;
   }
 
 
