@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AnimationBuilder, AnimationFactory, animate, style } from '@angular/animations';
+import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { getFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'services/authentication.service';
@@ -42,6 +43,9 @@ export class ChatMessagesComponent {
     public uploadService: UploadService,
     private elementRef: ElementRef,
     public genFunctService: GeneralFunctionsService,
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private builder: AnimationBuilder
   ) { }
 
 
@@ -66,22 +70,12 @@ export class ChatMessagesComponent {
   }
 
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event) {
-    const target = event.target as HTMLElement;
-    const emojipicker = target.closest('.emojiPicker');
-    if (!emojipicker) {
-      this.emojiService.picker_reaction_bar = false;
-      this.emojiService.emojiPicker_open = false;
-    }
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.toggleEditMessage = false;
-      this.emojiService.picker_reaction_bar = false;
-
-      if (this.emojiService.picker_index === -2) {
-        this.emojiPicker_open = false;
-      }
-    }
+  scrollDivToTop() {
+    const scrollContainerElement = this.scrollContainer.nativeElement;
+    scrollContainerElement.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Fügt eine sanfte Scroll-Animation hinzu
+    });
   }
 
 
@@ -152,5 +146,11 @@ export class ChatMessagesComponent {
 
   showPlaceholder() {
     return this.chatService.directChatMessages.length === 0 && this.chatService.currentChatSection === 'chats' && this.msgService.messagesLoaded;
+  }
+
+  checkForScroll() {
+    const divElement = this.scrollContainer.nativeElement;
+    if (divElement.scrollHeight > divElement.clientHeight) return true
+    else return false
   }
 }

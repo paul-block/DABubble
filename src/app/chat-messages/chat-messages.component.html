@@ -1,11 +1,12 @@
-<section class="chat-messages" #ChatContainerREF>
+<section class="chat-messages" #ChatContainerREF id="top">
     <section *ngIf=" this.chatService.currentChatSection === 'channels'" class="channel_description">
         <span>Dies ist der Anfang von Channel #{{ chatService.currentChatData.channelName }}</span>
         <span>{{chatService.currentChatData.description}}</span>
     </section>
     <app-empty-chat-placeholder *ngIf="showPlaceholder()"></app-empty-chat-placeholder>
 
-    <div class="chat-message-container" *ngFor="let chatMessage of chatService.directChatMessages; let i = index;">
+    <div class="chat-message-container"
+        *ngFor="let chatMessage of chatService.directChatMessages; let i = index; let isLast = last">
         <div *ngIf="i === 0 || chatMessage.created_At.toDate().toDateString() !== chatService.directChatMessages[i - 1].created_At.toDate().toDateString()"
             class="chat-messages-date">
             <div class="parting-line"></div>
@@ -33,14 +34,14 @@
                     class="chat-message-text-container">
 
                     <div class="chat-message-text">
-                       
-                            <span (click)="profileService.openProfile(word)"
-                                *ngFor="let word of chatMessage.modified_message; let k = index"
-                                [class.highlighted]="chatService.checkIfWordIsAnId(word)">
-                                {{chatService.renameUid(word)}}
-                                <ng-container *ngIf="chatService.checkForBreak(word)"><br></ng-container>
-                            </span>
-                        
+
+                        <span (click)="profileService.openProfile(word)"
+                            *ngFor="let word of chatMessage.modified_message; let k = index"
+                            [class.highlighted]="chatService.checkIfWordIsAnId(word)">
+                            {{chatService.renameUid(word)}}
+                            <ng-container *ngIf="chatService.checkForBreak(word)"><br></ng-container>
+                        </span>
+
                         <span class="message-edited" *ngIf="chatMessage.chat_message_edited">(bearbeitet)</span>
                     </div>
                 </div>
@@ -123,9 +124,9 @@
                 <div [ngStyle]="{'flex-direction':isMessageCreator(chatMessage.user_Sender_ID) === false ? 'row' : 'row-reverse' }"
                     class="gap-10 items-center container-answers">
                     <div class="answers">
-                        <span *ngIf="chatMessage.answers > 1"
-                            class="chat-message-answers-amount"
-                            (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}} Antworten</span>
+                        <span *ngIf="chatMessage.answers > 1" class="chat-message-answers-amount"
+                            (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}}
+                            Antworten</span>
                         <span *ngIf="chatMessage.answers == 1" class="chat-message-answers-amount"
                             (click)="fsDataThreadService.openDirectChatThread(i)">{{chatMessage.answers}} Antwort</span>
                     </div>
@@ -183,6 +184,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="scroll_top"  (click)="scrollDivToTop()" *ngIf="isLast && checkForScroll()">
+            <mat-icon>arrow_upward</mat-icon>
         </div>
     </div>
 </section>

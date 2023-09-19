@@ -127,10 +127,32 @@ app-empty-chat-placeholder {
   }
 }
 
-.last-message-time {
-  font-size: 14px;
-  font-weight: 400;
-  color: #686868;
+.scroll_top {
+  margin-top: 10px;
+  transition: 200ms;
+  box-sizing: border-box;
+  color: #444df2;
+  font-weight: 700;
+  font-size: 18px;
+  border: 1px solid #797ef3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+  width: 49px;
+  height: 49px;
+  padding: 0 10px 0 10px;
+
+  &:hover {
+    background-color: #444df2;
+    cursor: pointer;
+    color: white;
+
+    img {
+      filter: invert(99%) sepia(2%) saturate(393%) hue-rotate(45deg)
+        brightness(120%) contrast(100%);
+    }
+  }
 }
 
 .chat-message-text-container {
@@ -612,7 +634,7 @@ app-empty-chat-placeholder {
   }
 
   .chat-message {
-    width: calc(100% - 20px);
+    width: 80%;
     padding: 0 10px;
   }
 
