@@ -9,6 +9,7 @@ import { MessagesService } from './messages.service';
 import { ReactionBubbleService } from './reaction-bubble.service';
 import { UploadService } from './upload.service';
 import { ProfileMenuComponent } from 'app/profile-menu/profile-menu.component';
+import { GeneralFunctionsService } from './general-functions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class ProfileService {
     public msgService: MessagesService,
     public chatService: ChatService,
     public uploadService: UploadService,
-    public reactionBubbleService: ReactionBubbleService
+    public reactionBubbleService: ReactionBubbleService,
+    public generalFunctService: GeneralFunctionsService
   ) { }
 
 
@@ -50,7 +52,12 @@ export class ProfileService {
 
   openCurrentUserDetails() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'dialog_user_profile';
+    if (this.generalFunctService.isDesktopWidth()) {
+      dialogConfig.position = {
+        top: '0px',
+        right: '0px'
+      }
+    }
     this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
     this.fsDataThreadService.detailsVisible = true
     this.profileMenuRef.afterClosed().subscribe(() => {
