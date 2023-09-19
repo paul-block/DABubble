@@ -246,9 +246,6 @@ export class EmojiService {
     this.initializedEmojiMessageRef = false;
     this.initializedEmojiReactionBarRef = false;
   }
-
-
-
 }
 
 

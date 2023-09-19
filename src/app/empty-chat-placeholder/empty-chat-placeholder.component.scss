@@ -62,3 +62,18 @@ section {
         font-weight: 700;
     }
 }
+
+@media (max-width: 500px) {
+    section {
+        overflow: auto;
+        padding: 10px 15px;
+    }
+
+    .user-receiver {
+        img {
+            width: 80px;
+            height: 80px;
+        }
+    }
+
+}

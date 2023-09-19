@@ -38,7 +38,7 @@
 
             <div class="parting-line"></div>
             <button [disabled]="noChatSelected()"
-                (click)="togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(-2);" class="z_index emojiPicker">
+                (click)="togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(-2);" class="open-emojiPicker emojiPickerMessage">
                 <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2"
                     class="emoji_picker" (emojiClick)="addEmojitoTextarea($event);">
                 </emoji-mart>

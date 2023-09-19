@@ -441,6 +441,7 @@ app-empty-chat-placeholder {
 .emoji_main {
   display: flex;
   gap: 5px;
+  flex-wrap: wrap;
 }
 
 .open-picker-below {
@@ -565,8 +566,6 @@ app-empty-chat-placeholder {
 @media (max-width: 1000px) {
   .emoji_main {
     max-width: 350px;
-    display: flex;
-    flex-wrap: wrap;
   }
 
   .edit-message {

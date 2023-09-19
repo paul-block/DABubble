@@ -113,10 +113,16 @@ section {
 @media (max-width: 1000px) {
     section {
         max-width: unset;
-        width: 280px;
+        width: unset;
     }
 
     .p-20 {
         padding: 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    section {
+        max-height: 300px;
     }
 }

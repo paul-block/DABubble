@@ -105,11 +105,10 @@ $hover-transition: all ease-in-out 125ms;
     }
 }
 
-.z_index {
+.open-emojiPicker {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
     position: relative;
 }
 

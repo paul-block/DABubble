@@ -17,7 +17,6 @@ export class ChannelDirectSendMessageComponent {
   @Input() inputValue: string;
   open_attachment_menu: boolean = false;
   open_users: boolean = false;
-  emojiPicker_open: boolean = false;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
 
   constructor(
@@ -32,32 +31,35 @@ export class ChannelDirectSendMessageComponent {
   ) { }
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
+  onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.open_attachment_menu = false;
       this.open_users = false;
-      if (this.emojiService.picker_index === 0) {
-        this.emojiPicker_open = false;
-      }
     }
   }
 
 
   togglePopup(popupVariable: string) {
-    this[popupVariable] = !this[popupVariable];
-    if (this[popupVariable]) {
+    if (popupVariable === 'emojiPicker_open') {
+      console.log(this.emojiService[popupVariable]);
+
+      this.emojiService[popupVariable] = !this.emojiService[popupVariable];
+      console.log(this.emojiService[popupVariable]);
+
+
+    } else {
+      this[popupVariable] = !this[popupVariable];
       this.closeOtherPopups(popupVariable);
       this.uploadService.chat_section = 'channel'
     }
     if (popupVariable === 'open_users') {
       this.getAllUsers()
     }
-    this.emojiService.emojiPicker_open = this.emojiPicker_open;
   }
 
 
   closeOtherPopups(currentPopup: string) {
-    const popupVariables = ['open_attachment_menu', 'open_users', 'emojiPicker_open'];
+    const popupVariables = ['open_attachment_menu', 'open_users'];
     popupVariables.forEach(popup => {
       if (popup !== currentPopup) {
         this[popup] = false;
@@ -74,12 +76,12 @@ export class ChannelDirectSendMessageComponent {
   }
 
 
-  toggleEmojiPicker() {
-    this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
-    if (this.emojiService.emojiPicker_open) {
-      this.closeOtherPopups('emojiPicker_open');
-    }
-  }
+  // toggleEmojiPicker() {
+  //   this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
+  //   if (this.emojiService.emojiPicker_open) {
+  //     this.closeOtherPopups('emojiPicker_open');
+  //   }
+  // }
 
   public async onSendClick() {
     console.log(this.uploadService.upload_array.file_name);
