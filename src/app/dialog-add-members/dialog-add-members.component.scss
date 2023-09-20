@@ -88,7 +88,8 @@ section {
     padding: 10px 0px;
     font-weight: 400;
     font-size: 18px;
-    // height: 21px;
+    overflow-y: scroll;
+    max-height: 100px;
 }
 
 .clear-input-name {
@@ -186,6 +187,7 @@ section {
 @media (max-width: 1000px) {
     section {
         max-width: unset;
-        width: unset
+        width: unset;
     }
 }
+

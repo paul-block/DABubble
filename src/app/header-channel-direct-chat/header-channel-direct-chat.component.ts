@@ -115,10 +115,11 @@ export class HeaderChannelDirectChatComponent {
   }
 
 
-  channelMemberAvatars(id: string) {
-    const user = this.authService.all_users.find(user => user.uid === id);
-    return user.avatar;
-  }
+  // channelMemberAvatars(id: string) {
+  //   const user = this.authService.all_users.find(user => user.uid === id);
+  //   if (user) return user.avatar;
+  //   else console.log("User not found");
+  // }
 
 
   closeChat() {

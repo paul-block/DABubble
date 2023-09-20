@@ -408,6 +408,18 @@
   }
 }
 
+@media (max-height: 1000px) {
+  .dm-selection {
+    height: 410px !important;
+  }
+}
+
+@media (max-height: 900px) {
+  .dm-selection {
+    height: 340px !important;
+  }
+}
+
 @media (max-height: 700px) {
   .workspace-menu {
     gap: 15px !important;

@@ -26,7 +26,7 @@
             <div class="already-members-avatars">
                 <ng-container
                     *ngFor="let assignedUser of channelService.currentChannelData.assignedUsers; let i = index;">
-                    <img *ngIf="i < 3" [src]="channelMemberAvatars(assignedUser)">
+                    <img *ngIf="i < 3" [src]="authService.getImageUrl(assignedUser)">
                 </ng-container>
             </div>
             <span>{{ channelService.currentChannelData.assignedUsers.length }}</span>
