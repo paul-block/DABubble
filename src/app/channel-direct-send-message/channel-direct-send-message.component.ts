@@ -41,12 +41,7 @@ export class ChannelDirectSendMessageComponent {
 
   togglePopup(popupVariable: string) {
     if (popupVariable === 'emojiPicker_open') {
-      console.log(this.emojiService[popupVariable]);
-
-      this.emojiService[popupVariable] = !this.emojiService[popupVariable];
-      console.log(this.emojiService[popupVariable]);
-
-
+      this.toggleEmojiPicker()
     } else {
       this[popupVariable] = !this[popupVariable];
       this.closeOtherPopups(popupVariable);
@@ -55,6 +50,11 @@ export class ChannelDirectSendMessageComponent {
     if (popupVariable === 'open_users') {
       this.getAllUsers()
     }
+  }
+
+
+  toggleEmojiPicker() {
+    this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
   }
 
 
@@ -76,39 +76,43 @@ export class ChannelDirectSendMessageComponent {
   }
 
 
-  // toggleEmojiPicker() {
-  //   this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
-  //   if (this.emojiService.emojiPicker_open) {
-  //     this.closeOtherPopups('emojiPicker_open');
-  //   }
-  // }
-
   public async onSendClick() {
-    if (this.msgService.messageText.length > 0 || this.uploadService.upload_array.file_name.length > 0) {
+    if (this.textMessageNotEmpty() || this.fileReadyForUpload()) {
       if (this.chatService.openNewMsgComponent) {
-        this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
+        this.toggleOpenNewMsgComponent();
         this.chatService.currentChatSection = 'chats';
-        await this.uploadService.checkForUpload();
-        setTimeout(async () => {
-          await this.msgService.newMessage();
-          this.msgService.scrollToBottom('channel')
-        }, 400);
-        setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+        this.messagePreperation();
         this.chatService.userReceiverName = '';
       } else {
-        await this.uploadService.checkForUpload();
-        setTimeout(async () => {
-          await this.msgService.newMessage();
-          this.msgService.scrollToBottom('channel')
-        }, 400);
-        setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+        this.messagePreperation();
       }
     }
   }
 
-  stopPropagation(event: Event) {
-    event.stopPropagation();
-  };
+
+  textMessageNotEmpty() {
+    return this.msgService.messageText.length > 0;
+  }
+
+
+  fileReadyForUpload() {
+    return this.uploadService.upload_array.file_name.length > 0;
+  }
+
+
+  toggleOpenNewMsgComponent() {
+    this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
+  }
+
+
+  async messagePreperation() {
+    await this.uploadService.checkForUpload();
+    setTimeout(async () => {
+      await this.msgService.newMessage();
+      this.msgService.scrollToBottom()
+    }, 400);
+    setTimeout(() => this.uploadService.emptyUploadArray(), 500);
+  }
 
 
   addUserToTextarea(i: number) {
@@ -158,12 +162,12 @@ export class ChannelDirectSendMessageComponent {
 
 
   messageEmpty() {
-    return this.msgService.messageText.length === 0;
+    return this.msgService.messageText.length !== 0;
   }
 
 
   noFileSelected() {
-    return this.uploadService.upload_array.file_name.length === 0;
+    return this.uploadService.upload_array.file_name.length !== 0;
   }
 
 }
