@@ -83,10 +83,10 @@ export class FirestoreThreadDataService {
 
 
   openDirectChatThread(i: number) {
+    this.chatService.thread_open = true
     if (this.window_width < 1300 && this.window_width > 1000) {
       if (this.chatService.sidebarVisible) this.chatService.sidebarVisible = false
     }
-    this.chatService.thread_open = true
     this.current_channelname = this.chatService.currentChatData.channelName
     this.current_chat_data = this.chatService.directChatMessages[i]
     this.direct_chat_index = i

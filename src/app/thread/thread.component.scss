@@ -202,7 +202,7 @@ header {
   transition: 200ms;
   position: absolute;
   top: -23px;
-  left: 0;
+  left: 10px;
   opacity: 0;
   z-index: -100;
   background-color: white;
@@ -689,6 +689,11 @@ textarea {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.thread_up {
+  margin-top: 0;
+  margin-right: calc(50% - 73px)
 }
 
 @media (max-width: 1280px) {

@@ -76,6 +76,15 @@ export class ThreadComponent implements OnInit {
   }
 
 
+  scrollDivToTop() {
+    const scrollContainerElement = this.scrollContainer.nativeElement;
+    scrollContainerElement.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+
   scrollDivToBottom() {
     const scrollContainerElement = this.scrollContainer.nativeElement;
     scrollContainerElement.scrollTop = scrollContainerElement.scrollHeight;
@@ -368,5 +377,14 @@ export class ThreadComponent implements OnInit {
         this.comment_value += ' '
       }
     }
+  }
+
+  checkForScroll() {
+    if (this.scrollContainer) {
+      const divElement = this.scrollContainer.nativeElement;
+      if (divElement.scrollHeight > divElement.clientHeight) return true
+      else return false
+    }
+    else return false
   }
 }

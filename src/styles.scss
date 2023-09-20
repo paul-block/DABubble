@@ -312,6 +312,35 @@ button {
   width: 550px;
 }
 
+
+.scroll_top {
+  margin-top: 10px;
+  transition: 200ms;
+  box-sizing: border-box;
+  color: #444df2;
+  font-weight: 700;
+  font-size: 18px;
+  border: 1px solid #797ef3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+  width: 49px;
+  height: 49px;
+  padding: 0 10px 0 10px;
+
+  &:hover {
+    background-color: #444df2;
+    cursor: pointer;
+    color: white;
+
+    img {
+      filter: invert(99%) sepia(2%) saturate(393%) hue-rotate(45deg)
+        brightness(120%) contrast(100%);
+    }
+  }
+}
+
 @media (max-width: 1000px) {
 
   .custom-add-members-dialog {

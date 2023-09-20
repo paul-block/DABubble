@@ -141,7 +141,7 @@
 
     <div #comment class="comment_div"
         [class.row_reverse]="authService.getUserInfo(fsDataThreadService.comments[i]?.uid).user_name == authService.userData.user_name"
-        *ngFor="let comment of fsDataThreadService.fake_array; let i = index">
+        *ngFor="let comment of fsDataThreadService.fake_array; let i = index; let isLast = last">
 
         <!-----------------------------------------------------------------Edit Menu----------------------------------------------------------------------------------------->
 
@@ -261,6 +261,9 @@
                         size="24"></ngx-emoji>
                     <span>{{fsDataThreadService.comments[i].emoji_data[j].count}}</span>
                 </div>
+            </div>
+            <div class="scroll_top thread_up"  (click)="scrollDivToTop()" *ngIf="isLast && checkForScroll()">
+                <mat-icon>arrow_upward</mat-icon>
             </div>
         </div>
     </div>
