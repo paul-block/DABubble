@@ -77,8 +77,6 @@ export class ChannelDirectSendMessageComponent {
 
 
   public async onSendClick() {
-    console.log('test');
-    
     if (this.textMessageNotEmpty() || this.fileReadyForUpload()) {
       if (this.chatService.openNewMsgComponent) {
         this.toggleOpenNewMsgComponent();
