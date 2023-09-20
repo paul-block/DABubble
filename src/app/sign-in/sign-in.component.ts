@@ -49,8 +49,11 @@ export class SignInComponent {
 
   guestLogin() {
     this.authenticationService.guestSignIn()
-    setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+   
     this.channelService.loadStandardChannel()
+    this.messageService.getMessages().then(() => {
+      setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+    });
     
   }
 
