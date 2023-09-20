@@ -23,6 +23,7 @@ export class MessagesService {
   emoji_data = [];
   messageIndex: number = null;
   private scrollSubject = new Subject<void>();
+  private scrollSubjectThread = new Subject<void>();
   answers_count: any;
   time: any;
   upload_array: any;
@@ -132,15 +133,19 @@ export class MessagesService {
   }
 
 
-  scrollToBottom() {
-    setTimeout(() => {
-      this.scrollSubject.next();
-    }, 0);
+  scrollToBottom(section:string) {  
+     if(section == 'thread') setTimeout(() => this.scrollSubjectThread.next(), 0);
+     else setTimeout(() => this.scrollSubject.next(), 0);
   }
 
 
   get scrollObservable() {
     return this.scrollSubject.asObservable();
+  }
+
+
+  get scrollObservableThread() {
+    return this.scrollSubjectThread.asObservable();
   }
 
 

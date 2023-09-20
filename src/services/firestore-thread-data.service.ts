@@ -51,7 +51,7 @@ export class FirestoreThreadDataService {
       comments: this.comments
     });
     if (this.chat_type == 'direct') this.messageSevice.saveNumberOfAnswers(this.current_message_id)
-    this.messageSevice.scrollToBottom()
+    this.messageSevice.scrollToBottom('thread')
   }
 
 
@@ -94,12 +94,8 @@ export class FirestoreThreadDataService {
     this.current_message_id = this.chatService.directChatMessages[i].message_ID
     this.loadThread(this.current_message_id).then(() => {
       this.chat_type = 'direct'
-      this.messageSevice.scrollToBottom()
+      this.messageSevice.scrollToBottom('thread')
     });
-
-
-
-
   }
 
 
@@ -135,9 +131,7 @@ export class FirestoreThreadDataService {
           this.comments = changedData.comments;
           this.fake_array.length = this.comments.length;
         } else {
-          let thread_data = {
-            comments: []
-          }
+          let thread_data = {comments: []}
           await setDoc(docRef, thread_data);
         }
         resolve();

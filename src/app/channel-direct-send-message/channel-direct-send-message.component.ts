@@ -91,7 +91,7 @@ export class ChannelDirectSendMessageComponent {
         await this.uploadService.checkForUpload();
         setTimeout(async () => {
           await this.msgService.newMessage();
-          this.msgService.scrollToBottom()
+          this.msgService.scrollToBottom('channel')
         }, 400);
         setTimeout(() => this.uploadService.emptyUploadArray(), 500);
         this.chatService.userReceiverName = '';
@@ -99,7 +99,7 @@ export class ChannelDirectSendMessageComponent {
         await this.uploadService.checkForUpload();
         setTimeout(async () => {
           await this.msgService.newMessage();
-          this.msgService.scrollToBottom()
+          this.msgService.scrollToBottom('channel')
         }, 400);
         setTimeout(() => this.uploadService.emptyUploadArray(), 500);
       }

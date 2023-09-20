@@ -62,7 +62,7 @@ export class DialogAddMembersComponent implements OnInit {
     for (let user of this.selectedUsers) {
       await this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, user.uid);
       await this.sendAddMemberMessage(user.user_name);
-      this.messageService.scrollToBottom();
+      this.messageService.scrollToBottom('channel');
   } 
     this.selectedUsers = [];
   }

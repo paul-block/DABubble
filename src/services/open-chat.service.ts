@@ -46,7 +46,7 @@ export class OpenChatService {
     if (this.chatService.currentChatSection == 'channels') this.channelService.loadCurrentChannel();
     this.msgService.getMessages().then(() => {
       this.chatService.thread_open = false;
-      this.msgService.scrollToBottom()
+      this.msgService.scrollToBottom('channel')
     });
   }
 

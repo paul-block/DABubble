@@ -70,9 +70,17 @@ export class ThreadComponent implements OnInit {
     document.body.addEventListener('click', this.bodyClicked);
     this.fsDataThreadService.getMessages()
     await this.getAllUsers()
-    this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
-      if (this.scrollContainer) this.scrollDivToBottom();
+    this.scrollSubscription = this.msgService.scrollObservableThread.subscribe(() => {
+      this.scrollDivToBottom();
     });
+  }
+
+  
+  
+  ngOnDestroy(): void {
+    if (this.scrollSubscription) {
+      this.scrollSubscription.unsubscribe();
+    }
   }
 
 
@@ -159,7 +167,7 @@ export class ThreadComponent implements OnInit {
       }
       setTimeout(() => {
         this.fsDataThreadService.saveThread(comment_data),
-          this.msgService.scrollToBottom()
+          this.msgService.scrollToBottom('thread')
         500
       });
       this.comment_value = ''

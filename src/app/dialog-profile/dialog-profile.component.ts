@@ -76,7 +76,7 @@ async getCurrentData() {
   this.chatService.textAreaMessageTo();
   this.msgService.getMessages().then(() => {
     this.chatService.thread_open = false;
-    this.msgService.scrollToBottom()
+    this.msgService.scrollToBottom('channel')
   });
 }
 
