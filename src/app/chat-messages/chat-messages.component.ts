@@ -64,14 +64,17 @@ export class ChatMessagesComponent {
 
   scrollDivToBottom() {
     const scrollContainerElement = this.scrollContainer.nativeElement;
-    scrollContainerElement.scrollTop = scrollContainerElement.scrollHeight;
+    scrollContainerElement.scrollTo({
+      top: scrollContainerElement.scrollHeight,
+      behavior: 'smooth'
+    });
   }
 
   scrollDivToTop() {
     const scrollContainerElement = this.scrollContainer.nativeElement;
     scrollContainerElement.scrollTo({
       top: 0,
-      behavior: 'smooth' // Fügt eine sanfte Scroll-Animation hinzu
+      behavior: 'smooth'
     });
   }
 
