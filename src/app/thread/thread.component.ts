@@ -168,7 +168,6 @@ export class ThreadComponent implements OnInit {
 
 
   addEmojitoTextarea($event: any) {
-    this.emojiPicker_open = false
     let unicodeCode: string = $event.emoji.unified
     let emoji = String.fromCodePoint(parseInt(unicodeCode, 16));
     this.comment_value += emoji

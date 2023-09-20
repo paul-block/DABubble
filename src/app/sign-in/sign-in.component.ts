@@ -32,7 +32,7 @@ export class SignInComponent {
         setTimeout(() => this.router.navigateByUrl('/main'), 1900);
         this.channelService.loadStandardChannel();
         await this.messageService.getMessages()
-        this.router.navigateByUrl('/main');
+        setTimeout(() => this.router.navigateByUrl('/main'), 1900);
       }
       else setTimeout(() => this.router.navigateByUrl('/choose-avatar'), 1900);
     }

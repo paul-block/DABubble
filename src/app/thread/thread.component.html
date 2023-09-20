@@ -301,7 +301,7 @@
         </div>
 
         <!------------------------------------------------------------------Emoji-->
-        <div class="z_index">
+        <div class="z_index" (click)="genFunctService.stopPropagation($event)" >
             <emoji-mart [class.d_block]="emojiPicker_open && picker_index == -2" class="emoji_picker"
                 [class.emoji_picker_above]="show_picker_above" (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
         </div>
