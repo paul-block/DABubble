@@ -114,14 +114,6 @@ export class HeaderChannelDirectChatComponent {
     else this.editMembers()
   }
 
-
-  // channelMemberAvatars(id: string) {
-  //   const user = this.authService.all_users.find(user => user.uid === id);
-  //   if (user) return user.avatar;
-  //   else console.log("User not found");
-  // }
-
-
   closeChat() {
     this.chatService.open_chat = false
   }

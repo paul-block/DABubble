@@ -4,7 +4,7 @@
         <mat-icon class="close-dialog" (click)="close()" mat-button mat-dialog-close>close</mat-icon>
     </div>
 
-    <img class="profileImg" [src]="getImageUrl(data.user.uid)">
+    <img class="profileImg" [src]="authService.getImageUrl(data.user.uid)">
 
     <div class="middle-part">
         <div class="edit-container">

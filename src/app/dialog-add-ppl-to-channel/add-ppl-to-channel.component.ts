@@ -43,8 +43,6 @@ export class AddPplToChannelComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.searchControl.value);
-    
     this.searchControl.valueChanges
     .pipe(
       switchMap(value => this.filterUsers(value))
@@ -66,12 +64,6 @@ export class AddPplToChannelComponent implements OnInit {
   }
 
 
-  // addUser(user: object) {
-  //   this.selectedUser.push(user);
-  //   this.showSelectedUsers = true;
-  //   this.searchControl.setValue('');
-  // }
-
   addUser(user) {
     const userExists = this.selectedUser.some(existingUser => existingUser.user_name === user.user_name); 
   
@@ -80,7 +72,6 @@ export class AddPplToChannelComponent implements OnInit {
       this.showSelectedUsers = true;
       this.searchControl.setValue('');
     } else {
-      console.log("User bereits im Array vorhanden!");
       this.userExists = true;
     }
   }
@@ -108,11 +99,17 @@ export class AddPplToChannelComponent implements OnInit {
 
   async createNewChannel() {
     await this.channelService.createNewChannel(this.channelName, this.description);
+    this.checkWhichMembersToAdd();
+    this.showSelectedUsers = false;
+    this.dialog.closeAll();
+  }
+
+
+  checkWhichMembersToAdd() {
     if (this.selectedOptionControl.value === 'all') {
       const members = this.authService.all_users
       members.forEach(member => {
-        let id = member.uid
-        this.channelService.addUserToChannel(this.channelName, id);
+        this.channelService.addUserToChannel(this.channelName, member.uid);
       });
       setTimeout(() => this.sendAddAllMemberMessage() , 300);
     } else if (this.selectedOptionControl.value === 'certain' && this.selectedUser.length > 0) {
@@ -121,10 +118,7 @@ export class AddPplToChannelComponent implements OnInit {
       });
       setTimeout(() => this.sendAddAMemberMessage(this.selectedUser) , 300);
     }
-    this.showSelectedUsers = false;
-    this.dialog.closeAll();
   }
-
 
   sendAddAllMemberMessage() {
     let users = []

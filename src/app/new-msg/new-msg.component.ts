@@ -4,6 +4,8 @@ import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
 import { MessagesService } from 'services/messages.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
+import { GeneralFunctionsService } from 'services/general-functions.service';
+import { OpenChatService } from 'services/open-chat.service';
 
 @Component({
   selector: 'app-new-msg',
@@ -21,35 +23,30 @@ export class NewMsgComponent {
   uid: string;
 
   constructor(
-     public authService: AuthenticationService,
-      public channelService: ChannelService,
-      public chatService: ChatService,
-      public msgService: MessagesService,
-      public fsDataThreadService: FirestoreThreadDataService
-      ) {
+    public authService: AuthenticationService,
+    public channelService: ChannelService,
+    public chatService: ChatService,
+    public msgService: MessagesService,
+    public fsDataThreadService: FirestoreThreadDataService,
+    public genFunctService: GeneralFunctionsService,
+    public openChatService: OpenChatService) {
 
-    this.uid = this.authService.userData.uid;
-
-    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
-      this.inputValue = '@' + this.chatService.userReceiverName;
-    }
-    else {
-      this.inputValue = '';
-      this.chatService.messageToPlaceholder = 'Nachricht an ...';
-    }
+      this.uid = this.authService.userData.uid;
+      if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
+        this.inputValue = '@' + this.chatService.userReceiverName;
+      }
+      else {
+        this.inputValue = '';
+        this.chatService.messageToPlaceholder = 'Nachricht an ...';
+      }
   }
 
 
   async valueChange(value: string) {
-    this.filteredUsersByName = [];
-    this.filteredUsersByEmail = [];
-    this.filteredChannels = [];
-
-    console.log(this.uid);
+    this.clearArrays();
     this.filteredUsersByName = await this.authService.filterUsers(value);
     this.filteredUsersByEmail = await this.authService.filterUsersByEmail(value);
     this.authorizedChannels = await this.channelService.getChannels(this.uid);
-    console.log(this.filteredChannels)
     this.filteredChannels = this.authorizedChannels.filter(channel => channel.channelName.toLowerCase().startsWith(value.toLowerCase())
     );
   }
@@ -61,24 +58,19 @@ export class NewMsgComponent {
       this.checkExistingChat(id, clickedValue);
     } 
     if (category == 'channel') {
-      this.openChannel(id);      
+      this.openChatService.openChat(id, 'channels')
     } 
     this.selectedValue = clickedValue;
-    this.filteredUsersByName = [];
-    this.filteredUsersByEmail = [];
-    this.filteredChannels = [];
+    this.clearArrays();
   }
 
 
   async checkExistingChat(selectedUser, clickedValue?: string) {
     const currentUserUID = this.chatService.currentUser_id;
-    
     if (currentUserUID === selectedUser.uid) {
       if (await this.findSelfChat(currentUserUID)) return;
     }
-
     if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
-  
     await this.createNewChat(selectedUser, clickedValue);
   }
   
@@ -91,8 +83,7 @@ export class NewMsgComponent {
           chat.chat_Member_IDs[0] === currentUserUID &&
           chat.chat_Member_IDs[1] === currentUserUID
         ) {
-          console.log("Chat mit sich selbst gefunden");
-          this.openChat(chat);
+          this.openChatService.openChat(chat.chat_ID);
           return true;
         }
       }
@@ -108,8 +99,7 @@ export class NewMsgComponent {
           chat.chat_Member_IDs.includes(currentUserUID) &&
           chat.chat_Member_IDs.includes(selectedUserUID)
         ) {
-          console.log("Chat gefunden");
-          this.openChat(chat);
+          this.openChatService.openChat(chat.chat_ID);
           return true;
         }
       }
@@ -119,7 +109,6 @@ export class NewMsgComponent {
   
 
   async createNewChat(selectedUser, clickedValue: string) {
-    console.log("Neuer chat erstellt");
     this.inputValue = '@' + clickedValue;
     this.chatService.userReceiverID = selectedUser.uid;
     this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
@@ -129,42 +118,12 @@ export class NewMsgComponent {
     this.msgService.getMessages();
   }
   
-
-  async openChat(chat) {
-    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
-    if (this.chatService.currentChatID !== chat.chat_ID) {
-      this.chatService.currentChatSection = 'chats';
-      this.chatService.currentChatID = chat.chat_ID;
-      this.msgService.emptyMessageText();
-      try {
-        this.chatService.currentChatData = chat;
-        this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
-        this.chatService.thread_open = false;
-      } catch (error) {
-        console.error("Fehler bei öffnen des Chats: ", error);
-      }
-    }
-  }
-
-
-  async openChannel(channelID) {
-    if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
-    if (this.chatService.currentChatID !== channelID) {
-      this.chatService.currentChatSection = 'channels';
-      this.chatService.currentChatID = channelID;
-      this.msgService.emptyMessageText();
-      try {
-        this.chatService.getCurrentChatData();
-        this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
-        this.chatService.thread_open = false;
-      } catch (error) {
-        console.error("Fehler bei öffnen des Channels: ", error);
-      }
-    }
-  }
   
+  clearArrays() {
+    this.filteredUsersByName = [];
+    this.filteredUsersByEmail = [];
+    this.filteredChannels = [];
+  }
 
   closeChat() {
     this.chatService.open_chat = false

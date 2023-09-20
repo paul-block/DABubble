@@ -64,7 +64,7 @@
                 <ng-container *ngFor="let channel of channelService.channels">
                     <div [ngClass]="{'active-channel': channel.channel_ID === chatService.currentChatID}"
                         class="pointer inactive-channel sidebar-hover"
-                        (click)="openChat(channel.channel_ID, 'channels')">
+                        (click)="openChatService.openChat(channel.channel_ID, 'channels')">
                         <span class="tag">#</span>
                         <span>{{ channel.channelName }}</span>
                     </div>
@@ -111,7 +111,7 @@
         <div class="dm-selection select-none" *ngIf="dmsVisible">
             <div *ngFor="let chat of chatService.chats"
                 [ngClass]="{'active-chat': chat.chat_ID === chatService.currentChatID}" class="dm-profile pointer"
-                (click)="openChat(chat.chat_ID, 'chats')">
+                (click)="openChatService.openChat(chat.chat_ID)">
                 <img [src]="chatService.getChatReceiverUser(chat)?.avatar" alt="user avatar">
                 <span>{{chatService.getChatReceiverUser(chat)?.user_name}}{{ isCurrentUserChat(chat) ? ' (Du)' : ''
                     }}</span>

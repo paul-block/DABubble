@@ -117,7 +117,6 @@ export class ChannelService {
 
     if (!usersSnapshot.empty) {
       const userDoc = usersSnapshot.docs[0];
-      console.log(userDoc);
       return userDoc.data().uid;
     }
 

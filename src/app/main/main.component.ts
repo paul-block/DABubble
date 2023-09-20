@@ -28,7 +28,6 @@ export class MainComponent {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
-    console.log(this.windowWidth);
     this.windowWidth = window.innerWidth;
    if(this.windowWidth < 1200 && this.chatService.thread_open == true) this.chatService.sidebarVisible = false;
     

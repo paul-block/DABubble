@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ChannelService } from './channel.service';
 import { GeneralFunctionsService } from './general-functions.service';
+import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class ChatService {
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
+    // public msgService: MessagesService,
     public genFunctService: GeneralFunctionsService,
   ) { }
 
@@ -110,14 +112,11 @@ export class ChatService {
       const docRef = doc(this.db, 'chats', this.currentChatID);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
         return docSnap.data();
       } else {
-        console.log("No such document!");
         return null;
       }
     } else {
-      console.log("currentChatID is not set!");
       return null;
     }
   }
@@ -160,27 +159,6 @@ export class ChatService {
     }
   }
 
-  // getChatReceiverUser(chat) {
-  //   let chatReveiverID;
-  //   try {
-  //     if (!chat) {
-  //       return null;
-  //     }
-
-  //     if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
-  //       chatReveiverID = chat.chat_Member_IDs[0];
-  //     } else {
-  //       chatReveiverID = chat.chat_Member_IDs[1];
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-
-  //   }
-
-  //   const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
-  //   return user;
-  // }
-
   getChatReceiverUser(chat) {
     let chatReveiverID;
     try {
@@ -195,7 +173,6 @@ export class ChatService {
       }
     } catch (error) {
       console.error("Ein Fehler ist aufgetreten beim Verarbeiten des Chats:", chat);
-      console.error("Stacktrace:", error.stack);
     }
 
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);

@@ -70,7 +70,6 @@ export class DialogEditChannelComponent implements OnInit {
 
   toggleLeaveText() {
     this.leave_Channel = !this.leave_Channel;
-    console.log(this.leave_Channel);
   }
 
 

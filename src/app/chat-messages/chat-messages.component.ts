@@ -70,6 +70,7 @@ export class ChatMessagesComponent {
     });
   }
 
+  
   scrollDivToTop() {
     const scrollContainerElement = this.scrollContainer.nativeElement;
     scrollContainerElement.scrollTo({
