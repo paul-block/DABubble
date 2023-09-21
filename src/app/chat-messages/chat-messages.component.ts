@@ -1,4 +1,4 @@
-import { AnimationBuilder, AnimationFactory, animate, style } from '@angular/animations';
+import { AnimationBuilder } from '@angular/animations';
 import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { getFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
@@ -70,7 +70,7 @@ export class ChatMessagesComponent {
     });
   }
 
-  
+
   scrollDivToTop() {
     const scrollContainerElement = this.scrollContainer.nativeElement;
     scrollContainerElement.scrollTo({
@@ -86,39 +86,31 @@ export class ChatMessagesComponent {
     const emojiPickerReactionBar = target.closest('.emojiPickerReactionBar');
     const emojiPickerDirect = target.closest('.emojiPickerDirect');
     const emojiPickerMessage = target.closest('.emojiPickerMessage');
-
-    if (!emojiPickerReactionBar) {
-      this.emojiService.picker_reaction_bar = false;
-    }
-    if (!emojiPickerDirect && !emojiPickerMessage) {
-      this.emojiService.emojiPicker_open = false;
-    }
-
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.toggleEditMessage = false;
-    }
+    if (!emojiPickerReactionBar) this.emojiService.picker_reaction_bar = false;
+    if (!emojiPickerDirect && !emojiPickerMessage) this.emojiService.emojiPicker_open = false;
+    if (!this.elementRef.nativeElement.contains(event.target)) this.toggleEditMessage = false;
   }
-
 
 
   togglePopup(popupVariable: string) {
-    if (popupVariable === 'toggleEditMessage') {
-      this[popupVariable] = !this[popupVariable];
-    } else {
-      this.emojiService[popupVariable] = !this.emojiService[popupVariable];
-      if (this.emojiService[popupVariable]) {
-        this.closeOtherPopups(popupVariable);
-      }
-    }
+    popupVariable === 'toggleEditMessage' ? this.toggleLocalVar() : this.toggleServiceVar(popupVariable);
   }
+
+
+  toggleLocalVar() {
+    this.toggleEditMessage = !this.toggleEditMessage;
+  }
+
+  toggleServiceVar(popupVariable) {
+    this.emojiService[popupVariable] = !this.emojiService[popupVariable];
+    if (this.emojiService[popupVariable]) this.closeOtherPopups(popupVariable);
+  }
+
 
   closeOtherPopups(currentPopup: string) {
     const popupVariables = ['picker_reaction_bar', 'emojiPicker_open'];
-
     popupVariables.forEach(popup => {
-      if (popup !== currentPopup) {
-        this.emojiService[popup] = false;
-      }
+      if (popup !== currentPopup) this.emojiService[popup] = false;
     });
   }
 
@@ -139,8 +131,6 @@ export class ChatMessagesComponent {
     this.emojiService.picker_reaction_bar = false;
     this.msgService.emoji_data = this.emojiService.addEmoji($event, i, chatMessages, user)[i]['emoji_data'];
     this.msgService.updateMessagesReactions(chatMessage);
-    console.log(this.msgService.emoji_data);
-
   }
 
 
