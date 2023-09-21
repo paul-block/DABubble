@@ -128,20 +128,31 @@ export class ChannelDirectSendMessageComponent {
 
   async openChat(chat) {
     if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
-    if (this.chatService.currentChatID !== chat.chat_ID) {
-      this.chatService.currentChatSection = 'chats';
-      this.chatService.currentChatID = chat.chat_ID;
-      this.msgService.emptyMessageText();
-      try {
-        this.chatService.currentChatData = chat;
-        this.chatService.textAreaMessageTo();
-        this.msgService.getMessages();
-        this.chatService.thread_open = false;
-      } catch (error) {
-        console.error("Fehler bei öffnen des Chats: ", error);
-      }
+    if (this.notSameChatID(chat)) {
+      this.loadChatData(chat);
     }
   }
+
+
+  loadChatData(chat) {
+    this.chatService.currentChatSection = 'chats';
+    this.chatService.currentChatID = chat.chat_ID;
+    this.msgService.emptyMessageText();
+    try {
+      this.chatService.currentChatData = chat;
+      this.chatService.textAreaMessageTo();
+      this.msgService.getMessages();
+      this.chatService.thread_open = false;
+    } catch (error) {
+      console.error("Fehler bei öffnen des Chats: ", error);
+    }
+  }
+
+
+  notSameChatID(chat) {
+    return this.chatService.currentChatID !== chat.chat_ID;
+  }
+
 
 
   handleEnter(event: KeyboardEvent): void {
