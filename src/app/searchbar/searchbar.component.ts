@@ -1,8 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
-import { getFirestore, collection, getDocs } from '@angular/fire/firestore';
+import { collection, getDocs } from '@angular/fire/firestore';
 import { HostListener } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { DialogProfileComponent } from '../dialog-profile/dialog-profile.component';
 import { ChatService } from 'services/chat.service';
 import { ChannelService } from 'services/channel.service';
 import { MessagesService } from 'services/messages.service';
@@ -18,7 +16,7 @@ import { ProfileService } from 'services/profile.service';
 })
 
 export class SearchbarComponent {
-  db = getFirestore();
+  db = this.authService.db;
   showResults = false;
   isLoading = false;
   searchValue = '';
@@ -34,8 +32,10 @@ export class SearchbarComponent {
   profileRef;
   profileRefOpen = false;
 
-  constructor(private elementRef: ElementRef, private dialog: MatDialog,
-    public chatService: ChatService, public msgService: MessagesService,
+  constructor(
+    private elementRef: ElementRef,
+    public chatService: ChatService, 
+    public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
     public channelService: ChannelService,
     public authService: AuthenticationService,
@@ -94,16 +94,6 @@ export class SearchbarComponent {
     );
   }
 
-  clear() {
-    this.usersSet.clear();
-    this.channelsSet.clear();
-    this.filteredChannelMessagesSet.clear();
-    this.filteredChannels = [];
-    this.filteredUsers = [];
-    this.filteredChannelMessages = [];
-  }
-
-
   async getData(collectionName: string, currentUserId: string) {
     const collectionRef = collection(this.db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
@@ -118,47 +108,44 @@ export class SearchbarComponent {
     });
   }
   
-
-async getChannelMessages(currentUserId) {
+async getChannelMessages(currentUserId: string) {
   const channelsRef = collection(this.db, 'channels');
   const channelsSnapshot = await getDocs(channelsRef);
   const uniqueMessageMap = new Map();
-
-  for (let channelDoc of channelsSnapshot.docs) {
-      const channelData = channelDoc.data();
-
-      if (!channelData.assignedUsers?.includes(currentUserId)) {
-          continue;
-      }
-
-      const channelName = channelData.channelName;
-      const messagesRef = collection(channelDoc.ref, 'messages');
-      const messagesSnapshot = await getDocs(messagesRef);
-
-      for (let messageDoc of messagesSnapshot.docs) {
-          const messageData = messageDoc.data();
-          const message = messageData.chat_message;
-          const messageSender = messageData.user_Sender_Name;
-
-          if (!message) {
-               continue;
-          }
-
-          if (message.toLowerCase().startsWith(this.searchValue.toLowerCase())) {
-              const combinedMessage = `"${message}" in #${channelName} von: ${messageSender}`;
-              const channel_ID = channelData.channel_ID;
-              const uniqueKey = combinedMessage + "|" + channel_ID;
-
-              if (!uniqueMessageMap.has(uniqueKey)) {
-                  uniqueMessageMap.set(uniqueKey, { combinedMessage: combinedMessage, channel_ID: channel_ID });
-              }
-          }
-      }
-  }
+  await this.checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap)
   this.filteredChannelMessages = [...uniqueMessageMap.values()];
 }
 
+async checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap) {
+  for (let channelDoc of channelsSnapshot.docs) {
+    const channelData = channelDoc.data();
+    if (!channelData.assignedUsers?.includes(currentUserId)) continue;
+    const channelName = channelData.channelName;
+    const messagesRef = collection(channelDoc.ref, 'messages');
+    const messagesSnapshot = await getDocs(messagesRef);
+    for (let messageDoc of messagesSnapshot.docs) {
+        const messageData = messageDoc.data();
+        const message = messageData.chat_message;
+        const messageSender = messageData.user_Sender_Name;
+        if (!message) continue;
+        if (this.checkMessageRelevant(message)) 
+        this.createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap)
+    }
+}
+}
 
+checkMessageRelevant(message) {
+ return message.toLowerCase().startsWith(this.searchValue.toLowerCase())
+}
+
+createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap) {
+  const combinedMessage = `"${message}" in #${channelName} von: ${messageSender}`;
+  const channel_ID = channelData.channel_ID;
+  const uniqueKey = combinedMessage + "|" + channel_ID;
+  if (!uniqueMessageMap.has(uniqueKey)) {
+    uniqueMessageMap.set(uniqueKey, { combinedMessage: combinedMessage, channel_ID: channel_ID });
+}
+}
 
   show() {
     if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||
@@ -168,28 +155,21 @@ async getChannelMessages(currentUserId) {
     } else this.showResults = false;
   }
 
+  clear() {
+    this.usersSet.clear();
+    this.channelsSet.clear();
+    this.filteredChannelMessagesSet.clear();
+    this.filteredChannels = [];
+    this.filteredUsers = [];
+    this.filteredChannelMessages = [];
+  }
+
   openProfile(user) {
     this.searchValue = '';
     this.profileService.openProfile(user.uid)
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.panelClass = 'add-channel-dialog';
-    // dialogConfig.data = dialogConfig.data = { 
-    //   user: {
-    //     user_name: user.user_name, 
-    //     email: user.email,  
-    //     status: user.status,
-    //     uid: user.uid
-    //   }
-    // };
-    // this.dialog.closeAll();
-    // this.profileRef = this.dialog.open(DialogProfileComponent, dialogConfig);
-    // this.profileRefOpen = true;
-    // this.profileRef.afterClosed().subscribe(() => {
-    //   this.profileRefOpen = false;
-    // });
   }
 
-  async openChannel(channelID: string) {
+  openChannel(channelID: string) {
     this.searchValue = '';
     this.openChatService.openChat(channelID, 'channels');
   }
@@ -197,5 +177,6 @@ async getChannelMessages(currentUserId) {
   openMsg(channelID) {
     this.openChannel(channelID);
   }
+
 }
 
