@@ -41,14 +41,13 @@ export class DialogEditChannelComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogAddMembersComponent>,
   ) { }
 
+
   async ngOnInit() {
     this.channelName = this.chatService.currentChatData.channelName;
     this.channelDescription = this.chatService.currentChatData.description;
     this.assignedUsers = this.chatService.currentChatData.assignedUsers;
     this.getCreatorName();
   }
-
-
 
 
   @HostListener('window:resize', ['$event'])
@@ -93,40 +92,47 @@ export class DialogEditChannelComponent implements OnInit {
   changeEditText(section) {
     this.saveEditChannelInfo();
     if (section === 'name') {
-      this.editName = !this.editName;
-      if (this.editName) {
-        this.editChannelName = 'Speichern';
-        this.editChannelNameMobile = 'check_circle'
-      } else {
-        this.editChannelName = 'Bearbeiten';
-        this.editChannelNameMobile = 'edit'
-      }
+      this.toggleChannelEditSafe('editName', 'editChannelName', 'editChannelNameMobile')
     } else if (section === 'description') {
-      this.editDescription = !this.editDescription;
-      if (this.editDescription) {
-        this.editChannelDescription = 'Speichern';
-        this.editChannelDescriptionMobile = 'check_circle'
-      } else {
-        this.editChannelDescription = 'Bearbeiten';
-        this.editChannelDescriptionMobile = 'edit'
+      this.toggleChannelEditSafe('editDescription', 'editChannelDescription', 'editChannelDescriptionMobile')
+    }
+  }
 
-      }
+
+  toggleChannelEditSafe(sectionVar, sectionEditSafe, sectionEditSafeMobile) {
+    this[sectionVar] = !this[sectionVar];
+    if (this[sectionVar]) {
+      this[sectionEditSafe] = 'Speichern';
+      this[sectionEditSafeMobile] = 'check_circle'
+    } else {
+      this[sectionEditSafe] = 'Bearbeiten';
+      this[sectionEditSafeMobile] = 'edit'
     }
   }
 
 
   saveEditChannelInfo() {
     if (this.editName || this.editDescription || this.editChannelUsers) {
-      const changes = {
-        channelName: this.channelName,
-        description: this.channelDescription,
-        assignedUsers: this.assignedUsers
-      }
-      this.chatService.currentChatData.channelName = changes.channelName;
-      this.chatService.currentChatData.description = changes.description;
-      this.chatService.currentChatData.assignedUsers = changes.assignedUsers;
+      const changes = this.getChannelChanges();
+      this.applyChannelChanges(changes);
       this.channelService.updateChannelInfo(this.chatService.currentChatData, changes);
     }
+  }
+
+
+  getChannelChanges() {
+    return {
+      channelName: this.channelName,
+      description: this.channelDescription,
+      assignedUsers: this.assignedUsers
+    }
+  }
+
+
+  applyChannelChanges(changes) {
+    this.chatService.currentChatData.channelName = changes.channelName;
+    this.chatService.currentChatData.description = changes.description;
+    this.chatService.currentChatData.assignedUsers = changes.assignedUsers;
   }
 
 

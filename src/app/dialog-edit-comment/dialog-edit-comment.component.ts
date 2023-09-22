@@ -11,9 +11,11 @@ export class DialogEditCommentComponent {
 
   emojiPicker_open: boolean = false
 
-  constructor(public dialogRef: MatDialogRef<DialogEditCommentComponent>, @Inject(MAT_DIALOG_DATA) public data: { comment: string }) {
-
-  }
+  constructor(
+    public dialogRef: MatDialogRef<DialogEditCommentComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { comment: string }
+  ) { }
+  
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -21,14 +23,14 @@ export class DialogEditCommentComponent {
 
 
   openEmojiPicker() {
-    this.emojiPicker_open = true
+    this.emojiPicker_open = true;
   }
 
 
   addEmoji($event: any) {
-    this.emojiPicker_open = false
-    let unicodeCode: string = $event.emoji.unified
+    this.emojiPicker_open = false;
+    let unicodeCode: string = $event.emoji.unified;
     let emoji = String.fromCodePoint(parseInt(unicodeCode, 16));
-    this.data.comment += emoji
+    this.data.comment += emoji;
   }
 }
