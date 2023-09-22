@@ -100,6 +100,9 @@ textarea {
 }
 
 .custom-edit-channel-dialog {
+  position: absolute !important;
+  top: 178px;
+  left: 500px;
   width: 800px;
   max-width: 100% !important;
   .mat-mdc-dialog-container .mdc-dialog__surface {
