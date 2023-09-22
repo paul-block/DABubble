@@ -19,8 +19,8 @@
     [ngClass]="{'edit-container-channel-name-description':editName}">
     <div class="space-between">
       <h2>Channel-Name</h2>
-      <span class="edit-text hide-mobile" (click)="changeEditText('name')">{{ editChannelName }}</span>
-      <mat-icon class="hide-big-screen material-icons-outlined edit-icons"
+      <span *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="edit-text hide-mobile" (click)="changeEditText('name')">{{ editChannelName }}</span>
+      <mat-icon  class="hide-big-screen material-icons-outlined edit-icons"
         (click)="changeEditText('name')">{{ editChannelNameMobile }}</mat-icon>
     </div>
     <div class="edit-channel-name" *ngIf="editName">
@@ -39,7 +39,7 @@
     <ng-container *ngIf="!delete_Channel && !leave_Channel">
       <div class="space-between">
         <h2>Beschreibung</h2>
-        <span class="edit-text hide-mobile" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
+        <span *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="edit-text hide-mobile" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
         <mat-icon class="hide-big-screen material-icons-outlined edit-icons"
           (click)="changeEditText('description')">{{ editChannelDescriptionMobile }}</mat-icon>
       </div>

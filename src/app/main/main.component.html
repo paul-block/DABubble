@@ -7,7 +7,7 @@
         [class.open_main_chat]="chatService.open_chat"></app-channel-direct-chat>
     <app-new-msg [class.open_main_chat]="chatService.open_chat" *ngIf="chatService.openNewMsgComponent"
         class="mobile_chat box container-styling box-large"></app-new-msg>
-    <app-thread *ngIf="chatService.thread_open" [class.open_thread]="chatService.thread_open" class=" thread container-styling overflow"></app-thread>
+    <app-thread  [class.open_thread]="chatService.thread_open" class=" thread container-styling overflow"></app-thread>
 </section>
 <div class="vertical-text pointer select-none" (click)="chatService.toggleSidebar()">
     <span>{{ chatService.toggleSidebarMenuText }}</span>
