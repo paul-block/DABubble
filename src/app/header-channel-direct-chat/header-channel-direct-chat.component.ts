@@ -60,6 +60,7 @@ export class HeaderChannelDirectChatComponent {
 
   openEditChannel() {
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.position = { top: '175px', left: '500px' };
     dialogConfig.panelClass = 'custom-edit-channel-dialog';
     this.dialogEditChannelRef = this.dialog.open(DialogEditChannelComponent, dialogConfig);
     this.isEditChannelDialogOpen = true;
