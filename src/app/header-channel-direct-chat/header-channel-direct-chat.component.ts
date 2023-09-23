@@ -19,10 +19,9 @@ export class HeaderChannelDirectChatComponent {
   isEditChannelDialogOpen: boolean = false;
   isEditMembersDialogOpen: boolean = false;
   isAddMembersDialogOpen: boolean = false;
-  @ViewChild('editChannelREF') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   @ViewChild('editMembersREF') public ElementEditMembersRef: ElementRef<HTMLDivElement>;
   @ViewChild('addMembersREF') public ElementAddMembersRef: ElementRef;
-  @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
+  @ViewChild('editChannelRef', { read: ElementRef }) targetDiv: ElementRef;
   dialogEditChannelRef: MatDialogRef<DialogEditChannelComponent>;
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;

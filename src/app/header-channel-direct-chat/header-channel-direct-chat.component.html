@@ -1,5 +1,5 @@
 <header [ngClass]="{'placeholder':chatService.currentChatSection === 'noChatSectionSelected'}">
-    <div *ngIf="chatService.currentChatSection === 'channels'" class="chat-receiver"
+    <div #editChannelRef *ngIf="chatService.currentChatSection === 'channels'" class="chat-receiver"
         [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()" #editChannelREF>
         <mat-icon class="tag">tag</mat-icon>
         <h1>{{ channelService.currentChannelData.channelName }}</h1>
