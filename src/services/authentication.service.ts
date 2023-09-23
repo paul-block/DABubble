@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
@@ -6,20 +6,15 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat
 import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot, DocumentData } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from './channel.service';
-import { getStorage } from "firebase/storage";
 import { User, onAuthStateChanged } from '@angular/fire/auth';
-
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-
-  
   private authInitializedPromise: Promise<void>;
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
@@ -35,7 +30,7 @@ export class AuthenticationService {
   googleUser_exist: boolean;
   all_users: any[];
   usersPromise: Promise<any>;
-  newUser:boolean = false
+  newUser: boolean = false
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -43,6 +38,13 @@ export class AuthenticationService {
     private router: Router,
     public channelService: ChannelService,
   ) {
+    this.setCurrentUserToLocalStorage();
+    this.loadAllUsers();
+    this.loadCurrentUser();
+  }
+
+
+  setCurrentUserToLocalStorage() {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         setTimeout(() => this.getUserData(user.uid), 500);
@@ -52,9 +54,10 @@ export class AuthenticationService {
         localStorage.setItem('user', 'null');
       }
     });
+  }
 
 
-    
+  loadAllUsers() {
     this.usersPromise = new Promise<void>((resolve) => {
       const dbRef = collection(this.db, "users");
       onSnapshot(dbRef, docsSnap => {
@@ -66,8 +69,10 @@ export class AuthenticationService {
         resolve();
       });
     });
+  }
 
 
+  loadCurrentUser() {
     this.authInitializedPromise = new Promise<void>((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
         this.currentUserSubject.next(user);
@@ -96,7 +101,6 @@ export class AuthenticationService {
   }
 
 
-  // Sign up with email/password
   async SignUp(email: string, password: string) {
     try {
       const result = await this.afAuth
@@ -115,7 +119,6 @@ export class AuthenticationService {
   }
 
 
-  // Sign in with email/password
   async SignIn(email: string, password: string) {
     try {
       const result = await this.afAuth
@@ -154,7 +157,6 @@ export class AuthenticationService {
   }
 
 
-  // Sign in with Google
   async GoogleAuth() {
     await this.AuthLogin(new GoogleAuthProvider());
   }
@@ -234,7 +236,7 @@ export class AuthenticationService {
     });
     return users;
   }
-  
+
 
   getUserInfo(uid: string) {
     const user = this.all_users.find(user => user.uid === uid);
@@ -297,7 +299,8 @@ export class AuthenticationService {
     else console.log("User not found" + uid);
   }
 
-  isCurrentUser(user):boolean{
+
+  isCurrentUser(user): boolean {
     return user === this.userData.uid ? true : false;
   }
 }
