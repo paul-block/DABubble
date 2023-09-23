@@ -2,7 +2,7 @@
     <!-- <div class="arrow_back" (click)="closeChat()">
         <img src="/assets/img/arrow_back.png" alt="">
     </div> -->
-    <div *ngIf="chatService.currentChatSection === 'channels'" class="chat-receiver"
+    <div #targetDiv *ngIf="chatService.currentChatSection === 'channels'" class="chat-receiver"
         [ngClass]="{'edit-dialog-open':isEditChannelDialogOpen === true}" (click)="editChannel()" #editChannelREF>
         <mat-icon class="tag">tag</mat-icon>
         <h1>{{ channelService.currentChannelData.channelName }}</h1>

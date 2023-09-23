@@ -22,6 +22,7 @@ export class HeaderChannelDirectChatComponent {
   @ViewChild('editChannelREF') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   @ViewChild('editMembersREF') public ElementEditMembersRef: ElementRef<HTMLDivElement>;
   @ViewChild('addMembersREF') public ElementAddMembersRef: ElementRef;
+  @ViewChild('targetDiv', { read: ElementRef }) targetDiv: ElementRef;
   dialogEditChannelRef: MatDialogRef<DialogEditChannelComponent>;
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;
@@ -59,9 +60,16 @@ export class HeaderChannelDirectChatComponent {
 
 
   openEditChannel() {
+    const targetDiv = this.targetDiv.nativeElement;
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.position = { top: '175px', left: '500px' };
     dialogConfig.panelClass = 'custom-edit-channel-dialog';
+    const targetRect = targetDiv.getBoundingClientRect();
+    const offsetX = window.scrollX || document.documentElement.scrollLeft;
+    const offsetY = window.scrollY || document.documentElement.scrollTop;
+    dialogConfig.position = {
+      top: targetRect.top + 42 + offsetY + 'px',
+      left: targetRect.left + offsetX + 'px',
+    };
     this.dialogEditChannelRef = this.dialog.open(DialogEditChannelComponent, dialogConfig);
     this.isEditChannelDialogOpen = true;
     this.dialogEditChannelRef.afterClosed().subscribe(() => {
@@ -76,7 +84,7 @@ export class HeaderChannelDirectChatComponent {
     this.dialogEditMembersRef = this.dialog.open(DialogEditMembersComponent, dialogConfig);
     this.isEditMembersDialogOpen = true;
     this.dialogEditMembersRef.afterClosed().subscribe((closedWithRedirection: boolean) => {
-      if (closedWithRedirection && window.innerWidth > 1000) { 
+      if (closedWithRedirection && window.innerWidth > 1000) {
         this.dialogEditMembersRef = null;
         this.addMembers();
       }
@@ -90,14 +98,14 @@ export class HeaderChannelDirectChatComponent {
 
 
   addMembersMobile() {
-      const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.panelClass = 'custom-add-members-dialog';
-      this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
-      this.isAddMembersDialogOpen = true;
-      this.dialogAddMembersRef.afterClosed().subscribe(() => {
-        this.isAddMembersDialogOpen = false;
-      });
+    const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'custom-add-members-dialog';
+    this.dialogAddMembersRef = this.dialog.open(DialogAddMembersComponent, dialogConfig);
+    this.isAddMembersDialogOpen = true;
+    this.dialogAddMembersRef.afterClosed().subscribe(() => {
+      this.isAddMembersDialogOpen = false;
+    });
   }
 
 
