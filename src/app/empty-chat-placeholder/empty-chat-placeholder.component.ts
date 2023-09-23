@@ -9,9 +9,9 @@ import { ProfileService } from 'services/profile.service';
   styleUrls: ['./empty-chat-placeholder.component.scss']
 })
 export class EmptyChatPlaceholderComponent {
-constructor(
-  public authService: AuthenticationService,
-  public chatService: ChatService,
-  public profileService: ProfileService,
-){}
+  constructor(
+    public authService: AuthenticationService,
+    public chatService: ChatService,
+    public profileService: ProfileService,
+  ) { }
 }

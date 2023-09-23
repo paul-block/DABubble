@@ -17,12 +17,14 @@ export class ChannelDirectEditMessageComponent {
     public emojiService: EmojiService,
   ) { }
 
+
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event);
     this.msgService.messageText += this.emojiService.textMessage;
     this.emojiService.textMessage = '';
     this.msgService.checkIfEmpty();
   }
+
 
   toggleEmojiPicker() {
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;

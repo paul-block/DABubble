@@ -1,10 +1,11 @@
 <section class="edit-message-container">
     <div class="edit-message">
         <textarea name="" id="" cols="10" rows="2" [(ngModel)]="msgService.messageText"
-            (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()" (keyup.enter)="msgService.saveEditedMessage()"></textarea>
+            (keydown)="msgService.checkIfEmpty()" (keyup)="msgService.checkIfEmpty()"
+            (keyup.enter)="msgService.saveEditedMessage()"></textarea>
         <div class="extend-send-message">
             <div class="extend-message">
-                <div class="z_index">
+                <div class="z_index emojiPickerMessageEdit">
                     <emoji-mart [class.d_flex]="emojiService.emojiPicker_open && emojiService.picker_index == -2"
                         class="emoji_picker" (emojiClick)="addEmojitoTextarea($event);">
                     </emoji-mart>

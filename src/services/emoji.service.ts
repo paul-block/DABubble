@@ -11,7 +11,7 @@ export class EmojiService {
   picker_reaction_bar: boolean = false;
   openPickerBelow: boolean = false;
   checkMarkManualEvent: any =
-  
+
     {
       "emoji": {
         "name": "White Heavy Check Mark",

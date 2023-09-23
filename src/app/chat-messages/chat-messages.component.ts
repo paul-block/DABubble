@@ -86,8 +86,9 @@ export class ChatMessagesComponent {
     const emojiPickerReactionBar = target.closest('.emojiPickerReactionBar');
     const emojiPickerDirect = target.closest('.emojiPickerDirect');
     const emojiPickerMessage = target.closest('.emojiPickerMessage');
+    const emojiPickerMessageEdit = target.closest('.emojiPickerMessageEdit');
     if (!emojiPickerReactionBar) this.emojiService.picker_reaction_bar = false;
-    if (!emojiPickerDirect && !emojiPickerMessage) this.emojiService.emojiPicker_open = false;
+    if (!emojiPickerDirect && !emojiPickerMessage && !emojiPickerMessageEdit) this.emojiService.emojiPicker_open = false;
     if (!this.elementRef.nativeElement.contains(event.target)) this.toggleEditMessage = false;
   }
 

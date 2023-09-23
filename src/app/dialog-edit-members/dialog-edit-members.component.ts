@@ -12,18 +12,19 @@ import { ProfileService } from 'services/profile.service';
 })
 export class DialogEditMembersComponent {
   dialogEditMembersRef: MatDialogRef<DialogEditMembersComponent>;
+
   constructor(
     public chatService: ChatService,
     public authService: AuthenticationService,
     private dialogRef: MatDialogRef<DialogEditMembersComponent>,
     public profileService: ProfileService,
     public channelService: ChannelService
-    ) {
+  ) {
   }
 
   closeRedirectAddMember() {
     this.dialogRef.close(true);
   }
 
-  
+
 }
