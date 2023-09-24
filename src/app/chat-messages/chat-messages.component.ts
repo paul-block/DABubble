@@ -1,5 +1,4 @@
-import { AnimationBuilder } from '@angular/animations';
-import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { getFirestore } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'services/authentication.service';
@@ -43,9 +42,6 @@ export class ChatMessagesComponent {
     public uploadService: UploadService,
     private elementRef: ElementRef,
     public genFunctService: GeneralFunctionsService,
-    private el: ElementRef,
-    private renderer: Renderer2,
-    private builder: AnimationBuilder
   ) { }
 
 
@@ -121,9 +117,10 @@ export class ChatMessagesComponent {
     const emojiPickerDirect = target.closest('.emojiPickerDirect');
     const emojiPickerMessage = target.closest('.emojiPickerMessage');
     const emojiPickerMessageEdit = target.closest('.emojiPickerMessageEdit');
+    const toggleEditMessage = target.closest('.toggleEditMessage');
     if (!emojiPickerReactionBar) this.emojiService.picker_reaction_bar = false;
     if (!emojiPickerDirect && !emojiPickerMessage && !emojiPickerMessageEdit) this.emojiService.emojiPicker_open = false;
-    if (!this.elementRef.nativeElement.contains(event.target)) this.toggleEditMessage = false;
+    if (!toggleEditMessage) this.toggleEditMessage = false;
   }
 
 
