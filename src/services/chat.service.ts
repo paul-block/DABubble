@@ -72,18 +72,13 @@ export class ChatService {
 
 
   async searchChat(userReceiverID): Promise<string | null> {
-
     let foundChatId = null;
     if (this.authService.getUid() !== null) {
       try {
         const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
         docChatsSnapshot.forEach((chat) => {
           const chatData = chat.data();
-          const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
-          if (
-            (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === this.authService.getUid()) ||
-            (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === this.authService.getUid())
-          ) {
+          if (this.exactChatMemberIDs(chatData, userReceiverID)) {
             foundChatId = chatData.chat_ID;
           }
         });
@@ -95,6 +90,12 @@ export class ChatService {
       console.error("Kein Benutzer ist eingeloggt");
     }
     return null;
+  }
+
+  exactChatMemberIDs(chatData, userReceiverID) {
+    const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
+    return (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === this.authService.getUid()) ||
+      (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === this.authService.getUid());
   }
 
 
@@ -119,10 +120,6 @@ export class ChatService {
     return new Promise(async (resolve, reject) => {
       try {
         const time_stamp = new Date();
-        if (!userID) {
-          reject("Kein Benutzer ist eingeloggt");
-          return;
-        }
         const customChatID = await this.genFunctService.generateCustomFirestoreID();
         await setDoc(doc(collection(this.db, 'chats'), customChatID), {
           chat_Member_IDs: [userID, userReceiverID],
@@ -273,7 +270,7 @@ export class ChatService {
   }
 
 
-  changeText(text:string) {
+  changeText(text: string) {
     this.toggleSidebarMenuText = text;
   }
 }

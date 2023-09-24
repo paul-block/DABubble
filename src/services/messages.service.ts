@@ -48,27 +48,35 @@ export class MessagesService {
     }
   }
 
+
   async newMessage() {
     return new Promise<void>(async (resolve) => {
       let time_stamp = new Date();
       const customMessageID = await this.genFunctService.generateCustomFirestoreID();
-      await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID), {
-        chat_message: this.messageText,
-        user_Sender_ID: this.authService.userData.uid,
-        user_Sender_Name: this.authService.userData.user_name,
-        created_At: time_stamp,
-        chat_message_edited: false,
-        emoji_data: [],
-        modified_message: this.chatService.modifyMessageValue(this.messageText),
-        answers: 0,
-        last_answer: '',
-        uploaded_files: this.upload_array,
-        message_ID: customMessageID
-      }).then(() => {
+      await setDoc(doc(collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages'), customMessageID),
+        this.newMessageData(time_stamp, customMessageID)
+      ).then(() => {
         this.messageText = '';
       });
       resolve();
     });
+  }
+
+
+  newMessageData(time_stamp, customMessageID) {
+    return {
+      chat_message: this.messageText,
+      user_Sender_ID: this.authService.userData.uid,
+      user_Sender_Name: this.authService.userData.user_name,
+      created_At: time_stamp,
+      chat_message_edited: false,
+      emoji_data: [],
+      modified_message: this.chatService.modifyMessageValue(this.messageText),
+      answers: 0,
+      last_answer: '',
+      uploaded_files: this.upload_array,
+      message_ID: customMessageID
+    }
   }
 
 
@@ -94,18 +102,11 @@ export class MessagesService {
 
   async getMessages(): Promise<void> {
     return new Promise<void>(async (resolve) => {
-      if (this.chatSnapshotUnsubscribe) this.chatSnapshotUnsubscribe();
-      this.messagesLoaded = false;
-      this.emojiService.resetInitializedEmojiRef();
-      this.chatService.directChatMessages = [];
-      const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
-      const docDirectChatMessagesSnapshot = query(chatMessagesRef, orderBy("created_At", "asc"));
-      this.chatSnapshotUnsubscribe = onSnapshot(docDirectChatMessagesSnapshot, (snapshot) => {
+      this.prepareForGetMessages();
+      const docChatMessagesSnapshot = this.getChatMessagesSnapshot();
+      this.chatSnapshotUnsubscribe = onSnapshot(docChatMessagesSnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          const changedMessageData = change.doc.data();
-          if (change.type === 'added') this.chatService.directChatMessages.push(changedMessageData);
-          else if (change.type === 'modified') this.getChangedMessage(changedMessageData);
-          else if (change.type === 'removed') this.spliceMessage(changedMessageData);
+          this.reactToChange(change);
         });
         this.messagesLoaded = true;
         resolve();
@@ -113,6 +114,27 @@ export class MessagesService {
     });
   }
 
+
+  prepareForGetMessages() {
+    if (this.chatSnapshotUnsubscribe) this.chatSnapshotUnsubscribe();
+    this.messagesLoaded = false;
+    this.emojiService.resetInitializedEmojiRef();
+    this.chatService.directChatMessages = [];
+  }
+
+
+  getChatMessagesSnapshot() {
+    const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
+    return query(chatMessagesRef, orderBy("created_At", "asc"));
+  }
+
+
+  reactToChange(change) {
+    const changedMessageData = change.doc.data();
+    if (change.type === 'added') this.chatService.directChatMessages.push(changedMessageData);
+    else if (change.type === 'modified') this.getChangedMessage(changedMessageData);
+    else if (change.type === 'removed') this.spliceMessage(changedMessageData);
+  }
 
 
   async getChangedMessage(changedMessageData: DocumentData) {
@@ -133,9 +155,9 @@ export class MessagesService {
   }
 
 
-  scrollToBottom(section:string) {  
-     if(section == 'thread') setTimeout(() => this.scrollSubjectThread.next(), 0);
-     else setTimeout(() => this.scrollSubject.next(), 0);
+  scrollToBottom(section: string) {
+    if (section == 'thread') setTimeout(() => this.scrollSubjectThread.next(), 0);
+    else setTimeout(() => this.scrollSubject.next(), 0);
   }
 
 
@@ -160,14 +182,11 @@ export class MessagesService {
   async saveEditedMessage() {
     try {
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
-      await updateDoc(messageRef, {
-        chat_message: this.messageText,
-        chat_message_edited: true,
-        modified_message: this.chatService.modifyMessageValue(this.messageText),
-      }).then(() => {
+      await updateDoc(messageRef,
+        this.editedMessageData(this.messageText, true, this.chatService.modifyMessageValue(this.messageText))
+      ).then(() => {
         this.messageText = '';
         this.editMessageText = false;
-
       });
     } catch (error) {
       console.error('Error editing message:', error);
@@ -176,15 +195,20 @@ export class MessagesService {
 
 
   async saveEditedMessageFromThread(chat: { message_ID: any; chat_message: any; chat_message_edited: any; modified_message: any; }) {
-    let id = chat.message_ID
-    let message = chat.chat_message
-    let edited = chat.chat_message_edited
+    let id = chat.message_ID;
     const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
-    await updateDoc(messageRef, {
-      chat_message: message,
-      chat_message_edited: edited,
-      modified_message: chat.modified_message
-    })
+    await updateDoc(messageRef,
+      this.editedMessageData(chat.chat_message, chat.chat_message_edited, chat.modified_message)
+    )
+  }
+
+
+  editedMessageData(chatMessage, chatMessageEdited, modifiedMessage) {
+    return {
+      chat_message: chatMessage,
+      chat_message_edited: chatMessageEdited,
+      modified_message: modifiedMessage,
+    }
   }
 
 
@@ -279,8 +303,8 @@ export class MessagesService {
       await updateDoc(messageRef, {
         uploaded_files: this.chatService.directChatMessages[i].uploaded_files,
       })
-      if(message.uploaded_files.file_name.length == 0 && message.chat_message == '' && message.answers == 0) this.deleteMessage(i, message)
-      if(message.answers > 0 && message.uploaded_files.file_name.length == 0 && message.chat_message == '') this.changeMessageToDeleted(message)
+      if (message.uploaded_files.file_name.length == 0 && message.chat_message == '' && message.answers == 0) this.deleteMessage(i, message)
+      if (message.answers > 0 && message.uploaded_files.file_name.length == 0 && message.chat_message == '') this.changeMessageToDeleted(message)
     } catch (error) {
       console.error('Error updating files:', error);
     }
