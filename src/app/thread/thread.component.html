@@ -76,7 +76,7 @@
                 {{fsDataThreadService.current_chat_data.chat_message}}
             </div>
 
-            <div class="message" *ngIf="!fsDataThreadService.current_chat_data?.message_deleted"
+            <div class="message" *ngIf="!fsDataThreadService.current_chat_data?.message_deleted && fsDataThreadService.current_chat_data.chat_message != ''"
                 [class.message_user]="fsDataThreadService.current_chat_data?.user_Sender_ID == authService.userData.uid">
                 <span (click)="profileService.openProfile(word)"
                     *ngFor="let word of fsDataThreadService.current_chat_data.modified_message; let k = index"
@@ -91,6 +91,26 @@
                 <div *ngFor="let item of 0" class="emoji_count" matTooltip="{{react_user}} hat reagiert">
                     <ngx-emoji class="center" [emoji]="" size="24"></ngx-emoji>
                     <span></span>
+                </div>
+            </div>
+
+            <!-----------------------------------------------Message upload----------------------------------------------------------------------->
+
+
+            <div class="uploaded_main">
+                <div *ngFor="let file of fsDataThreadService.current_chat_data.uploaded_files.file_name; let k = index"
+                    class="upload_content"
+                    (click)="uploadService.downloadFile(fsDataThreadService.current_chat_data.uploaded_files.download_link[k])"
+                    style="cursor: pointer;">
+                    <img class="file_image"
+                        src="/assets/img/File-Types/{{fsDataThreadService.current_chat_data.uploaded_files.file_extension[k]}}.png">
+                    <div>
+                        {{uploadService.checkFileName(fsDataThreadService.current_chat_data.uploaded_files.file_name[k])}}
+                    </div>
+                    <div class="delete_file" *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authService.userData.uid">
+                        <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.current_chat_data.uploaded_files.file_name[k], fsDataThreadService.direct_chat_index, k, 'mainChat')"
+                            src="/assets/img/icons/close.png" (click)="genFunctService.stopPropagation($event)">
+                    </div>
                 </div>
             </div>
 

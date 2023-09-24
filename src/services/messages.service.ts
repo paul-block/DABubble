@@ -264,7 +264,6 @@ export class MessagesService {
   }
 
   updateUploadedFiles(i: number, k: number) {
-    console.log(this.chatService.directChatMessages[i]);
     this.chatService.directChatMessages[i].uploaded_files.file_name.splice(k, 1);
     this.chatService.directChatMessages[i].uploaded_files.download_link.splice(k, 1);
     this.messageID = this.chatService.directChatMessages[i].message_ID;
@@ -272,11 +271,13 @@ export class MessagesService {
   }
 
   async saveEditedUploads(i: number) {
+    let message = this.chatService.directChatMessages[i]
     try {
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
       await updateDoc(messageRef, {
         uploaded_files: this.chatService.directChatMessages[i].uploaded_files,
       })
+      if(message.uploaded_files.file_name.length == 0 && message.chat_message == '') this.deleteMessage(i, message)
     } catch (error) {
       console.error('Error updating files:', error);
     }

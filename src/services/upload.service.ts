@@ -96,25 +96,28 @@ export class UploadService {
       this.uploadProgressArray[i] = progress;
     });
     try {
-      uploadTask.snapshotChanges().pipe(
+      await uploadTask.snapshotChanges().pipe(
         finalize(async () => {
           try {
-            const downloadURL$ = fileRef.getDownloadURL();
-            let downloadURL = await lastValueFrom(downloadURL$);
+            const downloadURL = await fileRef.getDownloadURL().toPromise();
             this.upload_array.download_link[i] = downloadURL;
-          } catch (error) { console.error("Error getting download URL:", error); }
+          } catch (error) {
+            console.error("Error getting download URL:", error);
+          }
         }),
         catchError(error => {
           console.error("Error uploading file:", error);
           return of(null);
         })
-      )
+      ).toPromise();
       console.log('Upload erfolgreich');
     } catch (error) {
       console.error("Error during upload:", error);
       this.emptyUploadArray()
     }
   }
+  
+  
 
 
   emptyUploadArray() {

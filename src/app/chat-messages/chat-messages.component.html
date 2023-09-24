@@ -33,7 +33,7 @@
                     [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                     class="chat-message-text-container">
 
-                    <div class="chat-message-text">
+                    <div class="chat-message-text" *ngIf="chatMessage.chat_message != ''">
 
                         <span (click)="profileService.openProfile(word)"
                             *ngFor="let word of chatMessage.modified_message; let k = index"
