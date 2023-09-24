@@ -40,7 +40,6 @@ export class ChatMessagesComponent {
     public reactionBubbleService: ReactionBubbleService,
     public profileService: ProfileService,
     public uploadService: UploadService,
-    private elementRef: ElementRef,
     public genFunctService: GeneralFunctionsService,
   ) { }
 

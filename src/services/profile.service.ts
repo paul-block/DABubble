@@ -3,7 +3,6 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { DialogProfileComponent } from 'app/dialog-profile/dialog-profile.component';
 import { AuthenticationService } from './authentication.service';
 import { ChatService } from './chat.service';
-import { EmojiService } from './emoji.service';
 import { FirestoreThreadDataService } from './firestore-thread-data.service';
 import { MessagesService } from './messages.service';
 import { ReactionBubbleService } from './reaction-bubble.service';

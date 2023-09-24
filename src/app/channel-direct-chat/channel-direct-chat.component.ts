@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { AuthenticationService } from "services/authentication.service";
 import { ChatService } from "services/chat.service";
 import { MessagesService } from "services/messages.service";
 

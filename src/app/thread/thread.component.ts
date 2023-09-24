@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AuthenticationService } from 'services/authentication.service';
 import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { DialogEditCommentComponent } from '../dialog-edit-comment/dialog-edit-comment.component';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { Observable, catchError, finalize, lastValueFrom, of } from 'rxjs';
+import { Observable, catchError, finalize, of } from 'rxjs';
 import { FirestoreThreadDataService } from './firestore-thread-data.service';
 import { MessagesService } from './messages.service';
 

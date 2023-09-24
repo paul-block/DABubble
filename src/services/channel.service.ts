@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, arrayUnion, updateDoc, collection, addDoc, query, where, getDocs, doc, getDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { GeneralFunctionsService } from './general-functions.service';
 
 

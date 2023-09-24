@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { doc, getFirestore, collection, getDocs, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
-import { getAuth } from '@angular/fire/auth';
 import { AuthenticationService } from './authentication.service';
 import { ChannelService } from './channel.service';
 import { GeneralFunctionsService } from './general-functions.service';
