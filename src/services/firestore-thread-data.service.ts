@@ -86,8 +86,8 @@ export class FirestoreThreadDataService {
       if (this.chatService.sidebarVisible) this.chatService.sidebarVisible = false
     }
     this.current_channelname = this.chatService.currentChatData.channelName
-    this.current_chat_data = this.chatService.directChatMessages[i]
-    console.log(this.current_chat_data, this.current_chat_data.chat_message);
+    this.current_chat_data = this.chatService.directChatMessages[i] 
+    console.log(this.current_chat_data);
     
     this.direct_chat_index = i
     this.current_message = this.chatService.directChatMessages[i].modified_message

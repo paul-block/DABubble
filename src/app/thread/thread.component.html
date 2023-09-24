@@ -108,12 +108,12 @@
                         {{uploadService.checkFileName(fsDataThreadService.current_chat_data.uploaded_files.file_name[k])}}
                     </div>
                     <div class="delete_file" *ngIf="fsDataThreadService.current_chat_data.user_Sender_ID == authService.userData.uid">
-                        <img (click)="uploadService.deleteSelectedFile(fsDataThreadService.current_chat_data.uploaded_files.file_name[k], fsDataThreadService.direct_chat_index, k, 'mainChat')"
+                        <img (click)="deleteUploadFile(fsDataThreadService.current_chat_data.uploaded_files.file_name[k], k)"
                             src="/assets/img/icons/close.png" (click)="genFunctService.stopPropagation($event)">
                     </div>
                 </div>
             </div>
-
+         
             <!--------------------------------------------Emoji-------------------------------------------------------------------------------->
 
             <div class="emoji_main">

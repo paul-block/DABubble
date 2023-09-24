@@ -250,7 +250,6 @@ export class MessagesService {
   formatDate(timestamp: { toDate: () => any; }): string {
     const date = timestamp.toDate();
     const now = new Date();
-
     if (date.toDateString() === now.toDateString()) {
       return 'Heute';
     } else {
@@ -259,9 +258,11 @@ export class MessagesService {
     }
   }
 
+
   emptyMessageText() {
     this.messageText = '';
   }
+
 
   updateUploadedFiles(i: number, k: number) {
     this.chatService.directChatMessages[i].uploaded_files.file_name.splice(k, 1);
@@ -270,6 +271,7 @@ export class MessagesService {
     this.saveEditedUploads(i);
   }
 
+
   async saveEditedUploads(i: number) {
     let message = this.chatService.directChatMessages[i]
     try {
@@ -277,7 +279,8 @@ export class MessagesService {
       await updateDoc(messageRef, {
         uploaded_files: this.chatService.directChatMessages[i].uploaded_files,
       })
-      if(message.uploaded_files.file_name.length == 0 && message.chat_message == '') this.deleteMessage(i, message)
+      if(message.uploaded_files.file_name.length == 0 && message.chat_message == '' && message.answers == 0) this.deleteMessage(i, message)
+      if(message.answers > 0 && message.uploaded_files.file_name.length == 0 && message.chat_message == '') this.changeMessageToDeleted(message)
     } catch (error) {
       console.error('Error updating files:', error);
     }

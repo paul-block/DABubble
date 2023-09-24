@@ -391,4 +391,10 @@ export class ThreadComponent implements OnInit {
       }
     }
   }
+
+
+  deleteUploadFile(filename:string, k:number) {
+    this.uploadService.deleteSelectedFile(filename, this.fsDataThreadService.direct_chat_index, k, 'mainChat') 
+    if(this.fsDataThreadService.current_chat_data.answers == 0 && this.fsDataThreadService.current_chat_data.chat_message == '') this.deleteThread()
+  }
 }
