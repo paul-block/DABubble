@@ -119,7 +119,6 @@ export class ChatService {
     return new Promise(async (resolve, reject) => {
       try {
         const time_stamp = new Date();
-
         if (!userID) {
           reject("Kein Benutzer ist eingeloggt");
           return;
@@ -130,7 +129,6 @@ export class ChatService {
           created_At: time_stamp,
           chat_ID: customChatID
         });
-
         resolve(customChatID);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Chats: ", error);
@@ -138,7 +136,7 @@ export class ChatService {
       }
     });
   }
-  
+
 
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
@@ -150,22 +148,16 @@ export class ChatService {
     }
   }
 
+
   getChatReceiverUser(chat) {
     let chatReveiverID;
     try {
-      if (!chat || chat.channelName) {
-        return null;
-      }
-
-      if (chat.chat_Member_IDs[0] !== this.currentUser_id) {
-        chatReveiverID = chat.chat_Member_IDs[0];
-      } else {
-        chatReveiverID = chat.chat_Member_IDs[1];
-      }
+      if (!chat || chat.channelName) return null;
+      if (chat.chat_Member_IDs[0] !== this.currentUser_id) chatReveiverID = chat.chat_Member_IDs[0];
+      else chatReveiverID = chat.chat_Member_IDs[1];
     } catch (error) {
       console.error("Ein Fehler ist aufgetreten beim Verarbeiten des Chats:", chat);
     }
-
     const user = this.authService.all_users.find(user => user.uid === chatReveiverID);
     return user;
   }
@@ -180,7 +172,7 @@ export class ChatService {
   }
 
 
-  //-----------------------------------------------------------------@user Funktionen
+  //-----------------------------------------------------------------@user Funktionen----------------------------------------------------
 
 
   modifyMessageValue(message: string) {
@@ -268,6 +260,7 @@ export class ChatService {
     else return false
   }
 
+
   toggleSidebar() {
     if (window.innerWidth < 1300 && this.thread_open == true) this.thread_open = false
     if (this.sidebarVisible) {
@@ -279,7 +272,8 @@ export class ChatService {
     }
   }
 
-  changeText(text) {
+
+  changeText(text:string) {
     this.toggleSidebarMenuText = text;
   }
 }

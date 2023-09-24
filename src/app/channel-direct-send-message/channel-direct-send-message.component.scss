@@ -221,9 +221,7 @@ $hover-transition: all ease-in-out 125ms;
     overflow: hidden;
     background-color: white;
     position: absolute;
-    margin: 5px 0 5px 0;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin: 10px 50px;
     transition: 200ms;
     box-sizing: border-box;
     display: flex;
@@ -232,7 +230,7 @@ $hover-transition: all ease-in-out 125ms;
     padding: 10px;
     border: 1px solid #adb0d9;
     border-radius: 20px;
-    width: calc(100% - 30px);
+    width: calc(100% - 100px);
 
     a {
         text-decoration: none;
@@ -284,6 +282,11 @@ $hover-transition: all ease-in-out 125ms;
 @media (max-width: 1280px) {
     .write-new-message {
         margin: 10px 15px;
+    }
+
+    .upload_content {
+        margin: 10px 15px;
+        width: calc(100% - 30px);
     }
 }
 

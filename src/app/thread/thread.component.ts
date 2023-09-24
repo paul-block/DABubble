@@ -75,8 +75,8 @@ export class ThreadComponent implements OnInit {
     });
   }
 
-  
-  
+
+
   ngOnDestroy(): void {
     if (this.scrollSubscription) {
       this.scrollSubscription.unsubscribe();
@@ -155,26 +155,31 @@ export class ThreadComponent implements OnInit {
   async postComment() {
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
     if (this.comment_value.length > 0 && !this.checkComment(this.comment_value) || this.uploadService.upload_array.file_name.length > 0) {
-      let time_stamp = new Date()
-      let comment_data = {
-        comment: this.comment_value,
-        modified_comment: this.chatService.modifyMessageValue(this.comment_value),
-        time: time_stamp,
-        uid: this.authService.getUid(),
-        emoji_data: [],
-        text_edited: false,
-        uploaded_files: this.uploadService.upload_array
-      }
       setTimeout(() => {
-        this.fsDataThreadService.saveThread(comment_data),
+        this.fsDataThreadService.saveThread(this.commentData()),
           this.msgService.scrollToBottom('thread')
         500
       });
-      this.comment_value = ''
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
     }
+  }
+
+
+  commentData() {
+    let time_stamp = new Date()
+    let comment_data = {
+      comment: this.comment_value,
+      modified_comment: this.chatService.modifyMessageValue(this.comment_value),
+      time: time_stamp, 
+      uid: this.authService.getUid(),
+      emoji_data: [],
+      text_edited: false,
+      uploaded_files: this.uploadService.upload_array
+    };
+    this.comment_value = ''
+    return comment_data;
   }
 
 
@@ -387,12 +392,9 @@ export class ThreadComponent implements OnInit {
     }
   }
 
-  checkForScroll() {
-    if (this.scrollContainer) {
-      const divElement = this.scrollContainer.nativeElement;
-      if (divElement.scrollHeight > divElement.clientHeight) return true
-      else return false
-    }
-    else return false
+
+  deleteUploadFile(filename:string, k:number) {
+    this.uploadService.deleteSelectedFile(filename, this.fsDataThreadService.direct_chat_index, k, 'mainChat') 
+    if(this.fsDataThreadService.current_chat_data.answers == 0 && this.fsDataThreadService.current_chat_data.chat_message == '') this.deleteThread()
   }
 }

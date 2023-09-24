@@ -110,7 +110,6 @@ $hover-transition: all ease-in-out 125ms;
   svg {
     transform: rotate(90deg);
   }
-
 }
 
 .select-none {
@@ -123,8 +122,7 @@ $hover-transition: all ease-in-out 125ms;
 
 .slidein-sidebar {
   transition: $slide-transition;
-  min-width: 366px;
-  max-width: 366px;
+  width: 360px;
   margin-left: 25px;
 }
 
@@ -211,7 +209,7 @@ $hover-transition: all ease-in-out 125ms;
 
   .thread {
     min-width: unset;
-    display:none;
+    display: none;
     top: 100px;
     left: 0;
     z-index: -1;

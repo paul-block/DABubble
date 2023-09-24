@@ -33,7 +33,7 @@
                     [ngClass]="{'message-creator':isMessageCreator(chatMessage.user_Sender_ID) === true}"
                     class="chat-message-text-container">
 
-                    <div class="chat-message-text">
+                    <div class="chat-message-text" *ngIf="chatMessage.chat_message != ''">
 
                         <span (click)="profileService.openProfile(word)"
                             *ngFor="let word of chatMessage.modified_message; let k = index"
@@ -185,8 +185,8 @@
                 </div>
             </div>
         </div>
-        <div class="scroll_top"  (click)="scrollDivToTop()" *ngIf="isLast && checkForScroll()">
+        <div class="scroll_top" (click)="scrollDivToTop()" *ngIf="isLast && isScrollable">
             <mat-icon>arrow_upward</mat-icon>
-        </div>
+          </div>
     </div>
 </section>

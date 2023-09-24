@@ -76,7 +76,7 @@ export class ChannelDirectSendMessageComponent {
   }
 
 
-  public async onSendClick() {
+  public async onSendClick() {    
     if (this.textMessageNotEmpty() || this.fileReadyForUpload()) {
       if (this.chatService.openNewMsgComponent) {
         this.toggleOpenNewMsgComponent();
@@ -180,5 +180,4 @@ export class ChannelDirectSendMessageComponent {
   noFileSelected() {
     return this.uploadService.upload_array.file_name.length !== 0;
   }
-
 }

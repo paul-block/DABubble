@@ -112,17 +112,17 @@ export class ChannelService {
     return channels;
   }
 
+
   async findUserByName(name: string): Promise<string | null> {
     const usersSnapshot = await getDocs(query(collection(this.db, 'users'), where('user_name', '==', name)));
-
     if (!usersSnapshot.empty) {
       const userDoc = usersSnapshot.docs[0];
       return userDoc.data().uid;
     }
-
     return null;
   }
 
+  
   async addUserToChannel(channelName: string, id:string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
     if (!channelSnapshot.empty) {

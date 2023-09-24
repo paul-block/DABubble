@@ -18,7 +18,8 @@ export class SignInComponent {
   password: string = ''
   form_valid: boolean = false
 
-  constructor(public authenticationService: AuthenticationService,
+  constructor(
+    public authenticationService: AuthenticationService,
     private router: Router,
     public channelService: ChannelService,
     public messageService: MessagesService
@@ -38,23 +39,19 @@ export class SignInComponent {
     }
   }
 
+
   async signInWithPassword() {
     if (this.password.length > 7 && this.emailError && !this.authenticationService.signIn_error) {
       await this.authenticationService.SignIn(this.email, this.password)
-      if (this.authenticationService.signIn_successful) {
-        setTimeout(() => this.router.navigateByUrl('/main'), 1900);
-      }
+      if (this.authenticationService.signIn_successful)  setTimeout(() => this.router.navigateByUrl('/main'), 1900);
     }
   }
 
+
   guestLogin() {
     this.authenticationService.guestSignIn()
-   
     this.channelService.loadStandardChannel()
-    this.messageService.getMessages().then(() => {
-      setTimeout(() => this.router.navigateByUrl('/main'), 1900);
-    });
-    
+    this.messageService.getMessages().then(() =>  setTimeout(() => this.router.navigateByUrl('/main'), 1900));
   }
 
 

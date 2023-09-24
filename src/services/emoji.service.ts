@@ -121,7 +121,6 @@ export class EmojiService {
 
   initializedEmojiMessageRef = false;
   initializedEmojiReactionBarRef = false;
-
   ArrayEmojiMessagePopupsRef = [];
   ArrayEmojiPopupReactionBarRef = [];
 
@@ -143,7 +142,6 @@ export class EmojiService {
     }
     return array
   }
-
 
 
   addEmoji($event: any, i: number, array, user: string) {
@@ -213,7 +211,6 @@ export class EmojiService {
     ElementEmojiPopupReactionBarRef.forEach((popupRef) => {
       this.ArrayEmojiPopupReactionBarRef.push(popupRef);
     });
-    console.log(ElementEmojiPopupReactionBarRef);
   }
 
 

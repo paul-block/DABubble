@@ -29,6 +29,8 @@ export class ChatMessagesComponent {
   private scrollSubscription: Subscription;
   hovered_emoji: boolean = false;
   emoji_index: number;
+  private mutationObserver: MutationObserver;
+  isScrollable: boolean = false;
 
   constructor(
     public authService: AuthenticationService,
@@ -55,9 +57,41 @@ export class ChatMessagesComponent {
   }
 
 
+  ngAfterViewInit() {
+    this.observeDivChanges();
+  }
+
+
+  private observeDivChanges() {
+    if (this.scrollContainer) {
+      const nativeElement = this.scrollContainer.nativeElement;
+      const observerConfig = { childList: true, subtree: true };
+      this.mutationObserver = new MutationObserver(() => {
+        this.checkForScroll();
+      });
+      this.mutationObserver.observe(nativeElement, observerConfig);
+    }
+  }
+
+  checkForScroll() {
+    if (this.scrollContainer) {
+      const nativeElement = this.scrollContainer.nativeElement;
+      const isScrollable = nativeElement.scrollHeight > nativeElement.clientHeight;
+      if (this.isScrollable !== isScrollable) {
+        this.isScrollable = isScrollable;
+      }
+    } else {
+      this.isScrollable = false;
+    }
+  }
+
+
   ngOnDestroy(): void {
     if (this.scrollSubscription) {
       this.scrollSubscription.unsubscribe();
+    }
+    if (this.mutationObserver) {
+      this.mutationObserver.disconnect();
     }
   }
 
@@ -161,14 +195,5 @@ export class ChatMessagesComponent {
 
   showPlaceholder() {
     return this.chatService.directChatMessages.length === 0 && this.chatService.currentChatSection === 'chats' && this.msgService.messagesLoaded;
-  }
-
-  checkForScroll() {
-    if (this.scrollContainer) {
-      const divElement = this.scrollContainer.nativeElement;
-      if (divElement.scrollHeight > divElement.clientHeight) return true
-      else return false
-    }
-    else return false
   }
 }

@@ -20,7 +20,7 @@
     <div class="space-between">
       <h2>Channel-Name</h2>
       <span *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="edit-text hide-mobile" (click)="changeEditText('name')">{{ editChannelName }}</span>
-      <mat-icon  class="hide-big-screen material-icons-outlined edit-icons"
+      <mat-icon *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="hide-big-screen material-icons-outlined edit-icons"
         (click)="changeEditText('name')">{{ editChannelNameMobile }}</mat-icon>
     </div>
     <div class="edit-channel-name" *ngIf="editName">
@@ -40,7 +40,7 @@
       <div class="space-between">
         <h2>Beschreibung</h2>
         <span *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="edit-text hide-mobile" (click)="changeEditText('description')">{{ editChannelDescription }}</span>
-        <mat-icon class="hide-big-screen material-icons-outlined edit-icons"
+        <mat-icon *ngIf="chatService.currentChatData.channel_ID != 'RRraQrPndWV95cqAWCZR'" class="hide-big-screen material-icons-outlined edit-icons"
           (click)="changeEditText('description')">{{ editChannelDescriptionMobile }}</mat-icon>
       </div>
       <span *ngIf="!editDescription" class="channel-description">{{ chatService.currentChatData.description }}</span>
