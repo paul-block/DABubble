@@ -340,6 +340,18 @@ button {
   }
 }
 
+@media (max-width: 1500px) {
+  .custom-edit-members-dialog {
+    top: 178px;
+    right: 90px;
+  }
+  
+  .custom-add-members-dialog {
+    top: 178px;
+    right: 40px;
+  }
+}
+
 @media (max-width: 1300px) {
   .custom-edit-channel-dialog {
     margin-right: 25px;

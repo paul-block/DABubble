@@ -296,7 +296,7 @@ export class AuthenticationService {
   getImageUrl(uid: string) {
     const user = this.all_users.find(element => element.uid === uid);
     if (user) return user.avatar;
-    else console.log("User not found" + uid);
+    // else console.log("User not found" + uid);
   }
 
 

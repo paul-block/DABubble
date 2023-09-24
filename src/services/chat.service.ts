@@ -1,18 +1,14 @@
-import { Injectable, OnInit, Query } from '@angular/core';
-import firebase from 'firebase/compat/app';
-import { doc, getFirestore, updateDoc, collection, addDoc, getDocs, getDoc, query, orderBy, onSnapshot, setDoc } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
+import { doc, getFirestore, collection, getDocs, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { getAuth } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { ChannelService } from './channel.service';
 import { GeneralFunctionsService } from './general-functions.service';
-import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-
   db = getFirestore();
   open_chat: boolean = false
   at_users: any
@@ -33,12 +29,9 @@ export class ChatService {
   timeoutSidebarHide: boolean = false;
   toggleSidebarMenuText: string = 'Workspace-Menü schließen';
 
-
-
   constructor(
     public authService: AuthenticationService,
     public channelService: ChannelService,
-    // public msgService: MessagesService,
     public genFunctService: GeneralFunctionsService,
   ) { }
 
@@ -50,7 +43,7 @@ export class ChatService {
       onSnapshot(querySnapshot, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           const chatData = change.doc.data();
-          const isDataAlreadyInChats = this.chats.some(chat => JSON.stringify(chat) === JSON.stringify(chatData))
+          const isDataAlreadyInChats = this.chats.some(chat => JSON.stringify(chat) === JSON.stringify(chatData));
           if (change.type === 'added' && this.isUserChat(chatData) && !isDataAlreadyInChats) this.chats.push(chatData);
         });
         resolve();
@@ -60,7 +53,7 @@ export class ChatService {
 
 
   isUserChat(chatData) {
-    return chatData.chat_Member_IDs.includes(this.currentUser_id)
+    return chatData.chat_Member_IDs.includes(this.currentUser_id);
   }
 
 
@@ -79,18 +72,17 @@ export class ChatService {
 
 
   async searchChat(userReceiverID): Promise<string | null> {
-    const auth = getAuth();
-    const user = auth.currentUser;
+
     let foundChatId = null;
-    if (user !== null) {
+    if (this.authService.getUid() !== null) {
       try {
         const docChatsSnapshot = await getDocs(collection(this.db, 'chats'));
         docChatsSnapshot.forEach((chat) => {
           const chatData = chat.data();
           const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
           if (
-            (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === user.uid) ||
-            (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === user.uid)
+            (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === this.authService.getUid()) ||
+            (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === this.authService.getUid())
           ) {
             foundChatId = chatData.chat_ID;
           }
@@ -98,12 +90,11 @@ export class ChatService {
         return foundChatId;
       } catch (error) {
         console.error("Fehler bei der Suche nach einem Chat: ", error);
-        return null;
       }
     } else {
       console.error("Kein Benutzer ist eingeloggt");
-      return null;
     }
+    return null;
   }
 
 
