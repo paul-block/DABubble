@@ -185,8 +185,8 @@
                 </div>
             </div>
         </div>
-        <div class="scroll_top"  (click)="scrollDivToTop()" *ngIf="isLast && checkForScroll()">
+        <div class="scroll_top" (click)="scrollDivToTop()" *ngIf="isLast && isScrollable">
             <mat-icon>arrow_upward</mat-icon>
-        </div>
+          </div>
     </div>
 </section>
