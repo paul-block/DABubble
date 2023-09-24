@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { Observable, catchError, finalize, of } from 'rxjs';
+import { Observable, catchError, finalize, lastValueFrom, of } from 'rxjs';
 import { FirestoreThreadDataService } from './firestore-thread-data.service';
 import { MessagesService } from './messages.service';
 
@@ -33,11 +33,7 @@ export class UploadService {
 
 
   onFileSelected(event: any): void {
-    console.log(this.chat_section);
-
-    this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile);
-
+    this.selectedFile = event.target.files[0]
     if (this.selectedFile && this.checkFileSize(this.selectedFile)) {
       this.file.push(this.selectedFile)
       this.upload_array.file_type.push(this.selectedFile.type)
@@ -99,23 +95,20 @@ export class UploadService {
     uploadTask.percentageChanges().subscribe(progress => {
       this.uploadProgressArray[i] = progress;
     });
-
     try {
-      await uploadTask.snapshotChanges().pipe(
+      uploadTask.snapshotChanges().pipe(
         finalize(async () => {
           try {
-            const downloadURL = await fileRef.getDownloadURL().toPromise();
+            const downloadURL$ = fileRef.getDownloadURL();
+            let downloadURL = await lastValueFrom(downloadURL$);
             this.upload_array.download_link[i] = downloadURL;
-            console.log(this.upload_array.download_link);
-          } catch (error) {
-            console.error("Error getting download URL:", error);
-          }
+          } catch (error) { console.error("Error getting download URL:", error); }
         }),
         catchError(error => {
           console.error("Error uploading file:", error);
           return of(null);
         })
-      ).toPromise();
+      )
       console.log('Upload erfolgreich');
     } catch (error) {
       console.error("Error during upload:", error);
