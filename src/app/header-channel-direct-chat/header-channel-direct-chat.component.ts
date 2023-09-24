@@ -48,13 +48,12 @@ export class HeaderChannelDirectChatComponent {
 
 
   editChannel() {
-    if (this.windowWidth > 1000) {
+    if (this.windowWidth >= 1000) {
       this.genFunctService.isMobileScreen = false;
-      this.openEditChannel()
     } else if (this.windowWidth < 1000) {
       this.genFunctService.isMobileScreen = true;
-      this.openEditChannel()
     }
+    this.openEditChannel()
   }
 
 
