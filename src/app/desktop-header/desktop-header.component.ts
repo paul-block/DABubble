@@ -27,7 +27,10 @@ export class DesktopHeaderComponent {
     public genFuncService: GeneralFunctionsService,
     public profileService: ProfileService) { }
 
-
+ /**
+  * Opens the profile menu, setting the position based on the element's bounds and screen width.
+  * Listens for the dialog's close event and handles the cleanup.
+  */
   openProfileMenu() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
@@ -40,6 +43,12 @@ export class DesktopHeaderComponent {
     });
   }
 
+  /**
+  * Checks if the screen width corresponds to mobile or desktop. 
+  * Sets the dialog's configuration based on the screen width.
+  * @param {MatDialogConfig} dialogConfig - The configuration for the dialog.
+  * @param {ClientRect} rect - The bounding client rect of the reference element.
+  */
   checkMobileOrDesktopVersion(dialogConfig, rect) {
     if (this.genFuncService.isMobileWidth()) {
       dialogConfig.position = {
@@ -57,6 +66,9 @@ export class DesktopHeaderComponent {
     }
   }
 
+  /**
+  * Closes the chat and resets related properties to their default values.
+  */
   closeChat() {
     this.genFuncService.changeMobileLogo = false;
     this.chatService.open_chat = false;
