@@ -41,32 +41,51 @@ export class AddPplToChannelComponent implements OnInit {
     this.description = data.description;
   }
 
-
+  /**
+  * Component's initialization method. 
+  * Sets up listeners for value changes in search and option controls.
+  */
   ngOnInit(): void {
+    this.setupSearchControlValueChanges();
+    this.setupSelectedOptionControlValueChanges();
+  }
+  
+  /**
+  * Sets up the value changes listener for the search control. On value change, 
+  * it filters users based on the input.
+  */
+  setupSearchControlValueChanges(): void {
     this.searchControl.valueChanges
-    .pipe(
-      switchMap(value => this.filterUsers(value))
-    )
-    .subscribe(users => {
-      this.filteredUsers = users;
-      if (this.searchControl.value === '') this.userExists = false;
-    });
-
+      .pipe(
+        switchMap(value => this.filterUsers(value))
+      )
+      .subscribe(users => {
+        this.filteredUsers = users;
+        if (this.searchControl.value === '') {
+          this.userExists = false;
+        }
+      });
+  }
+  
+  /**
+  * Sets up the value changes listener for the selected option control. On value change, 
+  * if the screen width is under 1000px, it updates the dialog size based on the selected option.
+  */
+  setupSelectedOptionControlValueChanges(): void {
     this.selectedOptionControl.valueChanges.subscribe((value) => {
       if (window.innerWidth <= 1000) {
-       if (value === 'certain') {
-          this.dialogRef.updateSize('100vw', '350px');  
-      } else {
-          this.dialogRef.updateSize('100vw', '250px');  
+        const size = value === 'certain' ? '350px' : '250px';
+        this.dialogRef.updateSize('100vw', size);
       }
-    }
-  });
+    });
   }
 
-
+  /**
+  * Adds a user to the list of selected users if not already present.
+  * @param {Object} user - User object to add.
+  */
   addUser(user) {
     const userExists = this.selectedUser.some(existingUser => existingUser.user_name === user.user_name); 
-  
     if (!userExists) {
       this.selectedUser.push(user);
       this.showSelectedUsers = true;
@@ -76,6 +95,11 @@ export class AddPplToChannelComponent implements OnInit {
     }
   }
 
+  /**
+  * Filters users based on the input name.
+  * @param {string} name - Name string to filter users by.
+  * @return {Promise<any[]>} - Returns a promise with filtered users.
+  */
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.authService.usersWithoutCurrentuser();
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
@@ -83,7 +107,10 @@ export class AddPplToChannelComponent implements OnInit {
     return filteredUser;
   }
 
-
+  /**
+  * Deletes a selected user from the list.
+  * @param {Object} user - User object to delete.
+  */
   deleteSelectedUser(user) {
     const index = this.selectedUser.indexOf(user);
     if (index > -1) {
@@ -91,12 +118,9 @@ export class AddPplToChannelComponent implements OnInit {
     }
   }
 
-
-  closeDialog() {
-    this.dialog.closeAll();
-  }
-
-
+  /**
+  * Creates a new channel and checks which members to add.
+  */
   async createNewChannel() {
     await this.channelService.createNewChannel(this.channelName, this.description);
     this.checkWhichMembersToAdd();
@@ -104,7 +128,9 @@ export class AddPplToChannelComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-
+  /**
+  * Checks which members to add to the newly created channel based on the selected option.
+  */
   checkWhichMembersToAdd() {
     if (this.selectedOptionControl.value === 'all') {
       const members = this.authService.all_users
@@ -120,6 +146,9 @@ export class AddPplToChannelComponent implements OnInit {
     }
   }
 
+  /**
+  * Sends a notification message when all members have been added to a channel.
+  */
   sendAddAllMemberMessage() {
     let users = []
     this.authService.all_users.forEach(element => {
@@ -131,7 +160,10 @@ export class AddPplToChannelComponent implements OnInit {
     this.messageService.newMessage()
   }
 
-
+ /**
+  * Sends a notification message when certain members have been added to a channel.
+  * @param {any[]} array - Array of added members.
+  */
   sendAddAMemberMessage(array: any[]) {
     const userNames = array.map(obj => obj.user_name);
     let rest = array.length -1
@@ -140,5 +172,12 @@ export class AddPplToChannelComponent implements OnInit {
     if (userNames.length == 2)  this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere(r) beigetreten.'
     if (userNames.length == 1) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem ist ' + userNames[0] + ' beigetreten.'
     this.messageService.newMessage()
+  }
+
+  /**
+  * Closes all open dialogs.
+  */
+  closeDialog() {
+    this.dialog.closeAll();
   }
 }
