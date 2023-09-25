@@ -25,7 +25,10 @@ export class SignUpComponent {
 
 
 
-  constructor(public authenticationService: AuthenticationService, private router: Router) { }
+  constructor(
+    public authenticationService: AuthenticationService, 
+    private router: Router,
+    ) { }
 
 
   dataChanged(value: any, inputfield: string) {
@@ -54,16 +57,25 @@ export class SignUpComponent {
     return /[A-Z]/.test(this.password);
   }
 
+
+  /**
+   * Checks whether the form has been completely filled out
+   */
   validateForm() {
     if (this.password === this.matchPassword) this.passwordConfirmed = true
     if (this.hasNumber() && this.hasSpecialChr() && this.hasValidLength() && this.hasUppercase() && this.name.length > 2 && this.emailError && this.passwordConfirmed) this.formValid = true
   }
 
 
+  /**
+   * creates a new user account and redirects to the choose avatar component
+   */
   async signUp() {
     this.authenticationService.userName = this.name
     if (this.formValid) await this.authenticationService.SignUp(this.email, this.password)
-    if (this.authenticationService.signUp_successful) setTimeout(() => this.router.navigateByUrl('/choose-avatar'), 1900);
+    if (this.authenticationService.signUp_successful) {
+      setTimeout(() => this.router.navigateByUrl('/choose-avatar'), 1900);
+    }
   }
 }
 

@@ -23,6 +23,10 @@ export class StartScreenComponent implements OnInit {
     public authenticationService: AuthenticationService,
   ) { }
 
+
+  /**
+   * set timeouts for animations and redirects to sign-in
+   */
   ngOnInit(): void {
     setTimeout(() => this.animationStart = true, 1000);
     setTimeout(() => this.animationLogo = true, 2000);

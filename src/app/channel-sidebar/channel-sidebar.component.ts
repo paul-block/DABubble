@@ -78,9 +78,10 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   async addNewUserMessageToChannel() {
     this.authService.newUser = false
     this.channelService.loadStandardChannel()
+    await this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, this.authService.userData.uid);
     let user = this.authService.userData.user_name
     await this.uploadService.checkForUpload()
-    this.msgService.messageText = user + ' ist #allgemein beigetreten.'
+    this.msgService.messageText = user + ' ist #Entwicklerteam beigetreten.'
     await this.msgService.newMessage().then(async () => {
       this.msgService.getMessages()
     })

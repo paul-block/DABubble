@@ -26,13 +26,13 @@ export class SignInComponent {
   ) { }
 
 
+  /**
+   * logs the user in with googlaccount. If it is a new user, he will be redirected to the choose-avatar component
+   */
   async signIn() {
     await this.authenticationService.GoogleAuth()
     if (this.authenticationService.signIn_successful) {
       if (this.authenticationService.googleUser_exist) {
-        setTimeout(() => this.router.navigateByUrl('/main'), 1900);
-        this.channelService.loadStandardChannel();
-        await this.messageService.getMessages()
         setTimeout(() => this.router.navigateByUrl('/main'), 1900);
       }
       else setTimeout(() => this.router.navigateByUrl('/choose-avatar'), 1900);
@@ -40,21 +40,32 @@ export class SignInComponent {
   }
 
 
+  /**
+   * logs the user in with email and password and redirct to the main component.
+   */
   async signInWithPassword() {
     if (this.password.length > 7 && this.emailError && !this.authenticationService.signIn_error) {
       await this.authenticationService.SignIn(this.email, this.password)
-      if (this.authenticationService.signIn_successful)  setTimeout(() => this.router.navigateByUrl('/main'), 1900);
+      if (this.authenticationService.signIn_successful) setTimeout(() => this.router.navigateByUrl('/main'), 1900);
     }
   }
 
 
+
+  /**
+   * logs the user as a guest in
+   */
   guestLogin() {
     this.authenticationService.guestSignIn()
-    this.channelService.loadStandardChannel()
-    this.messageService.getMessages().then(() =>  setTimeout(() => this.router.navigateByUrl('/main'), 1900));
+    setTimeout(() => this.router.navigateByUrl('/main'), 1900);
   }
 
 
+  /**
+   * checks whether it is a valid email
+   * 
+   * @param value text from inputfield
+   */
   dataChanged(value: string) {
     this.emailError = this.regexEmail.test(value)
   }

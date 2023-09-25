@@ -155,11 +155,10 @@ export class ThreadComponent implements OnInit {
   async postComment() {
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
     if (this.comment_value.length > 0 && !this.checkComment(this.comment_value) || this.uploadService.upload_array.file_name.length > 0) {
-      setTimeout(() => {
+    
         this.fsDataThreadService.saveThread(this.commentData()),
           this.msgService.scrollToBottom('thread')
-        500
-      });
+   
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);
@@ -172,7 +171,7 @@ export class ThreadComponent implements OnInit {
     let comment_data = {
       comment: this.comment_value,
       modified_comment: this.chatService.modifyMessageValue(this.comment_value),
-      time: time_stamp, 
+      time: time_stamp,
       uid: this.authService.getUid(),
       emoji_data: [],
       text_edited: false,
@@ -393,8 +392,8 @@ export class ThreadComponent implements OnInit {
   }
 
 
-  deleteUploadFile(filename:string, k:number) {
-    this.uploadService.deleteSelectedFile(filename, this.fsDataThreadService.direct_chat_index, k, 'mainChat') 
-    if(this.fsDataThreadService.current_chat_data.answers == 0 && this.fsDataThreadService.current_chat_data.chat_message == '') this.deleteThread()
+  deleteUploadFile(filename: string, k: number) {
+    this.uploadService.deleteSelectedFile(filename, this.fsDataThreadService.direct_chat_index, k, 'mainChat')
+    if (this.fsDataThreadService.current_chat_data.answers == 0 && this.fsDataThreadService.current_chat_data.chat_message == '') this.deleteThread()
   }
 }
