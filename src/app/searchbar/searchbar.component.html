@@ -9,6 +9,13 @@
             <div class="loader"></div>
         </div>
 
+        <div class="results">
+            <div class="no-results-row"
+                *ngIf="filteredChannels.length === 0 && filteredChannelMessages.length === 0 && filteredUsers.length === 0 && noResults && !isLoading">
+                <span>Keine Übereinstimmung gefunden</span>
+            </div>
+        </div>
+
         <div class="results" *ngIf="filteredChannels.length > 0 && searchValue.length > 0">
             <div class="result-row" *ngFor="let channel of filteredChannels" (click)="openChannel(channel.channel_ID)">
                 <img src="assets/img/icons/workspaces.svg" alt="">

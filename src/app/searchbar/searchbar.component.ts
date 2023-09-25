@@ -18,6 +18,7 @@ import { ProfileService } from 'services/profile.service';
 export class SearchbarComponent {
   db = this.authService.db;
   showResults = false;
+  noResults = false;
   isLoading = false;
   searchValue = '';
 
@@ -29,8 +30,6 @@ export class SearchbarComponent {
   filteredChannels: Array<any> = [];
   filteredChannelMessages: Array<any> = [];
 
-  profileRef;
-  profileRefOpen = false;
 
   constructor(
     private elementRef: ElementRef,
@@ -151,8 +150,8 @@ show() {
   if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||
     this.searchValue.length > 0 && this.filteredUsers.length > 0 ||
     this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
-    this.showResults = true;
-  } else this.showResults = false;
+    this.noResults = false;
+  } else this.noResults = true;
 }
 
 clear() {
