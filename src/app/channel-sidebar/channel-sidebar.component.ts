@@ -61,9 +61,8 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
-    if (this.authService.newUser) {
-      this.loadStartChannel()
-    }
+    if (this.authService.newUser)  this.addNewUserMessageToChannel()
+    else this.loadStartChannel()
   }
 
   /**
@@ -76,7 +75,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   /**
   * Loads the start channel for new users, checks for uploads, and sets the join message.
   */
-  async loadStartChannel() {
+  async addNewUserMessageToChannel() {
     this.authService.newUser = false
     this.channelService.loadStandardChannel()
     let user = this.authService.userData.user_name
@@ -85,6 +84,14 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.msgService.newMessage().then(async () => {
       this.msgService.getMessages()
     })
+  }
+
+  /**
+   * load the standard channel that all users can see.
+   */
+  loadStartChannel() {
+    this.channelService.loadStandardChannel()
+    this.msgService.getMessages()
   }
 
   /**

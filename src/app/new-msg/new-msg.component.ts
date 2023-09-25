@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ChannelService } from 'services/channel.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
@@ -31,20 +31,20 @@ export class NewMsgComponent {
     public genFunctService: GeneralFunctionsService,
     public openChatService: OpenChatService) {
 
-      this.uid = this.authService.userData.uid;
-      if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
-        this.inputValue = '@' + this.chatService.userReceiverName;
-      }
-      else {
-        this.inputValue = '';
-        this.chatService.messageToPlaceholder = 'Nachricht an ...';
-      }
+    this.uid = this.authService.userData.uid;
+    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
+      this.inputValue = '@' + this.chatService.userReceiverName;
+    }
+    else {
+      this.inputValue = '';
+      this.chatService.messageToPlaceholder = 'Nachricht an ...';
+    }
   }
 
- /**
-  * Handles value changes, clears previous results, and retrieves filtered users and channels based on the value.
-  * @param {string} value - The search input value.
-  */
+  /**
+   * Handles value changes, clears previous results, and retrieves filtered users and channels based on the value.
+   * @param {string} value - The search input value.
+   */
   async valueChange(value: string) {
     this.clearArrays();
     this.filteredUsersByName = await this.authService.filterUsers(value);
@@ -60,14 +60,14 @@ export class NewMsgComponent {
   * @param {string} category - The category (userName, userEmail, or channel) of the selected item.
   * @param {string} id - The ID of the selected item.
   */
-  selectValue(event: Event, category: string, id:string) {
+  selectValue(event: Event, category: string, id: string) {
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
     if (category == 'userName' || category == 'userEmail') {
       this.checkExistingChat(id, clickedValue);
-    } 
+    }
     if (category == 'channel') {
       this.openChatService.openChat(id, 'channels')
-    } 
+    }
     this.selectedValue = clickedValue;
     this.clearArrays();
   }
@@ -82,7 +82,7 @@ export class NewMsgComponent {
     if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
     await this.createNewChat(selectedUser, clickedValue);
   }
-  
+
   /**
   * Searches for an existing chat between two users.
   * @param {string} currentUserUID - The UID of the current user.
@@ -103,7 +103,7 @@ export class NewMsgComponent {
     }
     return false;
   }
-  
+
   /**
   * Creates a new chat with the selected user.
   * @param {any} selectedUser - The selected user object.
@@ -114,11 +114,11 @@ export class NewMsgComponent {
     this.chatService.userReceiverID = selectedUser.uid;
     this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
     this.chatService.currentChatSection = 'chats';
-    this.chatService.currentChatID =  await this.chatService.newChat(this.chatService.userReceiverID);
+    this.chatService.currentChatID = await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatData = await this.chatService.getChatDocument();
     this.msgService.getMessages();
   }
-  
+
   /**
   * Clears the arrays containing filtered users and channels.
   */
@@ -136,6 +136,14 @@ export class NewMsgComponent {
     setTimeout(() => {
       this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
     }, 300);
+  }
+
+  /**
+   * closes the poopup when you click outside the popup
+   */
+  @HostListener('click', ['$event.target'])
+  onClick() {
+   this.inputValue = undefined
   }
 }
 
