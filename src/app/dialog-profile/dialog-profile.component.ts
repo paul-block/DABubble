@@ -23,7 +23,12 @@ export class DialogProfileComponent {
     public channelService: ChannelService
   ) {}
 
-
+/**
+* Sends a message to the specified user by ID and name, sets the receiver data,
+* checks for an existing chat with the user or creates a new one, and then closes the current context.
+* @param {string} user_id - ID of the user to send the message to.
+* @param {string} user_name - Name of the user to send the message to.
+*/
 async sendMsg(user_id: string, user_name: string) {
   this.setReceiverData(user_id, user_name);
   this.findChatWithUser(this.chatService.currentUser_id, this.chatService.userReceiverID);
@@ -31,7 +36,12 @@ async sendMsg(user_id: string, user_name: string) {
   this.close();
 }
 
-
+/**
+* Finds an existing chat with the selected user based on their UIDs.
+* Opens the chat if found or creates a new one if not.
+* @param {string} currentUserUID - UID of the current user.
+* @param {string} selectedUserUID - UID of the selected user.
+*/
 async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
     for (const chat of this.chatService.chats) {
         if (
@@ -44,7 +54,10 @@ async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
     this.createNewChat();
 }
 
-
+/**
+* Opens a chat based on its ID. Ensures the chat section is visible and loads the chat data.
+* @param {string} id - ID of the chat to open.
+*/
 async openChat(id: string) {
   this.ensureChatSectionVisible();
   if (this.chatService.currentChatID !== id) {
@@ -54,7 +67,9 @@ async openChat(id: string) {
   }
 }
 
-
+/**
+* Creates a new chat with the selected user.
+*/
 async createNewChat() {
   this.chatService.openNewMsgComponent = true;
     this.chatService.currentChatSection = 'chats';
@@ -64,13 +79,18 @@ async createNewChat() {
     this.msgService.getMessages();
 }
 
-
+/**
+* Sets the current chat ID and empties the message text area.
+* @param {string} id - ID of the current chat.
+*/
 setCurrentID(id: string) {
   this.chatService.currentChatID = id;
   this.msgService.emptyMessageText();
 }
 
-
+/**
+* Loads the current chat data and messages.
+*/
 async getCurrentData() {
   this.chatService.getCurrentChatData();
   this.chatService.textAreaMessageTo();
@@ -80,20 +100,28 @@ async getCurrentData() {
   });
 }
 
-
+/**
+* Ensures that the chat section is visible to the user.
+*/
 ensureChatSectionVisible() {
   this.chatService.open_chat = true
   this.chatService.userReceiverName = '';
   if (this.chatService.openNewMsgComponent)  this.chatService.openNewMsgComponent = false;
 }
 
-
+/**
+* Sets the receiver data for the chat service.
+* @param {string} user_id - ID of the receiver.
+* @param {string} user_name - Name of the receiver.
+*/
 setReceiverData(user_id: string, user_name: string) {
   this.chatService.userReceiverID = user_id;
   this.chatService.userReceiverName = user_name;
 }
 
-
+/**
+* Closes all open dialogs.
+*/
 close() {
   this.dialog.closeAll()
 }
