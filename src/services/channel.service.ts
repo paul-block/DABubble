@@ -46,12 +46,19 @@ export class ChannelService {
     });
   }
 
-
+  /**
+  * Sets the ID of the recently created channel.
+  * @param {string} newValue - The new channel ID.
+  */
   setCreatedChannelId(newValue: string) {
     this.createdChannelId.next(newValue);
   }
   
-
+  /**
+  * Retrieves all members associated with a specific channel.
+  * @param {string} channelName - The name of the channel.
+  * @returns {Promise<string[]>} A promise resolving to an array of user IDs.
+  */
   async getAllMembersOfCertainChannel(channelName: string): Promise<string[]> {
     const channelRef = doc(this.db, 'channels', channelName);
     const channelSnapshot = await getDoc(channelRef);
@@ -65,7 +72,11 @@ export class ChannelService {
     }
   }
 
-
+  /**
+  * Creates a new channel with the specified name and description.
+  * @param {string} channel - The name of the new channel.
+  * @param {string} [description] - An optional description for the channel.
+  */
   async createNewChannel(channel: string, description?: string) {
     const user = this.auth.currentUser;
     if (user !== null) {
@@ -90,7 +101,10 @@ export class ChannelService {
     }
   }
 
-
+  /**
+  * Fetches channels the user is authorized to view based on their UID.
+  * @param {string} uid - The user's UID.
+  */
   async getAuthorizedChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
     const querySnapshot = await getDocs(allDocuments);
@@ -101,7 +115,11 @@ export class ChannelService {
     this.channels = channels;
   }
 
-
+  /**
+  * Retrieves channels the user is a part of.
+  * @param {string} uid - The user's UID.
+  * @returns {Promise<any[]>} A promise resolving to an array of channel data.
+  */
   async getChannels(uid: string) {
     const allDocuments = query(collection(this.db, 'channels'), where('assignedUsers', 'array-contains', uid));
     const querySnapshot = await getDocs(allDocuments);
@@ -112,7 +130,11 @@ export class ChannelService {
     return channels;
   }
 
-
+  /**
+  * Looks for a user in the database by their name.
+  * @param {string} name - The user's name.
+  * @returns {Promise<string|null>} A promise resolving to the user's UID or null if not found.
+  */
   async findUserByName(name: string): Promise<string | null> {
     const usersSnapshot = await getDocs(query(collection(this.db, 'users'), where('user_name', '==', name)));
     if (!usersSnapshot.empty) {
@@ -123,6 +145,11 @@ export class ChannelService {
   }
 
   
+  /**
+  * Adds a user to a specified channel by updating the 'assignedUsers' array.
+  * @param {string} channelName - The name of the channel.
+  * @param {string} id - The user's UID.
+  */
   async addUserToChannel(channelName: string, id:string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
     if (!channelSnapshot.empty) {
@@ -135,7 +162,11 @@ export class ChannelService {
     }
   }
 
-  
+  /**
+  * Updates specific properties of a channel document.
+  * @param {any} currentChatData - The current chat data object.
+  * @param {any} changes - An object containing properties to update.
+  */
   async updateChannelInfo(currentChatData, changes){
     const auth = getAuth();
     const user = auth.currentUser; 
@@ -148,7 +179,10 @@ export class ChannelService {
       }
   }
 
-
+  /**
+  * Deletes a channel and its associated messages.
+  * @param {string} channelId - The ID of the channel to delete.
+  */
   async deleteChannel(channelId: string) {
     const subcollectionRef = collection(this.db, 'channels', channelId, 'messages'); 
     const subcollectionQuery = query(subcollectionRef);
@@ -160,12 +194,16 @@ export class ChannelService {
     this.loadStandardChannel();
   }
 
-
+  /**
+  * Sets the ID of the default channel.
+  */
   loadStandardChannel() {
     this.setCreatedChannelId('RRraQrPndWV95cqAWCZR');
   }
 
-
+  /**
+  * Loads the current channel data based on the current channel ID.
+  */
   loadCurrentChannel() {
     let channel = this.channels.find(element => element.channel_ID === this.currentChannelID)
     if(channel) this.currentChannelData = channel
