@@ -25,7 +25,7 @@
         </div>
 
         <div class="results" *ngIf="filteredChannelMessages.length > 0 && searchValue.length > 0">
-            <div class="result-row" *ngFor="let msg of filteredChannelMessages" (click)="openMsg(msg.channel_ID)">
+            <div class="result-row" *ngFor="let msg of filteredChannelMessages" (click)="openChannel(msg.channel_ID)">
                 <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <mask id="mask0_6244_7880" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24"
                         height="25">

@@ -51,7 +51,7 @@ export class NewMsgComponent {
     );
   }
 
-
+  
   selectValue(event: Event, category: string, id:string) {
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
     if (category == 'userName' || category == 'userEmail') {
@@ -67,31 +67,11 @@ export class NewMsgComponent {
 
   async checkExistingChat(selectedUser, clickedValue?: string) {
     const currentUserUID = this.chatService.currentUser_id;
-    if (currentUserUID === selectedUser.uid) {
-      if (await this.findSelfChat(currentUserUID)) return;
-    }
     if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
     await this.createNewChat(selectedUser, clickedValue);
   }
   
-
-  async findSelfChat(currentUserUID: string) {
-    for (const chat of this.chatService.chats) {
-      if (chat.chat_Member_IDs) {
-        if (
-          chat.chat_Member_IDs.length === 2 &&
-          chat.chat_Member_IDs[0] === currentUserUID &&
-          chat.chat_Member_IDs[1] === currentUserUID
-        ) {
-          this.openChatService.openChat(chat.chat_ID);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
   
-
   async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
     for (const chat of this.chatService.chats) {
       if (chat.chat_Member_IDs) {

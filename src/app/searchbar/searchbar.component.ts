@@ -147,36 +147,31 @@ createCombinedMessage(message, channelName, messageSender, channelData, uniqueMe
 }
 }
 
-  show() {
-    if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||
-      this.searchValue.length > 0 && this.filteredUsers.length > 0 ||
-      this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
-      this.showResults = true;
-    } else this.showResults = false;
-  }
+show() {
+  if (this.searchValue.length > 0 && this.filteredChannels.length > 0 ||
+    this.searchValue.length > 0 && this.filteredUsers.length > 0 ||
+    this.searchValue.length > 0 && this.filteredChannelMessages.length > 0) {
+    this.showResults = true;
+  } else this.showResults = false;
+}
 
-  clear() {
-    this.usersSet.clear();
-    this.channelsSet.clear();
-    this.filteredChannelMessagesSet.clear();
-    this.filteredChannels = [];
-    this.filteredUsers = [];
-    this.filteredChannelMessages = [];
-  }
+clear() {
+  this.usersSet.clear();
+  this.channelsSet.clear();
+  this.filteredChannelMessagesSet.clear();
+  this.filteredChannels = [];
+  this.filteredUsers = [];
+   this.filteredChannelMessages = [];
+}
 
-  openProfile(user) {
-    this.searchValue = '';
-    this.profileService.openProfile(user.uid)
-  }
+openProfile(user) {
+  this.searchValue = '';
+  this.profileService.openProfile(user.uid)
+}
 
-  openChannel(channelID: string) {
-    this.searchValue = '';
-    this.openChatService.openChat(channelID, 'channels');
-  }
-
-  openMsg(channelID) {
-    this.openChannel(channelID);
-  }
-
+openChannel(channelID: string) {
+  this.searchValue = '';
+  this.openChatService.openChat(channelID, 'channels');
+}
 }
 

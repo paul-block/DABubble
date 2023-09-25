@@ -83,6 +83,7 @@ async getCurrentData() {
 
 ensureChatSectionVisible() {
   this.chatService.open_chat = true
+  this.chatService.userReceiverName = '';
   if (this.chatService.openNewMsgComponent)  this.chatService.openNewMsgComponent = false;
 }
 
