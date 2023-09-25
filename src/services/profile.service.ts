@@ -28,7 +28,10 @@ export class ProfileService {
     public generalFunctService: GeneralFunctionsService
   ) { }
 
-
+  /**
+  * Opens the user profile based on the provided user ID. If it's the current user's profile, it opens their details.
+  * @param {string} uid - User ID for which the profile should be opened.
+  */
   openProfile(uid: string) {
     if (this.checkIfStringIsAnId(uid)) {
       if (this.authService.getUserInfo(uid).user_name == this.authService.userData.user_name && this.checkIfStringIsAnId(uid)) this.openCurrentUserDetails()
@@ -41,14 +44,20 @@ export class ProfileService {
     }
   }
 
-
+  /**
+  * Checks if the given string matches a user ID from the 'all_users' collection.
+  * @param {string} uid - String to check against the list of user IDs.
+  * @returns {boolean} - Returns true if the string is an ID, otherwise returns false.
+  */
   checkIfStringIsAnId(uid: string) {
     const user = this.authService.all_users.find(element => element.uid === uid);
     if (user) return true
     else return false
   }
 
-
+  /**
+  * Opens the details for the currently logged-in user.
+  */
   openCurrentUserDetails() {
     const dialogConfig = new MatDialogConfig();
     if (this.generalFunctService.isDesktopWidth()) {
@@ -64,7 +73,11 @@ export class ProfileService {
     });
   }
 
-
+  /**
+  * Retrieves the email address for a user based on the provided user ID.
+  * @param {string} uid - User ID for which the email is required.
+  * @returns {string} - Returns the email address of the user.
+  */
   getUserEmail(uid: string) {
     const user = this.authService.all_users.find(element => element.uid === uid);
     return user.email
