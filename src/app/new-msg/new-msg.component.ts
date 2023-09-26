@@ -30,25 +30,11 @@ export class NewMsgComponent {
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
-    public openChatService: OpenChatService) {
-
-      this.genFunctService.highlightInput.subscribe(shouldHighlight => {
-        const inputElement = document.getElementById('input');
-        if (shouldHighlight) {
-          inputElement.classList.add('highlight-red');
-        } else {
-          inputElement.classList.remove('highlight-red');
-        }
-      });
-
+    public openChatService: OpenChatService) 
+    {
+    this.subscribeHighlightCondition();
     this.uid = this.authService.userData.uid;
-    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
-      this.inputValue = '@' + this.chatService.userReceiverName;
-    }
-    else {
-      this.inputValue = '';
-      this.chatService.messageToPlaceholder = 'Nachricht an ...';
-    }
+    this.configureInputValue();
   }
 
   /**
@@ -160,6 +146,38 @@ export class NewMsgComponent {
     setTimeout(() => {
       this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
     }, 300);
+  }
+
+  /**
+   * Subscribes to the 'highlightInput' observable from 'genFunctService'. 
+   * If the observable emits a truthy value, the input element with the ID 'input' is highlighted in red.
+   * Otherwise, the red highlight is removed.
+   */
+  subscribeHighlightCondition() {
+    this.genFunctService.highlightInput.subscribe(shouldHighlight => {
+      const inputElement = document.getElementById('input');
+      if (shouldHighlight) {
+        inputElement.classList.add('highlight-red');
+      } else {
+        inputElement.classList.remove('highlight-red');
+      }
+    });
+  }
+
+  /**
+   * Configures the 'inputValue' based on the 'chatService' properties.
+   * If the user was directed from the profile button and a receiver name exists,
+   * the 'inputValue' is set to '@' followed by the receiver's name.
+   * Otherwise, it resets 'inputValue' and sets the placeholder for messages.
+   */
+  configureInputValue() {
+    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
+      this.inputValue = '@' + this.chatService.userReceiverName;
+    }
+    else {
+      this.inputValue = '';
+      this.chatService.messageToPlaceholder = 'Nachricht an ...';
+    }
   }
 }
 
