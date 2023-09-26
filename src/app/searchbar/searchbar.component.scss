@@ -30,6 +30,7 @@
 .search-container {
   position: absolute;
   top: 68px;
+  left: -34px;
   width: calc(100% - 20px);
   height: fit-content;
   background-color: white;
@@ -91,10 +92,14 @@
     font-size: 18px;
     font-weight: bold;
 
+    .no-results-row {
+      display: flex;
+      padding: 10px;
+    }
+
     .result-row {
       display: flex;
       padding: 10px;
-      // gap: 10px;
       cursor: pointer;
 
       img,

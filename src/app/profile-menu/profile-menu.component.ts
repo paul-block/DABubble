@@ -37,13 +37,19 @@ export class ProfileMenuComponent {
     public chatService: ChatService
   ) { }
 
+  /**
+  * Signs out the user, closes all dialogs, and sets the thread open variable to false.
+  */
   signOut() {
     this.authService.signOut();
     this.dialog.closeAll();
     this.chatService.thread_open = false
   }
 
-
+  /**
+  * Toggles the visibility of the user details section. 
+  * Closes the details section if it's currently visible.
+  */
   toggleDetails() {
     if (this.fsDataThreadService.detailsVisible) {
       this.fsDataThreadService.detailsVisible = false
@@ -52,33 +58,45 @@ export class ProfileMenuComponent {
     this.detailsVisible = !this.detailsVisible;
   }
 
-
+  /**
+  * Toggles the visibility of the edit details section.
+  */
   toggleEditDetails() {
     this.editDetailsVisible = !this.editDetailsVisible;
   }
 
+  /**
+  * Updates the user's details based on the provided username and email.
+  */
   updateUserDetails() {
     this.authService.updateUserDetails(this.current_username, this.current_email);
     this.dialog.closeAll();
-    this.fsDataThreadService.detailsVisible = false
+    this.fsDataThreadService.detailsVisible = false;
   }
 
-
+ /**
+  * Initiates the process to edit the avatar image.
+  */
   editAvatarImage() {
-    this.current_imageUrl = this.authService.userData.avatar
-    this.editDetailsVisible = false
-    this.editAvatarVisible = true
-    this.detailsVisible = false
+    this.current_imageUrl = this.authService.userData.avatar;
+    this.editDetailsVisible = false;
+    this.editAvatarVisible = true;
+    this.detailsVisible = false;
   }
 
-
+  /**
+  * Closes the edit avatar section and reopens the edit details section.
+  */
   closeEditAvatar() {
-    
-    this.editAvatarVisible = false
-    this.editDetailsVisible = true
+    this.editAvatarVisible = false;
+    this.editDetailsVisible = true;
   }
 
-
+  /**
+  * Handles the event when a file is selected for upload. 
+  * Checks the file type and initiates the upload if valid.
+  * @param {any} $event - The triggered DOM event.
+  */
   onFileSelected($event: any) {
     this.file_error = false;
     this.selectedFile = $event.target.files[0];
@@ -86,7 +104,9 @@ export class ProfileMenuComponent {
     else this.file_error = true;
   }
 
-
+ /**
+  * Uploads the selected image file to storage and updates the image URL.
+  */
   uploadImage() {
     this.file_error = false
     const filePath = this.authService.userData.uid + '/' + 'avatar_' + this.selectedFile.name;
@@ -105,12 +125,18 @@ export class ProfileMenuComponent {
     ).subscribe();
   }
 
-
+  /**
+  * Displays a preview of the selected avatar image.
+  * @param {string} imgUrl - The URL of the image.
+  */
   showPreviewAvatar(imgUrl: string) {
     this.current_imageUrl = imgUrl;
   }
 
-  
+  /**
+  * Saves the new avatar image, updates the user's avatar, 
+  * and closes the dialog. Deletes the previous avatar if it's not a default image.
+  */
   saveNewAvatar() {
     const decodedLink = decodeURIComponent(this.authService.userData.avatar);  
     const parts = decodedLink.split('/');
@@ -122,7 +148,9 @@ export class ProfileMenuComponent {
     if (!this.images.includes('/assets/img/small_avatar/' + filename )) this.uploadService.deleteFile(path)
   }
 
-
+  /**
+  * Closes the current dialog.
+  */
   onNoClick(): void {
     this.dialogRef.close();
   }

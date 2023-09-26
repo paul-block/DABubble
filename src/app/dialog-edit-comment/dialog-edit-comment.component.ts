@@ -27,6 +27,11 @@ export class DialogEditCommentComponent {
   }
 
 
+  /**
+   * add the selected emoji to the textarea
+   * 
+   * @param $event emoji is selected
+   */
   addEmoji($event: any) {
     this.emojiPicker_open = false;
     let unicodeCode: string = $event.emoji.unified;

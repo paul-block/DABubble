@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
 import { Subscription } from 'rxjs';
@@ -50,36 +50,54 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  
+  /**
+  * Component's initialization method. Waits for authentication, 
+  * loads chats, and initializes own chat. If it's a new user, loads the start channel.
+  */
   async ngOnInit() {
     await this.authService.waitUntilAuthInitialized();
     this.chatService.currentUser_id = this.auth.currentUser.uid
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
-    if (this.authService.newUser) {
-      this.loadStartChannel()
-    }
+    if (this.authService.newUser)  this.addNewUserMessageToChannel()
+    else this.loadStartChannel()
   }
 
-
+  /**
+  * Cleanup method for the component. Unsubscribes from the new channel ID.
+  */
   ngOnDestroy() {
     if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
   }
 
-
-  async loadStartChannel() {
+  /**
+  * Loads the start channel for new users, checks for uploads, and sets the join message.
+  */
+  async addNewUserMessageToChannel() {
     this.authService.newUser = false
     this.channelService.loadStandardChannel()
+    await this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, this.authService.userData.uid);
     let user = this.authService.userData.user_name
     await this.uploadService.checkForUpload()
-    this.msgService.messageText = user + ' ist #allgemein beigetreten.'
+    this.msgService.messageText = user + ' ist #Entwicklerteam beigetreten.'
     await this.msgService.newMessage().then(async () => {
       this.msgService.getMessages()
     })
   }
 
+  /**
+   * load the standard channel that all users can see.
+   */
+  loadStartChannel() {
+    this.channelService.loadStandardChannel()
+    this.msgService.getMessages()
+  }
 
+  /**
+  * Checks for mobile logo state and toggles new message component.
+  */
   sendNewMsg() {
     this.checkChangeToMobileLogo();
     this.chatService.open_chat = true
@@ -87,7 +105,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.toggleNewMsgComponent();
   }
 
-
+  /**
+  * Opens the add channel dialog and handles its close event.
+  */
   openAddChannelDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'add-channel-dialog';
@@ -98,34 +118,50 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  /**
+  * Checks the screen width and updates the mobile logo state accordingly.
+  */
   checkChangeToMobileLogo() {
     if (window.innerWidth <= 1000) {
       this.genFunctService.changeMobileLogo = true;
     }
   }
 
-
+  /**
+  * Toggles the visibility of the new message component.
+  */
   toggleNewMsgComponent() {
     this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
   }
 
-
+/**
+  * Toggles the visibility of the channels.
+  */
   toggleChannels() {
     this.channelsVisible = !this.channelsVisible;
   }
 
-
+ /**
+  * Toggles the visibility of direct messages.
+  */
   toggleDms() {
     this.dmsVisible = !this.dmsVisible;
   }
 
-
+  /**
+  * Compares the current chat ID with the receiver's ID to determine if they're different.
+  * @param {string} userReceiverID - User receiver's ID.
+  * @return {boolean} - Whether the current chat ID is different from the user receiver's ID.
+  */
   checkIfSameChatID(userReceiverID: string) {
     return this.chatService.currentChatID !== userReceiverID;
   }
 
-
+ /**
+  * Determines if a chat is associated with the current user.
+  * @param {Object} chat - The chat object to check.
+  * @return {boolean} - True if the chat is associated with the current user, false otherwise.
+  */
   isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }

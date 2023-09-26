@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ChannelService } from 'services/channel.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
@@ -31,17 +31,20 @@ export class NewMsgComponent {
     public genFunctService: GeneralFunctionsService,
     public openChatService: OpenChatService) {
 
-      this.uid = this.authService.userData.uid;
-      if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
-        this.inputValue = '@' + this.chatService.userReceiverName;
-      }
-      else {
-        this.inputValue = '';
-        this.chatService.messageToPlaceholder = 'Nachricht an ...';
-      }
+    this.uid = this.authService.userData.uid;
+    if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
+      this.inputValue = '@' + this.chatService.userReceiverName;
+    }
+    else {
+      this.inputValue = '';
+      this.chatService.messageToPlaceholder = 'Nachricht an ...';
+    }
   }
 
-
+  /**
+   * Handles value changes, clears previous results, and retrieves filtered users and channels based on the value.
+   * @param {string} value - The search input value.
+   */
   async valueChange(value: string) {
     this.clearArrays();
     this.filteredUsersByName = await this.authService.filterUsers(value);
@@ -51,47 +54,41 @@ export class NewMsgComponent {
     );
   }
 
-
-  selectValue(event: Event, category: string, id:string) {
+  /**
+  * Handles user selection from the dropdown, opens a chat or channel based on the selection.
+  * @param {Event} event - The triggered DOM event.
+  * @param {string} category - The category (userName, userEmail, or channel) of the selected item.
+  * @param {string} id - The ID of the selected item.
+  */
+  selectValue(event: Event, category: string, id: string) {
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
     if (category == 'userName' || category == 'userEmail') {
       this.checkExistingChat(id, clickedValue);
-    } 
+    }
     if (category == 'channel') {
       this.openChatService.openChat(id, 'channels')
-    } 
+    }
     this.selectedValue = clickedValue;
     this.clearArrays();
   }
 
-
+  /**
+  * Checks for an existing chat with the selected user. If none found, creates a new one.
+  * @param {any} selectedUser - The selected user object.
+  * @param {string} [clickedValue] - The name of the clicked user.
+  */
   async checkExistingChat(selectedUser, clickedValue?: string) {
     const currentUserUID = this.chatService.currentUser_id;
-    if (currentUserUID === selectedUser.uid) {
-      if (await this.findSelfChat(currentUserUID)) return;
-    }
     if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
     await this.createNewChat(selectedUser, clickedValue);
   }
-  
 
-  async findSelfChat(currentUserUID: string) {
-    for (const chat of this.chatService.chats) {
-      if (chat.chat_Member_IDs) {
-        if (
-          chat.chat_Member_IDs.length === 2 &&
-          chat.chat_Member_IDs[0] === currentUserUID &&
-          chat.chat_Member_IDs[1] === currentUserUID
-        ) {
-          this.openChatService.openChat(chat.chat_ID);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  
-
+  /**
+  * Searches for an existing chat between two users.
+  * @param {string} currentUserUID - The UID of the current user.
+  * @param {string} selectedUserUID - The UID of the selected user.
+  * @return {boolean} - Returns true if a chat is found, otherwise returns false.
+  */
   async findChatWithUser(currentUserUID: string, selectedUserUID: string) {
     for (const chat of this.chatService.chats) {
       if (chat.chat_Member_IDs) {
@@ -106,30 +103,47 @@ export class NewMsgComponent {
     }
     return false;
   }
-  
 
+  /**
+  * Creates a new chat with the selected user.
+  * @param {any} selectedUser - The selected user object.
+  * @param {string} clickedValue - The name of the clicked user.
+  */
   async createNewChat(selectedUser, clickedValue: string) {
     this.inputValue = '@' + clickedValue;
     this.chatService.userReceiverID = selectedUser.uid;
     this.chatService.messageToPlaceholder = `Nachricht an ${selectedUser.user_name}`;
     this.chatService.currentChatSection = 'chats';
-    this.chatService.currentChatID =  await this.chatService.newChat(this.chatService.userReceiverID);
+    this.chatService.currentChatID = await this.chatService.newChat(this.chatService.userReceiverID);
     this.chatService.currentChatData = await this.chatService.getChatDocument();
     this.msgService.getMessages();
   }
-  
-  
+
+  /**
+  * Clears the arrays containing filtered users and channels.
+  */
   clearArrays() {
     this.filteredUsersByName = [];
     this.filteredUsersByEmail = [];
     this.filteredChannels = [];
   }
 
+  /**
+  * Closes the currently open chat and toggles the new message component's visibility after a delay.
+  */
   closeChat() {
     this.chatService.open_chat = false
     setTimeout(() => {
       this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
     }, 300);
+  }
+
+  /**
+   * closes the poopup when you click outside the popup
+   */
+  @HostListener('click', ['$event.target'])
+  onClick() {
+   this.inputValue = undefined
   }
 }
 

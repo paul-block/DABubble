@@ -122,7 +122,8 @@ $hover-transition: all ease-in-out 125ms;
 
 .slidein-sidebar {
   transition: $slide-transition;
-  width: 360px;
+  max-width: 366px;
+  min-width: 366px;
   margin-left: 25px;
 }
 

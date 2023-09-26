@@ -89,35 +89,39 @@ export class UploadService {
 
 
   async uploadFile(file: File, i: number) {
-    const filePath = this.authenticationService.userData.uid + '/' + file.name;
-    const fileRef = this.storage.ref(filePath);
-    const uploadTask = this.storage.upload(filePath, file);
-    uploadTask.percentageChanges().subscribe(progress => {
-      this.uploadProgressArray[i] = progress;
+    return new Promise<void>(async (resolve, reject) => {
+      const filePath = this.authenticationService.userData.uid + '/' + file.name;
+      const fileRef = this.storage.ref(filePath);
+      const uploadTask = this.storage.upload(filePath, file);
+      uploadTask.percentageChanges().subscribe(progress => {
+        this.uploadProgressArray[i] = progress;
+      });
+      try {
+        await uploadTask.snapshotChanges().pipe(
+          finalize(async () => {
+            try {
+              const downloadURL = await fileRef.getDownloadURL().toPromise();
+              this.upload_array.download_link[i] = downloadURL;
+              console.log('Upload erfolgreich');
+              resolve();
+            } catch (error) {
+              console.error("Error getting download URL:", error);
+              reject(error);
+            }
+          }),
+          catchError(error => {
+            console.error("Error uploading file:", error);
+            reject(error);
+            return of(null);
+          })
+        ).toPromise();
+      } catch (error) {
+        console.error("Error during upload:", error);
+        this.emptyUploadArray();
+        reject(error);
+      }
     });
-    try {
-      await uploadTask.snapshotChanges().pipe(
-        finalize(async () => {
-          try {
-            const downloadURL = await fileRef.getDownloadURL().toPromise();
-            this.upload_array.download_link[i] = downloadURL;
-          } catch (error) {
-            console.error("Error getting download URL:", error);
-          }
-        }),
-        catchError(error => {
-          console.error("Error uploading file:", error);
-          return of(null);
-        })
-      ).toPromise();
-      console.log('Upload erfolgreich');
-    } catch (error) {
-      console.error("Error during upload:", error);
-      this.emptyUploadArray()
-    }
   }
-  
-  
 
 
   emptyUploadArray() {

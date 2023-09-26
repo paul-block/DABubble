@@ -26,10 +26,11 @@ export class AddChannelComponent {
     public channelService: ChannelService
   ) { }
 
-  closeDialog() {
-    this.dialog.closeAll();
-  }
-
+  /**
+  * This method first retrieves the channel name and description from the form, 
+  * configures the dialog's properties, and then 
+  * initializes the dialog. It also sets listeners for when the dialog is closed.
+  */
   openAddPplToChannel() {
     const channelName = this.form.controls['channel-name'].value;
     const description = this.form.controls['description'].value;
@@ -45,10 +46,21 @@ export class AddChannelComponent {
     });
   }
 
+  /**
+  * Checks if the provided channel name already exists. If it doesn't, 
+  * it opens the "Add People to Channel" dialog. If it does, toggles the error state.
+  */
   checkIfChannelNameExist() {
     let channelName = this.form.controls['channel-name'].value;
     let name = this.channelService.channels.find(name => name.channelName === channelName)
     if (!name) this.openAddPplToChannel()
     else this.error = !this.error
+  }
+
+  /**
+  * Closes all open dialogs.
+  */
+  closeDialog() {
+    this.dialog.closeAll();
   }
 }

@@ -14,7 +14,7 @@
         </div>
     </header>
 
-    <div id="autocomplete" [ngClass]="{'d-none': !inputValue || 
+    <div id="autocomplete" (click)=" genFunctService.stopPropagation($event)" [ngClass]="{'d-none': !inputValue || 
         (filteredUsersByName.length === 0 && 
         filteredUsersByEmail.length === 0 && 
         filteredChannels.length === 0)}">

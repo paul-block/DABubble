@@ -62,29 +62,30 @@ export class NewPasswordComponent implements OnInit {
   }
 
 
+  /**
+   * Checks whether the form has been completely filled out
+   */
   validateForm() {
     if (this.password === this.password_2) this.passwordConfirmed = true
     if (this.hasNumber() && this.hasSpecialChr() && this.hasValidLength() && this.hasUppercase()  && this.passwordConfirmed) this.formValid = true
   }
 
 
+  /**
+   * sets the user's new password
+   * 
+   */
   resetPassword() {
-    if (!this.formValid) {
-      return;
-    }
-
+    if (!this.formValid) return;
     this.afAuth.confirmPasswordReset(this.code, this.password)
       .then(resp => {
-      console.log(resp);
-      
+      console.log(resp); 
       })
       .catch(error => {
        console.log('fehler');
-       
         this.resetFailed = true;
       });
   }
-
 }
 
 

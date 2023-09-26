@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UploadService } from 'services/upload.service';
 import { MessagesService } from 'services/messages.service';
 import { ChannelService } from 'services/channel.service';
+import { defaultAppCheckInstanceFactory } from '@angular/fire/app-check/app-check.module';
 
 @Component({
   selector: 'app-choose-avatar',
@@ -38,7 +39,11 @@ export class ChooseAvatarComponent implements OnInit {
   }
 
 
-
+  /**
+   * checks whether the selected file is an image file
+   * 
+   * @param event file selected
+   */
   onFileSelected(event: any) {
     this.file_error = false
     this.selectedFile = event.target.files[0];
@@ -50,12 +55,19 @@ export class ChooseAvatarComponent implements OnInit {
   }
 
 
+  /**
+   * 
+   * @param image selected Avatar
+   */
   setAvatar(image: string) {
     this.authService.setAvatarImage(image)
     this.imageUrl = image
   }
 
 
+  /**
+   * saves the image in the backend
+   */
   uploadImage() {
     this.file_error = false
     const filePath = this.authService.userData.uid + '/' + 'avatar_' + this.selectedFile.name;
@@ -72,12 +84,15 @@ export class ChooseAvatarComponent implements OnInit {
       })
     ).subscribe(
       error => {
-        this.file_error = true
+       console.log('Fehler während des upload`s');
       }
     );
   }
 
 
+  /**
+   * redirects to main
+   */
   async goToMain() {
     this.router.navigateByUrl('/main');
   }
