@@ -14,6 +14,7 @@ import { GeneralFunctionsService } from 'services/general-functions.service';
 })
 export class ChannelDirectSendMessageComponent {
   @Input() inputValue: string;
+  @Input() selectedValue?: string;
   open_attachment_menu: boolean = false;
   open_users: boolean = false;
   @ViewChild('messageTextarea') messageTextarea: ElementRef;
@@ -75,6 +76,9 @@ export class ChannelDirectSendMessageComponent {
   }
 
   public async onSendClick() {    
+    if (!this.validateNewMessageComponentConditions()) {
+      return;
+    }
     if (this.textMessageNotEmpty()|| this.fileReadyForUpload()) {
       if (this.chatService.openNewMsgComponent) {
         this.toggleOpenNewMsgComponent();
@@ -87,6 +91,20 @@ export class ChannelDirectSendMessageComponent {
     }
   }
 
+/**
+ * Validates the conditions for the new message component before sending a message.
+ * If a user hasn't been selected (`selectedValue` is undefined) and the new message 
+ * component is open, it highlights the input field and returns false, indicating the message 
+ * shouldn't be sent. Otherwise, it returns true.
+ * @returns {boolean} - True if conditions to send the message are met, otherwise false.
+ */
+  validateNewMessageComponentConditions(): boolean {
+    if (this.selectedValue === undefined && this.chatService.openNewMsgComponent) {
+        this.genFService.highlightInput.next(true);
+        return false;
+    }
+    return true;
+}
 
   textMessageNotEmpty() {
     return this.msgService.messageText.length > 0;

@@ -32,6 +32,15 @@ export class NewMsgComponent {
     public genFunctService: GeneralFunctionsService,
     public openChatService: OpenChatService) {
 
+      this.genFunctService.highlightInput.subscribe(shouldHighlight => {
+        const inputElement = document.getElementById('input');
+        if (shouldHighlight) {
+          inputElement.classList.add('highlight-red');
+        } else {
+          inputElement.classList.remove('highlight-red');
+        }
+      });
+
     this.uid = this.authService.userData.uid;
     if (this.chatService.directedFromProfileButton && this.chatService.userReceiverName) {
       this.inputValue = '@' + this.chatService.userReceiverName;
@@ -46,7 +55,6 @@ export class NewMsgComponent {
    * Toggles the visibility of the autocomplete based on where the click event occurs.
    * If the click is inside the autocomplete or input elements, it displays the autocomplete.
    * Otherwise, it hides the autocomplete.
-   *
    * @param {HTMLElement} targetElement - The element that received the click.
    */
   @HostListener('click', ['$event.target'])
@@ -67,15 +75,15 @@ export class NewMsgComponent {
     this.authorizedChannels = await this.channelService.getChannels(this.uid);
     this.filteredChannels = this.authorizedChannels.filter(channel => channel.channelName.toLowerCase().startsWith(value.toLowerCase())
     );
-    this.checkAutocompleteVisibility();
+    // this.checkAutocompleteVisibility();
   }
 
-  checkAutocompleteVisibility() {
-    if (this.filteredChannels.length > 0 || 
-       this.filteredUsersByEmail.length > 0 || 
-       this.filteredUsersByName.length > 0) this.showAutocomplete = true;
-    else this.showAutocomplete = false;
-  }
+  // checkAutocompleteVisibility() {
+  //   if (this.filteredChannels.length > 0 || 
+  //      this.filteredUsersByEmail.length > 0 || 
+  //      this.filteredUsersByName.length > 0) this.showAutocomplete = true;
+  //   else this.showAutocomplete = false;
+  // }
 
   /**
   * Handles user selection from the dropdown, opens a chat or channel based on the selection.
@@ -84,6 +92,7 @@ export class NewMsgComponent {
   * @param {string} id - The ID of the selected item.
   */
   selectValue(event: Event, category: string, id: string) {
+    this.genFunctService.highlightInput.next(false);
     const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
     if (category == 'userName' || category == 'userEmail') {
       this.checkExistingChat(id, clickedValue);

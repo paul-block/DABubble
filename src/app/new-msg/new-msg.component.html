@@ -7,10 +7,7 @@
                 placeholder="#channel, @jemand oder E-Mail-Adresse">
         </div>
     </header>
-    <div id="autocomplete" [ngClass]="{'d-none': !showAutocomplete || !inputValue || 
-        (filteredUsersByName.length === 0 && 
-        filteredUsersByEmail.length === 0 && 
-        filteredChannels.length === 0)}">
+    <div id="autocomplete" [ngClass]="{'d-none': !showAutocomplete || !inputValue }">
         <div *ngFor="let user of filteredUsersByName" class="dm-profile pointer sidebar-hover"
             (click)="selectValue($event, 'userName', user)">
             <img src="assets/img/icons/account_circle.svg" alt="">
@@ -27,6 +24,11 @@
             <span class="tag">#</span>
             <span>{{ channel.channelName }}</span>
         </div>
+        <div *ngIf="inputValue && filteredUsersByName.length === 0 && filteredUsersByEmail.length === 0 && 
+        filteredChannels.length === 0" class="no-match-found">
+            Keine Übereinstimmungen gefunden
+        </div>
     </div>
-    <app-channel-direct-send-message [inputValue]="inputValue"></app-channel-direct-send-message>
+    <app-channel-direct-send-message [selectedValue]="selectedValue"
+        [inputValue]="inputValue"></app-channel-direct-send-message>
 </div>

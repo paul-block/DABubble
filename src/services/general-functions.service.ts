@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +8,10 @@ export class GeneralFunctionsService {
   showSidebarText: boolean = true;
   changeMobileLogo: boolean = false;
   isMobileScreen: boolean = false;
+  public highlightInput: Subject<boolean> = new Subject<boolean>();
 
-  constructor() { }
+
+  constructor() {}
 
   preventDefault(event: Event) {
     event.preventDefault();
