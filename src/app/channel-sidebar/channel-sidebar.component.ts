@@ -27,6 +27,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   channelsVisible: boolean = true;
   dmsVisible: boolean = true;
   openNewMsg: boolean = false;
+  sortedChats: any[];
 
   private newChannelIdSubscription: Subscription;
 
@@ -63,6 +64,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.chatService.initOwnChat();
     if (this.authService.newUser)  this.addNewUserMessageToChannel()
     else this.loadStartChannel()
+    this.sortedChats = this.sortChats(this.chatService.chats);
   }
 
   /**
@@ -166,6 +168,24 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
 
+/**
+ * Sorts an array of chats to place the chat associated with the current user at the beginning.
+ * Utilizes the isCurrentUserChat method to determine if a chat is associated with the current user.
+ * If both chats being compared are or aren't associated with the current user, their relative order remains unchanged.
+ * @param {Object[]} chats - The array of chat objects to be sorted.
+ * @return {Object[]} - The sorted array of chats.
+ */
+  sortChats(chats: any[]): any[] {
+    return chats.sort((a, b) => {
+      if (this.isCurrentUserChat(a) && !this.isCurrentUserChat(b)) {
+        return -1; 
+      }
+      if (!this.isCurrentUserChat(a) && this.isCurrentUserChat(b)) {
+        return 1;  
+      }
+      return 0;
+    });
+  }
 }
 
 

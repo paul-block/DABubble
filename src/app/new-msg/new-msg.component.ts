@@ -139,7 +139,7 @@ export class NewMsgComponent {
   }
 
   /**
-   * closes the poopup when you click outside the popup
+   * closes the popup when you click outside the popup
    */
   @HostListener('click', ['$event.target'])
   onClick() {

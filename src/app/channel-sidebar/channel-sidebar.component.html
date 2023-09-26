@@ -109,7 +109,7 @@
         </div>
 
         <div class="dm-selection select-none" *ngIf="dmsVisible">
-            <div *ngFor="let chat of chatService.chats"
+            <div *ngFor="let chat of sortedChats"
                 [ngClass]="{'active-chat': chat.chat_ID === chatService.currentChatID}" class="dm-profile pointer"
                 (click)="openChatService.openChat(chat.chat_ID)">
                 <img [src]="chatService.getChatReceiverUser(chat)?.avatar" alt="user avatar">
