@@ -1,36 +1,26 @@
 <div class="container">
     <header>
-        <!-- <div style="display: flex; align-items: center;"> -->
-        <!-- <div class="arrow_back" (click)="closeChat()">
-                <img src="/assets/img/arrow_back.png" alt="">
-            </div> -->
         <span id="headline">Neue Nachricht</span>
-        <!-- </div> -->
-
         <div class="input-container">
             <span>An: </span>
-            <input [(ngModel)]="inputValue" (ngModelChange)="valueChange(inputValue)" type="text"
+            <input id="input" [(ngModel)]="inputValue" (ngModelChange)="valueChange(inputValue)" type="text"
                 placeholder="#channel, @jemand oder E-Mail-Adresse">
         </div>
     </header>
-
-    <div id="autocomplete" (click)=" genFunctService.stopPropagation($event)" [ngClass]="{'d-none': !inputValue || 
+    <div id="autocomplete" [ngClass]="{'d-none': !showAutocomplete || !inputValue || 
         (filteredUsersByName.length === 0 && 
         filteredUsersByEmail.length === 0 && 
         filteredChannels.length === 0)}">
-
         <div *ngFor="let user of filteredUsersByName" class="dm-profile pointer sidebar-hover"
             (click)="selectValue($event, 'userName', user)">
             <img src="assets/img/icons/account_circle.svg" alt="">
             <span>{{ user.user_name }}</span>
         </div>
-
         <div *ngFor="let user of filteredUsersByEmail" class="dm-profile pointer sidebar-hover"
             (click)="selectValue($event, 'userEmail', user)">
             <img src="assets/img/mail.png" alt="">
             <span>{{ user.email }}</span>
         </div>
-
         <div class="channel-container" *ngFor="let channel of filteredChannels" class="dm-profile pointer sidebar-hover"
             (click)="selectValue($event, 'channel', channel.channel_ID)">
             <img src=" assets/img/icons/workspaces.svg" alt="">
@@ -38,6 +28,5 @@
             <span>{{ channel.channelName }}</span>
         </div>
     </div>
-
     <app-channel-direct-send-message [inputValue]="inputValue"></app-channel-direct-send-message>
 </div>

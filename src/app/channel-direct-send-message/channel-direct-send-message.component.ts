@@ -13,7 +13,6 @@ import { GeneralFunctionsService } from 'services/general-functions.service';
   styleUrls: ['./channel-direct-send-message.component.scss']
 })
 export class ChannelDirectSendMessageComponent {
-
   @Input() inputValue: string;
   open_attachment_menu: boolean = false;
   open_users: boolean = false;
@@ -75,9 +74,8 @@ export class ChannelDirectSendMessageComponent {
     this.msgService.checkIfEmpty();
   }
 
-
   public async onSendClick() {    
-    if (this.textMessageNotEmpty() || this.fileReadyForUpload()) {
+    if (this.textMessageNotEmpty()|| this.fileReadyForUpload()) {
       if (this.chatService.openNewMsgComponent) {
         this.toggleOpenNewMsgComponent();
         this.chatService.currentChatSection = 'chats';

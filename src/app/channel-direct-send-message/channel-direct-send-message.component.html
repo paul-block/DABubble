@@ -50,8 +50,7 @@
 
         </div>
         <button (click)="onSendClick()" [ngClass]="{'ready-to-send': noFileSelected() || messageEmpty()}"
-            [disabled]="!noFileSelected() && !messageEmpty()"
-            class="send-message">
+            [disabled]="!noFileSelected() && !messageEmpty()" class="send-message">
             <mat-icon>send</mat-icon>
         </button>
     </div>

@@ -21,6 +21,7 @@ export class NewMsgComponent {
   filteredChannels = [];
   selectedValue: string;
   uid: string;
+  showAutocomplete: boolean = false;
 
   constructor(
     public authService: AuthenticationService,
@@ -42,6 +43,20 @@ export class NewMsgComponent {
   }
 
   /**
+   * Toggles the visibility of the autocomplete based on where the click event occurs.
+   * If the click is inside the autocomplete or input elements, it displays the autocomplete.
+   * Otherwise, it hides the autocomplete.
+   *
+   * @param {HTMLElement} targetElement - The element that received the click.
+   */
+  @HostListener('click', ['$event.target'])
+  onClick(targetElement: HTMLElement) {
+    const clickedElement = targetElement.closest('#autocomplete, #input');
+    if (clickedElement) this.showAutocomplete = true;
+    else this.showAutocomplete = false;    
+  }
+
+  /**
    * Handles value changes, clears previous results, and retrieves filtered users and channels based on the value.
    * @param {string} value - The search input value.
    */
@@ -52,6 +67,14 @@ export class NewMsgComponent {
     this.authorizedChannels = await this.channelService.getChannels(this.uid);
     this.filteredChannels = this.authorizedChannels.filter(channel => channel.channelName.toLowerCase().startsWith(value.toLowerCase())
     );
+    this.checkAutocompleteVisibility();
+  }
+
+  checkAutocompleteVisibility() {
+    if (this.filteredChannels.length > 0 || 
+       this.filteredUsersByEmail.length > 0 || 
+       this.filteredUsersByName.length > 0) this.showAutocomplete = true;
+    else this.showAutocomplete = false;
   }
 
   /**
@@ -132,19 +155,12 @@ export class NewMsgComponent {
   * Closes the currently open chat and toggles the new message component's visibility after a delay.
   */
   closeChat() {
-    this.chatService.open_chat = false
+    this.chatService.open_chat = false;
     setTimeout(() => {
       this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
     }, 300);
   }
-
-  /**
-   * closes the popup when you click outside the popup
-   */
-  @HostListener('click', ['$event.target'])
-  onClick() {
-   this.inputValue = undefined
-  }
 }
+
 
 
