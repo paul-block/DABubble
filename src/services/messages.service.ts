@@ -264,9 +264,6 @@ export class MessagesService {
     const docRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
     await updateDoc(docRef, {
       emoji_data: this.emoji_data,
-    }).then(() => {
-      console.log(chatMessage.message_ID);
-
     });
   }
 
