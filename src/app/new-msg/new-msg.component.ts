@@ -75,15 +75,7 @@ export class NewMsgComponent {
     this.authorizedChannels = await this.channelService.getChannels(this.uid);
     this.filteredChannels = this.authorizedChannels.filter(channel => channel.channelName.toLowerCase().startsWith(value.toLowerCase())
     );
-    // this.checkAutocompleteVisibility();
   }
-
-  // checkAutocompleteVisibility() {
-  //   if (this.filteredChannels.length > 0 || 
-  //      this.filteredUsersByEmail.length > 0 || 
-  //      this.filteredUsersByName.length > 0) this.showAutocomplete = true;
-  //   else this.showAutocomplete = false;
-  // }
 
   /**
   * Handles user selection from the dropdown, opens a chat or channel based on the selection.
