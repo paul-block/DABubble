@@ -17,7 +17,7 @@ export class NewPasswordComponent implements OnInit {
   formValid:boolean
   code:string
   codeVerified: boolean;
-  resetFailed: boolean;
+  resetFailed: boolean = false;
 
   constructor(private route: ActivatedRoute, private afAuth: AngularFireAuth) { }
 
@@ -82,7 +82,7 @@ export class NewPasswordComponent implements OnInit {
       console.log(resp); 
       })
       .catch(error => {
-       console.log('fehler');
+       console.log('Fehler');
         this.resetFailed = true;
       });
   }
