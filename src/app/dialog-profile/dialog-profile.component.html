@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="email-container">
+    <div *ngIf="data.user.email != 'gast@gast.de'" class="email-container">
         <div>
             <img src="assets/img/mail.png" alt="">
             <span id="email-headline">E-Mail-Adresse</span>
@@ -29,7 +29,7 @@
         <a id="email-address" href="mailto:{{ data.user.email }}">{{ data.user.email }}</a>
     </div>
 
-    <div id="msg-btn" (click)="sendMsg(data.user.uid, data.user.user_name)">
+    <div *ngIf="data.user.email != 'gast@gast.de'" id="msg-btn" (click)="sendMsg(data.user.uid, data.user.user_name)">
         <img src="assets/img/icons/msg_icon.svg" alt="">
         <span>Nachricht</span>
     </div>
