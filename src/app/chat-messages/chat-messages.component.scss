@@ -228,13 +228,12 @@ app-empty-chat-placeholder {
 
 .chat-message-answers-amount {
   font-size: 18px;
-  font-weight: 600;
   color: $hover-text-color;
   transition: $hover-transition;
   cursor: pointer;
 
   &:hover {
-    font-weight: 700;
+    font-weight: 500;
   }
 }
 
