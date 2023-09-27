@@ -63,7 +63,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
     if (this.authService.newUser)  this.addNewUserMessageToChannel()
-    else this.loadStartChannel()
     this.sortedChats = this.sortChats(this.chatService.chats);
   }
 
@@ -88,14 +87,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       this.msgService.getMessages()
     })
   }
-
-  /**
-   * load the standard channel that all users can see.
-   */
-  loadStartChannel() {
-    this.channelService.loadStandardChannel()
-    this.msgService.getMessages()
-  }
+  
 
   /**
   * Checks for mobile logo state and toggles new message component.
