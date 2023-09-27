@@ -29,7 +29,7 @@ export class NewPasswordComponent implements OnInit {
         this.codeVerified = true;
       })
       .catch(error => {
-        this.resetFailed = true;
+        console.log(error);
       })
     })
   }
@@ -82,7 +82,7 @@ export class NewPasswordComponent implements OnInit {
       console.log(resp); 
       })
       .catch(error => {
-       console.log('Fehler');
+       console.log(error);
         this.resetFailed = true;
       });
   }

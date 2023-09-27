@@ -142,7 +142,7 @@
     }
 
     100% {
-        top: 0px;
+        top: -30px;
         left: calc(50% - 200px);
         scale: 0.3;
         opacity: 0;
@@ -168,13 +168,10 @@
 @keyframes slidelogo_in_mobile {
     0% {
         opacity: 0;
-        top: 50%;
-        left: 50%;
+    
     }
 
     100% {
-        top: 40px;
-        left: 40px;
         opacity: 1;
     }
 }
@@ -219,12 +216,12 @@
     }
 
     .slide_logo {
-        animation: slidelogo_out_mobile 1s;
+        animation: slidelogo_out_mobile 1s ease-in-out;
     }
 
     .slide_logo2 {
         z-index: 1;
-        animation: slidelogo_in_mobile 1s;
+        animation: slidelogo_in_mobile 1s ease-in-out;
     }
 }
 
