@@ -203,7 +203,7 @@ export class AuthenticationService {
 
 
   async SetUserData(user: any) {
-    this.channelService.addUserToChannel('allgemein', user.uid)
+    await this.channelService.addUserToChannel('Entwicklerteam', user.uid)
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const userDataFirestore = {
       uid: user.uid,

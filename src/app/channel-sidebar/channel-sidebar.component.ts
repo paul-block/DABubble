@@ -79,7 +79,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   async addNewUserMessageToChannel() {
     this.authService.newUser = false
     this.channelService.loadStandardChannel()
-    await this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, this.authService.userData.uid);
     let user = this.authService.userData.user_name
     await this.uploadService.checkForUpload()
     this.msgService.messageText = user + ' ist #Entwicklerteam beigetreten.'
@@ -87,7 +86,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
       this.msgService.getMessages()
     })
   }
-  
+
 
   /**
   * Checks for mobile logo state and toggles new message component.
