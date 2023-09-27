@@ -13,7 +13,6 @@ export class MainComponent {
   open_thread: boolean;
   windowWidth: number;
 
-
   constructor(
     public chatService: ChatService,
     public fsDataThreadService: FirestoreThreadDataService,
@@ -26,11 +25,13 @@ export class MainComponent {
     this.windowWidth = window.innerWidth;
   }
 
+
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.windowWidth = window.innerWidth;
     if (this.windowWidth < 1500 && this.chatService.thread_open == true) this.chatService.sidebarVisible = false;
   }
+
 
   setVariable(value: boolean) {
     this.open_thread = value;

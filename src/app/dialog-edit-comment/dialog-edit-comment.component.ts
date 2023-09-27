@@ -15,7 +15,7 @@ export class DialogEditCommentComponent {
     public dialogRef: MatDialogRef<DialogEditCommentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { comment: string }
   ) { }
-  
+
 
   onNoClick(): void {
     this.dialogRef.close();

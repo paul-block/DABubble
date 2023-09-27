@@ -8,13 +8,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogDeleteCommentComponent {
 
-  constructor(public dialogRef: MatDialogRef<DialogDeleteCommentComponent>, @Inject(MAT_DIALOG_DATA) public data: { comment: string }) {
-
-  }
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteCommentComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { comment: string }
+  ) { }
 
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
 }

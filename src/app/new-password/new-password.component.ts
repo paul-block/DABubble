@@ -9,13 +9,13 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class NewPasswordComponent implements OnInit {
 
-  password:string = ''
-  password_2:string = ''
-  pwFocus_2:boolean
-  pwFocus:boolean
-  passwordConfirmed:boolean 
-  formValid:boolean
-  code:string
+  password: string = ''
+  password_2: string = ''
+  pwFocus_2: boolean
+  pwFocus: boolean
+  passwordConfirmed: boolean
+  formValid: boolean
+  code: string
   codeVerified: boolean;
   resetFailed: boolean = false;
 
@@ -25,19 +25,19 @@ export class NewPasswordComponent implements OnInit {
     this.route.queryParams.subscribe((params: Params) => {
       this.code = params['oobCode'];
       this.afAuth.verifyPasswordResetCode(this.code)
-      .then(email => {
-        this.codeVerified = true;
-      })
-      .catch(error => {
-        console.log(error);
-      })
+        .then(email => {
+          this.codeVerified = true;
+        })
+        .catch(error => {
+          console.log(error);
+        })
     })
   }
 
 
-  dataChanged(value:string, pw:string) {
-    if(pw == 'pw1') this.password = value
-    if(pw == 'pw2') this.password_2 = value
+  dataChanged(value: string, pw: string) {
+    if (pw == 'pw1') this.password = value
+    if (pw == 'pw2') this.password_2 = value
     this.validateForm()
   }
 
@@ -67,7 +67,7 @@ export class NewPasswordComponent implements OnInit {
    */
   validateForm() {
     if (this.password === this.password_2) this.passwordConfirmed = true
-    if (this.hasNumber() && this.hasSpecialChr() && this.hasValidLength() && this.hasUppercase()  && this.passwordConfirmed) this.formValid = true
+    if (this.hasNumber() && this.hasSpecialChr() && this.hasValidLength() && this.hasUppercase() && this.passwordConfirmed) this.formValid = true
   }
 
 
@@ -79,10 +79,10 @@ export class NewPasswordComponent implements OnInit {
     if (!this.formValid) return;
     this.afAuth.confirmPasswordReset(this.code, this.password)
       .then(resp => {
-      console.log(resp); 
+        console.log(resp);
       })
       .catch(error => {
-       console.log(error);
+        console.log(error);
         this.resetFailed = true;
       });
   }

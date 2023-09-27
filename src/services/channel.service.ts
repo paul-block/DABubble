@@ -18,11 +18,11 @@ export class ChannelService {
   public authorizedChannelsSubject = new BehaviorSubject<any[]>([]);
   authorizedChannels = this.authorizedChannelsSubject.asObservable();
 
-  private createdChannelId  = new BehaviorSubject<string>(undefined);
-  createdChannelId$ : Observable<string> = this.createdChannelId .asObservable();
+  private createdChannelId = new BehaviorSubject<string>(undefined);
+  createdChannelId$: Observable<string> = this.createdChannelId.asObservable();
 
   currentChannelID: string = 'noChannelSelected';
-  currentChannelData:any;
+  currentChannelData: any;
   channels: any[] = [];
 
 
@@ -30,7 +30,7 @@ export class ChannelService {
     public afAuth: AngularFireAuth,
     public afs: AngularFirestore,
     public generalFuncttions: GeneralFunctionsService,
-  ) { 
+  ) {
     const dbRef = collection(this.db, "channels");
     onSnapshot(dbRef, docsSnap => {
       const channels: any[] = []
@@ -41,10 +41,11 @@ export class ChannelService {
       this.loadCurrentChannel()
       const user = this.auth.currentUser;
       if (user !== null) {
-         this.getAuthorizedChannels(user.uid);
+        this.getAuthorizedChannels(user.uid);
       }
     });
   }
+
 
   /**
   * Sets the ID of the recently created channel.
@@ -53,7 +54,8 @@ export class ChannelService {
   setCreatedChannelId(newValue: string) {
     this.createdChannelId.next(newValue);
   }
-  
+
+
   /**
   * Retrieves all members associated with a specific channel.
   * @param {string} channelName - The name of the channel.
@@ -72,6 +74,7 @@ export class ChannelService {
     }
   }
 
+
   /**
   * Creates a new channel with the specified name and description.
   * @param {string} channel - The name of the new channel.
@@ -81,7 +84,7 @@ export class ChannelService {
     const user = this.auth.currentUser;
     if (user !== null) {
       try {
-        const channelCollectionRef = await addDoc(collection(this.db, 'channels'),{
+        const channelCollectionRef = await addDoc(collection(this.db, 'channels'), {
           channelName: channel,
           createdBy: user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -101,6 +104,7 @@ export class ChannelService {
     }
   }
 
+
   /**
   * Fetches channels the user is authorized to view based on their UID.
   * @param {string} uid - The user's UID.
@@ -114,6 +118,7 @@ export class ChannelService {
     });
     this.channels = channels;
   }
+
 
   /**
   * Retrieves channels the user is a part of.
@@ -130,6 +135,7 @@ export class ChannelService {
     return channels;
   }
 
+
   /**
   * Looks for a user in the database by their name.
   * @param {string} name - The user's name.
@@ -144,13 +150,13 @@ export class ChannelService {
     return null;
   }
 
-  
+
   /**
   * Adds a user to a specified channel by updating the 'assignedUsers' array.
   * @param {string} channelName - The name of the channel.
   * @param {string} id - The user's UID.
   */
-  async addUserToChannel(channelName: string, id:string) {
+  async addUserToChannel(channelName: string, id: string) {
     const channelSnapshot = await getDocs(query(collection(this.db, 'channels'), where('channelName', '==', channelName)));
     if (!channelSnapshot.empty) {
       const channelDoc = channelSnapshot.docs[0];
@@ -162,29 +168,31 @@ export class ChannelService {
     }
   }
 
+
   /**
   * Updates specific properties of a channel document.
   * @param {any} currentChatData - The current chat data object.
   * @param {any} changes - An object containing properties to update.
   */
-  async updateChannelInfo(currentChatData, changes){
+  async updateChannelInfo(currentChatData, changes) {
     const auth = getAuth();
-    const user = auth.currentUser; 
-      try {
-        const channelDocRef = doc(this.db, 'channels', currentChatData.channel_ID);
-        await updateDoc(channelDocRef, changes);
-        this.getAuthorizedChannels(user.uid);
-      } catch (error) {
-        console.error("Error beim Erstellen eines neuen Channels: ", error);
-      }
+    const user = auth.currentUser;
+    try {
+      const channelDocRef = doc(this.db, 'channels', currentChatData.channel_ID);
+      await updateDoc(channelDocRef, changes);
+      this.getAuthorizedChannels(user.uid);
+    } catch (error) {
+      console.error("Error beim Erstellen eines neuen Channels: ", error);
+    }
   }
+
 
   /**
   * Deletes a channel and its associated messages.
   * @param {string} channelId - The ID of the channel to delete.
   */
   async deleteChannel(channelId: string) {
-    const subcollectionRef = collection(this.db, 'channels', channelId, 'messages'); 
+    const subcollectionRef = collection(this.db, 'channels', channelId, 'messages');
     const subcollectionQuery = query(subcollectionRef);
     const subcollectionDocs = await getDocs(subcollectionQuery);
     const deleteSubcollectionPromises = subcollectionDocs.docs.map(doc => deleteDoc(doc.ref));
@@ -194,6 +202,7 @@ export class ChannelService {
     this.loadStandardChannel();
   }
 
+
   /**
   * Sets the ID of the default channel.
   */
@@ -201,11 +210,12 @@ export class ChannelService {
     this.setCreatedChannelId('RRraQrPndWV95cqAWCZR');
   }
 
+
   /**
   * Loads the current channel data based on the current channel ID.
   */
   loadCurrentChannel() {
     let channel = this.channels.find(element => element.channel_ID === this.currentChannelID)
-    if(channel) this.currentChannelData = channel
+    if (channel) this.currentChannelData = channel
   }
 }

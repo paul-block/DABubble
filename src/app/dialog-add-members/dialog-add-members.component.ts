@@ -6,7 +6,6 @@ import { ChatService } from 'services/chat.service';
 import { MessagesService } from 'services/messages.service';
 import { UploadService } from 'services/upload.service';
 
-
 @Component({
   selector: 'app-dialog-add-members',
   templateUrl: './dialog-add-members.component.html',
@@ -40,7 +39,7 @@ export class DialogAddMembersComponent implements OnInit {
   filterUsers() {
     this.userAlreadyAdded = false;
     if (this.inputSearchUser.length > 0) {
-        this.filteredUsers = this.users.filter(user =>
+      this.filteredUsers = this.users.filter(user =>
         user.user_name.toLowerCase().startsWith(this.inputSearchUser.toLowerCase())
       );
     } else this.filteredUsers = this.users;
@@ -63,7 +62,7 @@ export class DialogAddMembersComponent implements OnInit {
       await this.channelService.addUserToChannel(this.chatService.currentChatData.channelName, user.uid);
       await this.sendAddMemberMessage(user.user_name);
       this.messageService.scrollToBottom('channel');
-  } 
+    }
     this.selectedUsers = [];
   }
 
@@ -84,9 +83,9 @@ export class DialogAddMembersComponent implements OnInit {
   }
 
 
- async sendAddMemberMessage(user: string) {
-   await this.uploadService.checkForUpload()
+  async sendAddMemberMessage(user: string) {
+    await this.uploadService.checkForUpload()
     this.messageService.messageText = user + ' ist #' + this.channelService.currentChannelData.channelName + ' beigetreten.'
-   await this.messageService.newMessage()
+    await this.messageService.newMessage()
   }
 }

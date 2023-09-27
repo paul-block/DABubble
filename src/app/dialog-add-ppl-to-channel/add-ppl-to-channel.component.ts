@@ -7,26 +7,21 @@ import { UploadService } from 'services/upload.service';
 import { switchMap } from 'rxjs/operators';
 import { MessagesService } from 'services/messages.service';
 
-
 @Component({
   selector: 'app-add-ppl-to-channel',
   templateUrl: './add-ppl-to-channel.component.html',
   styleUrls: ['./add-ppl-to-channel.component.scss']
 })
 export class AddPplToChannelComponent implements OnInit {
-
   certainInput: string;
   channelName: string;
   description: string;
-
   public searchControl = new FormControl();
   public selectedOptionControl = new FormControl('all');
-
   showSelectedUsers = false;
   userExists = false;
-
   filteredUsers: any[] = [];
-  selectedUser: any[]  = [];
+  selectedUser: any[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -49,7 +44,7 @@ export class AddPplToChannelComponent implements OnInit {
     this.setupSearchControlValueChanges();
     this.setupSelectedOptionControlValueChanges();
   }
-  
+
   /**
   * Sets up the value changes listener for the search control. On value change, 
   * it filters users based on the input.
@@ -66,7 +61,7 @@ export class AddPplToChannelComponent implements OnInit {
         }
       });
   }
-  
+
   /**
   * Sets up the value changes listener for the selected option control. On value change, 
   * if the screen width is under 1000px, it updates the dialog size based on the selected option.
@@ -85,7 +80,7 @@ export class AddPplToChannelComponent implements OnInit {
   * @param {Object} user - User object to add.
   */
   addUser(user) {
-    const userExists = this.selectedUser.some(existingUser => existingUser.user_name === user.user_name); 
+    const userExists = this.selectedUser.some(existingUser => existingUser.user_name === user.user_name);
     if (!userExists) {
       this.selectedUser.push(user);
       this.showSelectedUsers = true;
@@ -137,12 +132,12 @@ export class AddPplToChannelComponent implements OnInit {
       members.forEach(member => {
         this.channelService.addUserToChannel(this.channelName, member.uid);
       });
-      setTimeout(() => this.sendAddAllMemberMessage() , 300);
+      setTimeout(() => this.sendAddAllMemberMessage(), 300);
     } else if (this.selectedOptionControl.value === 'certain' && this.selectedUser.length > 0) {
       this.selectedUser.forEach(user => {
-          this.channelService.addUserToChannel(this.channelName, user.uid);
+        this.channelService.addUserToChannel(this.channelName, user.uid);
       });
-      setTimeout(() => this.sendAddAMemberMessage(this.selectedUser) , 300);
+      setTimeout(() => this.sendAddAMemberMessage(this.selectedUser), 300);
     }
   }
 
@@ -160,16 +155,16 @@ export class AddPplToChannelComponent implements OnInit {
     this.messageService.newMessage()
   }
 
- /**
-  * Sends a notification message when certain members have been added to a channel.
-  * @param {any[]} array - Array of added members.
-  */
+  /**
+   * Sends a notification message when certain members have been added to a channel.
+   * @param {any[]} array - Array of added members.
+   */
   sendAddAMemberMessage(array: any[]) {
     const userNames = array.map(obj => obj.user_name);
-    let rest = array.length -1
+    let rest = array.length - 1
     this.uploadService.checkForUpload()
-    if(userNames.length > 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere beigetreten.'
-    if (userNames.length == 2)  this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere(r) beigetreten.'
+    if (userNames.length > 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere beigetreten.'
+    if (userNames.length == 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere(r) beigetreten.'
     if (userNames.length == 1) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem ist ' + userNames[0] + ' beigetreten.'
     this.messageService.newMessage()
   }

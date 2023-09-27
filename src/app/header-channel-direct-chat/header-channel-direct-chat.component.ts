@@ -27,8 +27,6 @@ export class HeaderChannelDirectChatComponent {
   dialogAddMembersRef: MatDialogRef<DialogAddMembersComponent>;
   windowWidth: number;
 
-
-
   constructor(
     private dialog: MatDialog,
     public authService: AuthenticationService,
@@ -120,6 +118,7 @@ export class HeaderChannelDirectChatComponent {
     }
     else this.editMembers()
   }
+
 
   closeChat() {
     this.chatService.open_chat = false

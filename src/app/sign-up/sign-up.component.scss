@@ -36,11 +36,14 @@ input {
   height: 60px;
   background: #eceefe;
   border-radius: 100px;
+
   &:hover {
     cursor: pointer;
     border: 1px solid #686868;
+
     &:focus {
       border: 1px solid #535af1;
+
       &:focus::placeholder {
         color: transparent;
       }
@@ -77,6 +80,7 @@ input {
   border-radius: 25px;
   width: 137px;
   height: 49px;
+
   &:hover {
     background-color: #797ef3;
     cursor: pointer;
@@ -94,6 +98,7 @@ input {
   width: 40px;
   height: 40px;
   cursor: pointer;
+
   &:hover {
     border-radius: 100%;
     background-color: #eceefe;
@@ -131,6 +136,7 @@ input {
   margin-left: 15px;
   top: 63px;
   left: 0px;
+
   span {
     margin-right: 5px;
   }
@@ -138,6 +144,7 @@ input {
 
 .invalid {
   background-color: #686868;
+
   &:hover {
     background-color: #686868;
     cursor: not-allowed;
@@ -201,14 +208,17 @@ input {
     opacity: 0;
     transform: translateY(300%);
   }
+
   20% {
     opacity: 1;
     transform: translateY(0);
   }
+
   80% {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 0;
     transform: translateY(+300%);
@@ -263,7 +273,7 @@ input {
     font-size: 12px;
   }
 
-  
+
 }
 
 @media screen and (max-height: 950px) {
@@ -276,6 +286,7 @@ input {
     height: 600px;
   }
 }
+
 @media screen and (max-height: 750px) {
   input {
     height: 50px;

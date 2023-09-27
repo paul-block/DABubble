@@ -147,33 +147,6 @@ $hover-transition: all ease-in-out 125ms;
   }
 }
 
-// @media (max-width: 1000px) {
-//   .vertical-text {
-//     display: none;
-//   }
-
-//   .chat-interaction {
-//     margin: 0;
-//     height: calc(100% - 100px);
-//   }
-
-//   .mobile_chat {
-//     transform: translateX(150%);
-//     z-index: 12;
-//     box-sizing: border-box;
-//     position: absolute;
-//     left: 0;
-//     border-radius: 0;
-//     height: calc(100vh - 90px - 10px);
-//     width: 100%;
-//   }
-
-//   .open_main_chat {
-//     animation: slide_in 0.3s ease-in-out;
-//     transform: translateX(0%);
-//   }
-// }
-
 @media (max-width: 1000px) {
   .vertical-text {
     display: none;

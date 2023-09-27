@@ -169,8 +169,6 @@ export class ChatService {
 
 
   //-----------------------------------------------------------------@user Funktionen----------------------------------------------------
-
-
   modifyMessageValue(message: string) {
     const words = message.split(' ')
     for (let i = 0; i < words.length; i++) {

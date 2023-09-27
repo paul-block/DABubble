@@ -30,12 +30,12 @@ export class NewMsgComponent {
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
-    public openChatService: OpenChatService) 
-    {
+    public openChatService: OpenChatService) {
     this.subscribeHighlightCondition();
     this.uid = this.authService.userData.uid;
     this.configureInputValue();
   }
+
 
   /**
    * Toggles the visibility of the autocomplete based on where the click event occurs.
@@ -47,8 +47,9 @@ export class NewMsgComponent {
   onClick(targetElement: HTMLElement) {
     const clickedElement = targetElement.closest('#autocomplete, #input');
     if (clickedElement) this.showAutocomplete = true;
-    else this.showAutocomplete = false;    
+    else this.showAutocomplete = false;
   }
+
 
   /**
    * Handles value changes, clears previous results, and retrieves filtered users and channels based on the value.
@@ -62,6 +63,7 @@ export class NewMsgComponent {
     this.filteredChannels = this.authorizedChannels.filter(channel => channel.channelName.toLowerCase().startsWith(value.toLowerCase())
     );
   }
+
 
   /**
   * Handles user selection from the dropdown, opens a chat or channel based on the selection.
@@ -82,6 +84,7 @@ export class NewMsgComponent {
     this.clearArrays();
   }
 
+
   /**
   * Checks for an existing chat with the selected user. If none found, creates a new one.
   * @param {any} selectedUser - The selected user object.
@@ -92,6 +95,7 @@ export class NewMsgComponent {
     if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
     await this.createNewChat(selectedUser, clickedValue);
   }
+
 
   /**
   * Searches for an existing chat between two users.
@@ -114,6 +118,7 @@ export class NewMsgComponent {
     return false;
   }
 
+
   /**
   * Creates a new chat with the selected user.
   * @param {any} selectedUser - The selected user object.
@@ -129,6 +134,7 @@ export class NewMsgComponent {
     this.msgService.getMessages();
   }
 
+
   /**
   * Clears the arrays containing filtered users and channels.
   */
@@ -137,6 +143,7 @@ export class NewMsgComponent {
     this.filteredUsersByEmail = [];
     this.filteredChannels = [];
   }
+
 
   /**
   * Closes the currently open chat and toggles the new message component's visibility after a delay.
@@ -147,6 +154,7 @@ export class NewMsgComponent {
       this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
     }, 300);
   }
+
 
   /**
    * Subscribes to the 'highlightInput' observable from 'genFunctService'. 
@@ -163,6 +171,7 @@ export class NewMsgComponent {
       }
     });
   }
+
 
   /**
    * Configures the 'inputValue' based on the 'chatService' properties.

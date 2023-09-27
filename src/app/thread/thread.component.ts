@@ -14,16 +14,12 @@ import { ChannelService } from 'services/channel.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
 import { Subscription } from 'rxjs';
 
-
-
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
   styleUrls: ['./thread.component.scss'],
 })
 export class ThreadComponent implements OnInit {
-
-
   @ViewChild('ChatContainerREF') public scrollContainer: ElementRef;
   @ViewChildren('comment') comments: QueryList<ElementRef>;
   @ViewChild('type_message') textarea!: ElementRef;
@@ -155,10 +151,10 @@ export class ThreadComponent implements OnInit {
   async postComment() {
     if (this.uploadService.upload_array.file_name.length > 0) await this.uploadService.prepareUploadfiles()
     if (this.comment_value.length > 0 && !this.checkComment(this.comment_value) || this.uploadService.upload_array.file_name.length > 0) {
-    
-        this.fsDataThreadService.saveThread(this.commentData()),
-          this.msgService.scrollToBottom('thread')
-   
+
+      this.fsDataThreadService.saveThread(this.commentData()),
+        this.msgService.scrollToBottom('thread')
+
       if (this.fsDataThreadService.comments?.length > 1) this.response = 'Antworten'
       if (this.fsDataThreadService.comments?.length < 2) this.response = 'Antwort'
       setTimeout(() => this.uploadService.emptyUploadArray(), 500);

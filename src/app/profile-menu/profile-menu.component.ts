@@ -15,7 +15,7 @@ import { ChatService } from 'services/chat.service';
 })
 export class ProfileMenuComponent {
 
-  images = [ '/assets/img/small_avatar/avatar (1).png', '/assets/img/small_avatar/avatar (2).png', '/assets/img/small_avatar/avatar (3).png', '/assets/img/small_avatar/avatar (4).png', '/assets/img/small_avatar/avatar (5).png', '/assets/img/small_avatar/avatar (6).png' ]
+  images = ['/assets/img/small_avatar/avatar (1).png', '/assets/img/small_avatar/avatar (2).png', '/assets/img/small_avatar/avatar (3).png', '/assets/img/small_avatar/avatar (4).png', '/assets/img/small_avatar/avatar (5).png', '/assets/img/small_avatar/avatar (6).png']
   detailsVisible: boolean = false;
   editDetailsVisible: boolean = false;
   editAvatarVisible: boolean = false
@@ -37,6 +37,7 @@ export class ProfileMenuComponent {
     public chatService: ChatService
   ) { }
 
+
   /**
   * Signs out the user, closes all dialogs, and sets the thread open variable to false.
   */
@@ -45,6 +46,7 @@ export class ProfileMenuComponent {
     this.dialog.closeAll();
     this.chatService.thread_open = false
   }
+
 
   /**
   * Toggles the visibility of the user details section. 
@@ -58,12 +60,14 @@ export class ProfileMenuComponent {
     this.detailsVisible = !this.detailsVisible;
   }
 
+
   /**
   * Toggles the visibility of the edit details section.
   */
   toggleEditDetails() {
     this.editDetailsVisible = !this.editDetailsVisible;
   }
+
 
   /**
   * Updates the user's details based on the provided username and email.
@@ -74,15 +78,17 @@ export class ProfileMenuComponent {
     this.fsDataThreadService.detailsVisible = false;
   }
 
- /**
-  * Initiates the process to edit the avatar image.
-  */
+
+  /**
+   * Initiates the process to edit the avatar image.
+   */
   editAvatarImage() {
     this.current_imageUrl = this.authService.userData.avatar;
     this.editDetailsVisible = false;
     this.editAvatarVisible = true;
     this.detailsVisible = false;
   }
+
 
   /**
   * Closes the edit avatar section and reopens the edit details section.
@@ -91,6 +97,7 @@ export class ProfileMenuComponent {
     this.editAvatarVisible = false;
     this.editDetailsVisible = true;
   }
+
 
   /**
   * Handles the event when a file is selected for upload. 
@@ -104,9 +111,10 @@ export class ProfileMenuComponent {
     else this.file_error = true;
   }
 
- /**
-  * Uploads the selected image file to storage and updates the image URL.
-  */
+
+  /**
+   * Uploads the selected image file to storage and updates the image URL.
+   */
   uploadImage() {
     this.file_error = false
     const filePath = this.authService.userData.uid + '/' + 'avatar_' + this.selectedFile.name;
@@ -125,6 +133,7 @@ export class ProfileMenuComponent {
     ).subscribe();
   }
 
+
   /**
   * Displays a preview of the selected avatar image.
   * @param {string} imgUrl - The URL of the image.
@@ -133,20 +142,22 @@ export class ProfileMenuComponent {
     this.current_imageUrl = imgUrl;
   }
 
+
   /**
   * Saves the new avatar image, updates the user's avatar, 
   * and closes the dialog. Deletes the previous avatar if it's not a default image.
   */
   saveNewAvatar() {
-    const decodedLink = decodeURIComponent(this.authService.userData.avatar);  
+    const decodedLink = decodeURIComponent(this.authService.userData.avatar);
     const parts = decodedLink.split('/');
     const filename = parts[parts.length - 1].split('?')[0];
     let path = this.authService.userData.uid + '/' + filename;
     this.file_error = false
     this.authService.setAvatarImage(this.current_imageUrl)
     this.dialogRef.close();
-    if (!this.images.includes('/assets/img/small_avatar/' + filename )) this.uploadService.deleteFile(path)
+    if (!this.images.includes('/assets/img/small_avatar/' + filename)) this.uploadService.deleteFile(path)
   }
+
 
   /**
   * Closes the current dialog.

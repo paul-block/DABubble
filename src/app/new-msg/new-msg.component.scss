@@ -69,6 +69,7 @@
       justify-content: flex-start;
       width: 100%;
       padding: 5px 10px;
+
       &:hover {
         background-color: #eceefe;
         border-radius: 20px;
@@ -100,17 +101,49 @@
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  10% { transform: translateX(-10px); }
-  20% { transform: translateX(10px); }
-  30% { transform: translateX(-10px); }
-  40% { transform: translateX(10px); }
-  50% { transform: translateX(-10px); }
-  60% { transform: translateX(10px); }
-  70% { transform: translateX(-10px); }
-  80% { transform: translateX(10px); }
-  90% { transform: translateX(-10px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  10% {
+    transform: translateX(-10px);
+  }
+
+  20% {
+    transform: translateX(10px);
+  }
+
+  30% {
+    transform: translateX(-10px);
+  }
+
+  40% {
+    transform: translateX(10px);
+  }
+
+  50% {
+    transform: translateX(-10px);
+  }
+
+  60% {
+    transform: translateX(10px);
+  }
+
+  70% {
+    transform: translateX(-10px);
+  }
+
+  80% {
+    transform: translateX(10px);
+  }
+
+  90% {
+    transform: translateX(-10px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .d-none {
@@ -129,6 +162,7 @@ app-channel-direct-send-message {
   width: 40px;
   height: 40px;
   cursor: pointer;
+
   &:hover {
     border-radius: 100%;
     background-color: #eceefe;
@@ -137,8 +171,8 @@ app-channel-direct-send-message {
 
 @media (max-width: 1000px) {
 
-    #autocomplete {
-      left: 65px !important;
-      width: 240px !important;
-    }
+  #autocomplete {
+    left: 65px !important;
+    width: 240px !important;
+  }
 }

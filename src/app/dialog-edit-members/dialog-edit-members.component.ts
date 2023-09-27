@@ -19,12 +19,10 @@ export class DialogEditMembersComponent {
     private dialogRef: MatDialogRef<DialogEditMembersComponent>,
     public profileService: ProfileService,
     public channelService: ChannelService
-  ) {
-  }
+  ) { }
+
 
   closeRedirectAddMember() {
     this.dialogRef.close(true);
   }
-
-
 }

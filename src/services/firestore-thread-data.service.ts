@@ -6,16 +6,11 @@ import { ChatService } from './chat.service';
 import { MessagesService } from './messages.service';
 import { Subscription } from 'rxjs';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
 
 export class FirestoreThreadDataService {
-
-
   db = getFirestore();
   dbRef_thread = collection(this.db, "threads");
   dbRef_message = collection(this.db, "channel_messages");
@@ -86,7 +81,7 @@ export class FirestoreThreadDataService {
       if (this.chatService.sidebarVisible) this.chatService.sidebarVisible = false
     }
     this.current_channelname = this.chatService.currentChatData.channelName
-    this.current_chat_data = this.chatService.directChatMessages[i] 
+    this.current_chat_data = this.chatService.directChatMessages[i]
     this.direct_chat_index = i
     this.current_message = this.chatService.directChatMessages[i].modified_message
     this.current_message_id = this.chatService.directChatMessages[i].message_ID
@@ -129,14 +124,13 @@ export class FirestoreThreadDataService {
           this.comments = changedData.comments;
           this.fake_array.length = this.comments.length;
         } else {
-          let thread_data = {comments: []}
+          let thread_data = { comments: [] }
           await setDoc(docRef, thread_data);
         }
         resolve();
       });
     });
   }
-
 
 
   async deletThread() {

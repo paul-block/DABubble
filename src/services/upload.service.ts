@@ -158,14 +158,10 @@ export class UploadService {
     } else {
       this.fsDataThreadService.updateThread(i, k);
     }
-
   }
 
 
   downloadFile(path: string | URL) {
     window.open(path, '_blank');
   }
-
-
-
 }

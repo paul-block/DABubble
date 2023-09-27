@@ -16,6 +16,7 @@ export class OpenChatService {
     public channelService: ChannelService
   ) { }
 
+
   /**
   * Opens the chat based on the provided chat ID and section.
   * @param {string} id - The ID of the chat.
@@ -30,6 +31,7 @@ export class OpenChatService {
     }
   }
 
+
   /**
   * Checks the window's width and determines if the application should switch to a mobile logo.
   */
@@ -38,6 +40,7 @@ export class OpenChatService {
       this.genFunctService.changeMobileLogo = true;
     }
   }
+
 
   /**
   * Sets the current chat ID and optionally sets the current channel ID if the section is 'channels'.
@@ -49,6 +52,7 @@ export class OpenChatService {
     if (this.chatService.currentChatSection == 'channels') this.channelService.currentChannelID = id;
     this.msgService.emptyMessageText();
   }
+
 
   /**
   * Retrieves the current chat data, sets the appropriate messaging area, and loads chat messages.
@@ -63,6 +67,7 @@ export class OpenChatService {
       this.msgService.scrollToBottom('channel')
     });
   }
+
 
   /**
   * Ensures that the chat section is visible and makes adjustments based on the screen size.

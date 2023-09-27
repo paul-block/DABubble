@@ -27,10 +27,10 @@ export class DesktopHeaderComponent {
     public genFuncService: GeneralFunctionsService,
     public profileService: ProfileService) { }
 
- /**
-  * Opens the profile menu, setting the position based on the element's bounds and screen width.
-  * Listens for the dialog's close event and handles the cleanup.
-  */
+  /**
+   * Opens the profile menu, setting the position based on the element's bounds and screen width.
+   * Listens for the dialog's close event and handles the cleanup.
+   */
   openProfileMenu() {
     const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();

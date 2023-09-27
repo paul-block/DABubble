@@ -21,25 +21,23 @@ export class SearchbarComponent {
   noResults = false;
   isLoading = false;
   searchValue = '';
-
   usersSet: Set<any> = new Set();
   channelsSet: Set<any> = new Set();
   filteredChannelMessagesSet: Set<any> = new Set();
-
   filteredUsers: Array<any> = [];
   filteredChannels: Array<any> = [];
   filteredChannelMessages: Array<any> = [];
 
-
   constructor(
     private elementRef: ElementRef,
-    public chatService: ChatService, 
+    public chatService: ChatService,
     public msgService: MessagesService,
     public fsDataThreadService: FirestoreThreadDataService,
     public channelService: ChannelService,
     public authService: AuthenticationService,
     public openChatService: OpenChatService,
     public profileService: ProfileService) { }
+
 
   /**
   * Listens for click events outside the component and hides the search results if clicked outside specific elements.
@@ -55,6 +53,7 @@ export class SearchbarComponent {
     }
     this.showResults = false;
   }
+
 
   /**
   * Listens for click events inside the component and handles the search value selection.
@@ -73,6 +72,7 @@ export class SearchbarComponent {
       }
     }
   }
+
 
   /**
   * Handles the search value changes,
@@ -93,13 +93,14 @@ export class SearchbarComponent {
     }
   }
 
+
   /**
   * Filters the results from the data sets based on the current search value.
   */
   filterResults() {
     this.filteredChannels = Array.from(this.channelsSet).filter(channel =>
       channel.channelName.toLowerCase().startsWith(this.searchValue)
-      );
+    );
     this.filteredUsers = Array.from(this.usersSet).filter(user =>
       user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
     );
@@ -107,6 +108,7 @@ export class SearchbarComponent {
       msg.combinedMessage.toLowerCase().startsWith(this.searchValue.toLowerCase())
     );
   }
+
 
   /**
   * Fetches data based on the current user's ID and updates the local data sets.
@@ -126,11 +128,12 @@ export class SearchbarComponent {
       if (collectionName === 'users') this.usersSet.add(doc.data());
     });
   }
-  
+
+
   /**
   * Fetches all channel messages that current user is authorized to see.
   * @param {string} currentUserId - UID of the current user.
-  */  
+  */
   async getChannelMessages(currentUserId: string) {
     const channelsRef = collection(this.db, 'channels');
     const channelsSnapshot = await getDocs(channelsRef);
@@ -138,6 +141,7 @@ export class SearchbarComponent {
     await this.checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap)
     this.filteredChannelMessages = [...uniqueMessageMap.values()];
   }
+
 
   /**
   * Iterates through channels' messages, and constructs combined messages if relevant.
@@ -153,15 +157,16 @@ export class SearchbarComponent {
       const messagesRef = collection(channelDoc.ref, 'messages');
       const messagesSnapshot = await getDocs(messagesRef);
       for (let messageDoc of messagesSnapshot.docs) {
-          const messageData = messageDoc.data();
-          const message = messageData.chat_message;
-          const messageSender = messageData.user_Sender_Name;
-          if (!message) continue;
-          if (this.checkMessageRelevant(message)) 
+        const messageData = messageDoc.data();
+        const message = messageData.chat_message;
+        const messageSender = messageData.user_Sender_Name;
+        if (!message) continue;
+        if (this.checkMessageRelevant(message))
           this.createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap)
       }
+    }
   }
-  }
+
 
   /**
   * Checks if a message starts with the current search value.
@@ -169,7 +174,7 @@ export class SearchbarComponent {
   * @return {boolean} - Returns true if message is relevant, otherwise returns false.
   */
   checkMessageRelevant(message) {
-  return message.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    return message.toLowerCase().startsWith(this.searchValue.toLowerCase())
   }
 
 
@@ -187,8 +192,9 @@ export class SearchbarComponent {
     const uniqueKey = combinedMessage + "|" + channel_ID;
     if (!uniqueMessageMap.has(uniqueKey)) {
       uniqueMessageMap.set(uniqueKey, { combinedMessage: combinedMessage, channel_ID: channel_ID });
+    }
   }
-  }
+
 
   /**
   * Checks and sets the `noResults` variable based on the filtered data's length.
@@ -200,6 +206,7 @@ export class SearchbarComponent {
       this.noResults = false;
     } else this.noResults = true;
   }
+
 
   /**
   * Clears the data sets and filtered results.
@@ -213,6 +220,7 @@ export class SearchbarComponent {
     this.filteredChannelMessages = [];
   }
 
+
   /**
   * Opens the profile of a user.
   * @param {any} user - The user object.
@@ -221,6 +229,7 @@ export class SearchbarComponent {
     this.searchValue = '';
     this.profileService.openProfile(user.uid)
   }
+
 
   /**
   * Opens a specific channel.

@@ -36,6 +36,7 @@ $hover-transition: all ease-in-out 125ms;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
   &:hover {
     background-color: #eceefe;
     color: #535af1;
@@ -338,8 +339,7 @@ $hover-transition: all ease-in-out 125ms;
     color: white;
 
     img {
-      filter: invert(99%) sepia(2%) saturate(393%) hue-rotate(45deg)
-        brightness(120%) contrast(100%);
+      filter: invert(99%) sepia(2%) saturate(393%) hue-rotate(45deg) brightness(120%) contrast(100%);
     }
   }
 }
@@ -498,6 +498,7 @@ input[type="file"] {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%);
+
     .btn-container {
       width: unset !important;
       gap: 5px;
@@ -520,6 +521,7 @@ input[type="file"] {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%);
+
     .btn-container {
       width: unset !important;
       gap: 5px;

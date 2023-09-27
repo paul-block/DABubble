@@ -14,10 +14,6 @@ import { defaultAppCheckInstanceFactory } from '@angular/fire/app-check/app-chec
   styleUrls: ['./choose-avatar.component.scss']
 })
 export class ChooseAvatarComponent implements OnInit {
-
-
-
-
   uploadProgress: number = 0;
   selectedFile: File = null;
   images = ['/assets/img/small_avatar/avatar (1).png', '/assets/img/small_avatar/avatar (2).png', '/assets/img/small_avatar/avatar (3).png', '/assets/img/small_avatar/avatar (4).png', '/assets/img/small_avatar/avatar (5).png', '/assets/img/small_avatar/avatar (6).png']

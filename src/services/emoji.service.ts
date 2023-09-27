@@ -11,7 +11,6 @@ export class EmojiService {
   picker_reaction_bar: boolean = false;
   openPickerBelow: boolean = false;
   checkMarkManualEvent: any =
-
     {
       "emoji": {
         "name": "White Heavy Check Mark",
@@ -125,7 +124,6 @@ export class EmojiService {
   ArrayEmojiPopupReactionBarRef = [];
 
   constructor() { }
-
 
   addOrRemoveEmoji(i: number, j: number, array, user: string) {
     let index = array[i].emoji_data[j].react_users.indexOf(user)

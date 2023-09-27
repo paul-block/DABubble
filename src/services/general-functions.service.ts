@@ -10,7 +10,6 @@ export class GeneralFunctionsService {
   isMobileScreen: boolean = false;
   public highlightInput: Subject<boolean> = new Subject<boolean>();
 
-
   constructor() {}
 
   preventDefault(event: Event) {

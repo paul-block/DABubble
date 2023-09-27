@@ -17,18 +17,17 @@ export class ForgotPasswordComponent {
   message: string
 
 
-
-   /**
-   * checks whether it is a valid email
-   */
+  /**
+  * checks whether it is a valid email
+  */
   dataChanged(value: string) {
     this.email_valid = this.regexEmail.test(value)
   }
 
 
- /**
-  * sends the password reset email and sends a notification to the user
-  */
+  /**
+   * sends the password reset email and sends a notification to the user
+   */
   async sendMail() {
     if (this.authenticationService.email_send == null) {
       if (this.email_valid) await this.authenticationService.ForgotPassword(this.email)

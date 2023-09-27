@@ -73,6 +73,7 @@ header {
 
   #dot {
     position: relative;
+
     svg {
       right: 20px !important;
     }
@@ -82,12 +83,9 @@ header {
     display: none;
   }
 
-  // #profile {
-  //   flex-basis: 0;
-  // }
-
   header {
     margin: 0;
+
     #profile {
       position: absolute;
       right: 0;
@@ -98,11 +96,6 @@ header {
     margin-left: 35px;
     flex-basis: 275px;
   }
-
-  // #searchbar {
-  //   width: -webkit-fill-available;
-  //   margin-left: 321px;
-  // }
 }
 
 @media (max-width: 1000px) {

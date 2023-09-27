@@ -44,7 +44,6 @@ export class ChatMessagesComponent {
   ) { }
 
 
-
   ngOnInit(): void {
     this.scrollSubscription = this.msgService.scrollObservable.subscribe(() => {
       this.scrollDivToBottom();
@@ -68,6 +67,7 @@ export class ChatMessagesComponent {
     }
   }
 
+  
   checkForScroll() {
     if (this.scrollContainer) {
       const nativeElement = this.scrollContainer.nativeElement;

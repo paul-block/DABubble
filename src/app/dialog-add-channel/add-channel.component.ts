@@ -10,17 +10,13 @@ import { ChannelService } from 'services/channel.service';
   styleUrls: ['./add-channel.component.scss']
 })
 export class AddChannelComponent {
-
-
   error: boolean = false
   addPPlRef: MatDialogRef<AddPplToChannelComponent>;
   addPplOpen: boolean = false;
-
   form = new FormGroup({
     'channel-name': new FormControl(''),
     'description': new FormControl('')
   });
-
   constructor(
     public dialog: MatDialog,
     public channelService: ChannelService

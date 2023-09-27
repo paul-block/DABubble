@@ -170,7 +170,6 @@ export class ChannelDirectSendMessageComponent {
   }
 
 
-
   handleEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();

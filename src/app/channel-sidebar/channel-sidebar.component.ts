@@ -18,21 +18,16 @@ import { OpenChatService } from 'services/open-chat.service';
   styleUrls: ['./channel-sidebar.component.scss'],
 })
 export class ChannelSidebarComponent implements OnInit, OnDestroy {
-
   auth = getAuth();
   @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
   addChannelRef: MatDialogRef<AddChannelComponent>;
   addChannelOpen: boolean = false;
-
   channelsVisible: boolean = true;
   dmsVisible: boolean = true;
   openNewMsg: boolean = false;
   sortedChats: any[];
-
   private newChannelIdSubscription: Subscription;
-
   currentChannelId: string;
-
 
   constructor(
     public authService: AuthenticationService,
@@ -51,7 +46,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+
   /**
   * Component's initialization method. Waits for authentication, 
   * loads chats, and initializes own chat. If it's a new user, loads the start channel.
@@ -62,7 +57,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
-    if (this.authService.newUser)  this.addNewUserMessageToChannel()
+    if (this.authService.newUser) this.addNewUserMessageToChannel()
     this.sortedChats = this.sortChats(this.chatService.chats);
   }
 
@@ -127,16 +122,16 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
   }
 
-/**
-  * Toggles the visibility of the channels.
-  */
+  /**
+    * Toggles the visibility of the channels.
+    */
   toggleChannels() {
     this.channelsVisible = !this.channelsVisible;
   }
 
- /**
-  * Toggles the visibility of direct messages.
-  */
+  /**
+   * Toggles the visibility of direct messages.
+   */
   toggleDms() {
     this.dmsVisible = !this.dmsVisible;
   }
@@ -150,29 +145,29 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     return this.chatService.currentChatID !== userReceiverID;
   }
 
- /**
-  * Determines if a chat is associated with the current user.
-  * @param {Object} chat - The chat object to check.
-  * @return {boolean} - True if the chat is associated with the current user, false otherwise.
-  */
+  /**
+   * Determines if a chat is associated with the current user.
+   * @param {Object} chat - The chat object to check.
+   * @return {boolean} - True if the chat is associated with the current user, false otherwise.
+   */
   isCurrentUserChat(chat: { chat_Member_IDs: any[]; }): boolean {
     return chat.chat_Member_IDs[0] === chat.chat_Member_IDs[1] ? true : false;
   }
 
-/**
- * Sorts an array of chats to place the chat associated with the current user at the beginning.
- * Utilizes the isCurrentUserChat method to determine if a chat is associated with the current user.
- * If both chats being compared are or aren't associated with the current user, their relative order remains unchanged.
- * @param {Object[]} chats - The array of chat objects to be sorted.
- * @return {Object[]} - The sorted array of chats.
- */
+  /**
+   * Sorts an array of chats to place the chat associated with the current user at the beginning.
+   * Utilizes the isCurrentUserChat method to determine if a chat is associated with the current user.
+   * If both chats being compared are or aren't associated with the current user, their relative order remains unchanged.
+   * @param {Object[]} chats - The array of chat objects to be sorted.
+   * @return {Object[]} - The sorted array of chats.
+   */
   sortChats(chats: any[]): any[] {
     return chats.sort((a, b) => {
       if (this.isCurrentUserChat(a) && !this.isCurrentUserChat(b)) {
-        return -1; 
+        return -1;
       }
       if (!this.isCurrentUserChat(a) && this.isCurrentUserChat(b)) {
-        return 1;  
+        return 1;
       }
       return 0;
     });

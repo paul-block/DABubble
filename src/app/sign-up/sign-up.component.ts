@@ -23,12 +23,10 @@ export class SignUpComponent {
   matchPassword: string
   passwordConfirmed: boolean = false
 
-
-
   constructor(
-    public authenticationService: AuthenticationService, 
+    public authenticationService: AuthenticationService,
     private router: Router,
-    ) { }
+  ) { }
 
 
   dataChanged(value: any, inputfield: string) {
@@ -37,6 +35,7 @@ export class SignUpComponent {
     }
     this.validateForm()
   }
+
 
   hasNumber() {
     return /[0-9]/.test(this.password);

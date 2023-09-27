@@ -28,6 +28,7 @@ export class ProfileService {
     public generalFunctService: GeneralFunctionsService
   ) { }
 
+
   /**
   * Opens the user profile based on the provided user ID. If it's the current user's profile, it opens their details.
   * @param {string} uid - User ID for which the profile should be opened.
@@ -44,6 +45,7 @@ export class ProfileService {
     }
   }
 
+
   /**
   * Checks if the given string matches a user ID from the 'all_users' collection.
   * @param {string} uid - String to check against the list of user IDs.
@@ -54,6 +56,7 @@ export class ProfileService {
     if (user) return true
     else return false
   }
+
 
   /**
   * Opens the details for the currently logged-in user.
@@ -72,6 +75,7 @@ export class ProfileService {
       this.fsDataThreadService.detailsVisible = false
     });
   }
+
 
   /**
   * Retrieves the email address for a user based on the provided user ID.

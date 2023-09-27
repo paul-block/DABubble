@@ -11,7 +11,6 @@ export class ReactionBubbleService {
   ) { }
 
   replaceNameWithDu(react_userIDs, moreThen3Reactions) {
-
     const names_react_user = this.switchIDsWithNames(react_userIDs);
     const sortedNames = this.sortNamesWithDuFirst(names_react_user);
     if (moreThen3Reactions) {

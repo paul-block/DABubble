@@ -33,5 +33,4 @@ export class StartScreenComponent implements OnInit {
     setTimeout(() => this.d_none = true, 3500);
     this.router.navigateByUrl('/sign-in')
   }
-
 }

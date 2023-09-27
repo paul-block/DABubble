@@ -261,11 +261,12 @@ input {
 }
 
 .imprint {
-   
+
     margin-top: 20px;
     display: flex;
     gap: 50px;
     justify-content: center;
+
     span {
         z-index: 1;
         padding: 10px;
@@ -279,11 +280,11 @@ input {
         display: flex;
         align-items: center;
         justify-content: center;
-    
+
         &:hover {
             cursor: pointer;
             border: 1px solid #686868;
-    
+
         }
     }
 }
@@ -385,6 +386,7 @@ input {
     .signin_div {
         gap: 15px;
         margin-top: 16px;
+
         p {
             font-size: 16px;
         }
@@ -418,7 +420,7 @@ input {
 
     .signin_div {
         gap: 3px;
-      
+
         p {
             font-size: 16px;
             margin-bottom: 15px;
@@ -442,5 +444,5 @@ input {
         margin-top: 10px;
     }
 
-   
+
 }

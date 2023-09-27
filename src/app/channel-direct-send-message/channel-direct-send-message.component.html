@@ -10,14 +10,12 @@
         </div>
     </div>
 </div>
-
 <section class="write-new-message">
     <textarea [disabled]="noChatSelected()" #messageTextarea name="" id="" cols="10" rows="2"
         [placeholder]="chatService.messageToPlaceholder" (keydown)="handleEnter($event)"
         [(ngModel)]="msgService.messageText" (keyup.enter)="onSendClick()"></textarea>
     <div class="extend-send-message">
         <div class="extend-message">
-
             <div [class.show_edit_comment]="open_attachment_menu" class="edit_comment">
                 <input id="fileInput" type="file" (change)="uploadService.onFileSelected($event)">
                 <label class="menu_button" for="fileInput">Datei anhängen</label>
@@ -30,12 +28,10 @@
                         <div>{{user.user_name}}</div>
                     </div>
                 </div>
-
             </div>
             <button class="add-attachment" (click)="togglePopup('open_attachment_menu');" [disabled]="noChatSelected()">
                 <mat-icon>add</mat-icon>
             </button>
-
             <div class="parting-line"></div>
             <button [disabled]="noChatSelected()"
                 (click)="togglePopup('emojiPicker_open'); emojiService.openEmojiPicker(-2);"
@@ -47,7 +43,6 @@
             </button>
             <button [disabled]="noChatSelected()"
                 (click)="togglePopup('open_users')"><mat-icon>alternate_email</mat-icon></button>
-
         </div>
         <button (click)="onSendClick()" [ngClass]="{'ready-to-send': noFileSelected() || messageEmpty()}"
             [disabled]="!noFileSelected() && !messageEmpty()" class="send-message">

@@ -47,7 +47,7 @@ header {
   width: 100%;
 }
 
-.emoji_picker_above{
+.emoji_picker_above {
   display: none;
   z-index: 20;
   position: absolute;
@@ -190,8 +190,7 @@ header {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
-        brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
     }
   }
 }
@@ -305,8 +304,7 @@ header {
 
     img {
       transform: scale(1.05);
-      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg)
-        brightness(97%) contrast(94%);
+      filter: invert(61%) sepia(87%) saturate(6976%) hue-rotate(230deg) brightness(97%) contrast(94%);
     }
   }
 }
@@ -450,8 +448,7 @@ header {
   cursor: pointer;
 
   &:hover {
-    filter: invert(53%) sepia(23%) saturate(5121%) hue-rotate(213deg)
-      brightness(100%) contrast(91%);
+    filter: invert(53%) sepia(23%) saturate(5121%) hue-rotate(213deg) brightness(100%) contrast(91%);
   }
 }
 
@@ -479,8 +476,7 @@ textarea {
 
 .inactive {
   pointer-events: none;
-  filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%)
-    contrast(94%);
+  filter: invert(41%) sepia(0%) saturate(3%) hue-rotate(21deg) brightness(97%) contrast(94%);
 }
 
 .mat-tooltip {
@@ -557,6 +553,7 @@ textarea {
     width: min-content;
     padding: 0 5px 0 5px;
   }
+
   .emoji_main {
     justify-content: flex-end;
   }

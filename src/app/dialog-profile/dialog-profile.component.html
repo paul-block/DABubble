@@ -3,9 +3,7 @@
         <span>Profil</span>
         <mat-icon class="close-dialog" (click)="close()" mat-button mat-dialog-close>close</mat-icon>
     </div>
-
     <img class="profileImg" [src]="authService.getImageUrl(data.user.uid)">
-
     <div class="middle-part">
         <div class="edit-container">
             <span id="name">{{ data.user.user_name}}</span>
@@ -19,7 +17,6 @@
                 }}</span>
         </div>
     </div>
-
     <div *ngIf="data.user.email != 'gast@gast.de'" class="email-container">
         <div>
             <img src="assets/img/mail.png" alt="">
@@ -28,7 +25,6 @@
 
         <a id="email-address" href="mailto:{{ data.user.email }}">{{ data.user.email }}</a>
     </div>
-
     <div *ngIf="data.user.email != 'gast@gast.de'" id="msg-btn" (click)="sendMsg(data.user.uid, data.user.user_name)">
         <img src="assets/img/icons/msg_icon.svg" alt="">
         <span>Nachricht</span>

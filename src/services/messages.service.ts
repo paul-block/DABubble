@@ -8,7 +8,6 @@ import { GeneralFunctionsService } from './general-functions.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteCommentComponent } from 'app/dialog-delete-comment/dialog-delete-comment.component';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,14 +29,14 @@ export class MessagesService {
   messagesLoaded: boolean = false;
   private chatSnapshotUnsubscribe: () => void;
 
+
   constructor(
     public dialog: MatDialog,
     public chatService: ChatService,
     public authService: AuthenticationService,
     public emojiService: EmojiService,
     public genFunctService: GeneralFunctionsService,
-  ) {
-  }
+  ) { }
 
 
   checkIfEmpty() {
