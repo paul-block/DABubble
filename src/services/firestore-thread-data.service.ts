@@ -37,6 +37,11 @@ export class FirestoreThreadDataService {
   ) { }
 
 
+  /**
+   * saves changed content from the thread and scrolls the page downwards
+   * 
+   * @param comments data 
+   */
   async saveThread(data) {
     this.comments.push(data)
     const docRef = doc(this.db, "threads", this.current_message_id);
@@ -48,6 +53,9 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * updates the comments in the thread and saves the number of comments
+   */
   async updateData() {
     const docRef = doc(this.db, "threads", this.current_message_id);
     await updateDoc(docRef, {
@@ -57,6 +65,9 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * retrieves the messages from the backend
+   */
   async getMessages() {
     this.channel_messages = []
     const colRef = collection(this.db, "channel_messages");
@@ -67,6 +78,11 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * open the thread component ang get the message id
+   * 
+   * @param i 
+   */
   async openThread(i: number) {
     this.chat_type = 'channel'
     this.chatService.thread_open = true
@@ -75,6 +91,11 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * open the thread component ang get the message id
+   * 
+   * @param i index
+   */
   openDirectChatThread(i: number) {
     this.chatService.thread_open = true
     if (this.window_width < 1300 && this.window_width > 1000) {
@@ -92,12 +113,22 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * get the message id
+   * 
+   * @param i index
+   */
   validateIdFromMessage(i: number) {
     this.current_message_id = this.channel_messages[i].id
     this.loadThread(this.current_message_id)
   }
 
 
+  /**
+   * 
+   * @param timestamp current time
+   * @returns the time elapsed since the post
+   */
   getTimeSince(timestamp: number) {
     const nowInSeconds = Math.floor(Date.now() / 1000);
     const timeDifference = nowInSeconds - timestamp;
@@ -115,6 +146,12 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * loads the thread data from the backend
+   * 
+   * @param documentId 
+   * @returns promise
+   */
   async loadThread(documentId: string): Promise<void> {
     return new Promise<void>(async (resolve) => {
       const docRef = doc(this.db, 'threads', documentId);
@@ -133,12 +170,21 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * delete the thraed date in the backend
+   */
   async deletThread() {
     const docRef = doc(this.db, 'threads', this.current_message_id);
     await deleteDoc(docRef);
   }
 
 
+  /**
+   * updates the comment data in the backend
+   * 
+   * @param i index comments
+   * @param k index upload file
+   */
   updateThread(i: number, k: number) {
     this.comments[i].uploaded_files.file_name.splice(k, 1);
     this.comments[i].uploaded_files.download_link.splice(k, 1);
@@ -146,6 +192,12 @@ export class FirestoreThreadDataService {
   }
 
 
+  /**
+   * highlights the "@user" in the comment
+   * 
+   * @param user name 
+   * @returns highlighted "@username"
+   */
   formatNameAndText(name: string): string {
     const [firstName, lastName] = name.split(' ');
     const formattedName = `<span class="highlighted">@${firstName} ${lastName}</span>`;
