@@ -43,7 +43,9 @@ export class AuthenticationService {
     this.loadCurrentUser();
   }
 
-
+/**
+ * saves the user data in local storage
+ */
   setCurrentUserToLocalStorage() {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
@@ -57,6 +59,9 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * loads all registered users from the backend
+   */
   loadAllUsers() {
     this.usersPromise = new Promise<void>((resolve) => {
       const dbRef = collection(this.db, "users");
@@ -72,6 +77,9 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * loads the data of the logged in user
+   */
   loadCurrentUser() {
     this.authInitializedPromise = new Promise<void>((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
@@ -82,11 +90,19 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * 
+   * @returns returned true when authentication is fully loaded
+   */
   async waitUntilAuthInitialized(): Promise<void> {
     return this.authInitializedPromise;
   }
 
 
+  /**
+   * 
+   * @returns logged user id
+   */
   getUid() {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -94,6 +110,11 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * loads the data of the logged in user
+   * 
+   * @param uid logged user id
+   */
   async getUserData(uid: string) {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
@@ -101,6 +122,13 @@ export class AuthenticationService {
   }
 
 
+
+  /**
+   * creates a user account with email and password in the backend
+   * 
+   * @paramu user email from signup component
+   * @param user password  from signup component
+   */
   async SignUp(email: string, password: string) {
     try {
       const result = await this.afAuth
@@ -119,6 +147,12 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * logs the user in with email and password
+   * 
+   * @param user email from sign in component
+   * @param user password from sign in component
+   */
   async SignIn(email: string, password: string) {
     try {
       const result = await this.afAuth
@@ -133,6 +167,9 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * logs the user in as a guest
+   */
   async guestSignIn() {
     try {
       const result = await this.afAuth
@@ -148,6 +185,12 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * sets the online status
+   * 
+   * @param current user email 
+   * @param current user status 
+   */
   async setOnlineStatus(email: string, status: string) {
     const user = this.all_users.find(element => element.email === email);
     const userRef = doc(this.db, 'users', user.uid);
@@ -157,11 +200,17 @@ export class AuthenticationService {
   }
 
 
+
   async GoogleAuth() {
     await this.AuthLogin(new GoogleAuthProvider());
   }
 
 
+  /**
+   * Logs the user in with their Google account
+   * 
+   * @param provider Google
+   */
   async AuthLogin(provider: firebase.auth.AuthProvider | GoogleAuthProvider) {
     try {
       const result = await this.afAuth.signInWithPopup(provider);
@@ -175,6 +224,12 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * checks whether the user already has an account
+   * 
+   * @param current user email 
+   * @paramc current user 
+   */
   async isEmailRegistered(email: string, user: firebase.User) {
     (await this.getAllUsers()).forEach(element => {
       if (element.email == email) {
@@ -188,6 +243,11 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * sends an email to reset the password
+   * 
+   * @param user email
+   */
   async ForgotPassword(passwordResetEmail: string) {
     await this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
@@ -202,6 +262,11 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * adds the user to the “Development Team” channel and sets user data in the backend
+   * 
+   * @param current user 
+   */
   async SetUserData(user: any) {
     await this.channelService.addUserToChannel('Entwicklerteam', user.uid)
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
@@ -219,6 +284,9 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * logs the user out
+   */
   async signOut() {
     await this.setOnlineStatus(this.userData.email, 'Abwesend')
     await this.afAuth.signOut();
@@ -228,6 +296,10 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * 
+   * @returns  all registered users
+   */
   async getAllUsers() {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
     let users = [];
@@ -238,12 +310,23 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * 
+   * @param user id 
+   * @returns current user
+   */
   getUserInfo(uid: string) {
     const user = this.all_users.find(user => user.uid === uid);
     return user;
   }
 
 
+  /**
+   * sorts all users by name, replaces the first letter with a lowercase letter and returns this
+   * 
+   * @param user name 
+   * @returns filtered users
+   */
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
@@ -252,6 +335,12 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * sorts all users by name, replaces the first letter with a lowercase letter and returns this
+   * 
+   * @param user email 
+   * @returns filtered users
+   */
   async filterUsersByEmail(email: string): Promise<any> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.email?.toLowerCase().startsWith(email?.toLowerCase())
@@ -260,6 +349,10 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * 
+   * @returns all user without current user
+   */
   async usersWithoutCurrentuser() {
     const users = await this.getAllUsers();
     const userIndex = users.findIndex(user => user.user_name === this.userData.user_name);
@@ -267,6 +360,13 @@ export class AuthenticationService {
     return users
   }
 
+
+  /**
+   * updates the user data in the backend
+   * 
+   * @param current user name 
+   * @param current user email 
+   */
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -284,6 +384,11 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * updates the avatar image in the backend
+   * 
+   * @param avatar image 
+   */
   async setAvatarImage(image: string) {
     const docRef = doc(this.db, "users", this.getUid());
     await updateDoc(docRef, {
@@ -293,6 +398,11 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * 
+   * @param current user id 
+   * @returns download link of the avatar image
+   */
   getImageUrl(uid: string) {
     const user = this.all_users.find(element => element.uid === uid);
     if (user) return user.avatar;
@@ -300,6 +410,12 @@ export class AuthenticationService {
   }
 
 
+  /**
+   * checks whether a user is logged in
+   * 
+   * @param user 
+   * @returns true or false
+   */
   isCurrentUser(user): boolean {
     return user === this.userData.uid ? true : false;
   }
