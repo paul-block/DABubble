@@ -131,12 +131,10 @@ export class AuthenticationService {
    */
   async SignUp(email: string, password: string) {
     try {
-      const result = await this.afAuth
-        .createUserWithEmailAndPassword(email, password).then((result) => {
-          this.SetUserData(result.user);
-        })
-      this.signUp_successful = true
-      setTimeout(() => this.signUp_successful = false, 3000);
+      const result = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      await this.SetUserData(result.user);
+      this.signUp_successful = true;
+      setTimeout(() => (this.signUp_successful = false), 3000);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         this.email_error = true
@@ -275,7 +273,7 @@ export class AuthenticationService {
       email: user.email,
       user_name: this.userName,
       avatar: '/assets/img/big_avatar/81. Profile.png',
-      status: ''
+      status: 'Aktiv'
     };
     await userRef.set(userDataFirestore, {
       merge: true,
