@@ -38,13 +38,18 @@ export class HeaderChannelDirectChatComponent {
     this.windowWidth = window.innerWidth;
   }
 
-
+/**
+  * Listener for window resizing. Updates the `windowWidth` property with the current width of the window.
+  * @param {any} event - Event object containing information about the resizing.
+  */
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.windowWidth = event.target.innerWidth;
   }
 
-
+/**
+  * Determines whether the channel should be edited based on the current window width and triggers the channel edit dialog.
+  */
   editChannel() {
     if (this.windowWidth >= 1000) {
       this.genFunctService.isMobileScreen = false;
@@ -54,7 +59,9 @@ export class HeaderChannelDirectChatComponent {
     this.openEditChannel()
   }
 
-
+/**
+  * Opens the dialog for editing the channel. The dialog position is set relative to a target div.
+  */
   openEditChannel() {
     const targetDiv = this.targetDiv.nativeElement;
     const dialogConfig = new MatDialogConfig();
@@ -73,7 +80,9 @@ export class HeaderChannelDirectChatComponent {
     });
   }
 
-
+/**
+  * Opens the dialog for editing members of the channel.
+  */
   editMembers() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'custom-edit-members-dialog';
@@ -92,7 +101,9 @@ export class HeaderChannelDirectChatComponent {
     });
   }
 
-
+/**
+  * Opens the dialog for adding members on a mobile device.
+  */
   addMembersMobile() {
     const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
@@ -104,7 +115,9 @@ export class HeaderChannelDirectChatComponent {
     });
   }
 
-
+/**
+  * Opens the dialog for adding members to the channel. The function behavior is determined by the current window width.
+  */
   addMembers() {
     if (this.windowWidth > 1000) {
       const rect = this.ElementAddMembersRef.nativeElement.getBoundingClientRect();
@@ -119,7 +132,9 @@ export class HeaderChannelDirectChatComponent {
     else this.editMembers()
   }
 
-
+/**
+  * Closes the currently open chat.
+  */
   closeChat() {
     this.chatService.open_chat = false
   }

@@ -21,7 +21,10 @@ export class DialogEditMembersComponent {
     public channelService: ChannelService
   ) { }
 
-
+/**
+ * Closes the dialog for adding a member and triggers any further 
+ * processes listening for this dialog's closure with a positive response.
+ */
   closeRedirectAddMember() {
     this.dialogRef.close(true);
   }

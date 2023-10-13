@@ -17,7 +17,11 @@ export class ChannelDirectEditMessageComponent {
     public emojiService: EmojiService,
   ) { }
 
-
+  /**
+   * Adds an emoji to the textarea by invoking a service method and then updates the message text.
+   * Also checks if the message is empty.
+   * @param {any} $event - The event object associated with the emoji selection.
+   */
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event);
     this.msgService.messageText += this.emojiService.textMessage;
@@ -25,7 +29,9 @@ export class ChannelDirectEditMessageComponent {
     this.msgService.checkIfEmpty();
   }
 
-
+  /**
+  * Toggles the visibility of the emoji picker by updating the 'emojiPicker_open' property of the emoji service.
+  */
   toggleEmojiPicker() {
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
   }
