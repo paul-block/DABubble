@@ -35,6 +35,12 @@ export class ChatService {
   ) { }
 
 
+/**
+ * Loads the chat documents from the 'chats' collection in Firestore. 
+ * Filters out chats that the current user is not a part of.
+ * 
+ * @returns {Promise<void>} Resolves once the chats are loaded and filtered.
+ */
   async loadChats(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.chats = [];
@@ -50,12 +56,20 @@ export class ChatService {
     });
   }
 
-
+/**
+ * Checks if the provided chat data contains the current user's ID.
+ * Used to determine if the chat is relevant to the current user.
+ * 
+ * @param {any} chatData - The chat data to inspect.
+ * @returns {boolean} `true` if the current user is part of the chat, `false` otherwise.
+ */
   isUserChat(chatData) {
     return chatData.chat_Member_IDs.includes(this.currentUser_id);
   }
 
-
+/**
+ * Initializes the user's own chat in Firestore if it doesn't already exist.
+ */
   async initOwnChat() {
     const userID = this.currentUser_id;
     let chatExists = false;
@@ -69,7 +83,12 @@ export class ChatService {
     if (!chatExists) await this.newChat(userID);
   }
 
-
+/**
+ * Searches for a chat document based on the provided userReceiverID. 
+ * 
+ * @param {string} userReceiverID - The ID of the receiving user to search for.
+ * @returns {Promise<string|null>} The chat ID if found, `null` otherwise.
+ */
   async searchChat(userReceiverID): Promise<string | null> {
     let foundChatId = null;
     if (this.authService.getUid() !== null) {
@@ -91,13 +110,25 @@ export class ChatService {
     return null;
   }
 
+/**
+ * Checks if the provided chat data has the exact member IDs as specified.
+ * Used to determine if a chat already exists between two specific users.
+ * 
+ * @param {any} chatData - The chat data to inspect.
+ * @param {string} userReceiverID - The ID of the receiving user to match against.
+ * @returns {boolean} `true` if the chat data matches the exact user IDs, `false` otherwise.
+ */
   exactChatMemberIDs(chatData, userReceiverID) {
     const sortedMemberIDs = chatData.chat_Member_IDs.slice().sort();
     return (sortedMemberIDs[0] === userReceiverID && sortedMemberIDs[1] === this.authService.getUid()) ||
       (sortedMemberIDs[1] === userReceiverID && sortedMemberIDs[0] === this.authService.getUid());
   }
 
-
+/**
+ * Retrieves the chat document based on the current chat ID.
+ * 
+ * @returns {Promise<any|null>} The chat document data if found, `null` otherwise.
+ */
   async getChatDocument() {
     if (this.currentChatID) {
       const docRef = doc(this.db, 'chats', this.currentChatID);
@@ -112,7 +143,11 @@ export class ChatService {
     }
   }
 
-
+/**
+ * Creates a new chat document in Firestore with the specified receiver ID.
+ * @param {string} userReceiverID - The ID of the user receiving the chat.
+ * @returns {Promise<string|null>} The custom chat ID of the new chat if successful, `null` otherwise.
+ */
   async newChat(userReceiverID: string): Promise<string | null> {
     const userID = this.currentUser_id;
     this.directChatMessages = [];
@@ -133,7 +168,9 @@ export class ChatService {
     });
   }
 
-
+/**
+ * Sets the placeholder text for the message textarea based on the current chat section.
+ */
   textAreaMessageTo() {
     if (this.currentChatSection === 'chats') {
       this.messageToPlaceholder = 'Nachricht an ' + this.getChatReceiverUser(this.currentChatData).user_name;
@@ -144,7 +181,11 @@ export class ChatService {
     }
   }
 
-
+/**
+ * Retrieves the receiver user data from the provided chat.
+ * @param {any} chat - The chat data containing member IDs.
+ * @returns {any} The receiver user data if found, `null` otherwise.
+ */
   getChatReceiverUser(chat) {
     let chatReveiverID;
     try {
@@ -159,6 +200,9 @@ export class ChatService {
   }
 
 
+/**
+ * Gets the data of the current chat based on the chat section and chat ID.
+ */
   getCurrentChatData() {
     if (this.currentChatSection === 'channels') {
       this.currentChatData = this.channelService.channels.find(channel => channel.channel_ID === this.currentChatID);
@@ -167,8 +211,12 @@ export class ChatService {
     }
   }
 
-
-  //-----------------------------------------------------------------@user Funktionen----------------------------------------------------
+/**
+ * Modifies a given message text to replace user mentions (starting with '@') 
+ * with the respective user's ID from the user list.
+ * @param {string} message - The original message text containing user mentions.
+ * @returns {string} The modified message with user mentions replaced by their respective IDs.
+ */
   modifyMessageValue(message: string) {
     const words = message.split(' ')
     for (let i = 0; i < words.length; i++) {
@@ -190,7 +238,11 @@ export class ChatService {
     return words
   }
 
-
+/**
+ * Triggers user search functionality when typing a word starting with '@' in a message.
+ * @param {string} text - The message text being typed.
+ * @returns {string} The message text with possible user mentions processed.
+ */
   textChanged(text: string) {
     const words = text.split(' ');
     for (let i = 0; i < words.length; i++) {
@@ -205,7 +257,10 @@ export class ChatService {
     return words.join(' ')
   }
 
-
+/**
+ * Searches for users whose names start with the provided word (without '@' prefix).
+ * @param {string} word - The word being used to search for users.
+ */
   async searchUserByLetter(word: string) {
     this.open_users = true;
     const word_without_at = word.substring(1);
@@ -222,7 +277,12 @@ export class ChatService {
     this.at_users = filteredAndProcessedUsers;
   }
 
-
+/**
+ * Inserts the selected user's name at the position of the '@' mention in the message text.
+ * @param {number} i - The index of the selected user from the user mention suggestions.
+ * @param {string} text - The current message text.
+ * @returns {string} The updated message text with the selected user's name inserted.
+ */
   addUserToTextarea(i: number, text: string) {
     const search_word = this.at_users[i].word;
     const words = text.split(' ');
@@ -233,7 +293,11 @@ export class ChatService {
     return text;
   }
 
-
+/**
+ * Checks if a given word matches a user ID in the list of all users.
+ * @param {string} word - The word (or ID) to check.
+ * @returns {boolean} `true` if the word matches a user ID, `false` otherwise.
+ */
   checkIfWordIsAnId(word: string) {
     if (word.includes('\n')) word = word.replace(/\n/, '');
     const user = this.authService.all_users.find(element => element.uid === word);
@@ -241,20 +305,30 @@ export class ChatService {
     else return false
   }
 
-
+/**
+ * Replaces a given user ID with the corresponding user's mention (e.g., '@username').
+ * @param {string} word - The user ID to replace.
+ * @returns {string} The user's mention if the ID is found, the original word otherwise.
+ */
   renameUid(word: string) {
     const user = this.authService.all_users.find(element => element.uid === word);
     if (user) return '@' + user.user_name
     else return word
   }
 
-
+/**
+ * Checks if a word contains a newline character.
+ * @param {string} word - The word to check.
+ * @returns {boolean} `true` if the word contains a newline character, `false` otherwise.
+ */
   checkForBreak(word: string) {
     if (word.includes('\n')) return true
     else return false
   }
 
-
+/**
+ * Toggles the visibility state of the sidebar UI component.
+ */
   toggleSidebar() {
     if (this.sidebarVisible) {
       this.sidebarVisible = false;
@@ -266,7 +340,10 @@ export class ChatService {
     }
   }
 
-
+/**
+ * Changes the displayed text for the sidebar toggle button.
+ * @param {string} text - The new text to display on the toggle button.
+ */
   changeText(text: string) {
     this.toggleSidebarMenuText = text;
   }

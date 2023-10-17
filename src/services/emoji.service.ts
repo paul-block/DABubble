@@ -125,6 +125,15 @@ export class EmojiService {
 
   constructor() { }
 
+/**
+ * Adds or removes an emoji reaction to a message or comment.
+ * 
+ * @param {number} i - The index of the message or comment.
+ * @param {number} j - The index of the emoji in the message or comment's emoji_data array.
+ * @param {any} array - The list of messages or comments.
+ * @param {string} user - The ID of the user reacting.
+ * @returns {any} The updated list of messages or comments.
+ */
   addOrRemoveEmoji(i: number, j: number, array, user: string) {
     let index = array[i].emoji_data[j].react_users.indexOf(user)
     if (index == -1) {
@@ -141,7 +150,15 @@ export class EmojiService {
     return array
   }
 
-
+/**
+ * Adds an emoji reaction to a message or comment.
+ * 
+ * @param {any} $event - The event object containing the selected emoji.
+ * @param {number} i - The index of the message or comment.
+ * @param {any} array - The list of messages or comments.
+ * @param {string} user - The ID of the user reacting.
+ * @returns {any} The updated list of messages or comments.
+ */
   addEmoji($event: any, i: number, array, user: string) {
     this.emoji_exist = false
     this.checkIfEmojiExist($event.emoji.colons, i, array, user)
@@ -157,7 +174,14 @@ export class EmojiService {
     }
   }
 
-
+/**
+ * Checks if an emoji already exists in the emoji_data of a given message or comment.
+ * 
+ * @param {string} emoji - The emoji string to check for.
+ * @param {number} i - The index of the message or comment.
+ * @param {any[]} array - The list of messages or comments.
+ * @param {string} user - The ID of the user reacting.
+ */
   checkIfEmojiExist(emoji: string, i: number, array: { emoji_data: any[]; }[], user: string) {
     array[i].emoji_data.forEach((element: { emoji: string; react_users: string[]; count: number; }) => {
       if (element.emoji == emoji) {
@@ -177,7 +201,11 @@ export class EmojiService {
     });
   }
 
-
+/**
+ * Adds an emoji character to the message text area.
+ * 
+ * @param {any} $event - The event object containing the selected emoji.
+ */
   addEmojitoTextarea($event: any) {
     this.emojiPicker_open = false;
     let unicodeCode: string = $event.emoji.unified;
@@ -185,17 +213,29 @@ export class EmojiService {
     this.textMessage += emoji;
   }
 
-
+/**
+ * Prevents an event from propagating further.
+ * 
+ * @param {Event} event - The event to be stopped.
+ */
   stopPropagation(event: Event) {
     event.stopPropagation();
   };
 
-
+/**
+ * Opens the emoji picker at a specified index.
+ * 
+ * @param {number} i - The index at which the emoji picker should be opened.
+ */
   openEmojiPicker(i: number) {
     this.picker_index = i;
   }
 
-
+/**
+ * Initializes an array of references to message emoji popups.
+ * 
+ * @param {QueryList<ElementRef>} ElementEmojiMessagePopupsRef - The list of ElementRef for message emoji popups.
+ */
   async initEmojiMessageElements(ElementEmojiMessagePopupsRef: QueryList<ElementRef>) {
     this.ArrayEmojiMessagePopupsRef = [];
     ElementEmojiMessagePopupsRef.forEach((popupRef) => {
@@ -203,7 +243,11 @@ export class EmojiService {
     });
   }
 
-
+/**
+ * Initializes an array of references to the emoji reaction bar popups.
+ * 
+ * @param {QueryList<ElementRef>} ElementEmojiPopupReactionBarRef - The list of ElementRef for the emoji reaction bar popups.
+ */
   async initEmojiReactionBarElements(ElementEmojiPopupReactionBarRef: QueryList<ElementRef>) {
     this.ArrayEmojiPopupReactionBarRef = [];
     ElementEmojiPopupReactionBarRef.forEach((popupRef) => {
@@ -211,7 +255,15 @@ export class EmojiService {
     });
   }
 
-
+/**
+ * Determines whether an emoji popup should open above or below a specific position.
+ * 
+ * @param {number} i - The index of the message or comment.
+ * @param {string} section - Indicates whether the emoji popup is for a "Message" or "ReactionBar".
+ * @param {ElementRef} chatContainer - The ElementRef of the chat container.
+ * @param {QueryList<ElementRef>} ElementEmojiMessagePopupsRef - The list of ElementRef for message emoji popups.
+ * @param {QueryList<ElementRef>} ElementEmojiPopupReactionBarRef - The list of ElementRef for the emoji reaction bar popups.
+ */
   async checkOpenEmojiPopupAboveOrBelow(i: number, section: string, chatContainer: ElementRef, ElementEmojiMessagePopupsRef: QueryList<ElementRef>, ElementEmojiPopupReactionBarRef: QueryList<ElementRef>) {
     const container = chatContainer.nativeElement.getBoundingClientRect();
     let emojiPopup: ElementRef;
@@ -227,7 +279,12 @@ export class EmojiService {
     this.decidePopupOpenAboveOrBelow(emojiPopup, container);
   }
 
-
+/**
+ * Decides whether the emoji popup should open above or below based on the available space.
+ * 
+ * @param {ElementRef<any>} emojiPopup - The ElementRef of the emoji popup.
+ * @param {{ top: number; }} container - The bounding client rect of the chat container.
+ */
   decidePopupOpenAboveOrBelow(emojiPopup: ElementRef<any>, container: { top: number; }) {
     const viewportHeight = window.innerHeight;
     const emojiPopupRect = emojiPopup.nativeElement.getBoundingClientRect();
@@ -236,7 +293,9 @@ export class EmojiService {
     else this.openPickerBelow = false;
   }
 
-
+/**
+ * Resets the initialization flags for the emoji references.
+ */
   resetInitializedEmojiRef() {
     this.initializedEmojiMessageRef = false;
     this.initializedEmojiReactionBarRef = false;

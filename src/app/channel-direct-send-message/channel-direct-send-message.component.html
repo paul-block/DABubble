@@ -1,12 +1,11 @@
-<!--------------------------------------------------- upload -------------------------------------------------------->
 <div class="upload_main" *ngIf="uploadService.chat_section != 'thread'">
     <div *ngFor="let file of uploadService.upload_array.file_name; let i = index" [style.bottom.px]="i * 65"
         class="upload_content">
-        <img class="file_image" src="/assets/img/File-Types/{{uploadService.upload_array.file_extension[i]}}.png">
+        <img class="file_image" src="assets/img/File-Types/{{uploadService.upload_array.file_extension[i]}}.png">
         <div style="z-index: 1;">{{file}}</div>
         <div class="progress_load" [style.width.%]="uploadService.uploadProgressArray[i]"></div>
         <div class="delete_file">
-            <img (click)="uploadService.removeFile(i)" src="/assets/img/icons/close.png" alt="">
+            <img (click)="uploadService.removeFile(i)" src="assets/img/icons/close.png" alt="">
         </div>
     </div>
 </div>

@@ -13,10 +13,7 @@ export class DialogDeleteCommentComponent {
     @Inject(MAT_DIALOG_DATA) public data: { comment: string }
   ) { }
 
-/**
- * Closes the current dialog.
- * Triggered when a close action is taken in a dialog box.
- */
+
   onNoClick(): void {
     this.dialogRef.close();
   }

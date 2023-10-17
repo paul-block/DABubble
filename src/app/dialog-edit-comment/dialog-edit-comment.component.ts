@@ -16,25 +16,22 @@ export class DialogEditCommentComponent {
     @Inject(MAT_DIALOG_DATA) public data: { comment: string }
   ) { }
 
-/**
- * Closes the currently opened dialog without performing any action.
- */
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-/**
- * Opens the emoji picker interface for user input.
- */
+
   openEmojiPicker() {
     this.emojiPicker_open = true;
   }
 
-/**
-  * add the selected emoji to the textarea
-  * 
-  * @param $event emoji is selected
-  */
+
+  /**
+   * add the selected emoji to the textarea
+   * 
+   * @param $event emoji is selected
+   */
   addEmoji($event: any) {
     this.emojiPicker_open = false;
     let unicodeCode: string = $event.emoji.unified;

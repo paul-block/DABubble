@@ -44,7 +44,9 @@ export class AuthenticationService {
   }
 
 /**
- * saves the user data in local storage
+ * Sets the current user data to local storage. 
+ * When a user is detected via `authState`, the user data is stored in local storage. 
+ * Additionally, authorized channels for the user are fetched.
  */
   setCurrentUserToLocalStorage() {
     this.afAuth.authState.subscribe((user) => {
@@ -58,10 +60,11 @@ export class AuthenticationService {
     });
   }
 
-
-  /**
-   * loads all registered users from the backend
-   */
+/**
+ * Loads all users from the Firestore "users" collection into `all_users` property. 
+ * The method uses an observable pattern to get real-time updates from Firestore.
+ * @returns {Promise<void>} Resolves when the users have been loaded.
+ */
   loadAllUsers() {
     this.usersPromise = new Promise<void>((resolve) => {
       const dbRef = collection(this.db, "users");
@@ -76,10 +79,11 @@ export class AuthenticationService {
     });
   }
 
-
-  /**
-   * loads the data of the logged in user
-   */
+/**
+ * Loads the current authenticated user into the `currentUserSubject` observable. 
+ * This helps other parts of the application to know the state of the currently logged-in user.
+ * @returns {Promise<void>} Resolves when the authentication state has been determined.
+ */
   loadCurrentUser() {
     this.authInitializedPromise = new Promise<void>((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
@@ -89,52 +93,50 @@ export class AuthenticationService {
     });
   }
 
-
-  /**
-   * 
-   * @returns returned true when authentication is fully loaded
-   */
+/**
+ * Waits until the authentication state (user logged in/out) is initialized.
+ * Useful for parts of the application that require the user's authentication status.
+ * @returns {Promise<void>} Resolves when the authentication state has been initialized.
+ */
   async waitUntilAuthInitialized(): Promise<void> {
     return this.authInitializedPromise;
   }
 
-
-  /**
-   * 
-   * @returns logged user id
-   */
+/**
+ * Retrieves the UID (unique identifier) of the currently authenticated user.
+ * @returns {string} The UID of the authenticated user.
+ */
   getUid() {
     const auth = getAuth();
     const user = auth.currentUser;
     return user.uid;
   }
 
-
-  /**
-   * loads the data of the logged in user
-   * 
-   * @param uid logged user id
-   */
+/**
+ * Fetches user data from the Firestore database given a UID.
+ * @param {string} uid - The UID of the user whose data needs to be fetched.
+ */
   async getUserData(uid: string) {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data()
   }
 
-
-
-  /**
-   * creates a user account with email and password in the backend
-   * 
-   * @paramu user email from signup component
-   * @param user password  from signup component
-   */
+/**
+ * Signs up a user with a provided email and password. 
+ * If the sign-up is successful, the user data is set. 
+ * Error handling is done for scenarios like if the email is already in use.
+ * @param {string} email - The email address of the user.
+ * @param {string} password - The desired password for the user.
+ */
   async SignUp(email: string, password: string) {
     try {
-      const result = await this.afAuth.createUserWithEmailAndPassword(email, password);
-      await this.SetUserData(result.user);
-      this.signUp_successful = true;
-      setTimeout(() => (this.signUp_successful = false), 3000);
+      const result = await this.afAuth
+        .createUserWithEmailAndPassword(email, password).then((result) => {
+          this.SetUserData(result.user);
+        })
+      this.signUp_successful = true
+      setTimeout(() => this.signUp_successful = false, 3000);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         this.email_error = true
@@ -144,13 +146,12 @@ export class AuthenticationService {
     }
   }
 
-
-  /**
-   * logs the user in with email and password
-   * 
-   * @param user email from sign in component
-   * @param user password from sign in component
-   */
+/**
+ * Handles the sign-in process using provided email and password.
+ * On successful sign-in, sets the online status of the user.
+ * @param {string} email - The email address of the user.
+ * @param {string} password - The password for the user.
+ */
   async SignIn(email: string, password: string) {
     try {
       const result = await this.afAuth
@@ -164,10 +165,9 @@ export class AuthenticationService {
     }
   }
 
-
-  /**
-   * logs the user in as a guest
-   */
+/**
+ * Handles the sign-in process for a guest user.
+ */
   async guestSignIn() {
     try {
       const result = await this.afAuth
@@ -182,13 +182,11 @@ export class AuthenticationService {
     }
   }
 
-
-  /**
-   * sets the online status
-   * 
-   * @param current user email 
-   * @param current user status 
-   */
+/**
+ * Updates the online status of a user in the Firestore database.
+ * @param {string} email - The email address of the user.
+ * @param {string} status - The new status to set.
+ */
   async setOnlineStatus(email: string, status: string) {
     const user = this.all_users.find(element => element.email === email);
     const userRef = doc(this.db, 'users', user.uid);
@@ -197,18 +195,18 @@ export class AuthenticationService {
     });
   }
 
-
-
+/**
+ * Initiates the Google authentication process.
+ */
   async GoogleAuth() {
     await this.AuthLogin(new GoogleAuthProvider());
   }
 
-
-  /**
-   * Logs the user in with their Google account
-   * 
-   * @param provider Google
-   */
+/**
+ * Handles the sign-in process using a provided authentication provider.
+ * Used for third-party authentication methods like Google.
+ * @param {firebase.auth.AuthProvider | GoogleAuthProvider} provider - The authentication provider to use.
+ */
   async AuthLogin(provider: firebase.auth.AuthProvider | GoogleAuthProvider) {
     try {
       const result = await this.afAuth.signInWithPopup(provider);
@@ -221,13 +219,12 @@ export class AuthenticationService {
     }
   }
 
-
-  /**
-   * checks whether the user already has an account
-   * 
-   * @param current user email 
-   * @paramc current user 
-   */
+/**
+ * Checks if an email address is already registered.
+ * Sets online status and loads standard channels if the user is registered.
+ * @param {string} email - The email address to check.
+ * @param {firebase.User} user - The user object containing user details.
+ */
   async isEmailRegistered(email: string, user: firebase.User) {
     (await this.getAllUsers()).forEach(element => {
       if (element.email == email) {
@@ -240,12 +237,10 @@ export class AuthenticationService {
     if (this.googleUser_exist != true) await this.SetUserData(user);
   }
 
-
-  /**
-   * sends an email to reset the password
-   * 
-   * @param user email
-   */
+/**
+ * Sends a password reset email to the provided email address.
+ * @param {string} passwordResetEmail - The email address to which the password reset link should be sent.
+ */
   async ForgotPassword(passwordResetEmail: string) {
     await this.afAuth
       .sendPasswordResetEmail(passwordResetEmail)
@@ -259,12 +254,10 @@ export class AuthenticationService {
       });
   }
 
-
-  /**
-   * adds the user to the “Development Team” channel and sets user data in the backend
-   * 
-   * @param current user 
-   */
+/**
+ * Sets the user data in Firestore.
+ * @param {any} user - The user object containing user details.
+ */
   async SetUserData(user: any) {
     await this.channelService.addUserToChannel('Entwicklerteam', user.uid)
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
@@ -272,8 +265,8 @@ export class AuthenticationService {
       uid: user.uid,
       email: user.email,
       user_name: this.userName,
-      avatar: '/assets/img/big_avatar/81. Profile.png',
-      status: 'Aktiv'
+      avatar: 'assets/img/big_avatar/81. Profile.png',
+      status: ''
     };
     await userRef.set(userDataFirestore, {
       merge: true,
@@ -281,10 +274,9 @@ export class AuthenticationService {
     this.getUserData(user.uid)
   }
 
-
-  /**
-   * logs the user out
-   */
+/**
+ * Handles the user sign-out process.
+ */
   async signOut() {
     await this.setOnlineStatus(this.userData.email, 'Abwesend')
     await this.afAuth.signOut();
@@ -293,11 +285,10 @@ export class AuthenticationService {
     this.userData = []
   }
 
-
-  /**
-   * 
-   * @returns  all registered users
-   */
+/**
+ * Fetches all users from the Firestore 'users' collection.
+ * @returns {Promise<any[]>} An array of user objects.
+ */
   async getAllUsers() {
     const usersSnapshot = await getDocs(collection(this.db, 'users'));
     let users = [];
@@ -307,24 +298,21 @@ export class AuthenticationService {
     return users;
   }
 
-
-  /**
-   * 
-   * @param user id 
-   * @returns current user
-   */
+/**
+ * Retrieves user information based on UID.
+ * @param {string} uid - The unique identifier of the user.
+ * @returns {any} User information object.
+ */
   getUserInfo(uid: string) {
     const user = this.all_users.find(user => user.uid === uid);
     return user;
   }
 
-
-  /**
-   * sorts all users by name, replaces the first letter with a lowercase letter and returns this
-   * 
-   * @param user name 
-   * @returns filtered users
-   */
+/**
+ * Filters and returns a list of users based on the provided name string.
+ * @param {string} name - The name string to filter users by.
+ * @returns {Promise<any[]>} An array of user objects.
+ */
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
@@ -332,13 +320,11 @@ export class AuthenticationService {
     return filteredUser;
   }
 
-
-  /**
-   * sorts all users by name, replaces the first letter with a lowercase letter and returns this
-   * 
-   * @param user email 
-   * @returns filtered users
-   */
+/**
+ * Filters and returns a list of users based on the provided email string.
+ * @param {string} email - The email string to filter users by.
+ * @returns {Promise<any>} An array of user objects.
+ */
   async filterUsersByEmail(email: string): Promise<any> {
     const users = await this.getAllUsers();
     const filteredUser = users.filter(user => user.email?.toLowerCase().startsWith(email?.toLowerCase())
@@ -346,11 +332,10 @@ export class AuthenticationService {
     return filteredUser;
   }
 
-
-  /**
-   * 
-   * @returns all user without current user
-   */
+/**
+ * Returns a list of all users except the current user.
+ * @returns {Promise<any[]>} An array of user objects.
+ */
   async usersWithoutCurrentuser() {
     const users = await this.getAllUsers();
     const userIndex = users.findIndex(user => user.user_name === this.userData.user_name);
@@ -358,13 +343,11 @@ export class AuthenticationService {
     return users
   }
 
-
-  /**
-   * updates the user data in the backend
-   * 
-   * @param current user name 
-   * @param current user email 
-   */
+/**
+ * Updates the user's name and email in the Firestore database.
+ * @param {string} userName - The new name of the user.
+ * @param {string} email - The new email of the user.
+ */
   async updateUserDetails(userName: string, email: string) {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -381,12 +364,10 @@ export class AuthenticationService {
     }
   }
 
-
-  /**
-   * updates the avatar image in the backend
-   * 
-   * @param avatar image 
-   */
+/**
+ * Updates the avatar image for the current user in the Firestore database.
+ * @param {string} image - The new avatar image URL.
+ */
   async setAvatarImage(image: string) {
     const docRef = doc(this.db, "users", this.getUid());
     await updateDoc(docRef, {
@@ -395,25 +376,21 @@ export class AuthenticationService {
     this.getUserData(this.getUid())
   }
 
-
-  /**
-   * 
-   * @param current user id 
-   * @returns download link of the avatar image
-   */
+/**
+ * Retrieves the avatar image URL for a user based on their UID.
+ * @param {string} uid - The unique identifier of the user.
+ * @returns {string} Avatar image URL.
+ */
   getImageUrl(uid: string) {
     const user = this.all_users.find(element => element.uid === uid);
     if (user) return user.avatar;
-    // else console.log("User not found" + uid);
   }
 
-
-  /**
-   * checks whether a user is logged in
-   * 
-   * @param user 
-   * @returns true or false
-   */
+/**
+ * Checks if a user is the current authenticated user.
+ * @param {any} user - The user object to check.
+ * @returns {boolean} `true` if the user is the current user, `false` otherwise.
+ */
   isCurrentUser(user): boolean {
     return user === this.userData.uid ? true : false;
   }

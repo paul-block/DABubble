@@ -17,7 +17,6 @@ export class StartScreenComponent implements OnInit {
 
   constructor(
     public route: ActivatedRoute,
-    private firestoreService: AuthenticationService,
     public router: Router,
     public fsDataThreadService: FirestoreThreadDataService,
     public authenticationService: AuthenticationService,

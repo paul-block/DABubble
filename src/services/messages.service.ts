@@ -38,7 +38,10 @@ export class MessagesService {
     public genFunctService: GeneralFunctionsService,
   ) { }
 
-
+/**
+ * Checks if there's text input and if a chat is selected or a new message component is open.
+ * Updates the `readyToSend` boolean accordingly.
+ */
   checkIfEmpty() {
     if (this.messageText.length > 0 && this.chatService.currentChatID !== 'noChatSelected' || this.chatService.openNewMsgComponent) {
       this.readyToSend = true;
@@ -47,7 +50,10 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Adds a new message to the Firestore database.
+ * @returns {Promise<void>} Resolves when the message has been successfully added.
+ */
   async newMessage() {
     return new Promise<void>(async (resolve) => {
       let time_stamp = new Date();
@@ -61,7 +67,12 @@ export class MessagesService {
     });
   }
 
-
+/**
+ * Structures the data for a new chat message.
+ * @param {Date} time_stamp - The timestamp of the message.
+ * @param {string} customMessageID - The unique identifier for the message.
+ * @returns An object containing structured chat message data.
+ */
   newMessageData(time_stamp, customMessageID) {
     return {
       chat_message: this.messageText,
@@ -78,7 +89,10 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Updates the count of answers for a given message.
+ * @param {string} id - The identifier for the message.
+ */
   async saveNumberOfAnswers(id: string) {
     await this.getNumberOfAnswers(id)
     const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
@@ -89,7 +103,10 @@ export class MessagesService {
     updateDoc(messageRef, data);
   }
 
-
+/**
+ * Retrieves the number of answers for a given message ID.
+ * @param {string} id - The identifier for the message.
+ */
   async getNumberOfAnswers(id: string) {
     const docRef = doc(this.db, "threads", id);
     const docSnap = await getDoc(docRef);
@@ -98,7 +115,10 @@ export class MessagesService {
     else this.time = 0
   }
 
-
+/**
+ * Fetches all messages.
+ * @returns A promise that resolves once all messages have been fetched.
+ */
   async getMessages(): Promise<void> {
     return new Promise<void>(async (resolve) => {
       this.prepareForGetMessages();
@@ -113,7 +133,9 @@ export class MessagesService {
     });
   }
 
-
+/**
+ * Prepares necessary variables and state before fetching messages.
+ */
   prepareForGetMessages() {
     if (this.chatSnapshotUnsubscribe) this.chatSnapshotUnsubscribe();
     this.messagesLoaded = false;
@@ -121,13 +143,19 @@ export class MessagesService {
     this.chatService.directChatMessages = [];
   }
 
-
+/**
+ * Retrieves the snapshot of chat messages.
+ * @returns A snapshot of chat messages ordered by creation time.
+ */
   getChatMessagesSnapshot() {
     const chatMessagesRef = collection(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages');
     return query(chatMessagesRef, orderBy("created_At", "asc"));
   }
 
-
+/**
+ * Processes changes to chat messages.
+ * @param {DocumentChange} change - The change data from Firestore.
+ */
   reactToChange(change) {
     const changedMessageData = change.doc.data();
     if (change.type === 'added') this.chatService.directChatMessages.push(changedMessageData);
@@ -135,7 +163,10 @@ export class MessagesService {
     else if (change.type === 'removed') this.spliceMessage(changedMessageData);
   }
 
-
+/**
+ * Updates the message with any new data.
+ * @param {DocumentData} changedMessageData - The new data for the message.
+ */
   async getChangedMessage(changedMessageData: DocumentData) {
     let changedChatMessage = this.chatService.directChatMessages.find(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
     for (const variable in changedMessageData) {
@@ -145,7 +176,10 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Removes a message from the current chat messages array.
+ * @param {DocumentData} changedMessageData - The data of the message to be removed.
+ */
   async spliceMessage(changedMessageData: DocumentData) {
     const index = this.chatService.directChatMessages.findIndex(chatMessage => chatMessage.message_ID === changedMessageData.message_ID);
     if (index !== -1) {
@@ -153,23 +187,36 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Initiates a scroll to the bottom action based on the section.
+ * @param {string} section - The chat section to scroll.
+ */
   scrollToBottom(section: string) {
     if (section == 'thread') setTimeout(() => this.scrollSubjectThread.next(), 0);
     else setTimeout(() => this.scrollSubject.next(), 0);
   }
 
-
+/**
+ * Gets an observable for the scroll action.
+ * @returns An observable for the scroll action.
+ */
   get scrollObservable() {
     return this.scrollSubject.asObservable();
   }
 
-
+/**
+ * Gets an observable for the scroll action within a thread.
+ * @returns An observable for the thread's scroll action.
+ */
   get scrollObservableThread() {
     return this.scrollSubjectThread.asObservable();
   }
 
-
+/**
+ * Sets up the data for editing a message.
+ * @param {number} i - Index of the message.
+ * @param {object} chatMessage - The chat message object.
+ */
   async editMessage(i: number, chatMessage: { message_ID: string; chat_message: string; }) {
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
@@ -177,7 +224,9 @@ export class MessagesService {
     this.messageText = chatMessage.chat_message;
   }
 
-
+/**
+ * Saves any edits made to a message.
+ */
   async saveEditedMessage() {
     try {
       const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', this.messageID);
@@ -192,7 +241,10 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Saves edits made to a message within a thread.
+ * @param {object} chat - The chat message object.
+ */
   async saveEditedMessageFromThread(chat: { message_ID: any; chat_message: any; chat_message_edited: any; modified_message: any; }) {
     let id = chat.message_ID;
     const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', id);
@@ -201,7 +253,13 @@ export class MessagesService {
     )
   }
 
-
+/**
+ * Constructs the data for an edited message.
+ * @param {string} chatMessage - The edited message text.
+ * @param {boolean} chatMessageEdited - Indicator if the message was edited.
+ * @param {string} modifiedMessage - The modified message after any transformations.
+ * @returns An object with structured edited message data.
+ */
   editedMessageData(chatMessage, chatMessageEdited, modifiedMessage) {
     return {
       chat_message: chatMessage,
@@ -210,7 +268,11 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Deletes a message based on its index and data.
+ * @param {number} i - Index of the message.
+ * @param {object} chatMessage - The chat message object.
+ */
   async deleteMessage(i: number, chatMessage) {
     this.messageIndex = i;
     this.messageID = chatMessage.message_ID;
@@ -222,7 +284,11 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Opens a dialog to confirm the deletion of a message.
+ * @param {number} i - Index of the message.
+ * @param {object} chatMessage - The chat message object.
+ */
   openDeleteMessage(i: number, chatMessage: { chat_message: any; answers: number; }) {
     const dialogRef = this.dialog.open(DialogDeleteCommentComponent, {
       data: { comment: chatMessage.chat_message },
@@ -240,7 +306,10 @@ export class MessagesService {
     });
   }
 
-
+/**
+ * Updates a message to show that it has been deleted.
+ * @param {object} chatMessage - The chat message object.
+ */
   async changeMessageToDeleted(chatMessage) {
     chatMessage.chat_message = 'Diese Nachricht wurde gelöscht.'
     const messageRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
@@ -250,7 +319,11 @@ export class MessagesService {
     })
   }
 
-
+/**
+ * Converts a timestamp to a formatted time.
+ * @param {object} timestamp - The timestamp to format.
+ * @returns The formatted time string.
+ */
   getTimestampTime(timestamp: { toDate: () => any; }) {
     const dateObj = timestamp.toDate();
     const hours = dateObj.getHours();
@@ -258,7 +331,10 @@ export class MessagesService {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} Uhr`;
   }
 
-
+/**
+ * Updates the reactions on a chat message.
+ * @param {object} chatMessage - The chat message object.
+ */
   async updateMessagesReactions(chatMessage: { message_ID: string; }) {
     const docRef = doc(this.db, this.chatService.currentChatSection, this.chatService.currentChatID, 'messages', chatMessage.message_ID);
     await updateDoc(docRef, {
@@ -266,7 +342,11 @@ export class MessagesService {
     });
   }
 
-
+/**
+ * Converts a timestamp to a formatted date string.
+ * @param {object} timestamp - The timestamp to format.
+ * @returns The formatted date string.
+ */
   formatDate(timestamp: { toDate: () => any; }): string {
     const date = timestamp.toDate();
     const now = new Date();
@@ -278,12 +358,18 @@ export class MessagesService {
     }
   }
 
-
+/**
+ * Clears the message text field.
+ */
   emptyMessageText() {
     this.messageText = '';
   }
 
-
+/**
+ * Updates the uploaded files for a message.
+ * @param {number} i - Index of the message.
+ * @param {number} k - Index of the file within the message's uploaded files.
+ */
   updateUploadedFiles(i: number, k: number) {
     this.chatService.directChatMessages[i].uploaded_files.file_name.splice(k, 1);
     this.chatService.directChatMessages[i].uploaded_files.download_link.splice(k, 1);
@@ -291,7 +377,10 @@ export class MessagesService {
     this.saveEditedUploads(i);
   }
 
-
+/**
+ * Updates the uploaded files of a message and handles conditions for deletion or changing to "deleted" status.
+ * @param {number} i - Index of the message in the `directChatMessages` array.
+ */
   async saveEditedUploads(i: number) {
     let message = this.chatService.directChatMessages[i]
     try {

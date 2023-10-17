@@ -30,11 +30,6 @@ export class ChannelDirectSendMessageComponent {
     private elementRef: ElementRef
   ) { }
 
-  /**
-  * Listens to click events on the entire document.
-  * If the clicked element is outside the current component, it closes any open menus or user lists.
-  * @param {Event} event - The browser click event.
-  */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
@@ -43,11 +38,7 @@ export class ChannelDirectSendMessageComponent {
     }
   }
 
-  /**
-   * Toggles the visibility of a given popup component based on the provided popup variable.
-   * Can also trigger additional actions, like fetching users or triggering the emoji picker.
-   * @param {string} popupVariable - The name of the popup state variable.
-   */
+
   togglePopup(popupVariable: string) {
     if (popupVariable === 'emojiPicker_open') {
       this.toggleEmojiPicker()
@@ -61,17 +52,12 @@ export class ChannelDirectSendMessageComponent {
     }
   }
 
-  /**
-   * Toggles the visibility of the emoji picker.
-   */
+
   toggleEmojiPicker() {
     this.emojiService.emojiPicker_open = !this.emojiService.emojiPicker_open;
   }
 
-  /**
-   * Closes other popups, excluding the one specified by the provided popup variable.
-   * @param {string} currentPopup - The name of the popup state variable that should remain open.
-   */
+
   closeOtherPopups(currentPopup: string) {
     const popupVariables = ['open_attachment_menu', 'open_users'];
     popupVariables.forEach(popup => {
@@ -81,11 +67,7 @@ export class ChannelDirectSendMessageComponent {
     });
   }
 
-  /**
-   * Adds an emoji to the textarea and updates the message text.
-   * Also checks if the message is empty afterward.
-   * @param {any} $event - The event object associated with the emoji selection.
-   */
+
   addEmojitoTextarea($event: any) {
     this.emojiService.addEmojitoTextarea($event)
     this.msgService.messageText += this.emojiService.textMessage;
@@ -93,11 +75,6 @@ export class ChannelDirectSendMessageComponent {
     this.msgService.checkIfEmpty();
   }
 
-  /**
-  * Handles the send message action, validating conditions and preparing the message for sending.
-  * The function manages various conditions including checking if there's a message or file ready to send,
-  * and if the new message component is open.
-  */
   public async onSendClick() {    
     if (!this.validateNewMessageComponentConditions()) {
       return;
@@ -114,13 +91,13 @@ export class ChannelDirectSendMessageComponent {
     }
   }
 
-  /**
-   * Validates the conditions for the new message component before sending a message.
-   * If a user hasn't been selected (`selectedValue` is undefined) and the new message 
-   * component is open, it highlights the input field and returns false, indicating the message 
-   * shouldn't be sent. Otherwise, it returns true.
-   * @returns {boolean} - True if conditions to send the message are met, otherwise false.
-   */
+/**
+ * Validates the conditions for the new message component before sending a message.
+ * If a user hasn't been selected (`selectedValue` is undefined) and the new message 
+ * component is open, it highlights the input field and returns false, indicating the message 
+ * shouldn't be sent. Otherwise, it returns true.
+ * @returns {boolean} - True if conditions to send the message are met, otherwise false.
+ */
   validateNewMessageComponentConditions(): boolean {
     if (this.selectedValue === undefined && this.chatService.openNewMsgComponent) {
         this.genFService.highlightInput.next(true);
@@ -129,32 +106,21 @@ export class ChannelDirectSendMessageComponent {
     return true;
 }
 
-   /**
-   * Checks if a text message is not empty.
-   * @returns {boolean} True if there's any content in the message text.
-   */
   textMessageNotEmpty() {
     return this.msgService.messageText.length > 0;
   }
 
-   /**
-   * Verifies if there is a file ready for upload.
-   * @returns {boolean} True if there's a file selected for upload.
-   */
+
   fileReadyForUpload() {
     return this.uploadService.upload_array.file_name.length > 0;
   }
 
-  /**
-  * Toggles the state of the new message component.
-  */
+
   toggleOpenNewMsgComponent() {
     this.chatService.openNewMsgComponent = !this.chatService.openNewMsgComponent;
   }
 
-  /**
-  * Prepares the message for sending. If there's an upload pending, it ensures the upload finishes first.
-  */
+
   async messagePreperation() {
     await this.uploadService.checkForUpload();
     setTimeout(async () => {
@@ -164,26 +130,18 @@ export class ChannelDirectSendMessageComponent {
     setTimeout(() => this.uploadService.emptyUploadArray(), 500);
   }
 
-  /**
-  * Adds a user's mention to the textarea at the current cursor position.
-  * @param {number} i - The index of the user to be mentioned.
-  */
+
   addUserToTextarea(i: number) {
     this.messageTextarea.nativeElement.focus();
     this.msgService.messageText = this.chatService.addUserToTextarea(i, this.msgService.messageText)
   }
 
-  /**
-  * Fetches all users for mentioning in the chat.
-  */
+
   async getAllUsers() {
     this.chatService.at_users = await this.authService.getAllUsers();
   }
 
- /**
-  * Opens a chat conversation. If it's different from the current chat, it loads the new chat's data.
-  * @param {object} chat - The chat data to be opened.
-  */
+
   async openChat(chat) {
     if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
     if (this.notSameChatID(chat)) {
@@ -192,10 +150,6 @@ export class ChannelDirectSendMessageComponent {
   }
 
 
-  /**
-   * Loads the data related to a given chat.
-   * @param {object} chat - The chat data to be loaded.
-   */
   loadChatData(chat) {
     this.chatService.currentChatSection = 'chats';
     this.chatService.currentChatID = chat.chat_ID;
@@ -210,20 +164,12 @@ export class ChannelDirectSendMessageComponent {
     }
   }
 
-  /**
-   * Checks if the provided chat ID is different from the current chat ID.
-   * @param {object} chat - The chat data to be compared.
-   * @returns {boolean} True if the provided chat's ID is different from the current chat ID.
-   */
+
   notSameChatID(chat) {
     return this.chatService.currentChatID !== chat.chat_ID;
   }
 
-  /**
-   * Handles the 'Enter' keypress event in the chat input.
-   * Adds a newline to the message text if 'Shift + Enter' is pressed.
-   * @param {KeyboardEvent} event - The triggered keyboard event.
-   */
+
   handleEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -235,27 +181,17 @@ export class ChannelDirectSendMessageComponent {
     }
   }
 
-  /**
-   * Determines if no chat is currently selected.
-   * @returns {boolean} True if no chat is selected.
-   */
+
   noChatSelected() {
     return this.chatService.currentChatID === 'noChatSelected';
   }
 
 
-  /**
-   * Checks if the message text is empty.
-   * @returns {boolean} True if the message text is not empty.
-   */
   messageEmpty() {
     return this.msgService.messageText.length !== 0;
   }
 
-  /**
-   * Verifies if there isn't a file selected for upload.
-   * @returns {boolean} True if no file is selected for upload.
-   */
+
   noFileSelected() {
     return this.uploadService.upload_array.file_name.length !== 0;
   }
