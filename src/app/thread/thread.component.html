@@ -296,7 +296,7 @@
                 [class.emoji_picker_above]="show_picker_above" (emojiClick)="addEmojitoTextarea($event)"></emoji-mart>
         </div>
 
-        <textarea #messageTextarea type="text" [(ngModel)]="comment_value" (keyup.enter)="postComment()"
+        <textarea autofocus #messageTextarea type="text" [(ngModel)]="comment_value" (keyup.enter)="postComment()"
             (keydown)="handleEnter($event)" (ngModelChange)="textChanged($event)" placeholder="Antworten..."></textarea>
         <div class="icons_main">
             <div class="icons">
