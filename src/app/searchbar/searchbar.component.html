@@ -21,7 +21,7 @@
         </div>
         <div class="results" *ngIf="filteredUsers.length > 0 && searchValue.length > 0">
             <div class="result-row" *ngFor="let user of filteredUsers" (click)="openProfile(user)">
-                <img src="assets/img/icons/account_circle.svg" alt="">
+                <img src="{{user.avatar}}" alt="">
                 <span>{{ user.user_name }}</span>
             </div>
         </div>

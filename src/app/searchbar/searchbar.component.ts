@@ -67,7 +67,7 @@ export class SearchbarComponent {
       if (span.contains(event.target)) {
         this.searchValue = span.textContent;
         event.stopPropagation();
-        this.onSearchValueChange()
+        this.onSearchValueChange();
         return;
       }
     }
@@ -138,7 +138,7 @@ export class SearchbarComponent {
     const channelsRef = collection(this.db, 'channels');
     const channelsSnapshot = await getDocs(channelsRef);
     const uniqueMessageMap = new Map();
-    await this.checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap)
+    await this.checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap);
     this.filteredChannelMessages = [...uniqueMessageMap.values()];
   }
 
@@ -162,7 +162,7 @@ export class SearchbarComponent {
         const messageSender = messageData.user_Sender_Name;
         if (!message) continue;
         if (this.checkMessageRelevant(message))
-          this.createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap)
+          this.createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap);
       }
     }
   }
@@ -174,7 +174,7 @@ export class SearchbarComponent {
   * @return {boolean} - Returns true if message is relevant, otherwise returns false.
   */
   checkMessageRelevant(message) {
-    return message.toLowerCase().startsWith(this.searchValue.toLowerCase())
+    return message.toLowerCase().startsWith(this.searchValue.toLowerCase());
   }
 
 
@@ -227,7 +227,7 @@ export class SearchbarComponent {
   */
   openProfile(user) {
     this.searchValue = '';
-    this.profileService.openProfile(user.uid)
+    this.profileService.openProfile(user.uid);
   }
 
 
