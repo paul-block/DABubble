@@ -18,7 +18,7 @@ export class AuthenticationService {
   private authInitializedPromise: Promise<void>;
   private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
-  private auth = getAuth();
+  public auth = getAuth();
   db = getFirestore();
   userData: any = [];
   signIn_successful: boolean;
@@ -153,8 +153,7 @@ export class AuthenticationService {
    */
   async SignIn(email: string, password: string) {
     try {
-      const result = await this.afAuth
-        .signInWithEmailAndPassword(email, password);
+      await this.afAuth.signInWithEmailAndPassword(email, password);
       this.signIn_successful = true;
       this.setOnlineStatus(email, 'Aktiv');
       setTimeout(() => this.signIn_successful = false, 3000);
@@ -169,12 +168,11 @@ export class AuthenticationService {
    */
   async guestSignIn() {
     try {
-      const result = await this.afAuth
-        .signInWithEmailAndPassword('gast@gast.de', 'Amidala6%');
+      await this.afAuth.signInWithEmailAndPassword('gast@gast.de', 'Amidala6%');
       this.signIn_successful = true;
       this.setOnlineStatus('gast@gast.de', 'Aktiv');
       setTimeout(() => this.signIn_successful = false, 3000);
-      this.channelService.loadStandardChannel();
+      this.channelService.loadDefaultChannel();
     } catch (error) {
       this.signIn_error = true;
       setTimeout(() => this.signIn_error = false, 3000);
@@ -229,7 +227,7 @@ export class AuthenticationService {
       if (element.email == email) {
         this.googleUser_exist = true;
         this.setOnlineStatus(email, 'Aktiv');
-        this.channelService.loadStandardChannel();
+        this.channelService.loadDefaultChannel();
         return;
       }
     });
@@ -265,7 +263,7 @@ export class AuthenticationService {
       email: user.email,
       user_name: this.userName,
       avatar: 'assets/img/big_avatar/81. Profile.png',
-      status: ''
+      status: 'Aktiv'
     };
     await userRef.set(userDataFirestore, {
       merge: true,

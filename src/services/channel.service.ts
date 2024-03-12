@@ -33,15 +33,15 @@ export class ChannelService {
   ) {
     const dbRef = collection(this.db, "channels");
     onSnapshot(dbRef, docsSnap => {
-      const channels: any[] = []
+      const channels: any[] = [];
       docsSnap.forEach(doc => {
-        channels.push(doc.data())
-      })
+        channels.push(doc.data());
+      });
       this.channels = channels;
-      this.loadCurrentChannel()
+      this.loadCurrentChannel();
       const user = this.auth.currentUser;
       if (user !== null) {
-       this.getAuthorizedChannels(user.uid);
+        this.getAuthorizedChannels(user.uid);
       }
     });
   }
@@ -95,7 +95,7 @@ export class ChannelService {
         await updateDoc(channelCollectionRef, {
           channel_ID: newChannelID
         });
-        this.setCreatedChannelId(channelCollectionRef.id)
+        this.setCreatedChannelId(channelCollectionRef.id);
       } catch (error) {
         console.error("Error beim Erstellen eines neuen Channels: ", error);
       }
@@ -199,14 +199,14 @@ export class ChannelService {
     await Promise.all(deleteSubcollectionPromises);
     const documentRef = doc(this.db, 'channels', channelId);
     await deleteDoc(documentRef);
-    this.loadStandardChannel();
+    this.loadDefaultChannel();
   }
 
 
   /**
   * Sets the ID of the default channel.
   */
-  loadStandardChannel() {
+  loadDefaultChannel() {
     this.setCreatedChannelId('RRraQrPndWV95cqAWCZR');
   }
 
@@ -215,7 +215,7 @@ export class ChannelService {
   * Loads the current channel data based on the current channel ID.
   */
   loadCurrentChannel() {
-    let channel = this.channels.find(element => element.channel_ID === this.currentChannelID)
-    if (channel) this.currentChannelData = channel
+    let channel = this.channels.find(element => element.channel_ID === this.currentChannelID);
+    if (channel) this.currentChannelData = channel;
   }
 }
