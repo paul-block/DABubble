@@ -8,18 +8,20 @@
         </div>
     </header>
     <div id="autocomplete" [ngClass]="{'d-none': !showAutocomplete || !inputValue }">
+        <!-- <div *ngFor="let user of filteredUsersByName" class="dm-profile pointer sidebar-hover"
+            (click)="selectValue($event, 'userName', user)"> -->
         <div *ngFor="let user of filteredUsersByName" class="dm-profile pointer sidebar-hover"
-            (click)="selectValue($event, 'userName', user)">
+            (click)="selectValue(user.user_name, 'userName', user)">
             <img src="assets/img/icons/account_circle.svg" alt="">
             <span>{{ user.user_name }}</span>
         </div>
         <div *ngFor="let user of filteredUsersByEmail" class="dm-profile pointer sidebar-hover"
-            (click)="selectValue($event, 'userEmail', user)">
+            (click)="selectValue(user.email,'userEmail', user)">
             <img src="assets/img/mail.png" alt="">
             <span>{{ user.email }}</span>
         </div>
         <div class="channel-container" *ngFor="let channel of filteredChannels" class="dm-profile pointer sidebar-hover"
-            (click)="selectValue($event, 'channel', channel.channel_ID)">
+            (click)="selectValue(channel.channel_ID, 'channel', channel)">
             <img src=" assets/img/icons/workspaces.svg" alt="">
             <span class="tag">#</span>
             <span>{{ channel.channelName }}</span>

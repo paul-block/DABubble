@@ -3,8 +3,6 @@ import { AuthenticationService } from 'services/authentication.service';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ChatService } from 'services/chat.service';
 import { MessagesService } from 'services/messages.service';
-import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
-import { ChannelService } from 'services/channel.service';
 
 @Component({
   selector: 'app-dialog-profile',
@@ -15,12 +13,10 @@ export class DialogProfileComponent {
 
   constructor(
     public authService: AuthenticationService,
-    @Inject(MAT_DIALOG_DATA) public data: { user: any },
+    @Inject(MAT_DIALOG_DATA) public data: { user: any; },
     public dialog: MatDialog,
     public chatService: ChatService,
     public msgService: MessagesService,
-    public fsDataThreadService: FirestoreThreadDataService,
-    public channelService: ChannelService
   ) { }
 
 
@@ -102,7 +98,7 @@ export class DialogProfileComponent {
     this.chatService.textAreaMessageTo();
     this.msgService.getMessages().then(() => {
       this.chatService.thread_open = false;
-      this.msgService.scrollToBottom('channel')
+      this.msgService.scrollToBottom('channel');
     });
   }
 
@@ -111,7 +107,7 @@ export class DialogProfileComponent {
   * Ensures that the chat section is visible to the user.
   */
   ensureChatSectionVisible() {
-    this.chatService.open_chat = true
+    this.chatService.open_chat = true;
     this.chatService.userReceiverName = '';
     if (this.chatService.openNewMsgComponent) this.chatService.openNewMsgComponent = false;
   }
@@ -132,6 +128,6 @@ export class DialogProfileComponent {
   * Closes all open dialogs.
   */
   close() {
-    this.dialog.closeAll()
+    this.dialog.closeAll();
   }
 }

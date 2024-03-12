@@ -3,7 +3,6 @@ import { ChannelService } from 'services/channel.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChatService } from 'services/chat.service';
 import { MessagesService } from 'services/messages.service';
-import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
 import { OpenChatService } from 'services/open-chat.service';
 
@@ -20,7 +19,6 @@ export class NewMsgComponent {
   authorizedChannels = [];
   filteredChannels = [];
   selectedValue: string;
-  uid: string;
   showAutocomplete: boolean = false;
 
   constructor(
@@ -28,11 +26,9 @@ export class NewMsgComponent {
     public channelService: ChannelService,
     public chatService: ChatService,
     public msgService: MessagesService,
-    public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
     public openChatService: OpenChatService) {
-    this.subscribeHighlightCondition();
-    this.uid = this.authService.userData.uid;
+    this.checkIfInputNotEmpty();
     this.configureInputValue();
   }
 
@@ -59,31 +55,25 @@ export class NewMsgComponent {
     this.clearArrays();
     this.filteredUsersByName = await this.authService.filterUsers(value);
     this.filteredUsersByEmail = await this.authService.filterUsersByEmail(value);
-    this.authorizedChannels = await this.channelService.getChannels(this.uid);
+    this.authorizedChannels = await this.channelService.getChannels(this.authService.userData.uid);
     this.filteredChannels = this.authorizedChannels.filter(channel => channel.channelName.toLowerCase().startsWith(value.toLowerCase())
     );
   }
 
 
   /**
-  * Handles user selection from the dropdown, opens a chat or channel based on the selection.
-  * @param {Event} event - The triggered DOM event.
-  * @param {string} category - The category (userName, userEmail, or channel) of the selected item.
-  * @param {string} id - The ID of the selected item.
-  */
-  selectValue(event: Event, category: string, id: string) {
+   * Checks for an existing chat with the selected user. If none found, creates a new one.
+   * @param {string} nameOrMail - The name or email of the selected user.
+   * @param {string} category - The category of the selected item ('userName', 'userEmail', or 'channel').
+   * @param {any} user - The user object of the selected user.
+   */
+  selectValue(nameOrMail: string, category: string, user: any) {
     this.genFunctService.highlightInput.next(false);
-    const clickedValue = ((event.currentTarget as HTMLElement).querySelector('span:not(.tag)') as HTMLElement).innerText;
-    if (category == 'userName' || category == 'userEmail') {
-      this.checkExistingChat(id, clickedValue);
-    }
-    if (category == 'channel') {
-      this.openChatService.openChat(id, 'channels')
-    }
-    this.selectedValue = clickedValue;
+    if (category == 'userName' || category == 'userEmail') this.checkExistingChat(user, nameOrMail);
+    if (category == 'channel') this.openChatService.openChat(nameOrMail, 'channels');
+    this.selectedValue = nameOrMail;
     this.clearArrays();
   }
-
 
   /**
   * Checks for an existing chat with the selected user. If none found, creates a new one.
@@ -158,10 +148,10 @@ export class NewMsgComponent {
 
   /**
    * Subscribes to the 'highlightInput' observable from 'genFunctService'. 
-   * If the observable emits a truthy value, the input element with the ID 'input' is highlighted in red.
+   * If the observable emits a truthy value, the input is highlighted in red.
    * Otherwise, the red highlight is removed.
    */
-  subscribeHighlightCondition() {
+  checkIfInputNotEmpty() {
     this.genFunctService.highlightInput.subscribe(shouldHighlight => {
       const inputElement = document.getElementById('input');
       if (shouldHighlight) {
