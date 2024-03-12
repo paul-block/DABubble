@@ -1,15 +1,11 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog, } from '@angular/material/dialog';
 import { AddChannelComponent } from '../dialog-add-channel/add-channel.component';
-import { Subscription } from 'rxjs';
 import { ChannelService } from 'services/channel.service';
 import { ChatService } from 'services/chat.service';
-import { getAuth } from 'firebase/auth';
 import { MessagesService } from 'services/messages.service';
 import { AuthenticationService } from 'services/authentication.service';
-import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
-import { UploadService } from 'services/upload.service';
 import { OpenChatService } from 'services/open-chat.service';
 
 @Component({
@@ -17,16 +13,11 @@ import { OpenChatService } from 'services/open-chat.service';
   templateUrl: './channel-sidebar.component.html',
   styleUrls: ['./channel-sidebar.component.scss'],
 })
-export class ChannelSidebarComponent implements OnInit, OnDestroy {
-  auth = getAuth();
-  @ViewChild('addChannel') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
-  addChannelRef: MatDialogRef<AddChannelComponent>;
-  addChannelOpen: boolean = false;
+export class ChannelSidebarComponent implements OnInit {
   channelsVisible: boolean = true;
   dmsVisible: boolean = true;
   openNewMsg: boolean = false;
   sortedChats: any[];
-  private newChannelIdSubscription: Subscription;
   currentChannelId: string;
 
   constructor(
@@ -35,16 +26,9 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     public channelService: ChannelService,
     public chatService: ChatService,
     public msgService: MessagesService,
-    public fsDataThreadService: FirestoreThreadDataService,
     public genFunctService: GeneralFunctionsService,
-    public uploadService: UploadService,
     public openChatService: OpenChatService
-  ) {
-    this.newChannelIdSubscription = this.channelService.createdChannelId$.subscribe((newId) => {
-      this.currentChannelId = newId;
-      if (this.currentChannelId) this.openChatService.openChat(this.currentChannelId, 'channels');
-    });
-  }
+  ) { }
 
 
   /**
@@ -53,42 +37,30 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   */
   async ngOnInit() {
     await this.authService.waitUntilAuthInitialized();
-    this.chatService.currentUser_id = this.auth.currentUser.uid
+    this.chatService.currentUser_id = this.authService.auth.currentUser.uid;
     await this.authService.usersPromise;
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
-    if (this.authService.newUser) this.addNewUserMessageToChannel()
     this.sortedChats = this.sortChats(this.chatService.chats);
+    this.getCurrentChannel();
   }
 
   /**
-  * Cleanup method for the component. Unsubscribes from the new channel ID.
+  * Opens automatically the default channel or new created channel
   */
-  ngOnDestroy() {
-    if (this.newChannelIdSubscription) this.newChannelIdSubscription.unsubscribe();
+  getCurrentChannel() {
+    this.channelService.createdChannelId$.subscribe((channelId) => {
+      this.currentChannelId = channelId;
+      if (this.currentChannelId) this.openChatService.openChat(this.currentChannelId, 'channels');
+    });
   }
-
-  /**
-  * Loads the start channel for new users, checks for uploads, and sets the join message.
-  */
-  async addNewUserMessageToChannel() {
-    this.authService.newUser = false
-    this.channelService.loadStandardChannel()
-    let user = this.authService.userData.user_name
-    await this.uploadService.checkForUpload()
-    this.msgService.messageText = user + ' ist #Entwicklerteam beigetreten.'
-    await this.msgService.newMessage().then(async () => {
-      this.msgService.getMessages()
-    })
-  }
-
 
   /**
   * Checks for mobile logo state and toggles new message component.
   */
   sendNewMsg() {
     this.checkChangeToMobileLogo();
-    this.chatService.open_chat = true
+    this.chatService.open_chat = true;
     this.msgService.emptyMessageText();
     this.toggleNewMsgComponent();
   }
@@ -97,13 +69,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   * Opens the add channel dialog and handles its close event.
   */
   openAddChannelDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass = 'add-channel-dialog';
-    this.addChannelRef = this.dialog.open(AddChannelComponent, dialogConfig);
-    this.addChannelOpen = true;
-    this.addChannelRef.afterClosed().subscribe(() => {
-      this.addChannelOpen = false;
-    });
+    this.dialog.open(AddChannelComponent, { panelClass: 'add-channel-dialog' });
   }
 
   /**
@@ -146,7 +112,7 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Determines if a chat is associated with the current user.
+   * Determines if a chat is selfchat.
    * @param {Object} chat - The chat object to check.
    * @return {boolean} - True if the chat is associated with the current user, false otherwise.
    */
@@ -156,7 +122,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Sorts an array of chats to place the chat associated with the current user at the beginning.
-   * Utilizes the isCurrentUserChat method to determine if a chat is associated with the current user.
    * If both chats being compared are or aren't associated with the current user, their relative order remains unchanged.
    * @param {Object[]} chats - The array of chat objects to be sorted.
    * @return {Object[]} - The sorted array of chats.
@@ -165,9 +130,6 @@ export class ChannelSidebarComponent implements OnInit, OnDestroy {
     return chats.sort((a, b) => {
       if (this.isCurrentUserChat(a) && !this.isCurrentUserChat(b)) {
         return -1;
-      }
-      if (!this.isCurrentUserChat(a) && this.isCurrentUserChat(b)) {
-        return 1;
       }
       return 0;
     });

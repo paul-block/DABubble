@@ -8,8 +8,6 @@ import { InactivityService } from 'services/inactivity.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'DABubble';
-
 
   constructor(private inactivityService: InactivityService,
     private authService: AuthenticationService) { }
@@ -17,8 +15,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.inactivityService.startMonitoring();
-    this.inactivityService.inactivityObservable.subscribe(() => {
-    this.authService.signOut()
+    this.inactivityService.inActivitySubject.subscribe(() => {
+      this.authService.signOut();
     });
   }
 }
