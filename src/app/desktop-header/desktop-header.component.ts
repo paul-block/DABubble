@@ -1,11 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProfileMenuComponent } from '../profile-menu/profile-menu.component';
-import { AuthenticationService } from 'services/authentication.service';
-import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { ChatService } from 'services/chat.service';
 import { GeneralFunctionsService } from 'services/general-functions.service';
-import { ProfileService } from 'services/profile.service';
+import { AuthenticationService } from 'services/authentication.service';
 
 @Component({
   selector: 'app-desktop-header',
@@ -14,33 +12,20 @@ import { ProfileService } from 'services/profile.service';
 })
 export class DesktopHeaderComponent {
 
-  @ViewChild('profile') public ElementEditChannelRef: ElementRef<HTMLDivElement>;
-  profileMenuRef: MatDialogRef<ProfileMenuComponent>;
-  profileMenuOpen: boolean = false;
-  all_users: any[];
-
-
-  constructor(private dialog: MatDialog,
+  constructor(
     public authService: AuthenticationService,
-    public fsDataThreadService: FirestoreThreadDataService,
+    private dialog: MatDialog,
     public chatService: ChatService,
     public genFuncService: GeneralFunctionsService,
-    public profileService: ProfileService) { }
-
+  ) { }
   /**
    * Opens the profile menu, setting the position based on the element's bounds and screen width.
    * Listens for the dialog's close event and handles the cleanup.
    */
   openProfileMenu() {
-    const rect = this.ElementEditChannelRef.nativeElement.getBoundingClientRect();
     const dialogConfig = new MatDialogConfig();
-    this.checkMobileOrDesktopVersion(dialogConfig, rect);
-    this.profileMenuRef = this.dialog.open(ProfileMenuComponent, dialogConfig);
-    this.profileMenuOpen = true;
-    this.profileMenuRef.afterClosed().subscribe(() => {
-      this.profileMenuOpen = false;
-      this.fsDataThreadService.detailsVisible = false;
-    });
+    this.checkMobileOrDesktopVersion(dialogConfig);
+    this.dialog.open(ProfileMenuComponent, dialogConfig);
   }
 
   /**
@@ -49,17 +34,17 @@ export class DesktopHeaderComponent {
   * @param {MatDialogConfig} dialogConfig - The configuration for the dialog.
   * @param {ClientRect} rect - The bounding client rect of the reference element.
   */
-  checkMobileOrDesktopVersion(dialogConfig, rect) {
+  checkMobileOrDesktopVersion(dialogConfig) {
     if (this.genFuncService.isMobileWidth()) {
       dialogConfig.position = {
         bottom: `0px`
-      }
+      };
       dialogConfig.width = '100vw';
       dialogConfig.maxWidth = '100vw';
       dialogConfig.panelClass = 'mobile-profile-menu-dialog';
     } else {
       dialogConfig.position = {
-        top: `${rect.bottom + 5}px`,
+        top: `100px`,
         right: `25px`
       };
       dialogConfig.panelClass = 'custom-open-profile-menu-dialog';
