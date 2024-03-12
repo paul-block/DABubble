@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AddPplToChannelComponent } from '../dialog-add-ppl-to-channel/add-ppl-to-channel.component';
-import { FormGroup, FormControl } from '@angular/forms';
 import { ChannelService } from 'services/channel.service';
 
 @Component({
@@ -10,13 +9,11 @@ import { ChannelService } from 'services/channel.service';
   styleUrls: ['./add-channel.component.scss']
 })
 export class AddChannelComponent {
-  error: boolean = false
-  addPPlRef: MatDialogRef<AddPplToChannelComponent>;
-  addPplOpen: boolean = false;
-  form = new FormGroup({
-    'channel-name': new FormControl(''),
-    'description': new FormControl('')
-  });
+  error: boolean = false;
+  channelName: string = '';
+  description: string = '';
+  inputIsEmpty: boolean = true;
+
   constructor(
     public dialog: MatDialog,
     public channelService: ChannelService
@@ -28,18 +25,12 @@ export class AddChannelComponent {
   * initializes the dialog. It also sets listeners for when the dialog is closed.
   */
   openAddPplToChannel() {
-    const channelName = this.form.controls['channel-name'].value;
-    const description = this.form.controls['description'].value;
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '710px'
+    dialogConfig.width = '710px';
     dialogConfig.panelClass = 'dialog-add-people';
-    dialogConfig.data = { channelName: channelName, description: description };
+    dialogConfig.data = { channelName: this.channelName, description: this.description };
     this.dialog.closeAll();
-    this.addPPlRef = this.dialog.open(AddPplToChannelComponent, dialogConfig);
-    this.addPplOpen = true;
-    this.addPPlRef.afterClosed().subscribe(() => {
-      this.addPplOpen = false;
-    });
+    this.dialog.open(AddPplToChannelComponent, dialogConfig);
   }
 
   /**
@@ -47,10 +38,9 @@ export class AddChannelComponent {
   * it opens the "Add People to Channel" dialog. If it does, toggles the error state.
   */
   checkIfChannelNameExist() {
-    let channelName = this.form.controls['channel-name'].value;
-    let name = this.channelService.channels.find(name => name.channelName === channelName)
-    if (!name) this.openAddPplToChannel()
-    else this.error = !this.error
+    const channelName = this.channelService.channels.find(channel => channel.channelName === this.channelName);
+    if (!channelName) this.openAddPplToChannel();
+    else this.error = !this.error;
   }
 
   /**

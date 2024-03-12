@@ -10,19 +10,19 @@
 
     <span>Channel-Name</span>
 
-    <form [formGroup]="form">
+    <form (ngSubmit)="checkIfChannelNameExist()">
         <div id="channel-input">
             <img src="assets/img/icons/tag.svg" alt="">
-            <input type="text" formControlName="channel-name" maxlength="12" placeholder="z.B Kooperationsprojekte" required
-                (focus)="error = false">
+            <input name="channelName" type="text" [(ngModel)]="channelName" maxlength="12"
+                placeholder="z.B Kooperationsprojekte" required (focus)="error = false">
             <span *ngIf="error" class="error">Channel-Name existiert bereits</span>
         </div>
 
         <span>Beschreibung (optional)</span>
 
-        <input id="optional-input" type="text" formControlName="description" placeholder="Dein Text hier">
+        <input name="description" id="optional-input" type="text" [(ngModel)]="description"
+            placeholder="Dein Text hier">
 
-        <button class="primary-button" [disabled]="!form.valid" (click)="checkIfChannelNameExist()"
-            #create>Erstellen</button>
+        <button class="primary-button" [disabled]="!channelName" type="submit">Erstellen</button>
     </form>
 </div>
