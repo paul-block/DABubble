@@ -29,7 +29,7 @@ export class InactivityService implements OnInit {
    * @returns {number} The inactivity duration in milliseconds.
    */
   private getInactivityDuration(): number {
-    return 2 * 60 * 1000;
+    return 10 * 60 * 1000;
   }
 
   /**

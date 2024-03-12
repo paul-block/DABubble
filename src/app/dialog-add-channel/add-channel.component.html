@@ -23,6 +23,6 @@
         <input name="description" id="optional-input" type="text" [(ngModel)]="description"
             placeholder="Dein Text hier">
 
-        <button class="primary-button" [disabled]="!channelName" type="submit">Erstellen</button>
+        <button class="primary-button" [disabled]="!channelName || error" type="submit">Erstellen</button>
     </form>
 </div>

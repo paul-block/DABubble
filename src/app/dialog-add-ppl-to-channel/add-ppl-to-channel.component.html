@@ -5,19 +5,18 @@
     </div>
     <label class="checkbox-container">
         <div class="flex">
-            <input type="radio" class="round-checkbox" name="option" [formControl]="selectedOptionControl" value="all">
+            <input type="radio" name="radioInput" value="all" class="round-checkbox" [(ngModel)]="selectedCheckbox">
             <span class="checkmark">Alle Mitglieder von <span id="highlight">DA-Bubble</span> hinzufügen</span>
         </div>
     </label>
     <label class="checkbox-container">
         <div class="flex">
-            <input type="radio" class="round-checkbox" name="option" [formControl]="selectedOptionControl"
-                value="certain">
+            <input type="radio" name="radioInput" value="certain" class="round-checkbox" [(ngModel)]="selectedCheckbox">
             <span class="checkmark">Bestimmte Leute hinzufügen</span>
         </div>
-        <span *ngIf="userExists && searchControl.value.length > 0" id="user-exists">Nutzer bereits hinzugefügt</span>
-        <input *ngIf="selectedOptionControl.value === 'certain'" [formControl]="searchControl" id="certain-input"
-            type="text" placeholder="Name eingeben">
+        <span *ngIf="userExists && userName.length > 0" id="user-exists">Nutzer bereits hinzugefügt</span>
+        <input *ngIf="selectedCheckbox === 'certain'" [(ngModel)]="userName" (keyup)="getFilteredUsers()"
+            id="certain-input" type="text" placeholder="Name eingeben">
 
         <div class="absolute" *ngIf="showSelectedUsers">
             <div class="selected-user" *ngFor="let user of selectedUser; let i = index">
@@ -30,14 +29,14 @@
         </div>
     </label>
     <button class="primary-button" (click)="createNewChannel()"
-        [disabled]="selectedOptionControl.value === 'certain' && (!selectedOptionControl.value || selectedUser.length === 0)">Erstellen
+        [disabled]="selectedCheckbox === 'certain' && selectedUser.length === 0">Erstellen
     </button>
 </div>
 <div class="filteredUsers_div">
-    <div class="autocomplete-container" *ngIf="filteredUsers.length == 0 && searchControl.value != null">Keine
+    <div class="autocomplete-container" *ngIf="filteredUsers.length == 0 && userName !== ''">Keine
         Übereinstimmung gefunden</div>
     <div class="autocomplete-container"
-        *ngIf="searchControl.value && searchControl.value.length != 0 && filteredUsers.length != 0">
+        *ngIf="selectedCheckbox === 'certain' && userName !== '' && filteredUsers.length != 0">
         <div *ngFor="let user of filteredUsers" class="dm-profile pointer sidebar-hover" (click)="addUser(user)">
             <img class="avatar" [src]="user.avatar" alt="">
             <span>{{user.user_name}}</span>

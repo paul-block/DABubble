@@ -1,10 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from 'services/authentication.service';
 import { ChannelService } from 'services/channel.service';
-import { FormControl } from '@angular/forms';
 import { UploadService } from 'services/upload.service';
-import { switchMap } from 'rxjs/operators';
 import { MessagesService } from 'services/messages.service';
 
 @Component({
@@ -12,21 +10,20 @@ import { MessagesService } from 'services/messages.service';
   templateUrl: './add-ppl-to-channel.component.html',
   styleUrls: ['./add-ppl-to-channel.component.scss']
 })
-export class AddPplToChannelComponent implements OnInit {
-  certainInput: string;
+export class AddPplToChannelComponent {
+
+  selectedCheckbox: string = '';
+  userName: string = '';
   channelName: string;
   description: string;
-  public searchControl = new FormControl();
-  public selectedOptionControl = new FormControl('all');
   showSelectedUsers = false;
   userExists = false;
-  filteredUsers: any[] = [];
+  filteredUsers: any = [];
   selectedUser: any[] = [];
 
   constructor(
     public dialog: MatDialog,
     public authService: AuthenticationService,
-    public dialogRef: MatDialogRef<AddPplToChannelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public channelService: ChannelService,
     public uploadService: UploadService,
@@ -37,42 +34,12 @@ export class AddPplToChannelComponent implements OnInit {
   }
 
   /**
-  * Component's initialization method. 
-  * Sets up listeners for value changes in search and option controls.
-  */
-  ngOnInit(): void {
-    this.setupSearchControlValueChanges();
-    this.setupSelectedOptionControlValueChanges();
-  }
-
-  /**
   * Sets up the value changes listener for the search control. On value change, 
   * it filters users based on the input.
   */
-  setupSearchControlValueChanges(): void {
-    this.searchControl.valueChanges
-      .pipe(
-        switchMap(value => this.filterUsers(value))
-      )
-      .subscribe(users => {
-        this.filteredUsers = users;
-        if (this.searchControl.value === '') {
-          this.userExists = false;
-        }
-      });
-  }
-
-  /**
-  * Sets up the value changes listener for the selected option control. On value change, 
-  * if the screen width is under 1000px, it updates the dialog size based on the selected option.
-  */
-  setupSelectedOptionControlValueChanges(): void {
-    this.selectedOptionControl.valueChanges.subscribe((value) => {
-      if (window.innerWidth <= 1000) {
-        const size = value === 'certain' ? '350px' : '250px';
-        this.dialogRef.updateSize('100vw', size);
-      }
-    });
+  async getFilteredUsers(): Promise<void> {
+    this.filteredUsers = [...await this.filterUsers(this.userName)];
+    if (this.userName === '') this.userExists = false;
   }
 
   /**
@@ -84,7 +51,7 @@ export class AddPplToChannelComponent implements OnInit {
     if (!userExists) {
       this.selectedUser.push(user);
       this.showSelectedUsers = true;
-      this.searchControl.setValue('');
+      this.userName = '';
     } else {
       this.userExists = true;
     }
@@ -97,9 +64,10 @@ export class AddPplToChannelComponent implements OnInit {
   */
   async filterUsers(name: string): Promise<any[]> {
     const users = await this.authService.usersWithoutCurrentuser();
-    const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
+    const filteredUsers = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
     );
-    return filteredUser;
+    return filteredUsers;
+
   }
 
   /**
@@ -127,13 +95,13 @@ export class AddPplToChannelComponent implements OnInit {
   * Checks which members to add to the newly created channel based on the selected option.
   */
   checkWhichMembersToAdd() {
-    if (this.selectedOptionControl.value === 'all') {
-      const members = this.authService.all_users
+    if (this.selectedCheckbox === 'all') {
+      const members = this.authService.all_users;
       members.forEach(member => {
         this.channelService.addUserToChannel(this.channelName, member.uid);
       });
       setTimeout(() => this.sendAddAllMemberMessage(), 300);
-    } else if (this.selectedOptionControl.value === 'certain' && this.selectedUser.length > 0) {
+    } else if (this.selectedCheckbox === 'certain' && this.selectedUser.length > 0) {
       this.selectedUser.forEach(user => {
         this.channelService.addUserToChannel(this.channelName, user.uid);
       });
@@ -145,14 +113,14 @@ export class AddPplToChannelComponent implements OnInit {
   * Sends a notification message when all members have been added to a channel.
   */
   sendAddAllMemberMessage() {
-    let users = []
+    let users = [];
     this.authService.all_users.forEach(element => {
-      if (element.uid != this.authService.userData.uid) users.push(element.user_name)
+      if (element.uid != this.authService.userData.uid) users.push(element.user_name);
     });
-    let rest = users.length - 1
-    this.uploadService.checkForUpload()
-    this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + users[0] + ' und ' + rest + ' weitere beigetreten'
-    this.messageService.newMessage()
+    let rest = users.length - 1;
+    this.uploadService.checkForUpload();
+    this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + users[0] + ' und ' + rest + ' weitere beigetreten';
+    this.messageService.newMessage();
   }
 
   /**
@@ -161,12 +129,12 @@ export class AddPplToChannelComponent implements OnInit {
    */
   sendAddAMemberMessage(array: any[]) {
     const userNames = array.map(obj => obj.user_name);
-    let rest = array.length - 1
-    this.uploadService.checkForUpload()
-    if (userNames.length > 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere beigetreten.'
-    if (userNames.length == 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere(r) beigetreten.'
-    if (userNames.length == 1) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem ist ' + userNames[0] + ' beigetreten.'
-    this.messageService.newMessage()
+    let rest = array.length - 1;
+    this.uploadService.checkForUpload();
+    if (userNames.length > 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere beigetreten.';
+    if (userNames.length == 2) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem sind ' + userNames[0] + ' und ' + rest + ' weitere(r) beigetreten.';
+    if (userNames.length == 1) this.messageService.messageText = 'ist #' + this.channelService.currentChannelData.channelName + ' beigetreten. Außerdem ist ' + userNames[0] + ' beigetreten.';
+    this.messageService.newMessage();
   }
 
   /**
