@@ -43,6 +43,9 @@ export class ChannelSidebarComponent implements OnInit {
     this.getCurrentChannel();
   }
 
+  /**
+  * Checks if userData is available in local storage
+  */
   async checkLocalStorage() {
     let user = JSON.parse(localStorage.getItem('user'));
     if (user.uid) this.chatService.currentUser_id = user.uid;

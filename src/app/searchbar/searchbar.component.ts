@@ -19,9 +19,9 @@ export class SearchbarComponent {
   noResults: boolean = false;
   isLoading: boolean = false;
   searchValue: string = '';
-  usersSet: Set<any> = new Set();
-  channelsSet: Set<any> = new Set();
-  filteredChannelMessagesSet: Set<any> = new Set();
+  channelList: Array<any> = [];
+  userList: Array<any> = [];
+  channelMessages: Array<any> = [];
   filteredUsers: Array<any> = [];
   filteredChannels: Array<any> = [];
   filteredChannelMessages: Array<any> = [];
@@ -35,7 +35,6 @@ export class SearchbarComponent {
     public openChatService: OpenChatService,
     public profileService: ProfileService) { }
 
-
   /**
   * Listens for click events outside the component and hides the search results if clicked outside specific elements.
   * @param {Event} event - The triggered DOM event.
@@ -47,7 +46,6 @@ export class SearchbarComponent {
     this.showResults = false;
   }
 
-
   /**
   * Listens for click events inside the component and handles the search value selection.
   * @param {Event} event - The triggered DOM event.
@@ -58,49 +56,45 @@ export class SearchbarComponent {
     for (let span of resultRows) {
       if (span.contains(event.target)) {
         this.searchValue = span.textContent;
-        // event.stopPropagation();
         this.onSearchValueChange();
         return;
       }
     }
   }
 
-
   /**
   * Handles the search value changes,
   * clears previous data, retrieves the new data, and filters the results.
   */
   async onSearchValueChange() {
-    if (this.searchValue.length === 0) this.showResults = false;
-    else {
+    if (this.searchValue.length !== 0) {
       this.isLoading = true;
       this.showResults = true;
       this.clear();
       await this.getData('channels', this.authService.userData.uid);
       await this.getData('users', this.authService.userData.uid);
-      await this.getChannelMessages(this.authService.userData.uid);
+      await this.getMessages(this.authService.userData.uid);
       this.filterResults();
       this.isLoading = false;
       this.show();
     }
+    else this.showResults = false;
   }
 
-
   /**
-  * Filters the results from the data sets based on the current search value.
+  * Filters the results from the fetched data based on the current search value.
   */
   filterResults() {
-    this.filteredChannels = Array.from(this.channelsSet).filter(channel =>
+    this.filteredChannels = this.channelList.filter(channel =>
       channel.channelName.toLowerCase().startsWith(this.searchValue)
     );
-    this.filteredUsers = Array.from(this.usersSet).filter(user =>
+    this.filteredUsers = this.userList.filter(user =>
       user.user_name.toLowerCase().startsWith(this.searchValue.toLowerCase())
     );
-    this.filteredChannelMessages.filter(msg =>
+    this.filteredChannelMessages = this.channelMessages.filter(msg =>
       msg.combinedMessage.toLowerCase().startsWith(this.searchValue.toLowerCase())
     );
   }
-
 
   /**
   * Fetches data based on the current user's ID and updates the local data sets.
@@ -113,52 +107,52 @@ export class SearchbarComponent {
     querySnapshot.forEach((doc) => {
       if (collectionName === 'channels') {
         const channelData = doc.data();
-        if (channelData.assignedUsers?.includes(currentUserId)) {
-          this.channelsSet.add(channelData);
-        }
+        if (channelData.assignedUsers?.includes(currentUserId)) this.channelList.push(channelData);
       }
-      if (collectionName === 'users') this.usersSet.add(doc.data());
+      if (collectionName === 'users') this.userList.push(doc.data());
     });
   }
-
 
   /**
   * Fetches all channel messages that current user is authorized to see.
   * @param {string} currentUserId - UID of the current user.
   */
-  async getChannelMessages(currentUserId: string) {
+  async getMessages(currentUserId) {
     const channelsRef = collection(this.authService.db, 'channels');
-    const channelsSnapshot = await getDocs(channelsRef);
-    const uniqueMessageMap = new Map();
-    await this.checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap);
-    this.filteredChannelMessages = [...uniqueMessageMap.values()];
-  }
-
-
-  /**
-  * Iterates through channels' messages, and constructs combined messages if relevant.
-  * @param {any} channelsSnapshot - Snapshot of channels from Firestore.
-  * @param {string} currentUserId - UID of the current user.
-  * @param {Map} uniqueMessageMap - Map to store unique combined messages.
-  */
-  async checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap) {
-    for (let channelDoc of channelsSnapshot.docs) {
+    const AllChannelDocs = await getDocs(channelsRef);
+    for (let channelDoc of AllChannelDocs.docs) {
       const channelData = channelDoc.data();
-      if (!channelData.assignedUsers?.includes(currentUserId)) continue;
-      const channelName = channelData.channelName;
-      const messagesRef = collection(channelDoc.ref, 'messages');
-      const messagesSnapshot = await getDocs(messagesRef);
-      for (let messageDoc of messagesSnapshot.docs) {
-        const messageData = messageDoc.data();
-        const message = messageData.chat_message;
-        const messageSender = messageData.user_Sender_Name;
-        if (!message) continue;
-        if (this.checkMessageRelevant(message))
-          this.createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap);
+      if (channelData.assignedUsers?.includes(currentUserId)) {
+        const channelName = channelData.channelName;
+        const messagesRef = collection(channelDoc.ref, 'messages');
+        const messagesSnapshot = await getDocs(messagesRef);
+        for (let messageDoc of messagesSnapshot.docs) {
+          const messageData = messageDoc.data();
+          const message = messageData.chat_message;
+          const messageSender = messageData.user_Sender_Name;
+          if (this.checkMessageRelevant(message)) {
+            if (this.channelMessages.some(msg => msg.combinedMessage === `${message} in #${channelName} von: ${messageSender}`)) return;
+            else this.channelMessages.push(this.combinedMsgData(message, channelName, messageSender, channelData.channel_ID));
+          }
+        }
       }
     }
   }
 
+  /**
+   * Returns an object containing a combined message and channel ID.
+   * @param {string} message - The message text.
+   * @param {string} channelName - The name of the channel.
+   * @param {string} messageSender - The sender of the message.
+   * @param {string} channel_ID - The ID of the channel.
+   * @returns {Object} - An object with combinedMessage and channel_ID properties.
+   */
+  combinedMsgData(message: string, channelName: string, messageSender: string, channel_ID: string) {
+    return {
+      combinedMessage: `${message} in #${channelName} von: ${messageSender}`,
+      channel_ID: channel_ID
+    };
+  }
 
   /**
   * Checks if a message starts with the current search value.
@@ -168,25 +162,6 @@ export class SearchbarComponent {
   checkMessageRelevant(message) {
     return message.toLowerCase().startsWith(this.searchValue.toLowerCase());
   }
-
-
-  /**
-  * Constructs a combined message and stores it in a unique message map.
-  * @param {string} message - The message text.
-  * @param {string} channelName - Name of the channel.
-  * @param {string} messageSender - Name of the message sender.
-  * @param {any} channelData - Data of the channel.
-  * @param {Map} uniqueMessageMap - Map to store unique combined messages.
-  */
-  createCombinedMessage(message, channelName, messageSender, channelData, uniqueMessageMap) {
-    const combinedMessage = `"${message}" in #${channelName} von: ${messageSender}`;
-    const channel_ID = channelData.channel_ID;
-    const uniqueKey = combinedMessage + "|" + channel_ID;
-    if (!uniqueMessageMap.has(uniqueKey)) {
-      uniqueMessageMap.set(uniqueKey, { combinedMessage: combinedMessage, channel_ID: channel_ID });
-    }
-  }
-
 
   /**
   * Checks and sets the `noResults` variable based on the filtered data's length.
@@ -199,19 +174,24 @@ export class SearchbarComponent {
     } else this.noResults = true;
   }
 
-
   /**
   * Clears the data sets and filtered results.
   */
   clear() {
-    this.usersSet.clear();
-    this.channelsSet.clear();
-    this.filteredChannelMessagesSet.clear();
+    this.userList = [];
+    this.channelList = [];
+    this.channelMessages = [];
     this.filteredChannels = [];
     this.filteredUsers = [];
     this.filteredChannelMessages = [];
   }
 
+  /**
+  * Returns true if there are no results, false otherwise.
+  */
+  checkResults(): boolean {
+    return this.filteredChannels.length === 0 && this.filteredChannelMessages.length === 0 && this.filteredUsers.length === 0 && this.noResults && !this.isLoading;
+  }
 
   /**
   * Opens the profile of a user.
@@ -221,7 +201,6 @@ export class SearchbarComponent {
     this.searchValue = '';
     this.profileService.openProfile(user.uid);
   }
-
 
   /**
   * Opens a specific channel.

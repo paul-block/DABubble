@@ -41,6 +41,7 @@ export class AuthenticationService {
     this.loadAllUsers();
     this.loadCurrentUser();
   }
+
   /**
    * Sets the current user data to local storage. 
    * When a user is detected via `authState`, the user data is stored in local storage. 
@@ -61,7 +62,6 @@ export class AuthenticationService {
       }
     });
   }
-
 
   /**
    * Loads all users from the Firestore "users" collection into `all_users` property. 
@@ -97,15 +97,6 @@ export class AuthenticationService {
   }
 
   /**
-   * Waits until the authentication state (user logged in/out) is initialized.
-   * Useful for parts of the application that require the user's authentication status.
-   * @returns {Promise<void>} Resolves when the authentication state has been initialized.
-   */
-  // async waitUntilAuthInitialized(): Promise<void> {
-  //   return this.authInitializedPromise;
-  // }
-
-  /**
    * Retrieves the UID (unique identifier) of the currently authenticated user.
    * @returns {string} The UID of the authenticated user.
    */
@@ -122,7 +113,6 @@ export class AuthenticationService {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data();
-    console.log(this.userData);
   }
 
   /**
@@ -187,15 +177,12 @@ export class AuthenticationService {
    * @param {string} status - The new status to set.
    */
   async setOnlineStatus(email: string, status: string) {
-    console.log(this.all_users);
     const user = await this.all_users.find(element => element.email === email);
     const userRef = doc(this.db, 'users', user.uid);
     await updateDoc(userRef, {
       status: status
     });
-    console.log('online status' + status + this.userData.email);
   }
-
 
 
 

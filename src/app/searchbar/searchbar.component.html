@@ -7,8 +7,7 @@
             <div class="loader"></div>
         </div>
         <div class="results">
-            <div class="no-results-row"
-                *ngIf="filteredChannels.length === 0 && filteredChannelMessages.length === 0 && filteredUsers.length === 0 && noResults && !isLoading">
+            <div class="no-results-row" *ngIf="checkResults()">
                 <span>Keine Übereinstimmung gefunden</span>
             </div>
         </div>
