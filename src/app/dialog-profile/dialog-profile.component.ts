@@ -28,7 +28,7 @@ export class DialogProfileComponent {
   */
   async sendMsg(user_id: string, user_name: string) {
     this.setReceiverData(user_id, user_name);
-    this.findChatWithUser(this.chatService.currentUser_id, this.chatService.userReceiverID);
+    this.findChatWithUser(this.authService.auth.currentUser.uid, this.chatService.userReceiverID);
     this.chatService.directedFromProfileButton = true;
     this.close();
   }

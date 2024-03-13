@@ -36,13 +36,17 @@ export class ChannelSidebarComponent implements OnInit {
   * loads chats, and initializes own chat. If it's a new user, loads the start channel.
   */
   async ngOnInit() {
-    await this.authService.waitUntilAuthInitialized();
-    this.chatService.currentUser_id = this.authService.auth.currentUser.uid;
-    await this.authService.usersPromise;
+    await this.checkLocalStorage();
     await this.chatService.loadChats();
     await this.chatService.initOwnChat();
     this.sortedChats = this.sortChats(this.chatService.chats);
     this.getCurrentChannel();
+  }
+
+  async checkLocalStorage() {
+    let user = JSON.parse(localStorage.getItem('user'));
+    if (user.uid) this.chatService.currentUser_id = user.uid;
+    else this.chatService.currentUser_id = await this.authService.auth.currentUser.uid;
   }
 
   /**

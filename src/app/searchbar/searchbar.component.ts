@@ -4,7 +4,6 @@ import { HostListener } from '@angular/core';
 import { ChatService } from 'services/chat.service';
 import { ChannelService } from 'services/channel.service';
 import { MessagesService } from 'services/messages.service';
-import { FirestoreThreadDataService } from 'services/firestore-thread-data.service';
 import { AuthenticationService } from 'services/authentication.service';
 import { OpenChatService } from 'services/open-chat.service';
 import { ProfileService } from 'services/profile.service';
@@ -16,11 +15,10 @@ import { ProfileService } from 'services/profile.service';
 })
 
 export class SearchbarComponent {
-  db = this.authService.db;
-  showResults = false;
-  noResults = false;
-  isLoading = false;
-  searchValue = '';
+  showResults: boolean = false;
+  noResults: boolean = false;
+  isLoading: boolean = false;
+  searchValue: string = '';
   usersSet: Set<any> = new Set();
   channelsSet: Set<any> = new Set();
   filteredChannelMessagesSet: Set<any> = new Set();
@@ -32,7 +30,6 @@ export class SearchbarComponent {
     private elementRef: ElementRef,
     public chatService: ChatService,
     public msgService: MessagesService,
-    public fsDataThreadService: FirestoreThreadDataService,
     public channelService: ChannelService,
     public authService: AuthenticationService,
     public openChatService: OpenChatService,
@@ -45,12 +42,8 @@ export class SearchbarComponent {
   */
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event) {
-    const inputElement = this.elementRef.nativeElement.querySelector('.input-container input');
-    const searchContainer = this.elementRef.nativeElement.querySelector('.search-container');
-
-    if (inputElement.contains(event.target) || searchContainer && searchContainer.contains(event.target)) {
-      return;
-    }
+    const inputElement = this.elementRef.nativeElement.querySelector('.input-container');
+    if (inputElement.contains(event.target)) return;
     this.showResults = false;
   }
 
@@ -61,12 +54,11 @@ export class SearchbarComponent {
   */
   @HostListener(':click', ['$event'])
   handleClickInside(event: Event) {
-    const resultRows = this.elementRef.nativeElement.querySelectorAll('.result-row span');
-
+    const resultRows = this.elementRef.nativeElement.querySelectorAll('.result-row');
     for (let span of resultRows) {
       if (span.contains(event.target)) {
         this.searchValue = span.textContent;
-        event.stopPropagation();
+        // event.stopPropagation();
         this.onSearchValueChange();
         return;
       }
@@ -79,7 +71,7 @@ export class SearchbarComponent {
   * clears previous data, retrieves the new data, and filters the results.
   */
   async onSearchValueChange() {
-    if (this.searchValue.length == 0) this.showResults = false;
+    if (this.searchValue.length === 0) this.showResults = false;
     else {
       this.isLoading = true;
       this.showResults = true;
@@ -116,7 +108,7 @@ export class SearchbarComponent {
   * @param {string} currentUserId - UID of the current user.
   */
   async getData(collectionName: string, currentUserId: string) {
-    const collectionRef = collection(this.db, collectionName);
+    const collectionRef = collection(this.authService.db, collectionName);
     const querySnapshot = await getDocs(collectionRef);
     querySnapshot.forEach((doc) => {
       if (collectionName === 'channels') {
@@ -135,7 +127,7 @@ export class SearchbarComponent {
   * @param {string} currentUserId - UID of the current user.
   */
   async getChannelMessages(currentUserId: string) {
-    const channelsRef = collection(this.db, 'channels');
+    const channelsRef = collection(this.authService.db, 'channels');
     const channelsSnapshot = await getDocs(channelsRef);
     const uniqueMessageMap = new Map();
     await this.checkChannelMessages(channelsSnapshot, currentUserId, uniqueMessageMap);

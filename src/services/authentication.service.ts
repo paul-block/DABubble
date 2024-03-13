@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot, DocumentData } from '@angular/fire/firestore';
+import { doc, getDoc, getFirestore, updateDoc, getDocs, onSnapshot } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -15,10 +15,10 @@ import { User, onAuthStateChanged } from '@angular/fire/auth';
 })
 export class AuthenticationService {
 
-  private authInitializedPromise: Promise<void>;
-  private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  userLoaded: Promise<void>;
+  currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
-  public auth = getAuth();
+  auth = getAuth();
   db = getFirestore();
   userData: any = [];
   signIn_successful: boolean;
@@ -29,7 +29,6 @@ export class AuthenticationService {
   email_send: boolean = null;
   googleUser_exist: boolean;
   all_users: any[];
-  usersPromise: Promise<any>;
   newUser: boolean = false;
 
   constructor(
@@ -42,31 +41,35 @@ export class AuthenticationService {
     this.loadAllUsers();
     this.loadCurrentUser();
   }
-
   /**
    * Sets the current user data to local storage. 
    * When a user is detected via `authState`, the user data is stored in local storage. 
    * Additionally, authorized channels for the user are fetched.
    */
-  setCurrentUserToLocalStorage() {
+  async setCurrentUserToLocalStorage() {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
-        setTimeout(() => this.getUserData(user.uid), 500);
-        this.channelService.getAuthorizedChannels(user.uid);
-        localStorage.setItem('user', JSON.stringify(this.userData));
+        setTimeout(() => {
+          this.getUserData(user.uid).then(() => {
+            this.channelService.getAuthorizedChannels(user.uid);
+            localStorage.setItem('user', JSON.stringify(this.userData));
+            this.setOnlineStatus(user.email, 'Aktiv');
+          });
+        }, 500);
       } else {
         localStorage.setItem('user', 'null');
       }
     });
   }
 
+
   /**
    * Loads all users from the Firestore "users" collection into `all_users` property. 
    * The method uses an observable pattern to get real-time updates from Firestore.
    * @returns {Promise<void>} Resolves when the users have been loaded.
    */
-  loadAllUsers() {
-    this.usersPromise = new Promise<void>((resolve) => {
+  async loadAllUsers() {
+    return new Promise<void>((resolve) => {
       const dbRef = collection(this.db, "users");
       onSnapshot(dbRef, docsSnap => {
         const users: any[] = [];
@@ -85,7 +88,7 @@ export class AuthenticationService {
    * @returns {Promise<void>} Resolves when the authentication state has been determined.
    */
   loadCurrentUser() {
-    this.authInitializedPromise = new Promise<void>((resolve) => {
+    this.userLoaded = new Promise<void>((resolve) => {
       onAuthStateChanged(this.auth, (user) => {
         this.currentUserSubject.next(user);
         resolve();
@@ -98,9 +101,9 @@ export class AuthenticationService {
    * Useful for parts of the application that require the user's authentication status.
    * @returns {Promise<void>} Resolves when the authentication state has been initialized.
    */
-  async waitUntilAuthInitialized(): Promise<void> {
-    return this.authInitializedPromise;
-  }
+  // async waitUntilAuthInitialized(): Promise<void> {
+  //   return this.authInitializedPromise;
+  // }
 
   /**
    * Retrieves the UID (unique identifier) of the currently authenticated user.
@@ -119,6 +122,7 @@ export class AuthenticationService {
     const userRef = doc(this.db, "users", uid);
     let docSnap = await getDoc(userRef);
     this.userData = docSnap.data();
+    console.log(this.userData);
   }
 
   /**
@@ -130,7 +134,7 @@ export class AuthenticationService {
    */
   async SignUp(email: string, password: string) {
     try {
-      const result = await this.afAuth
+      await this.afAuth
         .createUserWithEmailAndPassword(email, password).then((result) => {
           this.SetUserData(result.user);
         });
@@ -155,7 +159,6 @@ export class AuthenticationService {
     try {
       await this.afAuth.signInWithEmailAndPassword(email, password);
       this.signIn_successful = true;
-      this.setOnlineStatus(email, 'Aktiv');
       setTimeout(() => this.signIn_successful = false, 3000);
     } catch (error) {
       this.signIn_error = true;
@@ -170,7 +173,6 @@ export class AuthenticationService {
     try {
       await this.afAuth.signInWithEmailAndPassword('gast@gast.de', 'Amidala6%');
       this.signIn_successful = true;
-      this.setOnlineStatus('gast@gast.de', 'Aktiv');
       setTimeout(() => this.signIn_successful = false, 3000);
       this.channelService.loadDefaultChannel();
     } catch (error) {
@@ -185,12 +187,17 @@ export class AuthenticationService {
    * @param {string} status - The new status to set.
    */
   async setOnlineStatus(email: string, status: string) {
-    const user = this.all_users.find(element => element.email === email);
+    console.log(this.all_users);
+    const user = await this.all_users.find(element => element.email === email);
     const userRef = doc(this.db, 'users', user.uid);
     await updateDoc(userRef, {
       status: status
     });
+    console.log('online status' + status + this.userData.email);
   }
+
+
+
 
   /**
    * Initiates the Google authentication process.
@@ -226,7 +233,6 @@ export class AuthenticationService {
     (await this.getAllUsers()).forEach(element => {
       if (element.email == email) {
         this.googleUser_exist = true;
-        this.setOnlineStatus(email, 'Aktiv');
         this.channelService.loadDefaultChannel();
         return;
       }
@@ -277,9 +283,7 @@ export class AuthenticationService {
   async signOut() {
     await this.setOnlineStatus(this.userData.email, 'Abwesend');
     await this.afAuth.signOut();
-    localStorage.removeItem('user');
     this.router.navigateByUrl('/sign-in');
-    this.userData = [];
   }
 
   /**
@@ -315,7 +319,7 @@ export class AuthenticationService {
     const filteredUser = users.filter(user => user.user_name?.toLowerCase().startsWith(name?.toLowerCase())
     );
     return filteredUser;
-  }
+  };
 
   /**
    * Filters and returns a list of users based on the provided email string.
@@ -327,7 +331,7 @@ export class AuthenticationService {
     const filteredUser = users.filter(user => user.email?.toLowerCase().startsWith(email?.toLowerCase())
     );
     return filteredUser;
-  }
+  };
 
   /**
    * Returns a list of all users except the current user.

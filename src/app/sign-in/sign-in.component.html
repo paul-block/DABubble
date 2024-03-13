@@ -4,8 +4,8 @@
     <div class="input_div">
         <img class="input_img" src="assets/img/mail.png" alt="">
         <input type="email" placeholder="beispielname@email.com" (focus)="emailFocus = true" [(ngModel)]="email"
-            (ngModelChange)="dataChanged($event)">
-        <span class="error" *ngIf="!emailError && emailFocus">Diese E-Mail-Adresse ist leider ungültig.</span>
+            (ngModelChange)="dataChanged(email)">
+        <span class="error" *ngIf="!validEmail && emailFocus">Diese E-Mail-Adresse ist leider ungültig.</span>
     </div>
     <div class="input_div">
         <img class="input_img_2" src="assets/img/lock.png">
@@ -17,12 +17,12 @@
         <span>ODER</span>
         <img src="assets/img/line.png" alt="">
     </div>
-    <div class="google_button" (click)="signIn()">
+    <div class="google_button" (click)="signInWithGoogleAcc()">
         <img src="assets/img/Google.png" alt="">
         <span>Anmelden mit Google</span>
     </div>
     <div class="button_div_sign_in">
-        <div [class.invalid]="password.length < 8 || !emailError" (click)="signInWithPassword()" class="signin_button">
+        <div [class.invalid]="password.length < 8 || !validEmail" (click)="signInWithPassword()" class="signin_button">
             Anmelden</div>
         <div (click)="guestLogin()" class="guest_login_button">Gäste-Login</div>
     </div>
@@ -32,7 +32,7 @@
     <span [routerLink]="['/data']">Datenschutz</span>
 </div>
 
-<div [class.show_sign_in_successful]="authenticationService.signIn_successful" class="login_success"><span>Hallo
-        {{authenticationService.userData?.user_name}}</span></div>
-<div [class.show_error]="authenticationService.signIn_error" class="login_error">Passwort oder Email falsch</div>
-<div [class.show_shadow]="authenticationService.signIn_successful" class="white_shadow"></div>
+<div [class.show_sign_in_successful]="authService.signIn_successful" class="login_success"><span>Hallo
+        {{authService.userData?.user_name}}</span></div>
+<div [class.show_error]="authService.signIn_error" class="login_error">Passwort oder Email falsch</div>
+<div [class.show_shadow]="authService.signIn_successful" class="white_shadow"></div>

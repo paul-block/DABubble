@@ -81,8 +81,7 @@ export class NewMsgComponent {
   * @param {string} [clickedValue] - The name of the clicked user.
   */
   async checkExistingChat(selectedUser, clickedValue?: string) {
-    const currentUserUID = this.chatService.currentUser_id;
-    if (await this.findChatWithUser(currentUserUID, selectedUser.uid)) return;
+    if (await this.findChatWithUser(this.authService.auth.currentUser.uid, selectedUser.uid)) return;
     await this.createNewChat(selectedUser, clickedValue);
   }
 
